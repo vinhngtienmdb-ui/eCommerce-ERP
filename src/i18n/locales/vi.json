@@ -1,0 +1,1280 @@
+{
+  "common": {
+    "search": "Tìm kiếm...",
+    "filter": "Bộ lọc",
+    "filters": "Bộ lọc",
+    "create": "Tạo mới",
+    "export": "Xuất",
+    "actions": "Hành động",
+    "viewDetails": "Xem chi tiết",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "cancel": "Hủy",
+    "status": "Trạng thái",
+    "moduleUnderConstruction": "Mô-đun đang được xây dựng"
+  },
+  "nav": {
+    "dashboard": "Bảng điều khiển",
+    "products": "Quản Lý Sản Phẩm",
+    "allProducts": "Tất Cả Sản Phẩm",
+    "addProduct": "Thêm Sản Phẩm",
+    "aiOptimization": "Công cụ Tối ưu AI",
+    "sellers": "Người bán",
+    "orders": "Đơn hàng",
+    "marketing": "Kênh Marketing",
+    "affiliate": "Tiếp thị liên kết",
+    "purchasing": "Mua hàng",
+    "finance": "Tài chính",
+    "accounting": "Kế toán & Tài chính",
+    "reconciliation": "Công nợ & Đối soát",
+    "pnl": "Phân tích P&L",
+    "paymentWallet": "Thanh toán & Ví nội bộ",
+    "sellerFinance": "Hỗ trợ Tài chính Seller",
+    "withdrawals": "Yêu cầu rút tiền",
+    "hr": "Nhân sự",
+    "coreHr": "Hồ sơ & Hợp đồng",
+    "timeAttendance": "Chấm công & Nghỉ phép",
+    "payroll": "Lương & Thưởng",
+    "performance": "Đánh giá & Đào tạo",
+    "admin": "Quản trị",
+    "adminWorkspace": "Hành chính & Workspace",
+    "assets": "Tài sản & Thiết bị",
+    "stationery": "Văn phòng phẩm",
+    "booking": "Đặt phòng & Xe",
+    "requests": "Đề xuất & Thanh toán",
+    "analytics": "Phân tích & BI",
+    "sales": "Bán hàng",
+    "loyalty": "Khách hàng thân thiết",
+    "live": "Live Hub",
+    "customers": "Khách hàng",
+    "customerService": "CSKH & Vận hành",
+    "social": "Cộng đồng & Mạng xã hội TMĐT",
+    "advertising": "Hệ thống Quảng cáo",
+    "legal": "Pháp chế & Bảo vệ thương hiệu",
+    "sellerFinance": "Hỗ trợ Tài chính Seller",
+    "settings": "Cài đặt"
+  },
+  "socialCommerce": {
+    "title": "Cộng đồng & Mạng xã hội TMĐT",
+    "description": "Không gian chia sẻ nội dung UGC, đánh giá sản phẩm và kết nối cộng đồng mua sắm.",
+    "tabs": {
+      "feed": "Social Feed",
+      "groups": "Cộng đồng & Nhóm",
+      "creators": "Nhà sáng tạo (Creators)"
+    },
+    "feed": {
+      "createPost": "Tạo bài viết",
+      "trending": "Xu hướng",
+      "following": "Đang theo dõi",
+      "forYou": "Dành cho bạn",
+      "likes": "Lượt thích",
+      "comments": "Bình luận",
+      "shares": "Chia sẻ",
+      "buyNow": "Mua ngay"
+    },
+    "groups": {
+      "createGroup": "Tạo nhóm",
+      "members": "Thành viên",
+      "posts": "Bài viết/ngày",
+      "join": "Tham gia",
+      "joined": "Đã tham gia",
+      "category": "Ngành hàng"
+    },
+    "creators": {
+      "followers": "Người theo dõi",
+      "engagementRate": "Tỷ lệ tương tác",
+      "totalSales": "Doanh số tạo ra",
+      "follow": "Theo dõi",
+      "unfollow": "Bỏ theo dõi"
+    }
+  },
+  "legal": {
+    "title": "Pháp chế & Bảo vệ thương hiệu",
+    "description": "Quản lý đăng ký bảo quyền, xử lý tranh chấp và giám sát tuân thủ pháp luật.",
+    "tabs": {
+      "brandPortal": "Brand Portal",
+      "dispute": "Giải quyết tranh chấp",
+      "compliance": "Giám sát tuân thủ"
+    },
+    "brandPortal": {
+      "register": "Đăng ký bảo quyền",
+      "brandName": "Tên thương hiệu",
+      "owner": "Chủ sở hữu",
+      "status": "Trạng thái",
+      "documents": "Tài liệu chứng minh"
+    },
+    "dispute": {
+      "caseId": "Mã vụ việc",
+      "type": "Loại vi phạm",
+      "reporter": "Người báo cáo",
+      "accused": "Bị cáo buộc",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "counterfeit": "Hàng giả",
+      "ipViolation": "Vi phạm SHTT"
+    },
+    "compliance": {
+      "policy": "Chính sách",
+      "violationRate": "Tỷ lệ vi phạm",
+      "lastAudit": "Lần kiểm tra cuối",
+      "status": "Trạng thái",
+      "dataPrivacy": "Bảo mật dữ liệu",
+      "ecommerceLaw": "Luật TMĐT"
+    }
+  },
+  "sellerFinance": {
+    "title": "Hỗ trợ Tài chính Seller",
+    "description": "Hệ thống chấm điểm tín dụng và cung cấp các gói ứng vốn nhanh cho Nhà bán hàng.",
+    "tabs": {
+      "credit": "Seller Credit",
+      "earlyPayout": "Early Payouts"
+    },
+    "credit": {
+      "sellerName": "Nhà bán hàng",
+      "creditScore": "Điểm tín dụng",
+      "performance": "Hiệu suất",
+      "loanLimit": "Hạn mức vay",
+      "status": "Trạng thái",
+      "excellent": "Xuất sắc",
+      "good": "Tốt",
+      "average": "Trung bình"
+    },
+    "earlyPayout": {
+      "requestPayout": "Yêu cầu ứng vốn",
+      "amount": "Số tiền ứng",
+      "fee": "Phí chiết khấu",
+      "netAmount": "Thực nhận",
+      "payoutDate": "Ngày nhận",
+      "status": "Trạng thái"
+    }
+  },
+  "advertising": {
+    "title": "Hệ thống Quảng cáo",
+    "description": "Quản lý đấu thầu từ khóa, vị trí hiển thị và phân tích hiệu quả quảng cáo.",
+    "tabs": {
+      "bidding": "Đấu thầu Quảng cáo",
+      "analytics": "Báo cáo Hiệu quả (ROAS)",
+      "revenue": "Doanh thu Quảng cáo Sàn"
+    },
+    "bidding": {
+      "keyword": "Từ khóa",
+      "position": "Vị trí hiển thị",
+      "bidPrice": "Giá thầu (VNĐ)",
+      "status": "Trạng thái",
+      "createCampaign": "Tạo chiến dịch",
+      "campaignName": "Tên chiến dịch",
+      "budget": "Ngân sách ngày",
+      "topSearch": "Top Tìm kiếm",
+      "homeBanner": "Banner Trang chủ",
+      "categoryBanner": "Banner Ngành hàng"
+    },
+    "analytics": {
+      "impressions": "Lượt hiển thị",
+      "clicks": "Lượt click",
+      "ctr": "Tỷ lệ click (CTR)",
+      "spend": "Chi phí",
+      "revenue": "Doanh thu",
+      "roas": "ROAS",
+      "campaign": "Chiến dịch"
+    },
+    "revenue": {
+      "totalAdRevenue": "Tổng doanh thu Quảng cáo",
+      "activeCampaigns": "Chiến dịch đang chạy",
+      "topSellers": "Seller chi tiêu Top"
+    }
+  },
+  "live": {
+    "title": "Trung tâm Livestream",
+    "description": "Quản lý lịch trình livestream, ghim sản phẩm, theo dõi thống kê doanh thu và tương tác theo thời gian thực.",
+    "tabs": {
+      "dashboard": "Tổng quan",
+      "schedule": "Lịch trình",
+      "activeSession": "Phiên Live hiện tại",
+      "products": "Sản phẩm ghim"
+    },
+    "dashboard": {
+      "activeViewers": "Người xem hiện tại",
+      "totalRevenue": "Doanh thu Live",
+      "orders": "Đơn hàng",
+      "engagement": "Tương tác (Like/Comment)"
+    },
+    "schedule": {
+      "create": "Tạo lịch Live",
+      "title": "Tiêu đề",
+      "host": "Host/KOL",
+      "startTime": "Thời gian bắt đầu",
+      "status": "Trạng thái",
+      "upcoming": "Sắp diễn ra",
+      "live": "Đang Live",
+      "ended": "Đã kết thúc"
+    },
+    "activeSession": {
+      "streamPreview": "Màn hình Live",
+      "chat": "Khung Chat",
+      "pinProduct": "Ghim sản phẩm",
+      "endStream": "Kết thúc Live",
+      "revenue": "Doanh thu",
+      "viewers": "Người xem"
+    },
+    "products": {
+      "search": "Tìm sản phẩm...",
+      "pin": "Ghim",
+      "unpin": "Bỏ ghim",
+      "pinned": "Đang ghim",
+      "stock": "Tồn kho",
+      "price": "Giá bán"
+    }
+  },
+  "adminWorkspace": {
+    "title": "Hành chính Văn phòng",
+    "description": "Quản lý tài sản, văn phòng phẩm, đặt phòng họp, xe công tác và các đề xuất hành chính.",
+    "tabs": {
+      "assets": "Tài sản & Thiết bị",
+      "stationery": "Văn phòng phẩm",
+      "booking": "Đặt phòng & Xe",
+      "requests": "Đề xuất & Thanh toán"
+    },
+    "assets": {
+      "create": "Thêm tài sản",
+      "assetId": "Mã tài sản",
+      "name": "Tên thiết bị",
+      "category": "Danh mục",
+      "assignee": "Người sử dụng",
+      "status": "Trạng thái",
+      "condition": "Tình trạng",
+      "laptop": "Laptop/PC",
+      "monitor": "Màn hình",
+      "furniture": "Bàn ghế",
+      "available": "Sẵn sàng",
+      "inUse": "Đang sử dụng",
+      "maintenance": "Bảo hành/Sửa chữa"
+    },
+    "stationery": {
+      "request": "Đăng ký VPP",
+      "item": "Vật phẩm",
+      "stock": "Tồn kho",
+      "unit": "Đơn vị tính",
+      "department": "Phòng ban yêu cầu",
+      "quantity": "Số lượng",
+      "status": "Trạng thái",
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "delivered": "Đã giao"
+    },
+    "booking": {
+      "bookRoom": "Đặt phòng họp",
+      "bookCar": "Đặt xe công tác",
+      "room": "Phòng họp",
+      "car": "Xe công tác",
+      "time": "Thời gian",
+      "purpose": "Mục đích",
+      "capacity": "Sức chứa",
+      "driver": "Tài xế",
+      "status": "Trạng thái",
+      "confirmed": "Đã xác nhận",
+      "cancelled": "Đã hủy"
+    },
+    "requests": {
+      "create": "Tạo đề xuất",
+      "requestId": "Mã ĐX",
+      "type": "Loại đề xuất",
+      "requester": "Người đề xuất",
+      "amount": "Số tiền (VNĐ)",
+      "date": "Ngày tạo",
+      "status": "Trạng thái",
+      "purchase": "Mua sắm tài sản",
+      "payment": "Thanh toán chi phí",
+      "travel": "Công tác phí"
+    }
+  },
+  "analytics": {
+    "title": "Phân tích & BI",
+    "description": "Kho dữ liệu kinh doanh thông minh, báo cáo chuyên sâu và cảnh báo gian lận.",
+    "tabs": {
+      "overview": "Tổng quan",
+      "customers": "Phân tích Khách hàng (RFM)",
+      "platform": "Chỉ số Sàn (AOV, CLV, CAC)",
+      "sellers": "Năng lực Seller",
+      "fraud": "Cảnh báo gian lận"
+    },
+    "rfm": {
+      "title": "Phân tích Khách hàng (RFM)",
+      "recency": "Gần đây",
+      "frequency": "Tần suất",
+      "monetary": "Giá trị"
+    },
+    "platform": {
+      "title": "Chỉ số Sàn",
+      "aov": "Giá trị đơn hàng trung bình (AOV)",
+      "clv": "Giá trị vòng đời khách hàng (CLV)",
+      "cac": "Chi phí thu hút khách hàng (CAC)"
+    },
+    "sellers": {
+      "title": "Phân tích năng lực Seller"
+    },
+    "fraud": {
+      "title": "Cảnh báo gian lận",
+      "buffOrders": "Buff đơn",
+      "spamVoucher": "Spam Voucher"
+    }
+  },
+  "sales": {
+    "title": "Quản lý Bán hàng",
+    "description": "Quản lý đội ngũ kinh doanh nội bộ, cơ cấu hoa hồng và theo dõi hiệu suất.",
+    "tabs": {
+      "overview": "Tổng quan",
+      "tiers": "Cấp bậc & Hoa hồng",
+      "tracking": "Theo dõi hiệu suất"
+    },
+    "overview": {
+      "totalRevenue": "Tổng doanh thu bán hàng",
+      "activeSales": "Nhân viên Sales đang hoạt động",
+      "topPerformer": "Nhân viên xuất sắc nhất",
+      "commissionPayout": "Chi trả hoa hồng"
+    },
+    "roles": {
+      "admin": "Quản trị viên",
+      "salesDirector": "Giám đốc kinh doanh",
+      "regionalDirector": "Giám đốc Vùng",
+      "salesManager": "Trưởng phòng kinh doanh",
+      "salesStaff": "Nhân viên kinh doanh",
+      "collaborator": "Cộng tác viên"
+    },
+    "performance": {
+      "individual": "Hiệu suất cá nhân",
+      "team": "Hiệu suất nhóm",
+      "hierarchy": "Cơ cấu tổ chức"
+    },
+    "tiers": {
+      "title": "Cấp bậc & Hoa hồng",
+      "name": "Tên cấp bậc",
+      "revenueTarget": "Mục tiêu doanh thu",
+      "commissionRate": "Tỷ lệ hoa hồng (%)",
+      "addTier": "Thêm cấp bậc"
+    },
+    "tracking": {
+      "title": "Theo dõi hiệu suất",
+      "leaderboard": "Bảng xếp hạng thời gian thực",
+      "individual": "Hiệu suất cá nhân",
+      "team": "Hiệu suất nhóm",
+      "reconciliation": "Đối soát doanh thu"
+    }
+  },
+  "customers": {
+    "title": "Khách hàng 360",
+    "description": "Quản lý hồ sơ khách hàng toàn diện, phân khúc và lịch sử tương tác.",
+    "crm": {
+      "title": "Danh sách Khách hàng",
+      "buyerName": "Tên khách hàng",
+      "purchaseHistory": "Lịch sử mua hàng",
+      "totalOrders": "Tổng đơn",
+      "totalSpent": "Tổng chi tiêu",
+      "lastOrder": "Gần nhất",
+      "details": "Hồ sơ 360 độ",
+      "segment": "Phân khúc",
+      "walletBalance": "Số dư ví",
+      "tags": "Thẻ phân loại"
+    }
+  },
+  "customerService": {
+    "title": "Trung tâm CSKH",
+    "description": "Hệ thống hỗ trợ khách hàng đa kênh, tổng đài và quản lý khiếu nại.",
+    "tabs": {
+      "chat": "Chat Đa kênh",
+      "hotline": "Tổng đài Hotline",
+      "tickets": "Quản lý Khiếu nại",
+      "teams": "Đội ngũ CSKH"
+    },
+    "chat": {
+      "channels": "Kênh hỗ trợ",
+      "customerInfo": "Thông tin khách hàng",
+      "recentOrders": "Đơn hàng gần đây",
+      "lookupPlaceholder": "Tìm SĐT/Mã đơn...",
+      "zaloOA": "Zalo OA",
+      "zaloPersonal": "Zalo Cá nhân",
+      "messenger": "Messenger",
+      "whatsapp": "WhatsApp",
+      "wechat": "WeChat"
+    },
+    "hotline": {
+      "incomingCall": "Cuộc gọi đến...",
+      "accept": "Nghe máy",
+      "reject": "Từ chối",
+      "callHistory": "Lịch sử cuộc gọi",
+      "simulateCall": "Giả lập cuộc gọi đến",
+      "activeCall": "Đang gọi",
+      "customerContext": "Bối cảnh khách hàng"
+    },
+    "tickets": {
+      "create": "Tạo Ticket",
+      "subject": "Chủ đề",
+      "priority": "Độ ưu tiên",
+      "status": "Trạng thái",
+      "assignee": "Người xử lý",
+      "high": "Cao",
+      "medium": "Trung bình",
+      "low": "Thấp",
+      "open": "Mới",
+      "in_progress": "Đang xử lý",
+      "resolved": "Đã xong"
+    },
+    "teams": {
+      "createGroup": "Tạo nhóm CSKH",
+      "groupName": "Tên nhóm",
+      "description": "Mô tả",
+      "members": "Thành viên",
+      "routing": "Phân luồng",
+      "routingRules": {
+        "all": "Tất cả cuộc gọi đến",
+        "vip": "Chỉ khách hàng VIP",
+        "tech": "Vấn đề kỹ thuật",
+        "complaint": "Khiếu nại"
+      }
+    }
+  },
+  "header": {
+    "searchPlaceholder": "Tìm kiếm sản phẩm, đơn hàng, người bán...",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "description": "Tổng quan về hiệu suất nền tảng thương mại điện tử của bạn.",
+    "totalRevenue": "Tổng doanh thu (GMV)",
+    "activeSellers": "Người bán đang hoạt động",
+    "totalOrders": "Tổng đơn hàng",
+    "activeProducts": "Sản phẩm đang hoạt động",
+    "fromLastMonth": "so với tháng trước",
+    "sinceLastHour": "kể từ giờ trước",
+    "revenueOverview": "Tổng quan doanh thu",
+    "revenueDesc": "Hiệu suất GMV hàng tháng trong năm hiện tại.",
+    "weeklyOrders": "Đơn hàng hàng tuần",
+    "weeklyOrdersDesc": "Khối lượng đơn hàng trong 7 ngày qua."
+  },
+  "products": {
+    "title": "Sản phẩm",
+    "description": "Quản lý danh mục sản phẩm, giá cả và hàng tồn kho.",
+    "addProduct": "Thêm 1 sản phẩm mới",
+    "searchPlaceholder": "Tìm Tên sản phẩm, SKU sản phẩm...",
+    "id": "Mã sản phẩm",
+    "name": "Tên sản phẩm",
+    "category": "Ngành hàng",
+    "seller": "Người bán",
+    "price": "Giá",
+    "stock": "Kho hàng",
+    "performance": "Hiệu suất",
+    "rating": "Đánh giá sản phẩm",
+    "noProducts": "Không tìm thấy sản phẩm.",
+    "productSettings": "Cài đặt sản phẩm",
+    "batchTools": "Công cụ xử lý hàng loạt",
+    "tabs": {
+      "all": "Tất cả",
+      "active": "Đang hoạt động",
+      "violations": "Vi phạm",
+      "pending": "Chờ duyệt bởi Shopee",
+      "unpublished": "Chưa được đăng"
+    },
+    "subTabs": {
+      "all": "Tất cả",
+      "needsRestock": "Cần bổ sung hàng",
+      "needsImprovement": "Cần Cải Thiện Nội Dung"
+    },
+    "filters": {
+      "category": "Ngành hàng",
+      "flagship": "Sản phẩm chủ lực",
+      "apply": "Áp dụng",
+      "reset": "Đặt lại",
+      "expand": "Mở rộng"
+    },
+    "add": {
+      "title": "Thêm 1 sản phẩm mới",
+      "suggestions": "Gợi ý điền Thông tin",
+      "sug1": "Thêm ít nhất 3 hình ảnh",
+      "sug2": "Thêm video sản phẩm",
+      "sug3": "Tên sản phẩm có ít nhất 25~100 kí tự",
+      "sug4": "Thêm ít nhất 100 kí tự hoặc 1 hình ảnh trong mô tả sản phẩm",
+      "sug5": "Thêm thương hiệu",
+      "tabs": {
+        "basic": "Thông tin cơ bản",
+        "description": "Mô tả",
+        "sales": "Thông tin bán hàng",
+        "shipping": "Vận chuyển",
+        "other": "Thông tin khác"
+      },
+      "basicInfo": "Thông tin cơ bản",
+      "productImages": "Hình ảnh sản phẩm",
+      "ratio11": "Hình ảnh tỷ lệ 1:1",
+      "ratio34": "Hình ảnh tỷ lệ 3:4",
+      "seeExample": "Xem ví dụ",
+      "addImage": "Thêm hình ảnh",
+      "coverImage": "Ảnh bìa",
+      "coverImageHint1": "Tải lên hình ảnh 1:1.",
+      "coverImageHint2": "Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,... Việc sử dụng ảnh bìa đẹp sẽ thu hút thêm lượt truy cập vào sản phẩm của bạn.",
+      "productVideo": "Video sản phẩm",
+      "addVideo": "Thêm video",
+      "videoHint1": "Size: Max 30MB, resolution should not less than 1x1px",
+      "videoHint2": "Độ dài: 10s-60s",
+      "videoHint3": "Định dạng: MP4",
+      "videoHint4": "Lưu ý: sản phẩm có thể hiển thị trong khi video đang được xử lý. Video sẽ tự động hiển thị sau khi đã xử lý thành công.",
+      "productName": "Tên sản phẩm",
+      "productNamePlaceholder": "Tên sản phẩm + Thương hiệu + Model + Thông số kỹ thuật",
+      "category": "Ngành hàng",
+      "selectCategory": "Chọn ngành hàng",
+      "description": "Mô tả",
+      "productDescription": "Mô tả sản phẩm",
+      "descriptionPlaceholder": "Nhập mô tả sản phẩm hoặc tải lên hình ảnh",
+      "salesInfo": "Thông tin bán hàng",
+      "salesInfoHint": "Có thể điều chỉnh sau khi chọn ngành hàng",
+      "shipping": "Vận chuyển",
+      "shippingHint": "Có thể điều chỉnh sau khi chọn ngành hàng",
+      "otherInfo": "Thông tin khác",
+      "preview": "Xem trước",
+      "productDetails": "Chi tiết sản phẩm",
+      "buyNow": "Mua Ngay",
+      "previewHint": "Hình ảnh có tính chất tham khảo, không phải hình ảnh cuối cùng Người mua thấy.",
+      "cancel": "Hủy",
+      "saveHidden": "Lưu & Ẩn",
+      "savePublish": "Lưu & Hiển thị"
+    }
+  },
+  "orders": {
+    "title": "Đơn hàng",
+    "description": "Quản lý đơn hàng của khách hàng, việc thực hiện và trả hàng.",
+    "searchPlaceholder": "Tìm kiếm mã đơn, khách hàng, sản phẩm...",
+    "id": "Mã đơn hàng",
+    "customer": "Khách hàng",
+    "product": "Sản phẩm",
+    "shop": "Cửa hàng",
+    "date": "Ngày đặt",
+    "items": "Số lượng",
+    "total": "Tổng cộng",
+    "trackingNumber": "Mã vận đơn",
+    "trackOrder": "Theo dõi vận đơn",
+    "tracking": {
+      "title": "Theo dõi vận đơn",
+      "description": "Thông tin chi tiết cho mã vận đơn:",
+      "carrier": "Đơn vị vận chuyển",
+      "status": "Trạng thái",
+      "inTransit": "Đang giao hàng",
+      "delivered": "Đã giao hàng",
+      "step1": { "title": "Đã tiếp nhận", "desc": "Đơn hàng đã được đơn vị vận chuyển tiếp nhận tại bưu cục." },
+      "step2": { "title": "Đang luân chuyển", "desc": "Đơn hàng đang được chuyển đến kho phân loại." },
+      "step3": { "title": "Đang giao hàng", "desc": "Shipper đang trên đường giao hàng đến bạn." }
+    },
+    "trackingCode": "Mã vận đơn",
+    "updateStatus": "Cập nhật trạng thái",
+    "cancelOrder": "Hủy đơn hàng",
+    "noOrders": "Không tìm thấy đơn hàng.",
+    "details": {
+      "title": "Chi tiết đơn hàng",
+      "customerInfo": "Thông tin khách hàng",
+      "shippingInfo": "Thông tin giao hàng",
+      "address": "Địa chỉ",
+      "phone": "Số điện thoại",
+      "print": "In vận đơn",
+      "updateTracking": "Cập nhật mã vận đơn",
+      "generateTracking": "Tự động tạo mã"
+    },
+    "statuses": {
+      "pending_payment": "Chờ thanh toán",
+      "pending_confirmation": "Chờ xác nhận",
+      "grouping": "Đang gom nhóm",
+      "confirmed": "Đã xác nhận",
+      "pending_shipping": "Chờ vận chuyển",
+      "shipping": "Đang vận chuyển",
+      "delivered": "Đã giao hàng",
+      "cancelled": "Đã hủy",
+      "return_requested": "Yêu cầu hoàn hàng",
+      "refund_requested": "Yêu cầu hoàn tiền",
+      "received": "Đã nhận",
+      "completed": "Kết thúc"
+    },
+    "tabs": {
+      "orders": "Đơn hàng",
+      "fulfillment": "Vận hành & Logistics",
+      "rma": "Đổi trả & Hoàn tiền",
+      "settings": "Cấu hình Vận chuyển"
+    },
+    "fulfillment": {
+      "title": "Vận hành & Logistics",
+      "description": "Điều phối giao vận, theo dõi trạng thái đơn vị vận chuyển và quản lý cước phí.",
+      "coordination": "Điều phối giao vận",
+      "carrierStatus": "Trạng thái ĐVVC",
+      "shippingFees": "Quản lý cước phí",
+      "carrier": "Đơn vị vận chuyển",
+      "trackingNumber": "Mã vận đơn",
+      "method": "Phương thức",
+      "fee": "Cước phí",
+      "dispatch": "Điều phối",
+      "updateStatus": "Cập nhật trạng thái ĐVVC",
+      "statuses": {
+        "pending": "Chờ lấy hàng",
+        "picked_up": "Đã lấy hàng",
+        "in_transit": "Đang giao hàng",
+        "delivered": "Đã giao hàng",
+        "failed": "Giao hàng thất bại",
+        "returned": "Đã chuyển hoàn"
+      },
+      "feeConfig": {
+        "title": "Cấu hình cước phí vận chuyển",
+        "baseFee": "Phí cơ bản",
+        "weightFee": "Phí theo khối lượng (kg)",
+        "codFee": "Phí thu hộ (COD)",
+        "save": "Lưu cấu hình cước phí"
+      }
+    },
+    "rma": {
+      "title": "Xử lý Đổi trả/Hoàn tiền (RMA)",
+      "description": "Quản lý quy trình đổi trả hàng, kiểm định và hoàn tiền cho khách hàng.",
+      "orderId": "Mã đơn hàng",
+      "reason": "Lý do",
+      "amount": "Số tiền hoàn",
+      "approve": "Phê duyệt",
+      "reject": "Từ chối",
+      "refund": "Hoàn tiền",
+      "status": "Trạng thái RMA",
+      "statuses": {
+        "pending": "Chờ xử lý",
+        "approved": "Đã chấp nhận",
+        "rejected": "Đã từ chối",
+        "refunded": "Đã hoàn tiền",
+        "processing": "Đang kiểm định"
+      }
+    }
+  },
+  "paymentWallet": {
+    "title": "Thanh toán & Ví nội bộ",
+    "depositOrders": "Lệnh nạp tiền",
+    "transactionId": "Mã GD",
+    "type": "Loại",
+    "amount": "Số tiền",
+    "customer": "Khách hàng",
+    "status": "Trạng thái",
+    "availableBalance": "Số dư khả dụng",
+    "pendingBalance": "Đang chờ xử lý",
+    "deposit": "Nạp tiền",
+    "withdraw": "Rút tiền",
+    "history": "Lịch sử giao dịch",
+    "escrow": "Giao dịch ký quỹ (Escrow)"
+  },
+  "hr": {
+      "title": "Quản trị Nguồn nhân lực toàn diện",
+      "description": "Quản lý hồ sơ nhân sự, chấm công, tính lương và đào tạo.",
+      "tabs": {
+        "core": "Core HR & Hành trình nhân viên",
+        "time": "Time & Attendance (Chấm công)",
+        "payroll": "Payroll & C&B (Lương bổng & Phúc lợi)",
+        "performance": "Performance & Training (Đánh giá & Đào tạo)"
+      },
+      "core": {
+        "addEmployee": "Thêm nhân viên",
+        "totalEmployees": "Tổng nhân viên",
+        "thisMonth": "trong tháng này",
+        "onboarding": "Onboarding",
+        "inProgress": "Đang thực hiện",
+        "departments": "Phòng ban",
+        "active": "Đang hoạt động",
+        "employeeList": "Hồ sơ nhân sự",
+        "employeeListDesc": "Quản lý hồ sơ nhân viên và trạng thái làm việc.",
+        "employeeId": "Mã NV",
+        "name": "Họ và tên",
+        "department": "Phòng ban",
+        "position": "Chức vụ",
+        "status": "Trạng thái",
+        "contracts": "Hợp đồng lao động",
+        "contractType": "Loại hợp đồng",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc",
+        "signedDate": "Ngày ký"
+      },
+      "time": {
+        "leaveRequests": "Yêu cầu nghỉ phép",
+        "leaveRequestsDesc": "Quản lý đơn xin nghỉ phép và làm thêm giờ.",
+        "employee": "Nhân viên",
+        "type": "Loại nghỉ",
+        "dates": "Thời gian",
+        "status": "Trạng thái",
+        "attendanceOverview": "Tổng quan chấm công",
+        "todayStats": "Thống kê hôm nay",
+        "present": "Có mặt",
+        "late": "Đi muộn",
+        "absent": "Vắng mặt",
+        "viewTimesheet": "Xem bảng công",
+        "shifts": "Ca làm việc",
+        "shiftName": "Tên ca",
+        "startTime": "Giờ bắt đầu",
+        "endTime": "Giờ kết thúc",
+        "otRequests": "Đăng ký OT",
+        "otHours": "Số giờ OT"
+      },
+      "payroll": {
+        "title": "Bảng lương",
+        "description": "Quản lý kỳ lương, tính toán và xuất phiếu lương.",
+        "runPayroll": "Tính lương",
+        "configFormulas": "Cấu hình công thức",
+        "exportReport": "Xuất báo cáo",
+        "period": "Kỳ lương",
+        "totalEmployees": "Số lượng NV",
+        "totalAmount": "Tổng chi trả",
+        "status": "Trạng thái",
+        "payslips": "Phiếu lương",
+        "salaryStructure": "Cấu trúc & Công thức lương",
+        "basicSalary": "Lương cơ bản",
+        "allowances": "Phụ cấp",
+        "deductions": "Khấu trừ",
+        "netSalary": "Thực nhận"
+      },
+      "performance": {
+        "kpiTitle": "Mục tiêu & KPIs",
+        "kpiDesc": "Theo dõi tiến độ thực hiện mục tiêu của công ty và cá nhân.",
+        "manageKPIs": "Quản lý KPIs",
+        "reviews": "Đánh giá năng lực",
+        "reviewCycle": "Chu kỳ đánh giá",
+        "reviewer": "Người đánh giá",
+        "rating": "Xếp loại"
+      },
+      "training": {
+        "title": "Đào tạo nội bộ",
+        "description": "Quản lý các khóa học và tiến độ đào tạo nhân viên.",
+        "completed": "Hoàn thành",
+        "courseCatalog": "Danh mục khóa học"
+      }
+    },
+    "settings": {
+      "title": "Cấu hình Logistics",
+      "description": "Thiết lập đơn vị vận chuyển, cấu hình API và quản lý cước phí vận chuyển.",
+      "addCarrier": "Thêm ĐVVC mới",
+      "carrierName": "Tên ĐVVC",
+      "apiEndpoint": "API Endpoint",
+      "apiKey": "API Key",
+      "testConnection": "Kiểm tra kết nối",
+      "saveConfig": "Lưu cấu hình",
+      "gateways": "Cổng vận chuyển tích hợp",
+      "configure": "Cấu hình API"
+    },
+  "sellers": {
+    "title": "Quản lý Nhà bán hàng",
+    "description": "Quản lý hồ sơ nhà bán hàng, đánh giá/rating, quản lý phí hoa hồng/chiết khấu và phê duyệt onboarding.",
+    "inviteSeller": "Mời Nhà bán hàng",
+    "searchPlaceholder": "Tìm kiếm nhà bán hàng...",
+    "id": "Mã nhà bán",
+    "storeName": "Tên cửa hàng",
+    "primaryCategory": "Danh mục chính",
+    "rating": "Đánh giá/Rating",
+    "totalSales": "Tổng doanh số",
+    "viewProfile": "Hồ sơ Seller",
+    "manageCommission": "Quản lý phí hoa hồng/chiết khấu",
+    "suspendSeller": "Đình chỉ nhà bán",
+    "noSellers": "Không tìm thấy nhà bán hàng.",
+    "sellerType": "Loại Nhà bán",
+    "regularSeller": "Nhà bán thông thường",
+    "dropShippingSeller": "Nhà bán DropShipping",
+    "f2cSeller": "Nhà bán F2C (Factory to Consumer)",
+    "onboardingApproval": "Phê duyệt Onboarding",
+    "taxId": "Mã số thuế (MST)",
+    "idCard": "CMND/CCCD",
+    "businessLicense": "GPKD",
+    "verifyTaxId": "Tra cứu/đối soát MST",
+    "verifyIdCard": "Tra cứu/đối soát CMND/CCCD",
+    "matchedNationalDb": "Khớp với CSDL Quốc gia",
+    "notMatchedNationalDb": "Không khớp với CSDL Quốc gia",
+    "uploadDocs": "Upload GPKD/CCCD",
+    "approveEkyc": "Phê duyệt eKYC",
+    "updateTax": "Cập nhật Thuế",
+    "updateBank": "Cập nhật Ngân hàng",
+    "detailsTab": "Tổng quan 360",
+    "ownerName": "Chủ shop",
+    "shopAddress": "Địa chỉ shop",
+    "contactPhone": "Điện thoại liên hệ",
+    "warehouseAddress": "Địa chỉ kho",
+    "warehouseStaff": "Nhân viên kho",
+    "warehousePhone": "SĐT liên hệ kho",
+    "bankAccountHolder": "Chủ tài khoản",
+    "selectBank": "Chọn ngân hàng",
+    "bankName": "Tên Ngân hàng",
+    "legalType": "Hình thức pháp lý",
+    "individual": "Cá nhân kinh doanh",
+    "businessHousehold": "Hộ kinh doanh",
+    "enterprise": "Doanh nghiệp",
+    "taxNoteIndividual": "Chịu thuế GTGT 1% và Thuế TNCN 0.5% trên doanh thu.",
+    "taxNoteEnterprise": "Không khấu trừ thuế tại nguồn.",
+    "personalAccount": "Số tài khoản chính chủ",
+    "businessAccount": "Số tài khoản doanh nghiệp",
+    "ownerIdPassport": "CCCD / Hộ chiếu chủ doanh nghiệp",
+    "sellerInfo": "Thông tin người bán",
+    "ownerNameIndividual": "Họ tên chủ shop",
+    "businessHouseholdName": "Hộ kinh doanh",
+    "enterpriseName": "Tên doanh nghiệp",
+    "contactAddress": "Địa chỉ liên lạc",
+    "taxAddress": "Địa chỉ thuế",
+    "email": "Email",
+    "bankInfo": "Thông tin ngân hàng",
+    "warehouseInfo": "Thông tin kho hàng",
+    "addWarehouse": "Thêm kho hàng",
+    "warehouseList": "Danh sách kho",
+    "returnForAdditionalInfo": "Trả lại bổ sung",
+    "approve": "Phê duyệt",
+    "reject": "Từ chối",
+    "actions": {
+      "view": "Xem",
+      "edit": "Sửa thông tin",
+      "suspend": "Đình chỉ nhà bán"
+    },
+    "tabs": {
+      "approval": "Phê duyệt (ưu tiên)"
+    }
+  },
+  "marketing": {
+    "title": "Kênh Marketing",
+    "description": "Quản lý chiến dịch, mạng xã hội, khuyến mãi và phân tích hiệu quả.",
+    "tabs": {
+      "campaigns": "Chiến dịch",
+      "social": "Mạng xã hội",
+      "messages": "Tin nhắn & Zalo",
+      "promotions": "Khuyến mãi & Flash Sale",
+      "landingPages": "Landing Pages"
+    },
+    "campaigns": {
+      "create": "Tạo chiến dịch",
+      "name": "Tên chiến dịch",
+      "status": "Trạng thái",
+      "budget": "Ngân sách",
+      "revenue": "Doanh thu",
+      "pnl": "Lợi nhuận (P&L)",
+      "roi": "ROI",
+      "active": "Đang chạy",
+      "completed": "Đã kết thúc",
+      "planned": "Đã lên lịch"
+    },
+    "social": {
+      "createPost": "Đăng bài mới",
+      "platform": "Nền tảng",
+      "content": "Nội dung",
+      "schedule": "Lịch đăng",
+      "engagement": "Tương tác"
+    },
+    "promotions": {
+      "flashSale": "Flash Sale",
+      "voucher": "Voucher Center",
+      "groupBuy": "Mua nhóm (Group Buy)",
+      "createFlashSale": "Tạo Flash Sale",
+      "createVoucher": "Tạo Voucher",
+      "createGroupBuy": "Tạo nhóm mua",
+      "startTime": "Bắt đầu",
+      "endTime": "Kết thúc",
+      "discount": "Giảm giá"
+    }
+  },
+  "affiliate": {
+    "title": "Tiếp thị liên kết",
+    "description": "Quản lý mạng lưới đối tác, hoa hồng và theo dõi hiệu quả tiếp thị.",
+    "tabs": {
+      "overview": "Tổng quan",
+      "publishers": "Mạng lưới Publisher/KOL",
+      "commissions": "Cấu hình Hoa hồng",
+      "tracking": "Tracking Link"
+    },
+    "overview": {
+      "totalRevenue": "Doanh thu Affiliate",
+      "activePublishers": "Publisher hoạt động",
+      "totalCommissions": "Tổng hoa hồng đã trả",
+      "clicks": "Lượt click"
+    },
+    "publishers": {
+      "name": "Tên Publisher",
+      "type": "Loại hình",
+      "followers": "Người theo dõi",
+      "commissionRate": "Tỷ lệ hoa hồng",
+      "status": "Trạng thái",
+      "actions": "Hành động",
+      "invite": "Mời Publisher",
+      "types": {
+        "kol": "KOL/Influencer",
+        "content_creator": "Content Creator",
+        "coupon_site": "Coupon Site",
+        "cashback": "Cashback"
+      }
+    },
+    "commissions": {
+      "title": "Cấu hình Hoa hồng",
+      "description": "Thiết lập tỷ lệ hoa hồng theo ngành hàng hoặc sản phẩm cụ thể.",
+      "defaultRate": "Tỷ lệ mặc định",
+      "categoryRates": "Theo ngành hàng",
+      "productRates": "Theo sản phẩm (Đặc biệt)",
+      "addCategory": "Thêm ngành hàng",
+      "addProduct": "Thêm sản phẩm",
+      "category": "Ngành hàng",
+      "rate": "Tỷ lệ (%)",
+      "save": "Lưu cấu hình"
+    },
+    "tracking": {
+      "title": "Tạo Tracking Link",
+      "description": "Tạo và chia sẻ đường dẫn theo dõi cho các chiến dịch.",
+      "generate": "Tạo Link",
+      "sourceUrl": "Link gốc (Sản phẩm/Trang chủ)",
+      "campaignSource": "Nguồn chiến dịch (utm_source)",
+      "campaignMedium": "Cách thức (utm_medium)",
+      "campaignName": "Tên chiến dịch (utm_campaign)",
+      "generatedUrl": "Link theo dõi",
+      "copy": "Sao chép"
+    }
+  },
+  "purchasing": {
+    "title": "Mua hàng & Chuỗi cung ứng B2B",
+    "description": "Quản lý yêu cầu mua hàng nội bộ, đánh giá nhà cung cấp và tồn kho B2B.",
+    "tabs": {
+      "requisitions": "Yêu cầu mua hàng",
+      "suppliers": "Nhà cung cấp",
+      "inventory": "Tồn kho B2B",
+      "reports": "Báo cáo X/N/T",
+      "forecasting": "Dự báo nhu cầu"
+    },
+    "requisitions": {
+      "create": "Tạo yêu cầu",
+      "listTitle": "Danh sách yêu cầu mua hàng",
+      "id": "Mã yêu cầu",
+      "requester": "Người yêu cầu",
+      "item": "Sản phẩm/Vật tư",
+      "quantity": "Số lượng",
+      "date": "Ngày tạo",
+      "priority": "Độ ưu tiên",
+      "status": "Trạng thái",
+      "actions": "Hành động"
+    },
+    "suppliers": {
+      "title": "Danh sách Nhà cung cấp",
+      "name": "Tên nhà cung cấp",
+      "category": "Danh mục",
+      "rating": "Đánh giá",
+      "status": "Trạng thái",
+      "lastOrder": "Đơn hàng cuối",
+      "evaluate": "Đánh giá lại"
+    },
+    "inventory": {
+      "title": "Quản lý Tồn kho B2B",
+      "sku": "SKU",
+      "productName": "Tên sản phẩm",
+      "currentStock": "Tồn kho hiện tại",
+      "safetyStock": "Định mức an toàn",
+      "status": "Trạng thái",
+      "alerts": {
+        "ok": "Ổn định",
+        "low": "Sắp hết hàng",
+        "critical": "Cảnh báo hết hàng",
+        "overstock": "Tồn kho quá mức"
+      }
+    },
+    "reports": {
+      "title": "Báo cáo Xuất/Nhập/Tồn",
+      "export": "Xuất báo cáo"
+    },
+    "forecasting": {
+      "title": "Dự báo nhu cầu mua hàng",
+      "item": "Sản phẩm",
+      "currentStock": "Tồn hiện tại",
+      "predictedDemand": "Nhu cầu dự báo (30 ngày)",
+      "suggestedOrder": "Gợi ý đặt hàng",
+      "confidence": "Độ tin cậy",
+      "createPO": "Tạo đơn mua hàng"
+    }
+  },
+  "finance": {
+    "title": "Tài chính & Kế toán",
+    "description": "Quản lý tài chính, kế toán chuyên sâu theo Thông tư 99/2025/TT-BTC.",
+    "tabs": {
+      "dashboard": "Tổng quan",
+      "chartOfAccounts": "Hệ thống Tài khoản",
+      "journal": "Chứng từ & Sổ sách",
+      "ledger": "Sổ cái",
+      "statements": "Báo cáo tài chính",
+      "paymentWallet": "Thanh toán & Ví nội bộ",
+      "withdrawal": "Yêu cầu rút tiền"
+    },
+    "dashboard": {
+      "totalRevenue": "Tổng doanh thu",
+      "totalExpenses": "Tổng chi phí",
+      "netProfit": "Lợi nhuận ròng",
+      "cashOnHand": "Tiền mặt & Tương đương",
+      "currentBalance": "Số dư hiện tại"
+    },
+    "chartOfAccounts": {
+      "title": "Hệ thống Tài khoản Kế toán",
+      "description": "Danh mục tài khoản kế toán doanh nghiệp theo Thông tư 99/2025/TT-BTC.",
+      "code": "Số hiệu TK",
+      "name": "Tên tài khoản",
+      "type": "Loại",
+      "create": "Thêm tài khoản"
+    },
+    "journal": {
+      "title": "Hệ thống Sổ sách & Chứng từ",
+      "description": "Quản lý các loại sổ kế toán theo quy định (Sổ Nhật ký chung, Sổ quỹ, Sổ tiền gửi...).",
+      "create": "Lập chứng từ mới",
+      "date": "Ngày ghi sổ",
+      "number": "Số hiệu",
+      "description": "Diễn giải",
+      "account": "Tài khoản",
+      "debit": "Nợ",
+      "credit": "Có",
+      "bookType": "Loại sổ",
+      "cashBook": "Sổ quỹ tiền mặt (S07-DN)",
+      "bankBook": "Sổ tiền gửi ngân hàng (S08-DN)",
+      "generalJournal": "Sổ Nhật ký chung (S03a-DN)"
+    },
+    "ledger": {
+      "title": "Sổ cái (S05-DN)",
+      "description": "Chi tiết giao dịch theo từng tài khoản kế toán.",
+      "selectAccount": "Chọn tài khoản",
+      "balance": "Số dư"
+    },
+    "statements": {
+      "title": "Báo cáo tài chính",
+      "description": "Hệ thống BCTC theo Thông tư 99/2025/TT-BTC.",
+      "preview": "Xem trước Báo cáo",
+      "balanceSheet": "Báo cáo tình hình tài chính (B 01 - DN)",
+      "incomeStatement": "Báo cáo kết quả hoạt động kinh doanh (B 02 - DN)",
+      "cashFlow": "Báo cáo lưu chuyển tiền tệ (B 03 - DN)"
+    },
+    "reconciliation": {
+      "title": "Đối soát & Công nợ",
+      "description": "Đối soát thanh toán cho Seller và quản lý công nợ.",
+      "seller": "Người bán (Seller)",
+      "orderId": "Mã đơn hàng",
+      "transactionDate": "Ngày giao dịch",
+      "orderValue": "Giá trị đơn",
+      "platformFee": "Phí sàn",
+      "shippingFee": "Phí vận chuyển",
+      "commission": "Hoa hồng",
+      "netPayment": "Thực nhận",
+      "status": "Trạng thái",
+      "action": "Thao tác",
+      "reconcile": "Đối soát",
+      "reconciled": "Đã đối soát",
+      "pending": "Chờ đối soát"
+    },
+    "pnl": {
+      "title": "Phân tích P&L",
+      "description": "Tự động trích xuất P&L dựa trên giá nhập, giá bán và chi phí.",
+      "revenue": "Doanh thu",
+      "cogs": "Giá vốn hàng bán (COGS)",
+      "grossProfit": "Lợi nhuận gộp",
+      "operatingExpenses": "Chi phí vận hành",
+      "netProfit": "Lợi nhuận ròng",
+      "product": "Sản phẩm",
+      "qtySold": "SL Bán",
+      "avgSellPrice": "Giá bán TB",
+      "avgImportPrice": "Giá nhập TB",
+      "margin": "Biên LN (%)"
+    },
+    "withdrawal": {
+      "title": "Yêu cầu rút tiền",
+      "description": "Quản lý yêu cầu rút tiền từ Người mua và Nhà bán hàng.",
+      "requestId": "Mã yêu cầu",
+      "requester": "Người yêu cầu",
+      "type": "Loại tài khoản",
+      "amount": "Số tiền",
+      "bankInfo": "Thông tin ngân hàng",
+      "status": "Trạng thái",
+      "date": "Ngày yêu cầu",
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "payout": "Giải ngân",
+      "user": "Người mua",
+      "seller": "Nhà bán"
+    },
+    "invoice": {
+      "title": "Hóa đơn điện tử",
+      "description": "Quản lý hóa đơn GTGT cho Người mua và hóa đơn hoa hồng cho Nhà bán.",
+      "invoiceNumber": "Số hóa đơn",
+      "type": "Loại hóa đơn",
+      "recipient": "Người nhận",
+      "amount": "Tổng tiền",
+      "date": "Ngày xuất",
+      "status": "Trạng thái",
+      "vatInvoice": "Hóa đơn GTGT",
+      "commissionInvoice": "Hóa đơn hoa hồng",
+      "view": "Xem",
+      "download": "Tải về",
+      "send": "Gửi email"
+    },
+    "statements": {
+      "balanceSheet": "Bảng cân đối kế toán",
+      "incomeStatement": "Kết quả HĐKD",
+      "cashFlow": "Lưu chuyển tiền tệ",
+      "preview": "Xem trước báo cáo"
+    }
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "description": "Quản lý cài đặt hệ thống và tùy chọn tài khoản của bạn.",
+    "tabs": {
+      "general": "Chung",
+      "account": "Tài khoản",
+      "notifications": "Thông báo",
+      "security": "Bảo mật",
+      "appearance": "Giao diện",
+      "fees": "Phí & Thuế",
+      "categories": "Ngành hàng",
+      "roles": "Phân quyền",
+      "integrations": "Tích hợp",
+      "shipping": "Vận chuyển",
+      "paymentShipping": "Thanh toán & Vận chuyển"
+    },
+    "general": {
+      "systemName": "Tên hệ thống",
+      "systemNameDesc": "Tên hiển thị của hệ thống trên các giao diện.",
+      "logo": "Logo hệ thống",
+      "navicon": "Favicon / Navicon",
+      "contactEmail": "Email liên hệ",
+      "contactEmailDesc": "Email dùng để nhận thông báo từ hệ thống.",
+      "hotline": "Hotline",
+      "hotlineDesc": "Số điện thoại hỗ trợ khách hàng.",
+      "timezone": "Múi giờ",
+      "currency": "Tiền tệ mặc định",
+      "save": "Lưu thay đổi"
+    },
+    "account": {
+      "profile": "Hồ sơ cá nhân",
+      "fullName": "Họ và tên",
+      "mobilePhone": "Số điện thoại di động",
+      "ext": "Ext (Máy lẻ)",
+      "email": "Email",
+      "department": "Phòng ban",
+      "position": "Chức vụ",
+      "role": "Vai trò",
+      "updateProfile": "Cập nhật hồ sơ"
+    },
+    "notifications": {
+      "emailNotif": "Thông báo qua Email",
+      "emailNotifDesc": "Nhận email khi có đơn hàng mới hoặc cập nhật quan trọng.",
+      "pushNotif": "Thông báo đẩy",
+      "pushNotifDesc": "Nhận thông báo trực tiếp trên trình duyệt.",
+      "smsNotif": "Thông báo SMS",
+      "smsNotifDesc": "Nhận tin nhắn SMS cho các cảnh báo bảo mật."
+    },
+    "appearance": {
+      "theme": "Giao diện",
+      "light": "Sáng",
+      "dark": "Tối",
+      "system": "Hệ thống",
+      "primaryColor": "Màu chủ đạo",
+      "fontSize": "Cỡ chữ",
+      "small": "Nhỏ",
+      "medium": "Trung bình",
+      "large": "Lớn"
+    },
+    "security": {
+      "changePassword": "Đổi mật khẩu",
+      "currentPassword": "Mật khẩu hiện tại",
+      "newPassword": "Mật khẩu mới",
+      "confirmPassword": "Xác nhận mật khẩu mới",
+      "twoFactorAuth": "Xác thực 2 yếu tố (2FA)",
+      "twoFactorAuthDesc": "Bảo vệ tài khoản của bạn bằng mã xác thực từ ứng dụng Authenticator.",
+      "loginHistory": "Lịch sử đăng nhập",
+      "activeSessions": "Phiên hoạt động",
+      "device": "Thiết bị",
+      "location": "Vị trí",
+      "ipAddress": "Địa chỉ IP",
+      "time": "Thời gian",
+      "revokeSession": "Đăng xuất"
+    },
+    "paymentShipping": {
+      "title": "Thanh toán & Vận chuyển",
+      "description": "Cấu hình kết nối API với các đối tác thanh toán và vận chuyển.",
+      "paymentGateways": "Cổng thanh toán",
+      "shippingProviders": "Đơn vị vận chuyển",
+      "partnerName": "Đối tác",
+      "apiKey": "API Key",
+      "secretKey": "Secret Key",
+      "merchantId": "Merchant ID",
+      "webhookUrl": "Webhook URL",
+      "configure": "Cấu hình",
+      "status": "Trạng thái",
+      "connected": "Đã kết nối",
+      "disconnected": "Chưa kết nối"
+    },
+    "fees": {
+      "title": "Cấu hình Phí & Thuế",
+      "platformFee": "Phí sàn theo ngành hàng",
+      "platformFeeDesc": "Cấu hình tỷ lệ phí sàn áp dụng cho từng ngành hàng cụ thể.",
+      "otherFees": "Các loại phí khác",
+      "otherFeesDesc": "Cấu hình các loại phí áp dụng trên mỗi đơn hàng.",
+      "feeName": "Tên loại phí",
+      "feeType": "Loại hình",
+      "feeValue": "Giá trị",
+      "feePercentage": "Tỷ lệ (%)",
+      "feeFixed": "Cố định (VND)",
+      "paymentFee": "Phí thanh toán",
+      "infrastructureFee": "Phí hạ tầng",
+      "insuranceFee": "Phí bảo hiểm",
+      "voucherFee": "Voucher",
+      "adsFee": "Quảng cáo",
+      "affiliateFee": "Phí Affiliate",
+      "vatTax": "Thuế GTGT",
+      "vatTaxDesc": "Áp dụng cho mọi đơn hàng",
+      "pitTax": "Thuế TNCN",
+      "pitTaxDesc": "Chỉ áp dụng cho Cá nhân / Hộ kinh doanh",
+      "categoryLevel1": "Ngành hàng cấp 1",
+      "categoryLevel2": "Ngành hàng cấp 2",
+      "categoryLevel3": "Ngành hàng cấp 3",
+      "feeRateMall": "Phí Mall (%)",
+      "feeRateRegular": "Phí Shop thường (%)",
+      "searchCategory": "Tìm kiếm ngành hàng...",
+      "addFee": "Thêm loại phí",
+      "addCategory": "Thêm ngành hàng",
+      "deleteCategory": "Xóa",
+      "confirmDelete": "Xác nhận xóa",
+      "confirmDeleteDesc": "Bạn có chắc chắn muốn xóa ngành hàng này không?",
+      "shippingFees": "Cấu hình cước phí vận chuyển",
+      "shippingFeesDesc": "Cấu hình cước phí riêng biệt cho từng đơn vị vận chuyển.",
+      "carrier": "Đơn vị vận chuyển",
+      "baseFee": "Phí cơ bản",
+      "weightFee": "Phí theo khối lượng (kg)",
+      "codFee": "Phí thu hộ (COD)",
+      "categoryLevel1Placeholder": "Nhập ngành hàng cấp 1...",
+      "categoryLevel2Placeholder": "Nhập ngành hàng cấp 2...",
+      "categoryLevel3Placeholder": "Nhập ngành hàng cấp 3 (tùy chọn)...",
+      "saveChanges": "Lưu cấu hình",
+      "categoryManagement": "Quản lý ngành hàng & Phí sàn",
+      "categoryManagementDesc": "Cấu hình danh mục ngành hàng và tỷ lệ phí sàn tương ứng cho Mall và Shop thường."
+    },
+    "roles": {
+      "title": "Ma trận phân quyền",
+      "description": "Quản lý vai trò và quyền hạn chi tiết cho từng module trong hệ thống.",
+      "roleName": "Tên vai trò",
+      "addRole": "Thêm vai trò",
+      "module": "Module",
+      "view": "Xem",
+      "create": "Thêm mới",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "approve": "Phê duyệt",
+      "modules": {
+        "products": "Sản phẩm",
+        "orders": "Đơn hàng",
+        "sellers": "Nhà bán (Sellers)",
+        "marketing": "Marketing",
+        "finance": "Tài chính",
+        "settings": "Cài đặt hệ thống"
+      }
+    },
+    "integrations": {
+      "title": "OpenAPI & Webhooks",
+      "description": "Quản lý kết nối API và Webhook cho các hệ thống bên thứ 3 (ERP, CRM...).",
+      "apiKeys": "API Keys",
+      "webhooks": "Webhooks",
+      "createApiKey": "Tạo API Key mới",
+      "keyName": "Tên Key",
+      "keyString": "API Key",
+      "createdDate": "Ngày tạo",
+      "lastUsed": "Lần cuối sử dụng",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Vô hiệu hóa",
+      "addWebhook": "Thêm Webhook",
+      "endpointUrl": "Endpoint URL",
+      "events": "Sự kiện (Events)",
+      "secret": "Secret Key"
+    }
+  }
+}

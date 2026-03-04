@@ -1,0 +1,1217 @@
+{
+  "common": {
+    "search": "Search...",
+    "filter": "Filter",
+    "filters": "Filters",
+    "create": "Create",
+    "export": "Export",
+    "actions": "Actions",
+    "viewDetails": "View details",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "status": "Status",
+    "moduleUnderConstruction": "Module under construction"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "products": "Product Management",
+    "allProducts": "All Products",
+    "addProduct": "Add Product",
+    "aiOptimization": "AI Optimization Tool",
+    "sellers": "Sellers",
+    "orders": "Orders",
+    "marketing": "Marketing Channel",
+    "affiliate": "Affiliate",
+    "purchasing": "Purchasing",
+    "finance": "Finance",
+    "accounting": "Accounting & Finance",
+    "reconciliation": "Reconciliation & Debt",
+    "pnl": "P&L Analysis",
+    "paymentWallet": "Payment & Internal Wallet",
+    "sellerFinance": "Seller Finance",
+    "withdrawals": "Withdrawal Requests",
+    "hr": "HR",
+    "coreHr": "Core HR & Contracts",
+    "timeAttendance": "Time & Attendance",
+    "payroll": "Payroll",
+    "performance": "Performance & Training",
+    "admin": "Admin",
+    "adminWorkspace": "Admin Workspace",
+    "assets": "Assets & Equipment",
+    "stationery": "Stationery",
+    "booking": "Room & Car Booking",
+    "requests": "Requests & Expenses",
+    "analytics": "BI & Analytics",
+    "sales": "Sales",
+    "loyalty": "Loyalty & Gamification",
+    "live": "Live Hub",
+    "customers": "Customers",
+    "social": "Social Commerce & Community",
+    "advertising": "Advertising",
+    "legal": "Legal & Brand Protection",
+    "sellerFinance": "Supply Chain Finance",
+    "settings": "Settings"
+  },
+  "socialCommerce": {
+    "title": "Social Commerce & Community",
+    "description": "Space for sharing UGC, product reviews, and connecting with the shopping community.",
+    "tabs": {
+      "feed": "Social Feed",
+      "groups": "Communities & Groups",
+      "creators": "Creators"
+    },
+    "feed": {
+      "createPost": "Create Post",
+      "trending": "Trending",
+      "following": "Following",
+      "forYou": "For You",
+      "likes": "Likes",
+      "comments": "Comments",
+      "shares": "Shares",
+      "buyNow": "Buy Now"
+    },
+    "groups": {
+      "createGroup": "Create Group",
+      "members": "Members",
+      "posts": "Posts/day",
+      "join": "Join",
+      "joined": "Joined",
+      "category": "Category"
+    },
+    "creators": {
+      "followers": "Followers",
+      "engagementRate": "Engagement Rate",
+      "totalSales": "Total Sales Generated",
+      "follow": "Follow",
+      "unfollow": "Unfollow"
+    }
+  },
+  "legal": {
+    "title": "Legal, Compliance & Brand Protection",
+    "description": "Manage brand registration, dispute resolution, and regulatory compliance.",
+    "tabs": {
+      "brandPortal": "Brand Portal",
+      "dispute": "Dispute Resolution",
+      "compliance": "Compliance"
+    },
+    "brandPortal": {
+      "register": "Register Brand",
+      "brandName": "Brand Name",
+      "owner": "Owner",
+      "status": "Status",
+      "documents": "Documents"
+    },
+    "dispute": {
+      "caseId": "Case ID",
+      "type": "Violation Type",
+      "reporter": "Reporter",
+      "accused": "Accused",
+      "status": "Status",
+      "action": "Action",
+      "counterfeit": "Counterfeit",
+      "ipViolation": "IP Violation"
+    },
+    "compliance": {
+      "policy": "Policy",
+      "violationRate": "Violation Rate",
+      "lastAudit": "Last Audit",
+      "status": "Status",
+      "dataPrivacy": "Data Privacy",
+      "ecommerceLaw": "E-commerce Law"
+    }
+  },
+  "sellerFinance": {
+    "title": "Supply Chain Finance",
+    "description": "Seller credit scoring and early payout systems for working capital.",
+    "tabs": {
+      "credit": "Seller Credit",
+      "earlyPayout": "Early Payouts"
+    },
+    "credit": {
+      "sellerName": "Seller Name",
+      "creditScore": "Credit Score",
+      "performance": "Performance",
+      "loanLimit": "Loan Limit",
+      "status": "Status",
+      "excellent": "Excellent",
+      "good": "Good",
+      "average": "Average"
+    },
+    "earlyPayout": {
+      "requestPayout": "Request Payout",
+      "amount": "Payout Amount",
+      "fee": "Discount Fee",
+      "netAmount": "Net Amount",
+      "payoutDate": "Payout Date",
+      "status": "Status"
+    }
+  },
+  "advertising": {
+    "title": "Advertising Manager",
+    "description": "Manage keyword bidding, display positions, and ad performance analytics.",
+    "tabs": {
+      "bidding": "Ad Bidding",
+      "analytics": "Performance Analytics (ROAS)",
+      "revenue": "Platform Ad Revenue"
+    },
+    "bidding": {
+      "keyword": "Keyword",
+      "position": "Display Position",
+      "bidPrice": "Bid Price",
+      "status": "Status",
+      "createCampaign": "Create Campaign",
+      "campaignName": "Campaign Name",
+      "budget": "Daily Budget",
+      "topSearch": "Top Search",
+      "homeBanner": "Home Banner",
+      "categoryBanner": "Category Banner"
+    },
+    "analytics": {
+      "impressions": "Impressions",
+      "clicks": "Clicks",
+      "ctr": "Click-Through Rate (CTR)",
+      "spend": "Spend",
+      "revenue": "Revenue",
+      "roas": "ROAS",
+      "campaign": "Campaign"
+    },
+    "revenue": {
+      "totalAdRevenue": "Total Ad Revenue",
+      "activeCampaigns": "Active Campaigns",
+      "topSellers": "Top Spending Sellers"
+    }
+  },
+  "live": {
+    "title": "Live-commerce Hub",
+    "description": "Manage livestream schedules, pin products, track revenue and real-time engagement.",
+    "tabs": {
+      "dashboard": "Overview",
+      "schedule": "Schedule",
+      "activeSession": "Active Session",
+      "products": "Pinned Products"
+    },
+    "dashboard": {
+      "activeViewers": "Active Viewers",
+      "totalRevenue": "Live Revenue",
+      "orders": "Orders",
+      "engagement": "Engagement (Like/Comment)"
+    },
+    "schedule": {
+      "create": "Schedule Live",
+      "title": "Title",
+      "host": "Host/KOL",
+      "startTime": "Start Time",
+      "status": "Status",
+      "upcoming": "Upcoming",
+      "live": "Live",
+      "ended": "Ended"
+    },
+    "activeSession": {
+      "streamPreview": "Stream Preview",
+      "chat": "Live Chat",
+      "pinProduct": "Pin Product",
+      "endStream": "End Stream",
+      "revenue": "Revenue",
+      "viewers": "Viewers"
+    },
+    "products": {
+      "search": "Search products...",
+      "pin": "Pin",
+      "unpin": "Unpin",
+      "pinned": "Pinned",
+      "stock": "Stock",
+      "price": "Price"
+    }
+  },
+  "adminWorkspace": {
+    "title": "Office Administration",
+    "description": "Manage assets, stationery, meeting rooms, company vehicles, and administrative requests.",
+    "tabs": {
+      "assets": "Assets & Equipment",
+      "stationery": "Stationery",
+      "booking": "Room & Car Booking",
+      "requests": "Requests & Expenses"
+    },
+    "assets": {
+      "create": "Add Asset",
+      "assetId": "Asset ID",
+      "name": "Device Name",
+      "category": "Category",
+      "assignee": "Assignee",
+      "status": "Status",
+      "condition": "Condition",
+      "laptop": "Laptop/PC",
+      "monitor": "Monitor",
+      "furniture": "Furniture",
+      "available": "Available",
+      "inUse": "In Use",
+      "maintenance": "Maintenance"
+    },
+    "stationery": {
+      "request": "Request Stationery",
+      "item": "Item",
+      "stock": "Stock",
+      "unit": "Unit",
+      "department": "Department",
+      "quantity": "Quantity",
+      "status": "Status",
+      "pending": "Pending",
+      "approved": "Approved",
+      "delivered": "Delivered"
+    },
+    "booking": {
+      "bookRoom": "Book Room",
+      "bookCar": "Book Car",
+      "room": "Meeting Room",
+      "car": "Company Car",
+      "time": "Time",
+      "purpose": "Purpose",
+      "capacity": "Capacity",
+      "driver": "Driver",
+      "status": "Status",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled"
+    },
+    "requests": {
+      "create": "Create Request",
+      "requestId": "Request ID",
+      "type": "Request Type",
+      "requester": "Requester",
+      "amount": "Amount",
+      "date": "Date",
+      "status": "Status",
+      "purchase": "Asset Purchase",
+      "payment": "Expense Payment",
+      "travel": "Travel Expense"
+    }
+  },
+  "analytics": {
+    "title": "BI & Analytics",
+    "description": "Business intelligence data warehouse, deep reports, and fraud detection.",
+    "tabs": {
+      "overview": "Overview",
+      "customers": "Customer Analysis (RFM)",
+      "platform": "Platform Metrics (AOV, CLV, CAC)",
+      "sellers": "Seller Performance",
+      "fraud": "Fraud Detection"
+    },
+    "rfm": {
+      "title": "Customer Analysis (RFM)",
+      "recency": "Recency",
+      "frequency": "Frequency",
+      "monetary": "Monetary"
+    },
+    "platform": {
+      "title": "Platform Metrics",
+      "aov": "Average Order Value (AOV)",
+      "clv": "Customer Lifetime Value (CLV)",
+      "cac": "Customer Acquisition Cost (CAC)"
+    },
+    "sellers": {
+      "title": "Seller Performance Analysis"
+    },
+    "fraud": {
+      "title": "Fraud Detection",
+      "buffOrders": "Buff Orders",
+      "spamVoucher": "Spam Voucher"
+    }
+  },
+  "sales": {
+    "title": "Sales Management",
+    "description": "Manage internal sales teams, commission structures, and performance tracking.",
+    "tabs": {
+      "overview": "Overview",
+      "tiers": "Tiers & Commissions",
+      "tracking": "Performance Tracking"
+    },
+    "overview": {
+      "totalRevenue": "Total Sales Revenue",
+      "activeSales": "Active Sales Staff",
+      "topPerformer": "Top Performer",
+      "commissionPayout": "Commission Payout"
+    },
+    "roles": {
+      "admin": "Admin",
+      "salesDirector": "Sales Director",
+      "regionalDirector": "Regional Director",
+      "salesManager": "Sales Manager",
+      "salesStaff": "Sales Staff",
+      "collaborator": "Collaborator"
+    },
+    "performance": {
+      "individual": "Individual Performance",
+      "team": "Team Performance",
+      "hierarchy": "Sales Hierarchy"
+    },
+    "tiers": {
+      "title": "Tiers & Commissions",
+      "name": "Tier Name",
+      "revenueTarget": "Revenue Target",
+      "commissionRate": "Commission Rate (%)",
+      "addTier": "Add Tier"
+    },
+    "tracking": {
+      "title": "Performance Tracking",
+      "leaderboard": "Real-time Leaderboard",
+      "individual": "Individual Performance",
+      "team": "Team Performance",
+      "reconciliation": "Revenue Reconciliation"
+    }
+  },
+  "customers": {
+    "title": "Customer Management",
+    "description": "Manage customer relationships, purchase history, and omni-channel support.",
+    "tabs": {
+      "crm": "CRM & CSKH",
+      "chat": "Omni-channel Chat",
+      "hotline": "Hotline Management"
+    },
+    "crm": {
+      "title": "Buyer Management",
+      "buyerName": "Buyer Name",
+      "purchaseHistory": "Purchase History",
+      "totalOrders": "Total Orders",
+      "totalSpent": "Total Spent",
+      "lastOrder": "Last Order",
+      "walletBalance": "Wallet Balance",
+      "details": "Customer Details"
+    },
+    "chat": {
+      "title": "Omni-channel Support",
+      "zalo": "Zalo",
+      "facebook": "Facebook",
+      "liveChat": "Live Chat",
+      "activeChats": "Active Chats",
+      "waiting": "Waiting",
+      "resolved": "Resolved"
+    },
+    "hotline": {
+      "title": "Virtual PBX Management",
+      "callLog": "Call Log",
+      "caller": "Caller",
+      "duration": "Duration",
+      "agent": "Agent",
+      "recording": "Recording",
+      "missedCalls": "Missed Calls"
+    }
+  },
+  "header": {
+    "searchPlaceholder": "Search products, orders, sellers...",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Overview of your e-commerce platform performance.",
+    "totalRevenue": "Total Revenue (GMV)",
+    "activeSellers": "Active Sellers",
+    "totalOrders": "Total Orders",
+    "activeProducts": "Active Products",
+    "fromLastMonth": "from last month",
+    "sinceLastHour": "since last hour",
+    "revenueOverview": "Revenue Overview",
+    "revenueDesc": "Monthly GMV performance for the current year.",
+    "weeklyOrders": "Weekly Orders",
+    "weeklyOrdersDesc": "Order volume over the last 7 days."
+  },
+  "products": {
+    "title": "Products",
+    "description": "Manage your product catalog, pricing, and inventory.",
+    "addProduct": "Add 1 new product",
+    "searchPlaceholder": "Search Product Name, SKU...",
+    "id": "Product ID",
+    "name": "Product Name",
+    "category": "Category",
+    "seller": "Seller",
+    "price": "Price",
+    "stock": "Stock",
+    "performance": "Performance",
+    "rating": "Product Rating",
+    "noProducts": "No products found.",
+    "productSettings": "Product Settings",
+    "batchTools": "Batch Tools",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "violations": "Violations",
+      "pending": "Pending Shopee Approval",
+      "unpublished": "Unpublished"
+    },
+    "subTabs": {
+      "all": "All",
+      "needsRestock": "Needs Restock",
+      "needsImprovement": "Needs Content Improvement"
+    },
+    "filters": {
+      "category": "Category",
+      "flagship": "Flagship product",
+      "apply": "Apply",
+      "reset": "Reset",
+      "expand": "Expand"
+    },
+    "add": {
+      "title": "Add 1 new product",
+      "suggestions": "Information filling suggestions",
+      "sug1": "Add at least 3 images",
+      "sug2": "Add product video",
+      "sug3": "Product name has at least 25~100 characters",
+      "sug4": "Add at least 100 characters or 1 image in product description",
+      "sug5": "Add brand",
+      "tabs": {
+        "basic": "Basic Info",
+        "description": "Description",
+        "sales": "Sales Info",
+        "shipping": "Shipping",
+        "other": "Other Info"
+      },
+      "basicInfo": "Basic Info",
+      "productImages": "Product Images",
+      "ratio11": "1:1 Ratio",
+      "ratio34": "3:4 Ratio",
+      "seeExample": "See example",
+      "addImage": "Add image",
+      "coverImage": "Cover Image",
+      "coverImageHint1": "Upload 1:1 image.",
+      "coverImageHint2": "Cover image will be displayed in search results, today's suggestions... Using a good cover image will attract more traffic to your product.",
+      "productVideo": "Product Video",
+      "addVideo": "Add video",
+      "videoHint1": "Size: Max 30MB, resolution should not be less than 1x1px",
+      "videoHint2": "Duration: 10s-60s",
+      "videoHint3": "Format: MP4",
+      "videoHint4": "Note: Product can be displayed while video is being processed. Video will automatically display after successful processing.",
+      "productName": "Product Name",
+      "productNamePlaceholder": "Product Name + Brand + Model + Specifications",
+      "category": "Category",
+      "selectCategory": "Select category",
+      "description": "Description",
+      "productDescription": "Product Description",
+      "descriptionPlaceholder": "Enter product description or insert image",
+      "salesInfo": "Sales Info",
+      "salesInfoHint": "Can be adjusted after selecting category",
+      "shipping": "Shipping",
+      "shippingHint": "Can be adjusted after selecting category",
+      "otherInfo": "Other Info",
+      "preview": "Preview",
+      "productDetails": "Product Details",
+      "buyNow": "Buy Now",
+      "previewHint": "Images are for reference only, not the final display.",
+      "cancel": "Cancel",
+      "saveHidden": "Save & Hide",
+      "savePublish": "Save & Publish"
+    }
+  },
+  "orders": {
+    "title": "Orders",
+    "description": "Manage customer orders, fulfillment, and returns.",
+    "searchPlaceholder": "Search orders...",
+    "id": "Order ID",
+    "customer": "Customer",
+    "date": "Date",
+    "items": "Items",
+    "total": "Total",
+    "trackingNumber": "Tracking Number",
+    "trackOrder": "Track Order",
+    "tracking": {
+      "title": "Order Tracking",
+      "description": "Detailed information for tracking number:",
+      "carrier": "Carrier",
+      "status": "Status",
+      "inTransit": "In Transit",
+      "delivered": "Delivered",
+      "step1": { "title": "Received", "desc": "Order has been received by the carrier at the post office." },
+      "step2": { "title": "In Transit", "desc": "Order is being transferred to the sorting center." },
+      "step3": { "title": "Out for Delivery", "desc": "Shipper is on the way to deliver to you." }
+    },
+    "updateStatus": "Update status",
+    "cancelOrder": "Cancel order",
+    "noOrders": "No orders found.",
+    "tabs": {
+      "orders": "Orders",
+      "fulfillment": "Fulfillment & Logistics",
+      "rma": "RMA & Returns",
+      "settings": "Shipping Settings"
+    },
+    "fulfillment": {
+      "title": "Fulfillment & Logistics",
+      "description": "Coordinate shipping, track carrier status, and manage shipping fees.",
+      "coordination": "Shipping Coordination",
+      "carrierStatus": "Carrier Status",
+      "shippingFees": "Shipping Fee Management",
+      "carrier": "Carrier",
+      "trackingNumber": "Tracking Number",
+      "method": "Method",
+      "fee": "Fee",
+      "dispatch": "Dispatch",
+      "updateStatus": "Update Carrier Status",
+      "statuses": {
+        "pending": "Pending Pickup",
+        "picked_up": "Picked Up",
+        "in_transit": "In Transit",
+        "delivered": "Delivered",
+        "failed": "Delivery Failed",
+        "returned": "Returned"
+      },
+      "feeConfig": {
+        "title": "Shipping Fee Configuration",
+        "baseFee": "Base Fee",
+        "weightFee": "Weight Fee (per kg)",
+        "codFee": "COD Fee",
+        "save": "Save Fee Configuration"
+      }
+    },
+    "rma": {
+      "title": "RMA & Return Processing",
+      "description": "Manage return requests, inspection, and customer refunds.",
+      "orderId": "Order ID",
+      "reason": "Reason",
+      "amount": "Refund Amount",
+      "approve": "Approve",
+      "reject": "Reject",
+      "refund": "Refund",
+      "status": "RMA Status",
+      "statuses": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "refunded": "Refunded",
+        "processing": "Inspecting"
+      }
+    }
+  },
+  "paymentWallet": {
+    "title": "Payment & Internal Wallet",
+    "depositOrders": "Deposit Orders",
+    "transactionId": "TXN ID",
+    "type": "Type",
+    "amount": "Amount",
+    "customer": "Customer",
+    "status": "Status",
+    "availableBalance": "Available Balance",
+    "pendingBalance": "Pending Balance",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "history": "Transaction History",
+    "escrow": "Escrow Transactions"
+  },
+  "hr": {
+      "title": "Comprehensive HR Management",
+      "description": "Manage employee profiles, time & attendance, payroll, and training.",
+      "tabs": {
+        "core": "Core HR & Employee Journey",
+        "time": "Time & Attendance",
+        "payroll": "Payroll & C&B",
+        "performance": "Performance & Training"
+      },
+      "core": {
+        "addEmployee": "Add Employee",
+        "totalEmployees": "Total Employees",
+        "thisMonth": "this month",
+        "onboarding": "Onboarding",
+        "inProgress": "In Progress",
+        "departments": "Departments",
+        "active": "Active",
+        "employeeList": "Employee List",
+        "employeeListDesc": "Manage employee profiles and employment status.",
+        "employeeId": "Employee ID",
+        "name": "Full Name",
+        "department": "Department",
+        "position": "Position",
+        "status": "Status",
+        "contracts": "Labor Contracts",
+        "contractType": "Contract Type",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "signedDate": "Signed Date"
+      },
+      "time": {
+        "leaveRequests": "Leave Requests",
+        "leaveRequestsDesc": "Manage leave requests and overtime.",
+        "employee": "Employee",
+        "type": "Type",
+        "dates": "Dates",
+        "status": "Status",
+        "attendanceOverview": "Attendance Overview",
+        "todayStats": "Today's Statistics",
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "viewTimesheet": "View Timesheet",
+        "shifts": "Shifts",
+        "shiftName": "Shift Name",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "otRequests": "OT Requests",
+        "otHours": "OT Hours"
+      },
+      "payroll": {
+        "title": "Payroll",
+        "description": "Manage payroll periods, calculations, and payslips.",
+        "runPayroll": "Run Payroll",
+        "configFormulas": "Configure Formulas",
+        "exportReport": "Export Report",
+        "period": "Period",
+        "totalEmployees": "Employees",
+        "totalAmount": "Total Amount",
+        "status": "Status",
+        "payslips": "Payslips",
+        "salaryStructure": "Salary Structure",
+        "basicSalary": "Basic Salary",
+        "allowances": "Allowances",
+        "deductions": "Deductions",
+        "netSalary": "Net Salary"
+      },
+      "performance": {
+        "kpiTitle": "Goals & KPIs",
+        "kpiDesc": "Track company and individual goal progress.",
+        "manageKPIs": "Manage KPIs",
+        "reviews": "Performance Reviews",
+        "reviewCycle": "Review Cycle",
+        "reviewer": "Reviewer",
+        "rating": "Rating"
+      },
+      "training": {
+        "title": "Internal Training",
+        "description": "Manage courses and employee training progress.",
+        "completed": "Completed",
+        "courseCatalog": "Course Catalog"
+      }
+    },
+    "settings": {
+      "title": "Logistics Configuration",
+      "description": "Set up shipping carriers, configure APIs, and manage shipping fees.",
+      "addCarrier": "Add New Carrier",
+      "carrierName": "Carrier Name",
+      "apiEndpoint": "API Endpoint",
+      "apiKey": "API Key",
+      "testConnection": "Test Connection",
+      "saveConfig": "Save Configuration",
+      "gateways": "Integrated Shipping Gateways",
+      "configure": "Configure API"
+    },
+  "sellers": {
+    "title": "Seller Management",
+    "description": "Manage seller profiles, ratings, commission/discount fees, and onboarding approval.",
+    "inviteSeller": "Invite Seller",
+    "searchPlaceholder": "Search sellers...",
+    "id": "Seller ID",
+    "storeName": "Store Name",
+    "primaryCategory": "Primary Category",
+    "rating": "Rating",
+    "totalSales": "Total Sales",
+    "viewProfile": "Seller Profile",
+    "manageCommission": "Manage Commission/Discount",
+    "suspendSeller": "Suspend Seller",
+    "noSellers": "No sellers found.",
+    "sellerType": "Seller Type",
+    "regularSeller": "Regular Seller",
+    "dropShippingSeller": "DropShipping Seller",
+    "f2cSeller": "F2C Seller (Factory to Consumer)",
+    "onboardingApproval": "Onboarding Approval",
+    "taxId": "Tax ID",
+    "idCard": "ID Card",
+    "businessLicense": "Business License",
+    "verifyTaxId": "Verify Tax ID",
+    "verifyIdCard": "Verify ID Card",
+    "matchedNationalDb": "Matched National DB",
+    "notMatchedNationalDb": "Not Matched National DB",
+    "uploadDocs": "Upload Docs",
+    "approveEkyc": "Approve eKYC",
+    "updateTax": "Update Tax Info",
+    "updateBank": "Update Bank Info",
+    "detailsTab": "360 Overview",
+    "ownerName": "Shop Owner",
+    "shopAddress": "Shop Address",
+    "contactPhone": "Contact Phone",
+    "warehouseAddress": "Warehouse Address",
+    "warehouseStaff": "Warehouse Staff",
+    "warehousePhone": "Warehouse Contact Phone",
+    "bankAccountHolder": "Account Holder",
+    "selectBank": "Select Bank",
+    "bankName": "Bank Name",
+    "legalType": "Legal Type",
+    "individual": "Individual Business",
+    "businessHousehold": "Business Household",
+    "enterprise": "Enterprise",
+    "taxNoteIndividual": "Subject to 1% VAT and 0.5% PIT on revenue.",
+    "taxNoteEnterprise": "No withholding tax at source.",
+    "personalAccount": "Personal Bank Account",
+    "businessAccount": "Business Bank Account",
+    "ownerIdPassport": "Owner ID Card / Passport",
+    "sellerInfo": "Seller Information",
+    "ownerNameIndividual": "Shop Owner Name",
+    "businessHouseholdName": "Business Household Name",
+    "enterpriseName": "Enterprise Name",
+    "contactAddress": "Contact Address",
+    "taxAddress": "Tax Address",
+    "email": "Email",
+    "bankInfo": "Bank Information",
+    "warehouseInfo": "Warehouse Information",
+    "addWarehouse": "Add Warehouse",
+    "warehouseList": "Warehouse List",
+    "returnForAdditionalInfo": "Return for additional info",
+    "approve": "Approve",
+    "reject": "Reject",
+    "actions": {
+      "view": "View",
+      "edit": "Edit Information",
+      "suspend": "Suspend Seller"
+    },
+    "tabs": {
+      "approval": "Approval (Priority)"
+    }
+  },
+  "marketing": {
+    "title": "Marketing Channel",
+    "description": "Manage campaigns, social media, promotions, and performance analytics.",
+    "tabs": {
+      "campaigns": "Campaigns",
+      "social": "Social Media",
+      "messages": "Messages & Zalo",
+      "promotions": "Promotions & Flash Sale",
+      "landingPages": "Landing Pages"
+    },
+    "campaigns": {
+      "create": "Create Campaign",
+      "name": "Campaign Name",
+      "status": "Status",
+      "budget": "Budget",
+      "revenue": "Revenue",
+      "pnl": "Profit (P&L)",
+      "roi": "ROI",
+      "active": "Active",
+      "completed": "Completed",
+      "planned": "Planned"
+    },
+    "social": {
+      "createPost": "Create Post",
+      "platform": "Platform",
+      "content": "Content",
+      "schedule": "Schedule",
+      "engagement": "Engagement"
+    },
+    "promotions": {
+      "flashSale": "Flash Sale",
+      "voucher": "Voucher Center",
+      "groupBuy": "Group Buy",
+      "createFlashSale": "Create Flash Sale",
+      "createVoucher": "Create Voucher",
+      "createGroupBuy": "Create Group Buy",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "discount": "Discount"
+    }
+  },
+  "affiliate": {
+    "title": "Affiliate Marketing",
+    "description": "Manage publisher network, commissions, and track marketing performance.",
+    "tabs": {
+      "overview": "Overview",
+      "publishers": "Publisher/KOL Network",
+      "commissions": "Commission Settings",
+      "tracking": "Tracking Link"
+    },
+    "overview": {
+      "totalRevenue": "Affiliate Revenue",
+      "activePublishers": "Active Publishers",
+      "totalCommissions": "Total Commissions Paid",
+      "clicks": "Clicks"
+    },
+    "publishers": {
+      "name": "Publisher Name",
+      "type": "Type",
+      "followers": "Followers",
+      "commissionRate": "Commission Rate",
+      "status": "Status",
+      "actions": "Actions",
+      "invite": "Invite Publisher",
+      "types": {
+        "kol": "KOL/Influencer",
+        "content_creator": "Content Creator",
+        "coupon_site": "Coupon Site",
+        "cashback": "Cashback"
+      }
+    },
+    "commissions": {
+      "title": "Commission Settings",
+      "description": "Set commission rates by category or specific product.",
+      "defaultRate": "Default Rate",
+      "categoryRates": "By Category",
+      "productRates": "By Product (Special)",
+      "addCategory": "Add Category",
+      "addProduct": "Add Product",
+      "category": "Category",
+      "rate": "Rate (%)",
+      "save": "Save Settings"
+    },
+    "tracking": {
+      "title": "Create Tracking Link",
+      "description": "Generate and share tracking links for campaigns.",
+      "generate": "Generate Link",
+      "sourceUrl": "Source URL (Product/Home)",
+      "campaignSource": "Campaign Source (utm_source)",
+      "campaignMedium": "Campaign Medium (utm_medium)",
+      "campaignName": "Campaign Name (utm_campaign)",
+      "generatedUrl": "Tracking Link",
+      "copy": "Copy"
+    }
+  },
+  "purchasing": {
+    "title": "Purchasing & B2B SCM",
+    "description": "Manage internal purchase requisitions, suppliers, and B2B inventory.",
+    "tabs": {
+      "requisitions": "Requisitions",
+      "suppliers": "Suppliers",
+      "inventory": "B2B Inventory",
+      "reports": "Stock Reports",
+      "forecasting": "Demand Forecasting"
+    },
+    "requisitions": {
+      "create": "Create Request",
+      "listTitle": "Purchase Requisitions",
+      "id": "Request ID",
+      "requester": "Requester",
+      "item": "Item/Material",
+      "quantity": "Quantity",
+      "date": "Date",
+      "priority": "Priority",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "suppliers": {
+      "title": "Supplier List",
+      "name": "Supplier Name",
+      "category": "Category",
+      "rating": "Rating",
+      "status": "Status",
+      "lastOrder": "Last Order",
+      "evaluate": "Evaluate"
+    },
+    "inventory": {
+      "title": "B2B Inventory Management",
+      "sku": "SKU",
+      "productName": "Product Name",
+      "currentStock": "Current Stock",
+      "safetyStock": "Safety Stock",
+      "status": "Status",
+      "alerts": {
+        "ok": "OK",
+        "low": "Low Stock",
+        "critical": "Critical",
+        "overstock": "Overstock"
+      }
+    },
+    "reports": {
+      "title": "Stock In/Out/Balance Reports",
+      "export": "Export Report"
+    },
+    "forecasting": {
+      "title": "Demand Forecasting",
+      "item": "Item",
+      "currentStock": "Current Stock",
+      "predictedDemand": "Predicted Demand (30d)",
+      "suggestedOrder": "Suggested Order",
+      "confidence": "Confidence",
+      "createPO": "Create PO"
+    }
+  },
+  "finance": {
+    "title": "Finance & Accounting",
+    "description": "Advanced financial management and accounting per Circular 99/2025/TT-BTC.",
+    "tabs": {
+      "dashboard": "Overview",
+      "chartOfAccounts": "Chart of Accounts",
+      "journal": "Journals & Books",
+      "ledger": "General Ledger",
+      "statements": "Financial Statements",
+      "paymentWallet": "Payment & Internal Wallet",
+      "withdrawal": "Withdrawal Requests"
+    },
+    "dashboard": {
+      "totalRevenue": "Total Revenue",
+      "totalExpenses": "Total Expenses",
+      "netProfit": "Net Profit",
+      "cashOnHand": "Cash & Equivalents",
+      "currentBalance": "Current Balance"
+    },
+    "chartOfAccounts": {
+      "title": "Chart of Accounts",
+      "description": "List of enterprise accounting accounts per Circular 99/2025/TT-BTC.",
+      "code": "Account Code",
+      "name": "Account Name",
+      "type": "Type",
+      "create": "Add Account"
+    },
+    "journal": {
+      "title": "Accounting Books & Journals",
+      "description": "Manage accounting books per regulations (General Journal, Cash Book, Bank Book...).",
+      "create": "New Entry",
+      "date": "Date",
+      "number": "Ref No.",
+      "description": "Description",
+      "account": "Account",
+      "debit": "Debit",
+      "credit": "Credit",
+      "bookType": "Book Type",
+      "cashBook": "Cash Book (S07-DN)",
+      "bankBook": "Bank Book (S08-DN)",
+      "generalJournal": "General Journal (S03a-DN)"
+    },
+    "ledger": {
+      "title": "General Ledger (S05-DN)",
+      "description": "Transaction details by account.",
+      "selectAccount": "Select Account",
+      "balance": "Balance"
+    },
+    "statements": {
+      "title": "Financial Statements",
+      "description": "Financial statements system per Circular 99/2025/TT-BTC.",
+      "preview": "Preview Statement",
+      "balanceSheet": "Statement of Financial Position (B 01 - DN)",
+      "incomeStatement": "Statement of Comprehensive Income (B 02 - DN)",
+      "cashFlow": "Statement of Cash Flows (B 03 - DN)"
+    },
+    "reconciliation": {
+      "title": "Reconciliation & Debt",
+      "description": "Reconcile payments for Sellers and manage debts.",
+      "seller": "Seller",
+      "orderId": "Order ID",
+      "transactionDate": "Transaction Date",
+      "orderValue": "Order Value",
+      "platformFee": "Platform Fee",
+      "shippingFee": "Shipping Fee",
+      "commission": "Commission",
+      "netPayment": "Net Payment",
+      "status": "Status",
+      "action": "Action",
+      "reconcile": "Reconcile",
+      "reconciled": "Reconciled",
+      "pending": "Pending"
+    },
+    "pnl": {
+      "title": "P&L Analysis",
+      "description": "Automatic P&L extraction based on import price, selling price, and expenses.",
+      "revenue": "Revenue",
+      "cogs": "Cost of Goods Sold (COGS)",
+      "grossProfit": "Gross Profit",
+      "operatingExpenses": "Operating Expenses",
+      "netProfit": "Net Profit",
+      "product": "Product",
+      "qtySold": "Qty Sold",
+      "avgSellPrice": "Avg Sell Price",
+      "avgImportPrice": "Avg Import Price",
+      "margin": "Margin (%)"
+    },
+    "withdrawal": {
+      "title": "Withdrawals",
+      "description": "Manage withdrawal requests from Users and Sellers.",
+      "requestId": "Request ID",
+      "requester": "Requester",
+      "type": "Account Type",
+      "amount": "Amount",
+      "bankInfo": "Bank Info",
+      "status": "Status",
+      "date": "Date",
+      "approve": "Approve",
+      "reject": "Reject",
+      "payout": "Payout",
+      "user": "User",
+      "seller": "Seller"
+    },
+    "invoice": {
+      "title": "e-Invoice",
+      "description": "Manage VAT invoices for Users and commission invoices for Sellers.",
+      "invoiceNumber": "Invoice #",
+      "type": "Invoice Type",
+      "recipient": "Recipient",
+      "amount": "Amount",
+      "date": "Date",
+      "status": "Status",
+      "vatInvoice": "VAT Invoice",
+      "commissionInvoice": "Commission Invoice",
+      "view": "View",
+      "download": "Download",
+      "send": "Send Email"
+    },
+    "statements": {
+      "balanceSheet": "Balance Sheet",
+      "incomeStatement": "Income Statement",
+      "cashFlow": "Cash Flow",
+      "preview": "Report Preview"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your system settings and account preferences.",
+    "tabs": {
+      "general": "General",
+      "account": "Account",
+      "notifications": "Notifications",
+      "security": "Security",
+      "appearance": "Appearance",
+      "fees": "Fees & Taxes",
+      "categories": "Categories",
+      "roles": "Roles & Permissions",
+      "integrations": "Integrations",
+      "shipping": "Shipping",
+      "paymentShipping": "Payment & Shipping"
+    },
+    "general": {
+      "systemName": "System Name",
+      "systemNameDesc": "The display name of the system.",
+      "logo": "System Logo",
+      "navicon": "Favicon / Navicon",
+      "contactEmail": "Contact Email",
+      "contactEmailDesc": "Email used to receive system notifications.",
+      "hotline": "Hotline",
+      "hotlineDesc": "Customer support phone number.",
+      "timezone": "Timezone",
+      "currency": "Default Currency",
+      "save": "Save Changes"
+    },
+    "account": {
+      "profile": "Personal Profile",
+      "fullName": "Full Name",
+      "mobilePhone": "Mobile Phone",
+      "ext": "Ext",
+      "email": "Email",
+      "department": "Department",
+      "position": "Position",
+      "role": "Role",
+      "updateProfile": "Update Profile"
+    },
+    "notifications": {
+      "emailNotif": "Email Notifications",
+      "emailNotifDesc": "Receive emails for new orders or important updates.",
+      "pushNotif": "Push Notifications",
+      "pushNotifDesc": "Receive notifications directly in your browser.",
+      "smsNotif": "SMS Notifications",
+      "smsNotifDesc": "Receive SMS messages for security alerts."
+    },
+    "appearance": {
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "primaryColor": "Primary Color",
+      "fontSize": "Font Size",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "twoFactorAuth": "Two-Factor Authentication (2FA)",
+      "twoFactorAuthDesc": "Protect your account with an authentication code from your Authenticator app.",
+      "loginHistory": "Login History",
+      "activeSessions": "Active Sessions",
+      "device": "Device",
+      "location": "Location",
+      "ipAddress": "IP Address",
+      "time": "Time",
+      "revokeSession": "Revoke"
+    },
+    "paymentShipping": {
+      "title": "Payment & Shipping",
+      "description": "Configure API connections with payment and shipping partners.",
+      "paymentGateways": "Payment Gateways",
+      "shippingProviders": "Shipping Providers",
+      "partnerName": "Partner",
+      "apiKey": "API Key",
+      "secretKey": "Secret Key",
+      "merchantId": "Merchant ID",
+      "webhookUrl": "Webhook URL",
+      "configure": "Configure",
+      "status": "Status",
+      "connected": "Connected",
+      "disconnected": "Disconnected"
+    },
+    "fees": {
+      "title": "Fees & Taxes Configuration",
+      "platformFee": "Platform Fee by Category",
+      "platformFeeDesc": "Configure the platform fee rate applied to specific categories.",
+      "otherFees": "Other Fees",
+      "otherFeesDesc": "Configure other fees applied to each order.",
+      "feeName": "Fee Name",
+      "feeType": "Fee Type",
+      "feeValue": "Value",
+      "feePercentage": "Percentage (%)",
+      "feeFixed": "Fixed Amount",
+      "paymentFee": "Payment Fee",
+      "infrastructureFee": "Infrastructure Fee",
+      "insuranceFee": "Insurance Fee",
+      "voucherFee": "Voucher",
+      "adsFee": "Advertising",
+      "affiliateFee": "Affiliate Fee",
+      "vatTax": "VAT",
+      "vatTaxDesc": "Applied to all orders",
+      "pitTax": "PIT",
+      "pitTaxDesc": "Only applied to Individual / Business Household",
+      "categoryLevel1": "Category Level 1",
+      "categoryLevel2": "Category Level 2",
+      "categoryLevel3": "Category Level 3",
+      "feeRateMall": "Mall Fee (%)",
+      "feeRateRegular": "Regular Shop Fee (%)",
+      "searchCategory": "Search category...",
+      "addFee": "Add Fee",
+      "addCategory": "Add Category",
+      "deleteCategory": "Delete",
+      "confirmDelete": "Confirm Deletion",
+      "confirmDeleteDesc": "Are you sure you want to delete this category?",
+      "shippingFees": "Shipping Fee Configuration",
+      "shippingFeesDesc": "Configure separate shipping fees for each carrier.",
+      "carrier": "Carrier",
+      "baseFee": "Base Fee",
+      "weightFee": "Weight Fee (per kg)",
+      "codFee": "COD Fee",
+      "categoryLevel1Placeholder": "Enter category level 1...",
+      "categoryLevel2Placeholder": "Enter category level 2...",
+      "categoryLevel3Placeholder": "Enter category level 3 (optional)...",
+      "saveChanges": "Save Configuration",
+      "categoryManagement": "Category & Platform Fee Management",
+      "categoryManagementDesc": "Configure product categories and corresponding platform fee rates for Mall and Regular Shops."
+    },
+    "roles": {
+      "title": "Permission Matrix",
+      "description": "Manage roles and detailed permissions for each module in the system.",
+      "roleName": "Role Name",
+      "addRole": "Add Role",
+      "module": "Module",
+      "view": "View",
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "approve": "Approve",
+      "modules": {
+        "products": "Products",
+        "orders": "Orders",
+        "sellers": "Sellers",
+        "marketing": "Marketing",
+        "finance": "Finance",
+        "settings": "System Settings"
+      }
+    },
+    "integrations": {
+      "title": "OpenAPI & Webhooks",
+      "description": "Manage API connections and Webhooks for 3rd-party systems (ERP, CRM...).",
+      "apiKeys": "API Keys",
+      "webhooks": "Webhooks",
+      "createApiKey": "Create API Key",
+      "keyName": "Key Name",
+      "keyString": "API Key",
+      "createdDate": "Created Date",
+      "lastUsed": "Last Used",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "addWebhook": "Add Webhook",
+      "endpointUrl": "Endpoint URL",
+      "events": "Events",
+      "secret": "Secret Key"
+    }
+  }
+}
