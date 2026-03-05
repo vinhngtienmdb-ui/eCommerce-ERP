@@ -10,10 +10,24 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 import { Badge } from "@/src/components/ui/badge"
-import { Plus, Search, Settings, Wrench, ChevronDown, ArrowUpDown, LayoutGrid, List, Package } from "lucide-react"
+import { 
+  Plus, 
+  Search, 
+  Settings, 
+  Wrench, 
+  ChevronDown, 
+  ArrowUpDown, 
+  LayoutGrid, 
+  List, 
+  Package,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle
+} from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { cn } from "@/src/lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -72,6 +86,57 @@ export function Products() {
             </Link>
           </Button>
         </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+            <div className="p-2 bg-blue-100 rounded-full">
+              <Package className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{initialProducts.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Active items</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Low Stock</CardTitle>
+            <div className="p-2 bg-yellow-100 rounded-full">
+              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">2</div>
+            <p className="text-xs text-muted-foreground mt-1">Needs restock</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Top Rated</CardTitle>
+            <div className="p-2 bg-green-100 rounded-full">
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">3</div>
+            <p className="text-xs text-muted-foreground mt-1">4.8+ Rating</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Inactive</CardTitle>
+            <div className="p-2 bg-red-100 rounded-full">
+              <XCircle className="h-4 w-4 text-red-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground mt-1">Unpublished</p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex space-x-6 border-b overflow-x-auto">

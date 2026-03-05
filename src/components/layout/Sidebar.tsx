@@ -38,7 +38,16 @@ const navigation = [
       { nameKey: "aiOptimization", href: "/products/ai-tools" },
     ]
   },
-  { nameKey: "sellers", href: "/sellers", icon: Users },
+  { 
+    nameKey: "sellers", 
+    href: "/sellers", 
+    icon: Users,
+    subItems: [
+      { nameKey: "sellerList", href: "/sellers/list" },
+      { nameKey: "sellerApproval", href: "/sellers/approval" },
+      { nameKey: "sellerRegistration", href: "/sellers/registration" },
+    ]
+  },
   { nameKey: "customers", href: "/customers", icon: UsersRound },
   { nameKey: "customerService", href: "/customer-service", icon: Headset },
   { nameKey: "orders", href: "/orders", icon: ShoppingCart },
@@ -116,15 +125,15 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "flex flex-col border-r bg-card transition-all duration-300",
+        "flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300",
         isSidebarOpen ? "w-64" : "w-[70px]"
       )}
     >
-      <div className="flex h-16 items-center justify-center border-b px-4">
+      <div className="flex h-16 items-center justify-center border-b border-sidebar-border px-4">
         {isSidebarOpen ? (
-          <span className="text-xl font-bold text-primary">E-Commerce ERP</span>
+          <span className="text-xl font-bold text-sidebar-primary">E-Commerce ERP</span>
         ) : (
-          <span className="text-xl font-bold text-primary">ERP</span>
+          <span className="text-xl font-bold text-sidebar-primary">ERP</span>
         )}
       </div>
       <div className="flex-1 overflow-y-auto py-4">
@@ -141,8 +150,8 @@ export function Sidebar() {
                     className={cn(
                       "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer",
                       isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                       !isSidebarOpen && "justify-center"
                     )}
                     title={!isSidebarOpen ? t(`nav.${item.nameKey}`) : undefined}
@@ -167,8 +176,8 @@ export function Sidebar() {
                       cn(
                         "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
+                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                         !isSidebarOpen && "justify-center"
                       )
                     }
@@ -195,8 +204,8 @@ export function Sidebar() {
                           cn(
                             "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
                             isActive
-                              ? "text-primary font-semibold"
-                              : "text-muted-foreground hover:text-foreground"
+                              ? "text-sidebar-primary font-semibold bg-sidebar-accent/50"
+                              : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/30"
                           )
                         }
                       >

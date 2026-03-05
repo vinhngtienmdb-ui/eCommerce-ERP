@@ -4,7 +4,9 @@ import { Dashboard } from "./pages/Dashboard"
 import { Products } from "./pages/Products"
 import { AddProduct } from "./pages/AddProduct"
 import { Orders } from "./pages/Orders"
-import { Sellers } from "./pages/Sellers"
+import { SellerList } from "./pages/sellers/SellerList"
+import { SellerApproval } from "./pages/sellers/SellerApproval"
+import { SellerRegistrationPage } from "./pages/sellers/SellerRegistrationPage"
 import { Customers } from "./pages/Customers"
 import { CustomerService } from "./pages/CustomerService"
 import { Marketing } from "./pages/Marketing"
@@ -31,6 +33,9 @@ import { Legal } from "./pages/Legal"
 import { SellerFinance } from "./pages/SellerFinance"
 import { SocialCommerce } from "./pages/SocialCommerce"
 import { useTranslation } from "react-i18next"
+import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
+import { HRDashboard } from "./pages/hr/HRDashboard"
+import { AdminDashboard } from "./pages/admin-workspace/AdminDashboard"
 
 function FallbackRoute() {
   const { t } = useTranslation()
@@ -50,7 +55,12 @@ export default function App() {
             <Route path="ai-tools" element={<FallbackRoute />} />
           </Route>
           <Route path="orders" element={<Orders />} />
-          <Route path="sellers" element={<Sellers />} />
+          <Route path="sellers">
+            <Route index element={<Navigate to="list" replace />} />
+            <Route path="list" element={<SellerList />} />
+            <Route path="approval" element={<SellerApproval />} />
+            <Route path="registration" element={<SellerRegistrationPage />} />
+          </Route>
           <Route path="customers" element={<Customers />} />
           <Route path="customer-service" element={<CustomerService />} />
           <Route path="marketing" element={<Marketing />} />
@@ -60,7 +70,7 @@ export default function App() {
           <Route path="purchasing" element={<Purchasing />} />
           <Route path="legal" element={<Legal />} />
           <Route path="finance">
-            <Route index element={<Navigate to="accounting" replace />} />
+            <Route index element={<FinanceDashboard />} />
             <Route path="accounting" element={<Accounting />} />
             <Route path="reconciliation" element={<Reconciliation />} />
             <Route path="pnl" element={<PnL />} />
@@ -68,14 +78,14 @@ export default function App() {
             <Route path="seller-finance" element={<SellerFinance />} />
           </Route>
           <Route path="hr">
-            <Route index element={<Navigate to="core" replace />} />
+            <Route index element={<HRDashboard />} />
             <Route path="core" element={<CoreHR />} />
             <Route path="time" element={<TimeAttendance />} />
             <Route path="payroll" element={<Payroll />} />
             <Route path="performance" element={<Performance />} />
           </Route>
           <Route path="admin-workspace">
-            <Route index element={<Navigate to="assets" replace />} />
+            <Route index element={<AdminDashboard />} />
             <Route path="assets" element={<AssetsPage />} />
             <Route path="stationery" element={<StationeryPage />} />
             <Route path="booking" element={<BookingPage />} />

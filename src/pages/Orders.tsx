@@ -10,7 +10,20 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 import { Badge } from "@/src/components/ui/badge"
-import { Search, Filter, MoreHorizontal, Download, Package, Truck, RotateCcw, Settings, Eye, Printer, RefreshCw } from "lucide-react"
+import { 
+  Search, 
+  Filter, 
+  MoreHorizontal, 
+  Download, 
+  Package, 
+  Truck, 
+  RotateCcw, 
+  Settings, 
+  Eye, 
+  Printer, 
+  RefreshCw,
+  Clock
+} from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +44,7 @@ import { useTranslation } from "react-i18next"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { FulfillmentTab } from "@/src/components/orders/FulfillmentTab"
 import { RMATab } from "@/src/components/orders/RMATab"
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -178,6 +192,57 @@ export function Orders() {
             {t("common.export")}
           </Button>
         </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+            <div className="p-2 bg-blue-100 rounded-full">
+              <Package className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{initialOrders.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">All time</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pending</CardTitle>
+            <div className="p-2 bg-yellow-100 rounded-full">
+              <Clock className="h-4 w-4 text-yellow-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1</div>
+            <p className="text-xs text-muted-foreground mt-1">Awaiting confirmation</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Shipping</CardTitle>
+            <div className="p-2 bg-purple-100 rounded-full">
+              <Truck className="h-4 w-4 text-purple-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1</div>
+            <p className="text-xs text-muted-foreground mt-1">In transit</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Returns</CardTitle>
+            <div className="p-2 bg-red-100 rounded-full">
+              <RotateCcw className="h-4 w-4 text-red-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground mt-1">Requests</p>
+          </CardContent>
+        </Card>
       </div>
 
       <Tabs defaultValue="orders" className="space-y-4">

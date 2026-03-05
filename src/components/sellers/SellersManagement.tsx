@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import {
@@ -10,7 +11,18 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 import { Badge } from "@/src/components/ui/badge"
-import { Search, Filter, MoreHorizontal, UserPlus, FileCheck, Building, CreditCard, XCircle } from "lucide-react"
+import { 
+  Search, 
+  Filter, 
+  MoreHorizontal, 
+  UserPlus, 
+  FileCheck, 
+  XCircle,
+  Users,
+  CheckCircle2,
+  Clock,
+  AlertTriangle
+} from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,8 +32,9 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 import { useTranslation } from "react-i18next"
-import { ManageSellerDialog, type Seller } from "@/src/components/sellers/ManageSellerDialog"
+import { ManageSellerDialog, type Seller } from "./ManageSellerDialog"
 import { cn } from "@/src/lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -178,9 +191,15 @@ const initialSellers: Seller[] = [
   },
 ]
 
-export function Sellers() {
+interface SellersManagementProps {
+  defaultTab?: string;
+  hideTabs?: boolean;
+}
+
+export function SellersManagement({ defaultTab = "all", hideTabs = false }: SellersManagementProps) {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
-  const [activeTab, setActiveTab] = useState("approval")
+  const [activeTab, setActiveTab] = useState(defaultTab)
   const [sellers, setSellers] = useState<Seller[]>(initialSellers)
   const [selectedSeller, setSelectedSeller] = useState<Seller | null>(null)
   const [isManageDialogOpen, setIsManageDialogOpen] = useState(false)
@@ -193,6 +212,8 @@ export function Sellers() {
     
     if (activeTab === "all") return matchesSearch
     if (activeTab === "approval") return matchesSearch && seller.kycStatus === "Pending"
+    if (activeTab === "personal") return matchesSearch && (seller.legalType === "Individual" || seller.legalType === "Household")
+    if (activeTab === "enterprise") return matchesSearch && seller.legalType === "Enterprise"
     if (activeTab === "regular") return matchesSearch && seller.sellerType === "Regular"
     if (activeTab === "dropshipping") return matchesSearch && seller.sellerType === "DropShipping"
     if (activeTab === "f2c") return matchesSearch && seller.sellerType === "F2C"
@@ -211,8 +232,9 @@ export function Sellers() {
   }
 
   const sellerTabs = [
-    { id: "approval", label: t("sellers.tabs.approval"), count: sellers.filter(s => s.kycStatus === "Pending").length },
     { id: "all", label: t("products.tabs.all"), count: sellers.length },
+    { id: "personal", label: "Cá nhân / Hộ kinh doanh", count: sellers.filter(s => s.legalType === "Individual" || s.legalType === "Household").length },
+    { id: "enterprise", label: "Doanh nghiệp", count: sellers.filter(s => s.legalType === "Enterprise").length },
     { id: "regular", label: t("sellers.regularSeller"), count: sellers.filter(s => s.sellerType === "Regular").length },
     { id: "dropshipping", label: t("sellers.dropShippingSeller"), count: sellers.filter(s => s.sellerType === "DropShipping").length },
     { id: "f2c", label: t("sellers.f2cSeller"), count: sellers.filter(s => s.sellerType === "F2C").length },
@@ -232,29 +254,82 @@ export function Sellers() {
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
           </Button>
-          <Button>
+          <Button onClick={() => navigate("/seller-registration")}>
             <UserPlus className="mr-2 h-4 w-4" />
-            {t("sellers.inviteSeller")}
+            Đăng ký Nhà bán
           </Button>
         </div>
       </div>
 
-      <div className="flex space-x-6 border-b overflow-x-auto">
-        {sellerTabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "pb-3 text-sm font-medium transition-colors relative whitespace-nowrap",
-              activeTab === tab.id
-                ? "text-[#ee4d2d] border-b-2 border-[#ee4d2d]"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {tab.label} ({tab.count})
-          </button>
-        ))}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Sellers</CardTitle>
+            <div className="p-2 bg-blue-100 rounded-full">
+              <Users className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{initialSellers.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Registered shops</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Verified</CardTitle>
+            <div className="p-2 bg-green-100 rounded-full">
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{initialSellers.filter(s => s.status === "Verified").length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Active & Verified</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
+            <div className="p-2 bg-yellow-100 rounded-full">
+              <Clock className="h-4 w-4 text-yellow-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{initialSellers.filter(s => s.status === "Pending").length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Awaiting review</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Suspended</CardTitle>
+            <div className="p-2 bg-red-100 rounded-full">
+              <AlertTriangle className="h-4 w-4 text-red-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{initialSellers.filter(s => s.status === "Suspended").length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Policy violations</p>
+          </CardContent>
+        </Card>
       </div>
+
+      {!hideTabs && (
+        <div className="flex space-x-6 border-b overflow-x-auto">
+          {sellerTabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "pb-3 text-sm font-medium transition-colors relative whitespace-nowrap",
+                activeTab === tab.id
+                  ? "text-[#ee4d2d] border-b-2 border-[#ee4d2d]"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              {tab.label} ({tab.count})
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="rounded-xl border bg-card text-card-foreground shadow">
         <div className="p-4 border-b flex items-center gap-4">
