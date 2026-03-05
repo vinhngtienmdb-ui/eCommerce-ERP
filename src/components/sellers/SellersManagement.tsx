@@ -233,8 +233,8 @@ export function SellersManagement({ defaultTab = "all", hideTabs = false }: Sell
 
   const sellerTabs = [
     { id: "all", label: t("products.tabs.all"), count: sellers.length },
-    { id: "personal", label: "Cá nhân / Hộ kinh doanh", count: sellers.filter(s => s.legalType === "Individual" || s.legalType === "Household").length },
-    { id: "enterprise", label: "Doanh nghiệp", count: sellers.filter(s => s.legalType === "Enterprise").length },
+    { id: "personal", label: t("sellers.tabs.personal"), count: sellers.filter(s => s.legalType === "Individual" || s.legalType === "Household").length },
+    { id: "enterprise", label: t("sellers.tabs.enterprise"), count: sellers.filter(s => s.legalType === "Enterprise").length },
     { id: "regular", label: t("sellers.regularSeller"), count: sellers.filter(s => s.sellerType === "Regular").length },
     { id: "dropshipping", label: t("sellers.dropShippingSeller"), count: sellers.filter(s => s.sellerType === "DropShipping").length },
     { id: "f2c", label: t("sellers.f2cSeller"), count: sellers.filter(s => s.sellerType === "F2C").length },
@@ -256,7 +256,7 @@ export function SellersManagement({ defaultTab = "all", hideTabs = false }: Sell
           </Button>
           <Button onClick={() => navigate("/seller-registration")}>
             <UserPlus className="mr-2 h-4 w-4" />
-            Đăng ký Nhà bán
+            {t("sellers.registerSeller")}
           </Button>
         </div>
       </div>
@@ -264,50 +264,50 @@ export function SellersManagement({ defaultTab = "all", hideTabs = false }: Sell
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Sellers</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("sellers.stats.totalSellers")}</CardTitle>
             <div className="p-2 bg-blue-100 rounded-full">
               <Users className="h-4 w-4 text-blue-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{initialSellers.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Registered shops</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("sellers.stats.registeredShops")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Verified</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("sellers.stats.verified")}</CardTitle>
             <div className="p-2 bg-green-100 rounded-full">
               <CheckCircle2 className="h-4 w-4 text-green-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{initialSellers.filter(s => s.status === "Verified").length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Active & Verified</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("sellers.stats.activeVerified")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("sellers.stats.pendingApproval")}</CardTitle>
             <div className="p-2 bg-yellow-100 rounded-full">
               <Clock className="h-4 w-4 text-yellow-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{initialSellers.filter(s => s.status === "Pending").length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Awaiting review</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("sellers.stats.awaitingReview")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Suspended</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("sellers.stats.suspended")}</CardTitle>
             <div className="p-2 bg-red-100 rounded-full">
               <AlertTriangle className="h-4 w-4 text-red-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{initialSellers.filter(s => s.status === "Suspended").length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Policy violations</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("sellers.stats.policyViolations")}</p>
           </CardContent>
         </Card>
       </div>

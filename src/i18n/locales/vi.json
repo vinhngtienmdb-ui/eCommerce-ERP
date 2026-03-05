@@ -539,6 +539,26 @@
       "cancel": "Hủy",
       "saveHidden": "Lưu & Ẩn",
       "savePublish": "Lưu & Hiển thị"
+    },
+    "stats": {
+      "totalProducts": "Tổng sản phẩm",
+      "activeItems": "Mục đang hoạt động",
+      "lowStock": "Sắp hết hàng",
+      "needsRestock": "Cần bổ sung",
+      "topRated": "Đánh giá cao",
+      "ratingDesc": "Đánh giá 4.8+",
+      "inactive": "Không hoạt động",
+      "unpublished": "Chưa xuất bản"
+    },
+    "promo": {
+      "text": "Tận hưởng dịch vụ Chương Trình \"Hỗ Trợ Kinh Phí Hiệu Suất khi sử dụng chế độ Tối Đa Doanh Thu Tùy chỉnh ROAS",
+      "details": "Xem Chi Tiết"
+    },
+    "list": {
+      "products": "Sản Phẩm",
+      "potential": "Tiềm năng Dịch Vụ Hiển Thị",
+      "sortBySuggestion": "Sắp xếp theo gợi ý",
+      "aiTool": "✨ Công cụ Tối ưu AI"
     }
   },
   "orders": {
@@ -578,6 +598,20 @@
       "print": "In vận đơn",
       "updateTracking": "Cập nhật mã vận đơn",
       "generateTracking": "Tự động tạo mã"
+    },
+    "trackOrder": "Theo dõi đơn hàng",
+    "trackingNumber": "Mã vận đơn",
+    "shop": "Cửa hàng",
+    "product": "Sản phẩm",
+    "stats": {
+      "totalOrders": "Tổng đơn hàng",
+      "allTime": "Tất cả thời gian",
+      "pending": "Chờ xử lý",
+      "awaitingConfirmation": "Chờ xác nhận",
+      "shipping": "Đang giao",
+      "inTransit": "Đang vận chuyển",
+      "returns": "Trả hàng",
+      "requests": "Yêu cầu"
     },
     "statuses": {
       "pending_payment": "Chờ thanh toán",
@@ -825,7 +859,25 @@
       "suspend": "Đình chỉ nhà bán"
     },
     "tabs": {
-      "approval": "Phê duyệt (ưu tiên)"
+      "approval": "Phê duyệt (ưu tiên)",
+      "personal": "Cá nhân / Hộ kinh doanh",
+      "enterprise": "Doanh nghiệp"
+    },
+    "registerSeller": "Đăng ký Nhà bán",
+    "currentEkycStatus": "Trạng thái eKYC hiện tại",
+    "autoLookupSystem": "Hệ thống tra cứu tự động",
+    "autoLookupNote": "Hệ thống sẽ tự động trích xuất thông tin từ ảnh tải lên và đối soát với Cơ sở dữ liệu Quốc gia về Dân cư / Đăng ký doanh nghiệp.",
+    "verifying": "Đang tra cứu...",
+    "saveChanges": "Lưu thay đổi",
+    "stats": {
+      "totalSellers": "Tổng số người bán",
+      "registeredShops": "Cửa hàng đã đăng ký",
+      "verified": "Đã xác minh",
+      "activeVerified": "Hoạt động & Đã xác minh",
+      "pendingApproval": "Chờ phê duyệt",
+      "awaitingReview": "Chờ xem xét",
+      "suspended": "Đã tạm ngưng",
+      "policyViolations": "Vi phạm chính sách"
     }
   },
   "marketing": {
@@ -838,10 +890,30 @@
       "promotions": "Khuyến mãi & Flash Sale",
       "landingPages": "Landing Pages"
     },
+    "dashboard": {
+      "campaigns": "Chiến dịch Marketing",
+      "content": "Nội dung & Truyền thông"
+    },
+    "backToDashboard": "Quay lại Dashboard",
+    "stats": {
+      "totalBudget": "Tổng ngân sách",
+      "totalRevenue": "Tổng doanh thu",
+      "roi": "ROI",
+      "activeCampaigns": "Chiến dịch đang chạy",
+      "totalReach": "Tổng lượt tiếp cận",
+      "conversionRate": "Tỷ lệ chuyển đổi",
+      "marketingRoi": "ROI Marketing",
+      "vsLastMonth": "{value} so với tháng trước",
+      "runningPlatforms": "Chạy trên {count} nền tảng"
+    },
     "campaigns": {
+      "title": "Chiến dịch",
+      "description": "Tạo chiến dịch, mục tiêu, thời gian, ngân sách.",
       "create": "Tạo chiến dịch",
+      "overview": "Tổng quan về các chiến dịch marketing và hiệu quả (P&L).",
       "name": "Tên chiến dịch",
       "status": "Trạng thái",
+      "platform": "Nền tảng",
       "budget": "Ngân sách",
       "revenue": "Doanh thu",
       "pnl": "Lợi nhuận (P&L)",
@@ -850,23 +922,147 @@
       "completed": "Đã kết thúc",
       "planned": "Đã lên lịch"
     },
+    "promotions": {
+      "create": "Tạo khuyến mãi",
+      "flashSale": "Flash Sale",
+      "flashSaleDesc": "Tạo ưu đãi giới hạn thời gian.",
+      "createFlashSale": "Tạo Flash Sale",
+      "voucherCenter": "Kho Voucher",
+      "voucherCenterDesc": "Quản lý mã giảm giá.",
+      "createVoucher": "Tạo Voucher",
+      "groupBuy": "Mua chung",
+      "groupBuyDesc": "Tạo deal mua chung.",
+      "createGroupBuy": "Tạo Mua chung",
+      "activePromotions": "Khuyến mãi đang chạy",
+      "name": "Tên",
+      "type": "Loại",
+      "discount": "Giảm giá",
+      "duration": "Thời gian",
+      "status": "Trạng thái",
+      "actions": "Hành động"
+    },
     "social": {
-      "createPost": "Đăng bài mới",
+      "title": "Mạng xã hội",
+      "description": "Lịch đăng bài, đa kênh, lịch sử đăng.",
+      "createPost": "Đăng bài",
       "platform": "Nền tảng",
       "content": "Nội dung",
       "schedule": "Lịch đăng",
-      "engagement": "Tương tác"
+      "recentPosts": "Bài đăng gần đây",
+      "recentPostsDesc": "Hiệu quả các bài đăng mạng xã hội gần đây.",
+      "engagement": "Tương tác",
+      "engagements": "Tương tác"
     },
-    "promotions": {
-      "flashSale": "Flash Sale",
-      "voucher": "Voucher Center",
-      "groupBuy": "Mua nhóm (Group Buy)",
-      "createFlashSale": "Tạo Flash Sale",
-      "createVoucher": "Tạo Voucher",
-      "createGroupBuy": "Tạo nhóm mua",
-      "startTime": "Bắt đầu",
-      "endTime": "Kết thúc",
-      "discount": "Giảm giá"
+    "messages": {
+      "title": "SMS & Thông báo",
+      "description": "SMS, push, tin nhắn trong app.",
+      "zaloIntegration": "Tích hợp Zalo OA",
+      "status": "Trạng thái",
+      "connected": "Đã kết nối",
+      "followers": "Người quan tâm",
+      "quotaRemaining": "Hạn mức còn lại",
+      "manageZalo": "Quản lý Zalo OA",
+      "adPerformance": "Hiệu quả tin nhắn quảng cáo",
+      "last30Days": "30 ngày qua",
+      "sent": "Đã gửi",
+      "openRate": "Tỷ lệ mở",
+      "clickRate": "Tỷ lệ click",
+      "campaigns": "Chiến dịch tin nhắn",
+      "campaignsDesc": "Lịch sử chiến dịch Zalo OA và SMS.",
+      "campaignName": "Tên chiến dịch",
+      "type": "Loại",
+      "date": "Ngày"
+    },
+    "landingPages": {
+      "title": "Landing page",
+      "description": "Tạo trang đích, form đăng ký, theo dõi.",
+      "noPages": "Chưa có Landing Page",
+      "createFirst": "Tạo landing page đầu tiên để tăng chuyển đổi.",
+      "create": "Tạo Landing Page"
+    },
+    "email": {
+      "title": "Email Marketing",
+      "description": "Gửi email hàng loạt, mẫu, A/B test.",
+      "create": "Tạo chiến dịch",
+      "subscribers": "Tổng người đăng ký",
+      "avgOpenRate": "Tỷ lệ mở TB",
+      "avgClickRate": "Tỷ lệ click TB",
+      "recentCampaigns": "Chiến dịch email gần đây",
+      "campaignName": "Tên chiến dịch",
+      "status": "Trạng thái",
+      "sent": "Đã gửi",
+      "openRate": "Tỷ lệ mở",
+      "clickRate": "Tỷ lệ click",
+      "date": "Ngày"
+    },
+    "reports": {
+      "title": "Báo cáo chiến dịch",
+      "description": "Hiệu quả, tỷ lệ mở/click, chuyển đổi.",
+      "trafficSources": "Nguồn truy cập",
+      "trafficSourcesDesc": "Lưu lượng truy cập đến từ đâu",
+      "trafficChartPlaceholder": "Biểu đồ lưu lượng (Placeholder)",
+      "conversionRate": "Tỷ lệ chuyển đổi theo kênh",
+      "conversionRateDesc": "Kênh nào chuyển đổi tốt nhất",
+      "conversionChartPlaceholder": "Biểu đồ chuyển đổi (Placeholder)"
+    },
+    "settings": {
+      "title": "Thiết lập chiến dịch",
+      "description": "Kênh, mẫu, giới hạn gửi.",
+      "general": "Cấu hình chung",
+      "generalDesc": "Quản lý cài đặt chiến dịch mặc định.",
+      "senderName": "Tên người gửi mặc định",
+      "senderEmail": "Email người gửi mặc định",
+      "trackOpens": "Theo dõi lượt mở email",
+      "trackClicks": "Theo dõi lượt click link",
+      "save": "Lưu cài đặt"
+    },
+    "content": {
+      "title": "Quản lý nội dung",
+      "description": "Bài viết, landing page, bài quảng cáo.",
+      "newArticle": "Bài viết mới",
+      "articleTitle": "Tiêu đề",
+      "author": "Tác giả",
+      "status": "Trạng thái",
+      "lastModified": "Sửa đổi lần cuối"
+    },
+    "assets": {
+      "title": "Thư viện tài sản",
+      "description": "Hình ảnh, video, file tái sử dụng.",
+      "upload": "Tải lên tài sản"
+    },
+    "leads": {
+      "title": "Form thu thập lead",
+      "description": "Form nhúng, popup, tích hợp.",
+      "create": "Tạo Form",
+      "activeForms": "Form đang hoạt động",
+      "activeFormsDesc": "Quản lý form thu thập khách hàng tiềm năng và popup.",
+      "formName": "Tên Form",
+      "type": "Loại",
+      "views": "Lượt xem",
+      "submissions": "Lượt gửi",
+      "conversionRate": "Tỷ lệ chuyển đổi",
+      "status": "Trạng thái",
+      "types": {
+        "embedded": "Nhúng",
+        "popup": "Popup",
+        "landingPage": "Landing Page"
+      },
+      "statuses": {
+        "active": "Hoạt động",
+        "paused": "Tạm dừng"
+      }
+    },
+    "contentSettings": {
+      "title": "Thiết lập nội dung",
+      "description": "Mẫu, thư viện thương hiệu.",
+      "brand": "Hướng dẫn thương hiệu",
+      "brandDesc": "Thiết lập màu sắc và phông chữ mặc định.",
+      "primaryColor": "Màu chính",
+      "secondaryColor": "Màu phụ",
+      "seo": "Mặc định SEO",
+      "seoDesc": "Cài đặt mặc định cho tối ưu hóa công cụ tìm kiếm.",
+      "metaSuffix": "Hậu tố tiêu đề Meta mặc định",
+      "indexContent": "Cho phép index nội dung theo mặc định"
     }
   },
   "affiliate": {
@@ -1279,5 +1475,54 @@
       "events": "Sự kiện (Events)",
       "secret": "Secret Key"
     }
+  },
+  "financeDashboard": {
+    "title": "Tổng quan Tài chính",
+    "description": "Tổng quan về tình hình tài chính và các module.",
+    "totalBalance": "Tổng số dư",
+    "pendingReconciliation": "Chờ đối soát",
+    "transactionsToReview": "Giao dịch cần xem xét",
+    "monthlyRevenue": "Doanh thu tháng",
+    "expenses": "Chi phí",
+    "modules": "Module Tài chính",
+    "accountingDesc": "Quản lý tài khoản, sổ cái và giao dịch.",
+    "reconciliationDesc": "Đối chiếu sao kê ngân hàng và hồ sơ nội bộ.",
+    "pnlDesc": "Báo cáo lãi lỗ và phân tích tài chính.",
+    "paymentWalletDesc": "Quản lý ví điện tử và phương thức thanh toán.",
+    "sellerFinanceDesc": "Quản lý thanh toán cho người bán và thỏa thuận tài chính."
+  },
+  "hrDashboard": {
+    "title": "Tổng quan Nhân sự",
+    "description": "Hệ thống Quản lý Nhân sự.",
+    "totalEmployees": "Tổng nhân viên",
+    "activeEmployees": "Nhân viên đang làm việc",
+    "onLeaveToday": "Nghỉ phép hôm nay",
+    "leaveDetails": "2 Nghỉ ốm, 1 Nghỉ phép năm",
+    "openPositions": "Vị trí tuyển dụng",
+    "hiringInProgress": "Đang tuyển dụng",
+    "newHires": "Nhân viên mới (Tháng)",
+    "onboardingCompleted": "Đã hoàn tất nhập môn",
+    "modules": "Module Nhân sự",
+    "coreHrDesc": "Quản lý hồ sơ nhân viên, hợp đồng và tổ chức.",
+    "timeAttendanceDesc": "Theo dõi chấm công, nghỉ phép và ca làm việc.",
+    "payrollDesc": "Xử lý lương, thuế và phúc lợi.",
+    "performanceDesc": "Đánh giá hiệu suất và mục tiêu nhân viên."
+  },
+  "adminDashboard": {
+    "title": "Tổng quan Hành chính",
+    "description": "Công cụ và dịch vụ hành chính.",
+    "totalAssets": "Tổng tài sản",
+    "itemsInInventory": "Mục trong kho",
+    "pendingRequests": "Yêu cầu chờ xử lý",
+    "awaitingApproval": "Đang chờ phê duyệt",
+    "roomBookings": "Đặt phòng họp",
+    "scheduledForToday": "Đã lên lịch hôm nay",
+    "stationeryOrders": "Đơn đặt văn phòng phẩm",
+    "processing": "Đang xử lý",
+    "modules": "Module Hành chính",
+    "assetsDesc": "Quản lý tài sản và kho công ty.",
+    "stationeryDesc": "Đặt hàng và theo dõi văn phòng phẩm.",
+    "bookingDesc": "Đặt phòng họp và tài nguyên.",
+    "requestsDesc": "Gửi và quản lý yêu cầu hành chính."
   }
 }

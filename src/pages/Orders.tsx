@@ -197,50 +197,50 @@ export function Orders() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("orders.stats.totalOrders")}</CardTitle>
             <div className="p-2 bg-blue-100 rounded-full">
               <Package className="h-4 w-4 text-blue-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{initialOrders.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">All time</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.allTime")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("orders.stats.pending")}</CardTitle>
             <div className="p-2 bg-yellow-100 rounded-full">
               <Clock className="h-4 w-4 text-yellow-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1</div>
-            <p className="text-xs text-muted-foreground mt-1">Awaiting confirmation</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.awaitingConfirmation")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Shipping</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("orders.stats.shipping")}</CardTitle>
             <div className="p-2 bg-purple-100 rounded-full">
               <Truck className="h-4 w-4 text-purple-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1</div>
-            <p className="text-xs text-muted-foreground mt-1">In transit</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.inTransit")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Returns</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("orders.stats.returns")}</CardTitle>
             <div className="p-2 bg-red-100 rounded-full">
               <RotateCcw className="h-4 w-4 text-red-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
-            <p className="text-xs text-muted-foreground mt-1">Requests</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.requests")}</p>
           </CardContent>
         </Card>
       </div>

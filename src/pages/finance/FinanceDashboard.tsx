@@ -23,7 +23,7 @@ export function FinanceDashboard() {
     { 
       id: "accounting", 
       title: "nav.accounting", 
-      description: "Manage accounts, ledgers, and transactions.", 
+      description: "financeDashboard.accountingDesc", 
       icon: Wallet, 
       color: "text-blue-500", 
       bg: "bg-blue-100",
@@ -32,7 +32,7 @@ export function FinanceDashboard() {
     { 
       id: "reconciliation", 
       title: "nav.reconciliation", 
-      description: "Reconcile bank statements and internal records.", 
+      description: "financeDashboard.reconciliationDesc", 
       icon: FileText, 
       color: "text-purple-500", 
       bg: "bg-purple-100",
@@ -41,7 +41,7 @@ export function FinanceDashboard() {
     { 
       id: "pnl", 
       title: "nav.pnl", 
-      description: "Profit and Loss statements and financial analysis.", 
+      description: "financeDashboard.pnlDesc", 
       icon: TrendingUp, 
       color: "text-green-500", 
       bg: "bg-green-100",
@@ -50,7 +50,7 @@ export function FinanceDashboard() {
     { 
       id: "paymentWallet", 
       title: "nav.paymentWallet", 
-      description: "Manage digital wallets and payment methods.", 
+      description: "financeDashboard.paymentWalletDesc", 
       icon: CreditCard, 
       color: "text-orange-500", 
       bg: "bg-orange-100",
@@ -59,7 +59,7 @@ export function FinanceDashboard() {
     { 
       id: "sellerFinance", 
       title: "nav.sellerFinance", 
-      description: "Manage seller payouts and financial agreements.", 
+      description: "financeDashboard.sellerFinanceDesc", 
       icon: Users, 
       color: "text-pink-500", 
       bg: "bg-pink-100",
@@ -73,7 +73,7 @@ export function FinanceDashboard() {
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{t("nav.finance")}</h2>
           <p className="text-muted-foreground">
-            Overview of financial status and modules.
+            {t("financeDashboard.description")}
           </p>
         </div>
       </div>
@@ -82,7 +82,7 @@ export function FinanceDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Balance</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("financeDashboard.totalBalance")}</CardTitle>
             <div className="p-2 bg-emerald-100 rounded-full">
               <DollarSign className="h-4 w-4 text-emerald-600" />
             </div>
@@ -94,13 +94,13 @@ export function FinanceDashboard() {
                 <ArrowUp className="h-3 w-3 mr-1" />
                 +12%
               </span>
-              from last month
+              {t("dashboard.fromLastMonth")}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Reconciliation</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("financeDashboard.pendingReconciliation")}</CardTitle>
             <div className="p-2 bg-yellow-100 rounded-full">
               <FileText className="h-4 w-4 text-yellow-600" />
             </div>
@@ -108,13 +108,13 @@ export function FinanceDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">15</div>
             <p className="text-xs text-muted-foreground mt-1">
-              Transactions to review
+              {t("financeDashboard.transactionsToReview")}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("financeDashboard.monthlyRevenue")}</CardTitle>
             <div className="p-2 bg-blue-100 rounded-full">
               <TrendingUp className="h-4 w-4 text-blue-600" />
             </div>
@@ -126,13 +126,13 @@ export function FinanceDashboard() {
                 <ArrowUp className="h-3 w-3 mr-1" />
                 +8%
               </span>
-              from last month
+              {t("dashboard.fromLastMonth")}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Expenses</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("financeDashboard.expenses")}</CardTitle>
             <div className="p-2 bg-rose-100 rounded-full">
               <ArrowDown className="h-4 w-4 text-rose-600" />
             </div>
@@ -144,7 +144,7 @@ export function FinanceDashboard() {
                 <ArrowUp className="h-3 w-3 mr-1" />
                 +5%
               </span>
-              from last month
+              {t("dashboard.fromLastMonth")}
             </p>
           </CardContent>
         </Card>
@@ -154,7 +154,7 @@ export function FinanceDashboard() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-          <h3 className="text-lg font-semibold text-blue-600">Financial Modules</h3>
+          <h3 className="text-lg font-semibold text-blue-600">{t("financeDashboard.modules")}</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {financeModules.map((item) => (
@@ -174,7 +174,7 @@ export function FinanceDashboard() {
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-semibold">{t(item.title)}</h4>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{t(item.description)}</p>
                   </div>
                 </div>
               </CardContent>

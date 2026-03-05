@@ -503,6 +503,26 @@
       "cancel": "Cancel",
       "saveHidden": "Save & Hide",
       "savePublish": "Save & Publish"
+    },
+    "stats": {
+      "totalProducts": "Total Products",
+      "activeItems": "Active items",
+      "lowStock": "Low Stock",
+      "needsRestock": "Needs restock",
+      "topRated": "Top Rated",
+      "ratingDesc": "4.8+ Rating",
+      "inactive": "Inactive",
+      "unpublished": "Unpublished"
+    },
+    "promo": {
+      "text": "Enjoy Performance Funding Support Program when using Custom ROAS Revenue Maximization mode",
+      "details": "View Details"
+    },
+    "list": {
+      "products": "Products",
+      "potential": "Potential Display Service",
+      "sortBySuggestion": "Sort by suggestion",
+      "aiTool": "✨ AI Optimization Tool"
     }
   },
   "orders": {
@@ -526,6 +546,28 @@
       "step1": { "title": "Received", "desc": "Order has been received by the carrier at the post office." },
       "step2": { "title": "In Transit", "desc": "Order is being transferred to the sorting center." },
       "step3": { "title": "Out for Delivery", "desc": "Shipper is on the way to deliver to you." }
+    },
+    "trackOrder": "Track Order",
+    "trackingNumber": "Tracking Number",
+    "shop": "Shop",
+    "product": "Product",
+    "details": {
+      "title": "Order Details",
+      "customerInfo": "Customer Info",
+      "phone": "Phone",
+      "shippingInfo": "Shipping Info",
+      "address": "Address",
+      "print": "Print Order"
+    },
+    "stats": {
+      "totalOrders": "Total Orders",
+      "allTime": "All time",
+      "pending": "Pending",
+      "awaitingConfirmation": "Awaiting confirmation",
+      "shipping": "Shipping",
+      "inTransit": "In transit",
+      "returns": "Returns",
+      "requests": "Requests"
     },
     "updateStatus": "Update status",
     "cancelOrder": "Cancel order",
@@ -762,7 +804,25 @@
       "suspend": "Suspend Seller"
     },
     "tabs": {
-      "approval": "Approval (Priority)"
+      "approval": "Approval (Priority)",
+      "personal": "Individual / Household",
+      "enterprise": "Enterprise"
+    },
+    "registerSeller": "Register Seller",
+    "currentEkycStatus": "Current eKYC Status",
+    "autoLookupSystem": "Auto Lookup System",
+    "autoLookupNote": "The system will automatically extract information from uploaded photos and cross-check with the National Population / Business Registration Database.",
+    "verifying": "Verifying...",
+    "saveChanges": "Save Changes",
+    "stats": {
+      "totalSellers": "Total Sellers",
+      "registeredShops": "Registered shops",
+      "verified": "Verified",
+      "activeVerified": "Active & Verified",
+      "pendingApproval": "Pending Approval",
+      "awaitingReview": "Awaiting review",
+      "suspended": "Suspended",
+      "policyViolations": "Policy violations"
     }
   },
   "marketing": {
@@ -775,10 +835,30 @@
       "promotions": "Promotions & Flash Sale",
       "landingPages": "Landing Pages"
     },
+    "dashboard": {
+      "campaigns": "Marketing Campaigns",
+      "content": "Content & Media"
+    },
+    "backToDashboard": "Back to Dashboard",
+    "stats": {
+      "totalBudget": "Total Budget",
+      "totalRevenue": "Total Revenue",
+      "roi": "ROI",
+      "activeCampaigns": "Active Campaigns",
+      "totalReach": "Total Reach",
+      "conversionRate": "Conversion Rate",
+      "marketingRoi": "Marketing ROI",
+      "vsLastMonth": "{value} from last month",
+      "runningPlatforms": "Running across {count} platforms"
+    },
     "campaigns": {
+      "title": "Campaigns",
+      "description": "Create campaigns, goals, timing, budget.",
       "create": "Create Campaign",
+      "overview": "Overview of your marketing campaigns and their performance (P&L).",
       "name": "Campaign Name",
       "status": "Status",
+      "platform": "Platform",
       "budget": "Budget",
       "revenue": "Revenue",
       "pnl": "Profit (P&L)",
@@ -787,23 +867,147 @@
       "completed": "Completed",
       "planned": "Planned"
     },
+    "promotions": {
+      "create": "Create Promotion",
+      "flashSale": "Flash Sale",
+      "flashSaleDesc": "Create time-limited offers.",
+      "createFlashSale": "Create Flash Sale",
+      "voucherCenter": "Voucher Center",
+      "voucherCenterDesc": "Manage discount vouchers.",
+      "createVoucher": "Create Voucher",
+      "groupBuy": "Group Buy",
+      "groupBuyDesc": "Create group buying deals.",
+      "createGroupBuy": "Create Group Buy",
+      "activePromotions": "Active Promotions",
+      "name": "Name",
+      "type": "Type",
+      "discount": "Discount",
+      "duration": "Duration",
+      "status": "Status",
+      "actions": "Actions"
+    },
     "social": {
+      "title": "Social Media",
+      "description": "Post schedule, multi-channel, post history.",
       "createPost": "Create Post",
       "platform": "Platform",
       "content": "Content",
       "schedule": "Schedule",
-      "engagement": "Engagement"
+      "recentPosts": "Recent Posts",
+      "recentPostsDesc": "Performance of your recent social media posts.",
+      "engagement": "Engagement",
+      "engagements": "Engagements"
     },
-    "promotions": {
-      "flashSale": "Flash Sale",
-      "voucher": "Voucher Center",
-      "groupBuy": "Group Buy",
-      "createFlashSale": "Create Flash Sale",
-      "createVoucher": "Create Voucher",
-      "createGroupBuy": "Create Group Buy",
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "discount": "Discount"
+    "messages": {
+      "title": "SMS & Notifications",
+      "description": "SMS, push, in-app messages.",
+      "zaloIntegration": "Zalo OA Integration",
+      "status": "Status",
+      "connected": "Connected",
+      "followers": "Followers",
+      "quotaRemaining": "Quota Remaining",
+      "manageZalo": "Manage Zalo OA",
+      "adPerformance": "Ad Message Performance",
+      "last30Days": "Last 30 days",
+      "sent": "Sent",
+      "openRate": "Open Rate",
+      "clickRate": "Click Rate",
+      "campaigns": "Message Campaigns",
+      "campaignsDesc": "History of Zalo OA and SMS campaigns.",
+      "campaignName": "Campaign Name",
+      "type": "Type",
+      "date": "Date"
+    },
+    "landingPages": {
+      "title": "Landing page",
+      "description": "Create landing pages, registration forms, tracking.",
+      "noPages": "No Landing Pages",
+      "createFirst": "Create your first landing page to drive conversions.",
+      "create": "Create Landing Page"
+    },
+    "email": {
+      "title": "Email Marketing",
+      "description": "Bulk email, templates, A/B testing.",
+      "create": "Create Campaign",
+      "subscribers": "Total Subscribers",
+      "avgOpenRate": "Avg. Open Rate",
+      "avgClickRate": "Avg. Click Rate",
+      "recentCampaigns": "Recent Email Campaigns",
+      "campaignName": "Campaign Name",
+      "status": "Status",
+      "sent": "Sent",
+      "openRate": "Open Rate",
+      "clickRate": "Click Rate",
+      "date": "Date"
+    },
+    "reports": {
+      "title": "Campaign Reports",
+      "description": "Efficiency, open/click rate, conversion.",
+      "trafficSources": "Traffic Sources",
+      "trafficSourcesDesc": "Where your traffic is coming from",
+      "trafficChartPlaceholder": "Traffic Chart Placeholder",
+      "conversionRate": "Conversion Rate by Channel",
+      "conversionRateDesc": "Which channels convert best",
+      "conversionChartPlaceholder": "Conversion Chart Placeholder"
+    },
+    "settings": {
+      "title": "Campaign Settings",
+      "description": "Channels, templates, sending limits.",
+      "general": "General Configuration",
+      "generalDesc": "Manage your default campaign settings.",
+      "senderName": "Default Sender Name",
+      "senderEmail": "Default Sender Email",
+      "trackOpens": "Track email opens",
+      "trackClicks": "Track link clicks",
+      "save": "Save Settings"
+    },
+    "content": {
+      "title": "Content Management",
+      "description": "Articles, landing pages, ad content.",
+      "newArticle": "New Article",
+      "articleTitle": "Title",
+      "author": "Author",
+      "status": "Status",
+      "lastModified": "Last Modified"
+    },
+    "assets": {
+      "title": "Asset Library",
+      "description": "Images, videos, reusable files.",
+      "upload": "Upload Asset"
+    },
+    "leads": {
+      "title": "Lead Generation Forms",
+      "description": "Embedded forms, popups, integrations.",
+      "create": "Create Form",
+      "activeForms": "Active Forms",
+      "activeFormsDesc": "Manage your lead capture forms and popups.",
+      "formName": "Form Name",
+      "type": "Type",
+      "views": "Views",
+      "submissions": "Submissions",
+      "conversionRate": "Conversion Rate",
+      "status": "Status",
+      "types": {
+        "embedded": "Embedded",
+        "popup": "Popup",
+        "landingPage": "Landing Page"
+      },
+      "statuses": {
+        "active": "Active",
+        "paused": "Paused"
+      }
+    },
+    "contentSettings": {
+      "title": "Content Settings",
+      "description": "Templates, brand library.",
+      "brand": "Brand Guidelines",
+      "brandDesc": "Set default colors and fonts for your content.",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
+      "seo": "SEO Defaults",
+      "seoDesc": "Default settings for search engine optimization.",
+      "metaSuffix": "Default Meta Title Suffix",
+      "indexContent": "Index content by default"
     }
   },
   "affiliate": {
@@ -1216,5 +1420,54 @@
       "events": "Events",
       "secret": "Secret Key"
     }
+  },
+  "financeDashboard": {
+    "title": "Finance Overview",
+    "description": "Overview of financial status and modules.",
+    "totalBalance": "Total Balance",
+    "pendingReconciliation": "Pending Reconciliation",
+    "transactionsToReview": "Transactions to review",
+    "monthlyRevenue": "Monthly Revenue",
+    "expenses": "Expenses",
+    "modules": "Financial Modules",
+    "accountingDesc": "Manage accounts, ledgers, and transactions.",
+    "reconciliationDesc": "Reconcile bank statements and internal records.",
+    "pnlDesc": "Profit and Loss statements and financial analysis.",
+    "paymentWalletDesc": "Manage digital wallets and payment methods.",
+    "sellerFinanceDesc": "Manage seller payouts and financial agreements."
+  },
+  "hrDashboard": {
+    "title": "HR Overview",
+    "description": "Human Resources Management System.",
+    "totalEmployees": "Total Employees",
+    "activeEmployees": "Active employees",
+    "onLeaveToday": "On Leave Today",
+    "leaveDetails": "2 Sick, 1 Annual",
+    "openPositions": "Open Positions",
+    "hiringInProgress": "Hiring in progress",
+    "newHires": "New Hires (Month)",
+    "onboardingCompleted": "Onboarding completed",
+    "modules": "HR Modules",
+    "coreHrDesc": "Manage employee profiles, contracts, and organization.",
+    "timeAttendanceDesc": "Track attendance, leaves, and shifts.",
+    "payrollDesc": "Process payroll, taxes, and benefits.",
+    "performanceDesc": "Employee performance reviews and goals."
+  },
+  "adminDashboard": {
+    "title": "Admin Overview",
+    "description": "Administrative tools and services.",
+    "totalAssets": "Total Assets",
+    "itemsInInventory": "Items in inventory",
+    "pendingRequests": "Pending Requests",
+    "awaitingApproval": "Awaiting approval",
+    "roomBookings": "Room Bookings",
+    "scheduledForToday": "Scheduled for today",
+    "stationeryOrders": "Stationery Orders",
+    "processing": "Processing",
+    "modules": "Admin Modules",
+    "assetsDesc": "Manage company assets and inventory.",
+    "stationeryDesc": "Order and track stationery supplies.",
+    "bookingDesc": "Book meeting rooms and resources.",
+    "requestsDesc": "Submit and manage administrative requests."
   }
 }

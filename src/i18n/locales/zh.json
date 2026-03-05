@@ -1,7 +1,9 @@
 {
   "common": {
     "search": "搜索...",
+    "filter": "筛选",
     "filters": "筛选",
+    "create": "创建",
     "export": "导出",
     "actions": "操作",
     "viewDetails": "查看详情",
@@ -18,18 +20,41 @@
     "addProduct": "添加产品",
     "aiOptimization": "AI 优化工具",
     "sellers": "卖家",
+    "sellerList": "卖家列表",
+    "sellerApproval": "卖家审批",
+    "sellerRegistration": "卖家注册",
     "orders": "订单",
-    "marketing": "营销",
-    "affiliate": "联盟",
+    "marketing": "营销渠道",
+    "affiliate": "联盟营销",
     "purchasing": "采购",
     "finance": "财务",
+    "accounting": "会计与财务",
+    "reconciliation": "对账",
+    "pnl": "损益分析 (P&L)",
+    "paymentWallet": "支付与钱包",
+    "sellerFinance": "卖家金融支持",
+    "withdrawals": "提现请求",
     "hr": "人力资源",
+    "coreHr": "核心人事 & 合同",
+    "timeAttendance": "考勤与休假",
+    "payroll": "薪资与福利",
+    "performance": "绩效与培训",
     "admin": "管理",
+    "adminWorkspace": "行政与工作区",
+    "assets": "资产与设备",
+    "stationery": "办公用品",
+    "booking": "预订",
+    "requests": "请求与审批",
     "analytics": "商业智能与分析",
     "sales": "销售",
+    "loyalty": "客户忠诚度",
     "live": "直播中心",
-    "loyalty": "忠诚度",
-    "social": "社交"
+    "customers": "客户",
+    "customerService": "客户服务",
+    "social": "社交电商",
+    "advertising": "广告系统",
+    "legal": "法务与品牌保护",
+    "settings": "设置"
   },
   "header": {
     "searchPlaceholder": "搜索产品、订单、卖家...",
@@ -44,12 +69,61 @@
     "activeSellers": "活跃卖家",
     "totalOrders": "总订单",
     "activeProducts": "活跃产品",
-    "fromLastMonth": "较上个月",
-    "sinceLastHour": "自上个小时",
+    "fromLastMonth": "较上月",
+    "sinceLastHour": "自上小时",
     "revenueOverview": "收入概览",
     "revenueDesc": "本年度每月 GMV 表现。",
     "weeklyOrders": "每周订单",
     "weeklyOrdersDesc": "过去 7 天的订单量。"
+  },
+  "financeDashboard": {
+    "title": "财务概览",
+    "description": "财务状况和模块概览。",
+    "totalBalance": "总余额",
+    "pendingReconciliation": "待对账",
+    "transactionsToReview": "待审核交易",
+    "monthlyRevenue": "月收入",
+    "expenses": "支出",
+    "modules": "财务模块",
+    "accountingDesc": "管理账户、分类账和交易。",
+    "reconciliationDesc": "核对银行对账单和内部记录。",
+    "pnlDesc": "损益表和财务分析。",
+    "paymentWalletDesc": "管理数字钱包和支付方式。",
+    "sellerFinanceDesc": "管理卖家付款和财务协议。"
+  },
+  "hrDashboard": {
+    "title": "人力资源概览",
+    "description": "人力资源管理系统。",
+    "totalEmployees": "员工总数",
+    "activeEmployees": "在职员工",
+    "onLeaveToday": "今日休假",
+    "leaveDetails": "2 病假, 1 年假",
+    "openPositions": "开放职位",
+    "hiringInProgress": "招聘进行中",
+    "newHires": "新入职 (本月)",
+    "onboardingCompleted": "入职完成",
+    "modules": "HR 模块",
+    "coreHrDesc": "管理员工档案、合同和组织架构。",
+    "timeAttendanceDesc": "跟踪考勤、休假和排班。",
+    "payrollDesc": "处理薪资、税务和福利。",
+    "performanceDesc": "员工绩效评估和目标。"
+  },
+  "adminDashboard": {
+    "title": "行政概览",
+    "description": "行政工具和服务。",
+    "totalAssets": "总资产",
+    "itemsInInventory": "库存物品",
+    "pendingRequests": "待处理请求",
+    "awaitingApproval": "等待审批",
+    "roomBookings": "会议室预订",
+    "scheduledForToday": "今日已安排",
+    "stationeryOrders": "办公用品订单",
+    "processing": "处理中",
+    "modules": "行政模块",
+    "assetsDesc": "管理公司资产和库存。",
+    "stationeryDesc": "订购和跟踪办公用品。",
+    "bookingDesc": "预订会议室和资源。",
+    "requestsDesc": "提交和管理行政请求。"
   },
   "products": {
     "title": "产品",
@@ -63,7 +137,7 @@
     "price": "价格",
     "stock": "库存",
     "performance": "表现",
-    "rating": "产品评分",
+    "rating": "评分",
     "noProducts": "未找到产品。",
     "productSettings": "产品设置",
     "batchTools": "批量工具",
@@ -71,13 +145,13 @@
       "all": "全部",
       "active": "活跃",
       "violations": "违规",
-      "pending": "待 Shopee 审核",
+      "pending": "待审核",
       "unpublished": "未发布"
     },
     "subTabs": {
       "all": "全部",
       "needsRestock": "需要补货",
-      "needsImprovement": "需要内容改进"
+      "needsImprovement": "需要改进"
     },
     "filters": {
       "category": "类别",
@@ -87,12 +161,12 @@
       "expand": "展开"
     },
     "add": {
-      "title": "添加 1 个新产品",
-      "suggestions": "信息填写建议",
+      "title": "添加新产品",
+      "suggestions": "填写建议",
       "sug1": "添加至少 3 张图片",
       "sug2": "添加产品视频",
       "sug3": "产品名称至少 25~100 个字符",
-      "sug4": "在产品描述中添加至少 100 个字符或 1 张图片",
+      "sug4": "在描述中添加至少 100 个字符或 1 张图片",
       "sug5": "添加品牌",
       "tabs": {
         "basic": "基本信息",
@@ -109,32 +183,52 @@
       "addImage": "添加图片",
       "coverImage": "封面图片",
       "coverImageHint1": "上传 1:1 图片。",
-      "coverImageHint2": "封面图片将显示在搜索结果、今日建议等中... 使用好的封面图片将为您的产品吸引更多流量。",
+      "coverImageHint2": "封面图片将显示在搜索结果中。好的封面图片能吸引更多流量。",
       "productVideo": "产品视频",
       "addVideo": "添加视频",
-      "videoHint1": "大小：最大 30MB，分辨率不应小于 1x1px",
+      "videoHint1": "大小：最大 30MB，分辨率不小于 1x1px",
       "videoHint2": "时长：10s-60s",
       "videoHint3": "格式：MP4",
-      "videoHint4": "注意：视频处理期间可以显示产品。视频处理成功后将自动显示。",
+      "videoHint4": "注意：视频处理期间产品可显示。处理成功后自动显示。",
       "productName": "产品名称",
       "productNamePlaceholder": "产品名称 + 品牌 + 型号 + 规格",
       "category": "类别",
       "selectCategory": "选择类别",
       "description": "描述",
       "productDescription": "产品描述",
-      "descriptionPlaceholder": "输入产品描述或插入图片",
+      "descriptionPlaceholder": "输入描述或插入图片",
       "salesInfo": "销售信息",
-      "salesInfoHint": "选择类别后可以调整",
+      "salesInfoHint": "选择类别后可调整",
       "shipping": "运输",
-      "shippingHint": "选择类别后可以调整",
+      "shippingHint": "选择类别后可调整",
       "otherInfo": "其他信息",
       "preview": "预览",
       "productDetails": "产品详情",
       "buyNow": "立即购买",
-      "previewHint": "图片仅供参考，并非买家看到的最终显示效果。",
+      "previewHint": "图片仅供参考，非最终效果。",
       "cancel": "取消",
       "saveHidden": "保存并隐藏",
       "savePublish": "保存并发布"
+    },
+    "stats": {
+      "totalProducts": "总产品",
+      "activeItems": "活跃商品",
+      "lowStock": "库存不足",
+      "needsRestock": "需要补货",
+      "topRated": "最高评分",
+      "ratingDesc": "4.8+ 评分",
+      "inactive": "未激活",
+      "unpublished": "未发布"
+    },
+    "promo": {
+      "text": "使用自定义 ROAS 最大化收入模式时，享受绩效资金支持计划服务",
+      "details": "查看详情"
+    },
+    "list": {
+      "products": "产品",
+      "potential": "潜在展示服务",
+      "sortBySuggestion": "按建议排序",
+      "aiTool": "✨ AI 优化工具"
     }
   },
   "orders": {
@@ -148,21 +242,1117 @@
     "total": "总计",
     "updateStatus": "更新状态",
     "cancelOrder": "取消订单",
-    "noOrders": "未找到订单。"
+    "noOrders": "未找到订单。",
+    "statuses": {
+      "pending_payment": "待付款",
+      "pending_confirmation": "待确认",
+      "grouping": "拼团中",
+      "confirmed": "已确认",
+      "pending_shipping": "待发货",
+      "shipping": "运输中",
+      "delivered": "已送达",
+      "cancelled": "已取消",
+      "return_requested": "申请退货",
+      "refund_requested": "申请退款",
+      "received": "已收货",
+      "completed": "已完成"
+    },
+    "tracking": {
+      "title": "订单跟踪",
+      "description": "跟踪号码详细信息：",
+      "carrier": "承运商",
+      "status": "状态",
+      "inTransit": "运输中",
+      "delivered": "已送达",
+      "step1": { "title": "已揽收", "desc": "承运商已在邮局揽收订单。" },
+      "step2": { "title": "运输中", "desc": "订单正在转运至分拣中心。" },
+      "step3": { "title": "派送中", "desc": "快递员正在为您派送。" }
+    },
+    "trackOrder": "跟踪订单",
+    "trackingNumber": "跟踪号码",
+    "shop": "店铺",
+    "product": "产品",
+    "details": {
+      "title": "订单详情",
+      "customerInfo": "客户信息",
+      "phone": "电话",
+      "shippingInfo": "运输信息",
+      "address": "地址",
+      "print": "打印订单"
+    },
+    "stats": {
+      "totalOrders": "总订单",
+      "allTime": "历史累计",
+      "pending": "待处理",
+      "awaitingConfirmation": "等待确认",
+      "shipping": "运输中",
+      "inTransit": "途中",
+      "returns": "退货",
+      "requests": "请求"
+    },
+    "tabs": {
+      "orders": "订单",
+      "fulfillment": "履行 & 物流",
+      "rma": "退货 & 退款",
+      "settings": "运输设置"
+    }
   },
   "sellers": {
-    "title": "卖家",
-    "description": "管理供应商资料、评级和入驻。",
+    "title": "卖家管理",
+    "description": "管理卖家资料、评级和入驻。",
     "inviteSeller": "邀请卖家",
     "searchPlaceholder": "搜索卖家...",
     "id": "卖家 ID",
     "storeName": "店铺名称",
-    "primaryCategory": "主要类别",
-    "rating": "评级",
+    "primaryCategory": "主营类目",
+    "rating": "评分",
     "totalSales": "总销售额",
     "viewProfile": "查看资料",
     "manageCommission": "管理佣金",
     "suspendSeller": "暂停卖家",
-    "noSellers": "未找到卖家。"
+    "noSellers": "未找到卖家。",
+    "sellerType": "卖家类型",
+    "regularSeller": "普通卖家",
+    "dropShippingSeller": "一件代发",
+    "f2cSeller": "工厂直销 (F2C)",
+    "onboardingApproval": "入驻审批",
+    "taxId": "税号",
+    "idCard": "身份证",
+    "businessLicense": "营业执照",
+    "verifyTaxId": "验证税号",
+    "verifyIdCard": "验证身份证",
+    "matchedNationalDb": "匹配国家数据库",
+    "notMatchedNationalDb": "不匹配国家数据库",
+    "uploadDocs": "上传文档",
+    "approveEkyc": "批准 eKYC",
+    "updateTax": "更新税务",
+    "updateBank": "更新银行",
+    "detailsTab": "360 概览",
+    "ownerName": "店主姓名",
+    "shopAddress": "店铺地址",
+    "contactPhone": "联系电话",
+    "warehouseAddress": "仓库地址",
+    "warehouseStaff": "仓库人员",
+    "warehousePhone": "仓库电话",
+    "bankAccountHolder": "开户人",
+    "selectBank": "选择银行",
+    "bankName": "银行名称",
+    "legalType": "法律形式",
+    "individual": "个体户",
+    "businessHousehold": "家庭作坊",
+    "enterprise": "企业",
+    "taxNoteIndividual": "需缴纳 1% 增值税和 0.5% 个人所得税。",
+    "taxNoteEnterprise": "源头不扣税。",
+    "personalAccount": "个人账户",
+    "businessAccount": "企业账户",
+    "ownerIdPassport": "店主身份证/护照",
+    "sellerInfo": "卖家信息",
+    "ownerNameIndividual": "店主姓名",
+    "businessHouseholdName": "商户名称",
+    "enterpriseName": "企业名称",
+    "contactAddress": "联系地址",
+    "taxAddress": "税务地址",
+    "email": "电子邮件",
+    "bankInfo": "银行信息",
+    "warehouseInfo": "仓库信息",
+    "addWarehouse": "添加仓库",
+    "warehouseList": "仓库列表",
+    "returnForAdditionalInfo": "退回补充信息",
+    "approve": "批准",
+    "reject": "拒绝",
+    "actions": {
+      "view": "查看",
+      "edit": "编辑信息",
+      "suspend": "暂停卖家"
+    },
+    "tabs": {
+      "approval": "审批 (优先)",
+      "personal": "个人 / 个体户",
+      "enterprise": "企业"
+    },
+    "registerSeller": "注册卖家",
+    "currentEkycStatus": "当前 eKYC 状态",
+    "autoLookupSystem": "自动查询系统",
+    "autoLookupNote": "系统将自动从上传的照片中提取信息，并与国家居民/企业登记数据库进行核对。",
+    "verifying": "正在查询...",
+    "saveChanges": "保存更改",
+    "stats": {
+      "totalSellers": "卖家总数",
+      "registeredShops": "注册店铺",
+      "verified": "已验证",
+      "activeVerified": "活跃 & 已验证",
+      "pendingApproval": "待审批",
+      "awaitingReview": "等待审核",
+      "suspended": "已暂停",
+      "policyViolations": "违反政策"
+    }
+  },
+  "marketing": {
+    "title": "营销渠道",
+    "description": "管理活动、社交媒体、促销和分析。",
+    "tabs": {
+      "campaigns": "活动",
+      "social": "社交媒体",
+      "messages": "消息 & Zalo",
+      "promotions": "促销 & 限时抢购",
+      "landingPages": "落地页"
+    },
+    "dashboard": {
+      "campaigns": "营销活动",
+      "content": "内容与媒体"
+    },
+    "backToDashboard": "返回仪表板",
+    "stats": {
+      "totalBudget": "总预算",
+      "totalRevenue": "总收入",
+      "roi": "投资回报率",
+      "activeCampaigns": "活跃活动",
+      "totalReach": "总触达",
+      "conversionRate": "转化率",
+      "marketingRoi": "营销 ROI",
+      "vsLastMonth": "较上月 {value}",
+      "runningPlatforms": "运行于 {count} 个平台"
+    },
+    "campaigns": {
+      "title": "活动",
+      "description": "创建活动、目标、时间、预算。",
+      "create": "创建活动",
+      "overview": "营销活动及其表现 (P&L) 概览。",
+      "name": "活动名称",
+      "status": "状态",
+      "platform": "平台",
+      "budget": "预算",
+      "revenue": "收入",
+      "pnl": "利润 (P&L)",
+      "roi": "ROI",
+      "active": "进行中",
+      "completed": "已结束",
+      "planned": "已计划"
+    },
+    "promotions": {
+      "create": "创建促销",
+      "flashSale": "限时抢购",
+      "flashSaleDesc": "创建限时优惠。",
+      "createFlashSale": "创建限时抢购",
+      "voucherCenter": "优惠券中心",
+      "voucherCenterDesc": "管理折扣优惠券。",
+      "createVoucher": "创建优惠券",
+      "groupBuy": "团购",
+      "groupBuyDesc": "创建团购交易。",
+      "createGroupBuy": "创建团购",
+      "activePromotions": "进行中的促销",
+      "name": "名称",
+      "type": "类型",
+      "discount": "折扣",
+      "duration": "持续时间",
+      "status": "状态",
+      "actions": "操作"
+    },
+    "social": {
+      "title": "社交媒体",
+      "description": "发布日程、多渠道、发布历史。",
+      "createPost": "发布帖子",
+      "platform": "平台",
+      "content": "内容",
+      "schedule": "日程",
+      "recentPosts": "最近发布的帖子",
+      "recentPostsDesc": "最近社交媒体帖子的表现。",
+      "engagement": "互动",
+      "engagements": "互动"
+    },
+    "messages": {
+      "title": "短信 & 通知",
+      "description": "短信、推送、应用内消息。",
+      "zaloIntegration": "Zalo OA 集成",
+      "status": "状态",
+      "connected": "已连接",
+      "followers": "关注者",
+      "quotaRemaining": "剩余配额",
+      "manageZalo": "管理 Zalo OA",
+      "adPerformance": "广告消息表现",
+      "last30Days": "过去 30 天",
+      "sent": "已发送",
+      "openRate": "打开率",
+      "clickRate": "点击率",
+      "campaigns": "消息活动",
+      "campaignsDesc": "Zalo OA 和 SMS 活动历史。",
+      "campaignName": "活动名称",
+      "type": "类型",
+      "date": "日期"
+    },
+    "landingPages": {
+      "title": "落地页",
+      "description": "创建落地页、注册表单、跟踪。",
+      "noPages": "暂无落地页",
+      "createFirst": "创建您的第一个落地页以提高转化率。",
+      "create": "创建落地页"
+    },
+    "email": {
+      "title": "邮件营销",
+      "description": "批量发送邮件、模板、A/B 测试。",
+      "create": "创建活动",
+      "subscribers": "总订阅者",
+      "avgOpenRate": "平均打开率",
+      "avgClickRate": "平均点击率",
+      "recentCampaigns": "最近的邮件活动",
+      "campaignName": "活动名称",
+      "status": "状态",
+      "sent": "已发送",
+      "openRate": "打开率",
+      "clickRate": "点击率",
+      "date": "日期"
+    },
+    "reports": {
+      "title": "活动报告",
+      "description": "效率、打开率/点击率、转化率。",
+      "trafficSources": "流量来源",
+      "trafficSourcesDesc": "您的流量来自哪里",
+      "trafficChartPlaceholder": "流量图表占位符",
+      "conversionRate": "渠道转化率",
+      "conversionRateDesc": "哪些渠道转化效果最好",
+      "conversionChartPlaceholder": "转化图表占位符"
+    },
+    "settings": {
+      "title": "活动设置",
+      "description": "渠道、模板、发送限制。",
+      "general": "常规配置",
+      "generalDesc": "管理默认活动设置。",
+      "senderName": "默认发件人名称",
+      "senderEmail": "默认发件人邮箱",
+      "trackOpens": "跟踪邮件打开",
+      "trackClicks": "跟踪链接点击",
+      "save": "保存设置"
+    },
+    "content": {
+      "title": "内容管理",
+      "description": "文章、落地页、广告内容。",
+      "newArticle": "新建文章",
+      "articleTitle": "标题",
+      "author": "作者",
+      "status": "状态",
+      "lastModified": "最后修改"
+    },
+    "assets": {
+      "title": "资产库",
+      "description": "图像、视频、可重用文件。",
+      "upload": "上传资产"
+    },
+    "leads": {
+      "title": "潜在客户表单",
+      "description": "嵌入表单、弹窗、集成。",
+      "create": "创建表单",
+      "activeForms": "活跃表单",
+      "activeFormsDesc": "管理潜在客户捕获表单和弹窗。",
+      "formName": "表单名称",
+      "type": "类型",
+      "views": "浏览量",
+      "submissions": "提交量",
+      "conversionRate": "转化率",
+      "status": "状态",
+      "types": {
+        "embedded": "嵌入式",
+        "popup": "弹窗",
+        "landingPage": "落地页"
+      },
+      "statuses": {
+        "active": "活跃",
+        "paused": "已暂停"
+      }
+    },
+    "contentSettings": {
+      "title": "内容设置",
+      "description": "模板、品牌库。",
+      "brand": "品牌指南",
+      "brandDesc": "设置内容的默认颜色和字体。",
+      "primaryColor": "主色",
+      "secondaryColor": "辅色",
+      "seo": "SEO 默认值",
+      "seoDesc": "搜索引擎优化的默认设置。",
+      "metaSuffix": "默认 Meta 标题后缀",
+      "indexContent": "默认索引内容"
+    }
+  },
+  "affiliate": {
+    "title": "联盟营销",
+    "description": "管理合作伙伴网络、佣金和跟踪。",
+    "tabs": {
+      "overview": "概览",
+      "publishers": "发布者/KOL 网络",
+      "commissions": "佣金配置",
+      "tracking": "跟踪链接"
+    },
+    "overview": {
+      "totalRevenue": "联盟收入",
+      "activePublishers": "活跃发布者",
+      "totalCommissions": "已付佣金总额",
+      "clicks": "点击量"
+    },
+    "publishers": {
+      "name": "发布者名称",
+      "type": "类型",
+      "followers": "粉丝数",
+      "commissionRate": "佣金率",
+      "status": "状态",
+      "actions": "操作",
+      "invite": "邀请发布者",
+      "types": {
+        "kol": "KOL/网红",
+        "content_creator": "内容创作者",
+        "coupon_site": "优惠券网站",
+        "cashback": "返利网"
+      }
+    },
+    "commissions": {
+      "title": "佣金配置",
+      "description": "按类别或产品设置佣金率。",
+      "defaultRate": "默认费率",
+      "categoryRates": "按类别",
+      "productRates": "按产品 (特殊)",
+      "addCategory": "添加类别",
+      "addProduct": "添加产品",
+      "category": "类别",
+      "rate": "费率 (%)",
+      "save": "保存配置"
+    },
+    "tracking": {
+      "title": "创建跟踪链接",
+      "description": "为活动生成并分享跟踪链接。",
+      "generate": "生成链接",
+      "sourceUrl": "源链接 (产品/主页)",
+      "campaignSource": "活动来源 (utm_source)",
+      "campaignMedium": "媒介 (utm_medium)",
+      "campaignName": "活动名称 (utm_campaign)",
+      "generatedUrl": "跟踪链接",
+      "copy": "复制"
+    }
+  },
+  "purchasing": {
+    "title": "采购 & B2B 供应链",
+    "description": "管理内部采购请求、供应商和 B2B 库存。",
+    "tabs": {
+      "requisitions": "采购申请",
+      "suppliers": "供应商",
+      "inventory": "B2B 库存",
+      "reports": "进销存报告",
+      "forecasting": "需求预测"
+    },
+    "requisitions": {
+      "create": "创建申请",
+      "listTitle": "采购申请列表",
+      "id": "申请 ID",
+      "requester": "申请人",
+      "item": "物品",
+      "quantity": "数量",
+      "date": "日期",
+      "priority": "优先级",
+      "status": "状态",
+      "actions": "操作"
+    },
+    "suppliers": {
+      "title": "供应商列表",
+      "name": "供应商名称",
+      "category": "类别",
+      "rating": "评级",
+      "status": "状态",
+      "lastOrder": "最后订单",
+      "evaluate": "重新评估"
+    },
+    "inventory": {
+      "title": "B2B 库存管理",
+      "sku": "SKU",
+      "productName": "产品名称",
+      "currentStock": "当前库存",
+      "safetyStock": "安全库存",
+      "status": "状态",
+      "alerts": {
+        "ok": "正常",
+        "low": "库存低",
+        "critical": "严重短缺",
+        "overstock": "库存积压"
+      }
+    },
+    "reports": {
+      "title": "进销存报告",
+      "export": "导出报告"
+    },
+    "forecasting": {
+      "title": "采购需求预测",
+      "item": "物品",
+      "currentStock": "当前库存",
+      "predictedDemand": "预测需求 (30天)",
+      "suggestedOrder": "建议订购",
+      "confidence": "置信度",
+      "createPO": "创建采购订单"
+    }
+  },
+  "finance": {
+    "title": "财务与会计",
+    "description": "根据法规管理财务和会计。",
+    "tabs": {
+      "dashboard": "概览",
+      "chartOfAccounts": "会计科目表",
+      "journal": "凭证与账簿",
+      "ledger": "总账",
+      "statements": "财务报表",
+      "paymentWallet": "支付与钱包",
+      "withdrawal": "提现请求"
+    },
+    "dashboard": {
+      "totalRevenue": "总收入",
+      "totalExpenses": "总支出",
+      "netProfit": "净利润",
+      "cashOnHand": "现金及等价物",
+      "currentBalance": "当前余额"
+    },
+    "chartOfAccounts": {
+      "title": "会计科目表",
+      "description": "企业会计科目列表。",
+      "code": "科目代码",
+      "name": "科目名称",
+      "type": "类型",
+      "create": "添加科目"
+    },
+    "journal": {
+      "title": "账簿与凭证系统",
+      "description": "管理会计账簿。",
+      "create": "创建凭证",
+      "date": "日期",
+      "number": "编号",
+      "description": "描述",
+      "account": "科目",
+      "debit": "借",
+      "credit": "贷",
+      "bookType": "账簿类型",
+      "cashBook": "现金日记账",
+      "bankBook": "银行存款日记账",
+      "generalJournal": "普通日记账"
+    },
+    "ledger": {
+      "title": "总账",
+      "description": "按科目查看交易详情。",
+      "selectAccount": "选择科目",
+      "balance": "余额"
+    },
+    "statements": {
+      "title": "财务报表",
+      "description": "财务报告系统。",
+      "preview": "预览报表",
+      "balanceSheet": "资产负债表",
+      "incomeStatement": "利润表",
+      "cashFlow": "现金流量表"
+    },
+    "reconciliation": {
+      "title": "对账与债务",
+      "description": "卖家付款对账和债务管理。",
+      "seller": "卖家",
+      "orderId": "订单 ID",
+      "transactionDate": "交易日期",
+      "orderValue": "订单价值",
+      "platformFee": "平台费",
+      "shippingFee": "运费",
+      "commission": "佣金",
+      "netPayment": "实付",
+      "status": "状态",
+      "action": "操作",
+      "reconcile": "对账",
+      "reconciled": "已对账",
+      "pending": "待处理"
+    },
+    "pnl": {
+      "title": "损益分析",
+      "description": "基于成本、价格和支出的自动 P&L。",
+      "revenue": "收入",
+      "cogs": "销货成本 (COGS)",
+      "grossProfit": "毛利",
+      "operatingExpenses": "运营费用",
+      "netProfit": "净利润",
+      "product": "产品",
+      "qtySold": "销量",
+      "avgSellPrice": "平均售价",
+      "avgImportPrice": "平均进价",
+      "margin": "利润率 (%)"
+    },
+    "withdrawal": {
+      "title": "提现请求",
+      "description": "管理买家和卖家的提现请求。",
+      "requestId": "请求 ID",
+      "requester": "申请人",
+      "type": "账户类型",
+      "amount": "金额",
+      "bankInfo": "银行信息",
+      "status": "状态",
+      "date": "日期",
+      "approve": "批准",
+      "reject": "拒绝",
+      "payout": "支付",
+      "user": "买家",
+      "seller": "卖家"
+    },
+    "invoice": {
+      "title": "电子发票",
+      "description": "管理买家增值税发票和卖家佣金发票。",
+      "invoiceNumber": "发票号码",
+      "type": "类型",
+      "recipient": "接收人",
+      "amount": "金额",
+      "date": "日期",
+      "status": "状态",
+      "vatInvoice": "增值税发票",
+      "commissionInvoice": "佣金发票",
+      "view": "查看",
+      "download": "下载",
+      "send": "发送邮件"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理系统设置和账户选项。",
+    "tabs": {
+      "general": "常规",
+      "account": "账户",
+      "notifications": "通知",
+      "security": "安全",
+      "appearance": "外观",
+      "fees": "费用 & 税务",
+      "categories": "类别",
+      "roles": "角色权限",
+      "integrations": "集成",
+      "shipping": "运输",
+      "paymentShipping": "支付 & 运输"
+    },
+    "general": {
+      "systemName": "系统名称",
+      "systemNameDesc": "系统显示名称。",
+      "logo": "系统 Logo",
+      "navicon": "图标",
+      "contactEmail": "联系邮箱",
+      "contactEmailDesc": "接收系统通知的邮箱。",
+      "hotline": "热线",
+      "hotlineDesc": "客户支持电话。",
+      "timezone": "时区",
+      "currency": "默认货币",
+      "save": "保存更改"
+    },
+    "account": {
+      "profile": "个人资料",
+      "fullName": "全名",
+      "mobilePhone": "手机号",
+      "ext": "分机",
+      "email": "邮箱",
+      "department": "部门",
+      "position": "职位",
+      "role": "角色",
+      "updateProfile": "更新资料"
+    },
+    "notifications": {
+      "emailNotif": "邮件通知",
+      "emailNotifDesc": "接收新订单或重要更新的邮件。",
+      "pushNotif": "推送通知",
+      "pushNotifDesc": "在浏览器上接收直接通知。",
+      "smsNotif": "短信通知",
+      "smsNotifDesc": "接收安全警报短信。"
+    },
+    "appearance": {
+      "theme": "主题",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "系统",
+      "primaryColor": "主色调",
+      "fontSize": "字体大小",
+      "small": "小",
+      "medium": "中",
+      "large": "大"
+    },
+    "security": {
+      "changePassword": "修改密码",
+      "currentPassword": "当前密码",
+      "newPassword": "新密码",
+      "confirmPassword": "确认新密码",
+      "twoFactorAuth": "双重认证 (2FA)",
+      "twoFactorAuthDesc": "使用验证器应用保护您的账户。",
+      "loginHistory": "登录历史",
+      "activeSessions": "活跃会话",
+      "device": "设备",
+      "location": "位置",
+      "ipAddress": "IP 地址",
+      "time": "时间",
+      "revokeSession": "注销"
+    },
+    "paymentShipping": {
+      "title": "支付 & 运输",
+      "description": "配置支付和运输合作伙伴的 API 连接。",
+      "paymentGateways": "支付网关",
+      "shippingProviders": "运输提供商",
+      "partnerName": "合作伙伴",
+      "apiKey": "API Key",
+      "secretKey": "Secret Key",
+      "merchantId": "Merchant ID",
+      "webhookUrl": "Webhook URL",
+      "configure": "配置",
+      "status": "状态",
+      "connected": "已连接",
+      "disconnected": "未连接"
+    },
+    "fees": {
+      "title": "费用 & 税务配置",
+      "platformFee": "平台费 (按类别)",
+      "platformFeeDesc": "配置各类别平台费率。",
+      "otherFees": "其他费用",
+      "otherFeesDesc": "配置每单适用的其他费用。",
+      "feeName": "费用名称",
+      "feeType": "类型",
+      "feeValue": "值",
+      "feePercentage": "比例 (%)",
+      "feeFixed": "固定 (VND)",
+      "paymentFee": "支付费",
+      "infrastructureFee": "基础设施费",
+      "insuranceFee": "保险费",
+      "voucherFee": "优惠券",
+      "adsFee": "广告费",
+      "affiliateFee": "联盟费",
+      "vatTax": "增值税",
+      "vatTaxDesc": "适用于所有订单",
+      "pitTax": "个人所得税",
+      "pitTaxDesc": "仅适用于个人/家庭作坊",
+      "categoryLevel1": "一级分类",
+      "categoryLevel2": "二级分类",
+      "categoryLevel3": "三级分类",
+      "feeRateMall": "商城费率 (%)",
+      "feeRateRegular": "普通店费率 (%)",
+      "searchCategory": "搜索类别...",
+      "addFee": "添加费用",
+      "addCategory": "添加类别",
+      "deleteCategory": "删除",
+      "confirmDelete": "确认删除",
+      "confirmDeleteDesc": "确定要删除此类别吗？",
+      "shippingFees": "运费配置",
+      "shippingFeesDesc": "为每个运输商配置运费。",
+      "carrier": "运输商",
+      "baseFee": "基础费",
+      "weightFee": "重量费 (kg)",
+      "codFee": "COD 费",
+      "categoryLevel1Placeholder": "输入一级分类...",
+      "categoryLevel2Placeholder": "输入二级分类...",
+      "categoryLevel3Placeholder": "输入三级分类 (可选)...",
+      "saveChanges": "保存配置",
+      "categoryManagement": "类别与平台费管理",
+      "categoryManagementDesc": "配置类别结构和相应的平台费率。"
+    },
+    "roles": {
+      "title": "权限矩阵",
+      "description": "管理系统各模块的角色和详细权限。",
+      "roleName": "角色名称",
+      "addRole": "添加角色",
+      "module": "模块",
+      "view": "查看",
+      "create": "创建",
+      "edit": "编辑",
+      "delete": "删除",
+      "approve": "批准",
+      "modules": {
+        "products": "产品",
+        "orders": "订单",
+        "sellers": "卖家",
+        "marketing": "营销",
+        "finance": "财务",
+        "settings": "系统设置"
+      }
+    },
+    "integrations": {
+      "title": "OpenAPI & Webhooks",
+      "description": "管理第三方系统 (ERP, CRM...) 的 API 连接和 Webhook。",
+      "apiKeys": "API Keys",
+      "webhooks": "Webhooks",
+      "createApiKey": "创建新 API Key",
+      "keyName": "Key 名称",
+      "keyString": "API Key",
+      "createdDate": "创建日期",
+      "lastUsed": "最后使用",
+      "status": "状态",
+      "active": "活跃",
+      "inactive": "停用",
+      "addWebhook": "添加 Webhook",
+      "endpointUrl": "Endpoint URL",
+      "events": "事件",
+      "secret": "Secret Key"
+    }
+  },
+  "socialCommerce": {
+    "title": "社交电商",
+    "description": "UGC 内容、产品评论和社区参与。",
+    "tabs": {
+      "feed": "社交动态",
+      "groups": "社区 & 群组",
+      "creators": "创作者"
+    },
+    "feed": {
+      "createPost": "发布帖子",
+      "trending": "趋势",
+      "following": "关注中",
+      "forYou": "推荐",
+      "likes": "点赞",
+      "comments": "评论",
+      "shares": "分享",
+      "buyNow": "立即购买"
+    },
+    "groups": {
+      "createGroup": "创建群组",
+      "members": "成员",
+      "posts": "帖子/天",
+      "join": "加入",
+      "joined": "已加入",
+      "category": "类别"
+    },
+    "creators": {
+      "followers": "粉丝",
+      "engagementRate": "互动率",
+      "totalSales": "总销售额",
+      "follow": "关注",
+      "unfollow": "取消关注"
+    }
+  },
+  "legal": {
+    "title": "法务与品牌保护",
+    "description": "管理版权注册、争议解决和合规监控。",
+    "tabs": {
+      "brandPortal": "品牌门户",
+      "dispute": "争议解决",
+      "compliance": "合规监控"
+    },
+    "brandPortal": {
+      "register": "注册版权",
+      "brandName": "品牌名称",
+      "owner": "所有者",
+      "status": "状态",
+      "documents": "证明文件"
+    },
+    "dispute": {
+      "caseId": "案件 ID",
+      "type": "违规类型",
+      "reporter": "举报人",
+      "accused": "被举报人",
+      "status": "状态",
+      "action": "操作",
+      "counterfeit": "假冒伪劣",
+      "ipViolation": "侵犯知识产权"
+    },
+    "compliance": {
+      "policy": "政策",
+      "violationRate": "违规率",
+      "lastAudit": "上次审计",
+      "status": "状态",
+      "dataPrivacy": "数据隐私",
+      "ecommerceLaw": "电商法"
+    }
+  },
+  "sellerFinance": {
+    "title": "卖家金融支持",
+    "description": "信用评分和快速贷款。",
+    "tabs": {
+      "credit": "卖家信用",
+      "earlyPayout": "提前收款"
+    },
+    "credit": {
+      "sellerName": "卖家",
+      "creditScore": "信用分",
+      "performance": "表现",
+      "loanLimit": "贷款额度",
+      "status": "状态",
+      "excellent": "优秀",
+      "good": "良好",
+      "average": "一般"
+    },
+    "earlyPayout": {
+      "requestPayout": "申请提前收款",
+      "amount": "金额",
+      "fee": "费用",
+      "netAmount": "实收",
+      "payoutDate": "收款日期",
+      "status": "状态"
+    }
+  },
+  "advertising": {
+    "title": "广告系统",
+    "description": "管理关键词竞价、展示位置和广告分析。",
+    "tabs": {
+      "bidding": "广告竞价",
+      "analytics": "效果报告 (ROAS)",
+      "revenue": "平台广告收入"
+    },
+    "bidding": {
+      "keyword": "关键词",
+      "position": "位置",
+      "bidPrice": "出价 (VND)",
+      "status": "状态",
+      "createCampaign": "创建广告",
+      "campaignName": "广告名称",
+      "budget": "日预算",
+      "topSearch": "搜索置顶",
+      "homeBanner": "首页横幅",
+      "categoryBanner": "类目横幅"
+    },
+    "analytics": {
+      "impressions": "展示量",
+      "clicks": "点击量",
+      "ctr": "点击率 (CTR)",
+      "spend": "花费",
+      "revenue": "收入",
+      "roas": "ROAS",
+      "campaign": "广告活动"
+    },
+    "revenue": {
+      "totalAdRevenue": "总广告收入",
+      "activeCampaigns": "活跃广告",
+      "topSellers": "头部广告主"
+    }
+  },
+  "live": {
+    "title": "直播中心",
+    "description": "管理直播日程、置顶产品和实时统计。",
+    "tabs": {
+      "dashboard": "概览",
+      "schedule": "日程",
+      "activeSession": "当前直播",
+      "products": "置顶产品"
+    },
+    "dashboard": {
+      "activeViewers": "当前观众",
+      "totalRevenue": "直播收入",
+      "orders": "订单",
+      "engagement": "互动 (点赞/评论)"
+    },
+    "schedule": {
+      "create": "创建直播",
+      "title": "标题",
+      "host": "主播/KOL",
+      "startTime": "开始时间",
+      "status": "状态",
+      "upcoming": "即将开始",
+      "live": "直播中",
+      "ended": "已结束"
+    },
+    "activeSession": {
+      "streamPreview": "直播预览",
+      "chat": "聊天",
+      "pinProduct": "置顶产品",
+      "endStream": "结束直播",
+      "revenue": "收入",
+      "viewers": "观众"
+    },
+    "products": {
+      "search": "搜索产品...",
+      "pin": "置顶",
+      "unpin": "取消置顶",
+      "pinned": "已置顶",
+      "stock": "库存",
+      "price": "价格"
+    }
+  },
+  "adminWorkspace": {
+    "title": "行政与工作区",
+    "description": "管理资产、办公用品、预订和行政请求。",
+    "tabs": {
+      "assets": "资产 & 设备",
+      "stationery": "办公用品",
+      "booking": "预订",
+      "requests": "请求 & 报销"
+    },
+    "assets": {
+      "create": "添加资产",
+      "assetId": "资产 ID",
+      "name": "设备名称",
+      "category": "类别",
+      "assignee": "使用人",
+      "status": "状态",
+      "condition": "状况",
+      "laptop": "笔记本/PC",
+      "monitor": "显示器",
+      "furniture": "家具",
+      "available": "可用",
+      "inUse": "使用中",
+      "maintenance": "维修中"
+    },
+    "stationery": {
+      "request": "申请办公用品",
+      "item": "物品",
+      "stock": "库存",
+      "unit": "单位",
+      "department": "部门",
+      "quantity": "数量",
+      "status": "状态",
+      "pending": "待处理",
+      "approved": "已批准",
+      "delivered": "已交付"
+    },
+    "booking": {
+      "bookRoom": "预订会议室",
+      "bookCar": "预订车辆",
+      "room": "会议室",
+      "car": "车辆",
+      "time": "时间",
+      "purpose": "目的",
+      "capacity": "容量",
+      "driver": "司机",
+      "status": "状态",
+      "confirmed": "已确认",
+      "cancelled": "已取消"
+    },
+    "requests": {
+      "create": "创建请求",
+      "requestId": "请求 ID",
+      "type": "类型",
+      "requester": "申请人",
+      "amount": "金额 (VND)",
+      "date": "日期",
+      "status": "状态",
+      "purchase": "资产采购",
+      "payment": "费用支付",
+      "travel": "差旅费"
+    }
+  },
+  "analytics": {
+    "title": "商业智能与分析",
+    "description": "商业智能数据仓库、深度报告和欺诈警报。",
+    "tabs": {
+      "overview": "概览",
+      "customers": "客户分析 (RFM)",
+      "platform": "平台指标 (AOV, CLV, CAC)",
+      "sellers": "卖家表现",
+      "fraud": "欺诈警报"
+    },
+    "rfm": {
+      "title": "客户分析 (RFM)",
+      "recency": "最近购买",
+      "frequency": "购买频率",
+      "monetary": "消费金额"
+    },
+    "platform": {
+      "title": "平台指标",
+      "aov": "平均客单价 (AOV)",
+      "clv": "客户终身价值 (CLV)",
+      "cac": "获客成本 (CAC)"
+    },
+    "sellers": {
+      "title": "卖家能力分析"
+    },
+    "fraud": {
+      "title": "欺诈警报",
+      "buffOrders": "刷单",
+      "spamVoucher": "滥用优惠券"
+    }
+  },
+  "sales": {
+    "title": "销售管理",
+    "description": "管理内部销售团队、佣金结构和绩效跟踪。",
+    "tabs": {
+      "overview": "概览",
+      "tiers": "等级 & 佣金",
+      "tracking": "绩效跟踪"
+    },
+    "overview": {
+      "totalRevenue": "总销售收入",
+      "activeSales": "活跃销售人员",
+      "topPerformer": "最佳表现者",
+      "commissionPayout": "佣金支付"
+    },
+    "roles": {
+      "admin": "管理员",
+      "salesDirector": "销售总监",
+      "regionalDirector": "区域总监",
+      "salesManager": "销售经理",
+      "salesStaff": "销售专员",
+      "collaborator": "合作者"
+    },
+    "performance": {
+      "individual": "个人绩效",
+      "team": "团队绩效",
+      "hierarchy": "组织架构"
+    },
+    "tiers": {
+      "title": "等级 & 佣金",
+      "name": "等级名称",
+      "revenueTarget": "收入目标",
+      "commissionRate": "佣金率 (%)",
+      "addTier": "添加等级"
+    },
+    "tracking": {
+      "title": "绩效跟踪",
+      "leaderboard": "实时排行榜",
+      "individual": "个人绩效",
+      "team": "团队绩效",
+      "reconciliation": "收入对账"
+    }
+  },
+  "customers": {
+    "title": "客户 360",
+    "description": "管理全面的客户档案、细分和互动历史。",
+    "crm": {
+      "title": "客户列表",
+      "buyerName": "客户姓名",
+      "purchaseHistory": "购买历史",
+      "totalOrders": "总订单",
+      "totalSpent": "总消费",
+      "lastOrder": "最近订单",
+      "details": "360 档案",
+      "segment": "细分",
+      "walletBalance": "钱包余额",
+      "tags": "标签"
+    }
+  },
+  "customerService": {
+    "title": "客户服务中心",
+    "description": "多渠道客户支持、热线和工单管理。",
+    "tabs": {
+      "chat": "多渠道聊天",
+      "hotline": "热线",
+      "tickets": "工单管理",
+      "teams": "客服团队"
+    },
+    "chat": {
+      "channels": "支持渠道",
+      "customerInfo": "客户信息",
+      "recentOrders": "最近订单",
+      "lookupPlaceholder": "搜索电话/订单号...",
+      "zaloOA": "Zalo 公众号",
+      "zaloPersonal": "Zalo 个人",
+      "messenger": "Messenger",
+      "whatsapp": "WhatsApp",
+      "wechat": "微信"
+    },
+    "hotline": {
+      "incomingCall": "来电...",
+      "accept": "接听",
+      "reject": "拒绝",
+      "callHistory": "通话记录",
+      "simulateCall": "模拟来电",
+      "activeCall": "通话中",
+      "customerContext": "客户背景"
+    },
+    "tickets": {
+      "create": "创建工单",
+      "subject": "主题",
+      "priority": "优先级",
+      "status": "状态",
+      "assignee": "处理人",
+      "high": "高",
+      "medium": "中",
+      "low": "低",
+      "open": "新建",
+      "in_progress": "处理中",
+      "resolved": "已解决"
+    },
+    "teams": {
+      "createGroup": "创建客服组",
+      "groupName": "组名",
+      "description": "描述",
+      "members": "成员",
+      "routing": "路由",
+      "routingRules": {
+        "all": "所有来电",
+        "vip": "仅 VIP 客户",
+        "tech": "技术问题",
+        "complaint": "投诉"
+      }
+    }
   }
 }

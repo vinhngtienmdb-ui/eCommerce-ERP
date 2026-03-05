@@ -91,50 +91,50 @@ export function Products() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("products.stats.totalProducts")}</CardTitle>
             <div className="p-2 bg-blue-100 rounded-full">
               <Package className="h-4 w-4 text-blue-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{initialProducts.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Active items</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.activeItems")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Low Stock</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("products.stats.lowStock")}</CardTitle>
             <div className="p-2 bg-yellow-100 rounded-full">
               <AlertTriangle className="h-4 w-4 text-yellow-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground mt-1">Needs restock</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.needsRestock")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Top Rated</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("products.stats.topRated")}</CardTitle>
             <div className="p-2 bg-green-100 rounded-full">
               <CheckCircle2 className="h-4 w-4 text-green-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground mt-1">4.8+ Rating</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.ratingDesc")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Inactive</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("products.stats.inactive")}</CardTitle>
             <div className="p-2 bg-red-100 rounded-full">
               <XCircle className="h-4 w-4 text-red-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
-            <p className="text-xs text-muted-foreground mt-1">Unpublished</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.unpublished")}</p>
           </CardContent>
         </Card>
       </div>
@@ -159,10 +159,10 @@ export function Products() {
       <div className="bg-[#e8f8f5] border border-[#b2dfdb] rounded-md p-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[#009688]">
           <span className="text-xl">✨</span>
-          <span className="text-sm font-medium">Tận hưởng dịch vụ Chương Trình "Hỗ Trợ Kinh Phí Hiệu Suất khi sử dụng chế độ Tối Đa Doanh Thu Tùy chỉnh ROAS</span>
+          <span className="text-sm font-medium">{t("products.promo.text")}</span>
         </div>
         <Button variant="default" className="bg-[#009688] hover:bg-[#00796b] text-white h-8 text-xs">
-          Xem Chi Tiết
+          {t("products.promo.details")}
         </Button>
       </div>
 
@@ -227,12 +227,12 @@ export function Products() {
 
           <div className="flex items-center justify-between pt-2">
             <div className="text-sm font-medium">
-              {filteredProducts.length} Sản Phẩm <Badge variant="secondary" className="ml-2 font-normal text-xs">Tiềm năng Dịch Vụ Hiển Thị</Badge>
+              {filteredProducts.length} {t("products.list.products")} <Badge variant="secondary" className="ml-2 font-normal text-xs">{t("products.list.potential")}</Badge>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" className="h-8 text-xs">
                 <ArrowUpDown className="mr-2 h-3 w-3" />
-                Sắp xếp theo gợi ý
+                {t("products.list.sortBySuggestion")}
               </Button>
               <div className="flex items-center border rounded-md">
                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none rounded-l-md">
@@ -243,7 +243,7 @@ export function Products() {
                 </Button>
               </div>
               <Button variant="outline" size="sm" className="h-8 text-xs text-[#ee4d2d] border-[#ee4d2d]">
-                ✨ Công cụ Tối ưu AI
+                {t("products.list.aiTool")}
               </Button>
             </div>
           </div>

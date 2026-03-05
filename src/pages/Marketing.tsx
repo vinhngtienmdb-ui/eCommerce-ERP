@@ -65,20 +65,20 @@ export function Marketing() {
   ])
 
   const marketingCampaigns = [
-    { id: "campaigns", title: "Chiến dịch", description: "Tạo chiến dịch, mục tiêu, thời gian, ngân sách.", icon: Megaphone, color: "text-pink-500", bg: "bg-pink-100" },
-    { id: "email", title: "Email Marketing", description: "Gửi email hàng loạt, mẫu, A/B test.", icon: Mail, color: "text-blue-500", bg: "bg-blue-100" },
-    { id: "messages", title: "SMS & Thông báo", description: "SMS, push, tin nhắn trong app.", icon: MessageSquare, color: "text-green-500", bg: "bg-green-100" },
-    { id: "social", title: "Mạng xã hội", description: "Lịch đăng bài, đa kênh, lịch sử đăng.", icon: Share2, color: "text-purple-500", bg: "bg-purple-100" },
-    { id: "reports", title: "Báo cáo chiến dịch", description: "Hiệu quả, tỷ lệ mở/click, chuyển đổi.", icon: BarChart3, color: "text-cyan-500", bg: "bg-cyan-100" },
-    { id: "settings", title: "Thiết lập chiến dịch", description: "Kênh, mẫu, giới hạn gửi.", icon: Settings, color: "text-gray-500", bg: "bg-gray-100" },
+    { id: "campaigns", title: t("marketing.campaigns.title"), description: t("marketing.campaigns.description"), icon: Megaphone, color: "text-pink-500", bg: "bg-pink-100" },
+    { id: "email", title: t("marketing.email.title"), description: t("marketing.email.description"), icon: Mail, color: "text-blue-500", bg: "bg-blue-100" },
+    { id: "messages", title: t("marketing.messages.title"), description: t("marketing.messages.description"), icon: MessageSquare, color: "text-green-500", bg: "bg-green-100" },
+    { id: "social", title: t("marketing.social.title"), description: t("marketing.social.description"), icon: Share2, color: "text-purple-500", bg: "bg-purple-100" },
+    { id: "reports", title: t("marketing.reports.title"), description: t("marketing.reports.description"), icon: BarChart3, color: "text-cyan-500", bg: "bg-cyan-100" },
+    { id: "settings", title: t("marketing.settings.title"), description: t("marketing.settings.description"), icon: Settings, color: "text-gray-500", bg: "bg-gray-100" },
   ]
 
   const contentMedia = [
-    { id: "content", title: "Quản lý nội dung", description: "Bài viết, landing page, bài quảng cáo.", icon: FileText, color: "text-pink-500", bg: "bg-pink-100" },
-    { id: "assets", title: "Thư viện tài sản", description: "Hình ảnh, video, file tái sử dụng.", icon: Image, color: "text-violet-500", bg: "bg-violet-100" },
-    { id: "landingPages", title: "Landing page", description: "Tạo trang đích, form đăng ký, theo dõi.", icon: LayoutTemplate, color: "text-emerald-500", bg: "bg-emerald-100" },
-    { id: "leads", title: "Form thu thập lead", description: "Form nhúng, popup, tích hợp.", icon: ClipboardList, color: "text-orange-500", bg: "bg-orange-100" },
-    { id: "contentSettings", title: "Thiết lập nội dung", description: "Mẫu, thư viện thương hiệu.", icon: Settings, color: "text-gray-500", bg: "bg-gray-100" },
+    { id: "content", title: t("marketing.content.title"), description: t("marketing.content.description"), icon: FileText, color: "text-pink-500", bg: "bg-pink-100" },
+    { id: "assets", title: t("marketing.assets.title"), description: t("marketing.assets.description"), icon: Image, color: "text-violet-500", bg: "bg-violet-100" },
+    { id: "landingPages", title: t("marketing.landingPages.title"), description: t("marketing.landingPages.description"), icon: LayoutTemplate, color: "text-emerald-500", bg: "bg-emerald-100" },
+    { id: "leads", title: t("marketing.leads.title"), description: t("marketing.leads.description"), icon: ClipboardList, color: "text-orange-500", bg: "bg-orange-100" },
+    { id: "contentSettings", title: t("marketing.contentSettings.title"), description: t("marketing.contentSettings.description"), icon: Settings, color: "text-gray-500", bg: "bg-gray-100" },
   ]
 
   const renderDashboard = () => (
@@ -86,7 +86,7 @@ export function Marketing() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-          <h3 className="text-lg font-semibold text-blue-600">Chiến dịch Marketing</h3>
+          <h3 className="text-lg font-semibold text-blue-600">{t("marketing.dashboard.campaigns")}</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {marketingCampaigns.map((item) => (
@@ -118,7 +118,7 @@ export function Marketing() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-          <h3 className="text-lg font-semibold text-blue-600">Nội dung & Truyền thông</h3>
+          <h3 className="text-lg font-semibold text-blue-600">{t("marketing.dashboard.content")}</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {contentMedia.map((item) => (
@@ -155,7 +155,7 @@ export function Marketing() {
     return (
       <div className="space-y-6">
         <Button variant="ghost" className="gap-2 pl-0 hover:bg-transparent hover:text-primary" onClick={() => setCurrentView("dashboard")}>
-          <ArrowLeft className="w-4 h-4" /> Quay lại Dashboard
+          <ArrowLeft className="w-4 h-4" /> {t("marketing.backToDashboard")}
         </Button>
 
         {currentView === "campaigns" && (
@@ -169,42 +169,42 @@ export function Marketing() {
              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Budget</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("marketing.stats.totalBudget")}</CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">100.000.000đ</div>
-                <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                <p className="text-xs text-muted-foreground">{t("marketing.stats.vsLastMonth", { value: "+20.1%" })}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("marketing.stats.totalRevenue")}</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">205.000.000đ</div>
-                <p className="text-xs text-muted-foreground">+15% from last month</p>
+                <p className="text-xs text-muted-foreground">{t("marketing.stats.vsLastMonth", { value: "+15%" })}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">ROI</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("marketing.stats.roi")}</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">205%</div>
-                <p className="text-xs text-muted-foreground">+5% from last month</p>
+                <p className="text-xs text-muted-foreground">{t("marketing.stats.vsLastMonth", { value: "+5%" })}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("marketing.stats.activeCampaigns")}</CardTitle>
                 <Megaphone className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">3</div>
-                <p className="text-xs text-muted-foreground">Running across 3 platforms</p>
+                <p className="text-xs text-muted-foreground">{t("marketing.stats.runningPlatforms", { count: 3 })}</p>
               </CardContent>
             </Card>
           </div>
@@ -213,7 +213,7 @@ export function Marketing() {
             <CardHeader>
               <CardTitle>{t("marketing.tabs.campaigns")}</CardTitle>
               <CardDescription>
-                Overview of your marketing campaigns and their performance (P&L).
+                {t("marketing.campaigns.overview")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -222,7 +222,7 @@ export function Marketing() {
                   <TableRow>
                     <TableHead>{t("marketing.campaigns.name")}</TableHead>
                     <TableHead>{t("marketing.campaigns.status")}</TableHead>
-                    <TableHead>Platform</TableHead>
+                    <TableHead>{t("marketing.campaigns.platform")}</TableHead>
                     <TableHead className="text-right">{t("marketing.campaigns.budget")}</TableHead>
                     <TableHead className="text-right">{t("marketing.campaigns.revenue")}</TableHead>
                     <TableHead className="text-right">{t("marketing.campaigns.pnl")}</TableHead>
@@ -256,9 +256,9 @@ export function Marketing() {
                 <Card className="bg-gradient-to-br from-orange-50 to-white border-orange-200">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-orange-600">
-                      <Clock className="h-5 w-5" /> Flash Sale
+                      <Clock className="h-5 w-5" /> {t("marketing.promotions.flashSale")}
                     </CardTitle>
-                    <CardDescription>Create time-limited offers.</CardDescription>
+                    <CardDescription>{t("marketing.promotions.flashSaleDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button className="w-full bg-orange-600 hover:bg-orange-700">{t("marketing.promotions.createFlashSale")}</Button>
@@ -267,9 +267,9 @@ export function Marketing() {
                 <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-200">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-blue-600">
-                      <Tag className="h-5 w-5" /> Voucher Center
+                      <Tag className="h-5 w-5" /> {t("marketing.promotions.voucherCenter")}
                     </CardTitle>
-                    <CardDescription>Manage discount vouchers.</CardDescription>
+                    <CardDescription>{t("marketing.promotions.voucherCenterDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button className="w-full bg-blue-600 hover:bg-blue-700">{t("marketing.promotions.createVoucher")}</Button>
@@ -278,9 +278,9 @@ export function Marketing() {
                 <Card className="bg-gradient-to-br from-green-50 to-white border-green-200">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-green-600">
-                      <Users className="h-5 w-5" /> Group Buy
+                      <Users className="h-5 w-5" /> {t("marketing.promotions.groupBuy")}
                     </CardTitle>
-                    <CardDescription>Create group buying deals.</CardDescription>
+                    <CardDescription>{t("marketing.promotions.groupBuyDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button className="w-full bg-green-600 hover:bg-green-700">{t("marketing.promotions.createGroupBuy")}</Button>
@@ -290,18 +290,18 @@ export function Marketing() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Active Promotions</CardTitle>
+                  <CardTitle>{t("marketing.promotions.activePromotions")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Discount</TableHead>
-                        <TableHead>Duration</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead>{t("marketing.promotions.name")}</TableHead>
+                        <TableHead>{t("marketing.promotions.type")}</TableHead>
+                        <TableHead>{t("marketing.promotions.discount")}</TableHead>
+                        <TableHead>{t("marketing.promotions.duration")}</TableHead>
+                        <TableHead>{t("marketing.promotions.status")}</TableHead>
+                        <TableHead className="text-right">{t("marketing.promotions.actions")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -360,8 +360,8 @@ export function Marketing() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Recent Posts</CardTitle>
-                <CardDescription>Performance of your recent social media posts.</CardDescription>
+                <CardTitle>{t("marketing.social.recentPosts")}</CardTitle>
+                <CardDescription>{t("marketing.social.recentPostsDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -378,7 +378,7 @@ export function Marketing() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold">{post.engagement}</p>
-                        <p className="text-xs text-muted-foreground">Engagements</p>
+                        <p className="text-xs text-muted-foreground">{t("marketing.social.engagements")}</p>
                       </div>
                     </div>
                   ))}
@@ -393,40 +393,40 @@ export function Marketing() {
             <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Zalo OA Integration</CardTitle>
-                <CardDescription>Status: <span className="text-green-600 font-bold">Connected</span></CardDescription>
+                <CardTitle>{t("marketing.messages.zaloIntegration")}</CardTitle>
+                <CardDescription>{t("marketing.messages.status")}: <span className="text-green-600 font-bold">{t("marketing.messages.connected")}</span></CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Followers</span>
+                    <span className="text-sm text-muted-foreground">{t("marketing.messages.followers")}</span>
                     <span className="font-bold text-xl">12,450</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Quota Remaining</span>
+                    <span className="text-sm text-muted-foreground">{t("marketing.messages.quotaRemaining")}</span>
                     <span className="font-bold text-xl">45,000 / 50,000</span>
                   </div>
-                  <Button className="w-full" variant="outline">Manage Zalo OA</Button>
+                  <Button className="w-full" variant="outline">{t("marketing.messages.manageZalo")}</Button>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Ad Message Performance</CardTitle>
-                <CardDescription>Last 30 days</CardDescription>
+                <CardTitle>{t("marketing.messages.adPerformance")}</CardTitle>
+                <CardDescription>{t("marketing.messages.last30Days")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Sent</span>
+                    <span className="text-sm text-muted-foreground">{t("marketing.messages.sent")}</span>
                     <span className="font-bold text-xl">5,000</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Open Rate</span>
+                    <span className="text-sm text-muted-foreground">{t("marketing.messages.openRate")}</span>
                     <span className="font-bold text-xl">12.5%</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Click Rate</span>
+                    <span className="text-sm text-muted-foreground">{t("marketing.messages.clickRate")}</span>
                     <span className="font-bold text-xl">3.2%</span>
                   </div>
                 </div>
@@ -436,19 +436,19 @@ export function Marketing() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Message Campaigns</CardTitle>
-              <CardDescription>History of Zalo OA and SMS campaigns.</CardDescription>
+              <CardTitle>{t("marketing.messages.campaigns")}</CardTitle>
+              <CardDescription>{t("marketing.messages.campaignsDesc")}</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Campaign Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Sent</TableHead>
-                    <TableHead>Open Rate</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Date</TableHead>
+                    <TableHead>{t("marketing.messages.campaignName")}</TableHead>
+                    <TableHead>{t("marketing.messages.type")}</TableHead>
+                    <TableHead>{t("marketing.messages.sent")}</TableHead>
+                    <TableHead>{t("marketing.messages.openRate")}</TableHead>
+                    <TableHead>{t("marketing.messages.status")}</TableHead>
+                    <TableHead className="text-right">{t("marketing.messages.date")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -478,16 +478,16 @@ export function Marketing() {
         {currentView === "landingPages" && (
            <Card>
             <CardHeader>
-              <CardTitle>Landing Pages</CardTitle>
-              <CardDescription>Manage content for your marketing landing pages.</CardDescription>
+              <CardTitle>{t("marketing.landingPages.title")}</CardTitle>
+              <CardDescription>{t("marketing.landingPages.description")}</CardDescription>
             </CardHeader>
             <CardContent>
                <div className="flex items-center justify-center h-40 border-2 border-dashed rounded-lg">
                   <div className="text-center">
                     <LayoutTemplate className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <h3 className="mt-2 text-lg font-medium">No Landing Pages</h3>
-                    <p className="text-sm text-muted-foreground">Create your first landing page to drive conversions.</p>
-                    <Button className="mt-4" variant="outline">Create Landing Page</Button>
+                    <h3 className="mt-2 text-lg font-medium">{t("marketing.landingPages.noPages")}</h3>
+                    <p className="text-sm text-muted-foreground">{t("marketing.landingPages.createFirst")}</p>
+                    <Button className="mt-4" variant="outline">{t("marketing.landingPages.create")}</Button>
                   </div>
                </div>
             </CardContent>
@@ -498,52 +498,52 @@ export function Marketing() {
         {currentView === "email" && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">Email Marketing</h3>
-              <Button><Plus className="mr-2 h-4 w-4" /> Create Campaign</Button>
+              <h3 className="text-xl font-semibold">{t("marketing.email.title")}</h3>
+              <Button><Plus className="mr-2 h-4 w-4" /> {t("marketing.email.create")}</Button>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Total Subscribers</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("marketing.email.subscribers")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">15,234</div>
-                  <p className="text-xs text-muted-foreground">+12% from last month</p>
+                  <p className="text-xs text-muted-foreground">{t("marketing.stats.vsLastMonth", { value: "+12%" })}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Avg. Open Rate</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("marketing.email.avgOpenRate")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">24.8%</div>
-                  <p className="text-xs text-muted-foreground">+2.4% from last month</p>
+                  <p className="text-xs text-muted-foreground">{t("marketing.stats.vsLastMonth", { value: "+2.4%" })}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Avg. Click Rate</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("marketing.email.avgClickRate")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">3.2%</div>
-                  <p className="text-xs text-muted-foreground">-0.5% from last month</p>
+                  <p className="text-xs text-muted-foreground">{t("marketing.stats.vsLastMonth", { value: "-0.5%" })}</p>
                 </CardContent>
               </Card>
             </div>
             <Card>
               <CardHeader>
-                <CardTitle>Recent Email Campaigns</CardTitle>
+                <CardTitle>{t("marketing.email.recentCampaigns")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Campaign Name</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Sent</TableHead>
-                      <TableHead>Open Rate</TableHead>
-                      <TableHead>Click Rate</TableHead>
-                      <TableHead className="text-right">Date</TableHead>
+                      <TableHead>{t("marketing.email.campaignName")}</TableHead>
+                      <TableHead>{t("marketing.email.status")}</TableHead>
+                      <TableHead>{t("marketing.email.sent")}</TableHead>
+                      <TableHead>{t("marketing.email.openRate")}</TableHead>
+                      <TableHead>{t("marketing.email.clickRate")}</TableHead>
+                      <TableHead className="text-right">{t("marketing.email.date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -573,29 +573,29 @@ export function Marketing() {
         {/* Reports View */}
         {currentView === "reports" && (
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Campaign Reports</h3>
+            <h3 className="text-xl font-semibold">{t("marketing.reports.title")}</h3>
             <div className="grid gap-4 md:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Traffic Sources</CardTitle>
-                  <CardDescription>Where your traffic is coming from</CardDescription>
+                  <CardTitle>{t("marketing.reports.trafficSources")}</CardTitle>
+                  <CardDescription>{t("marketing.reports.trafficSourcesDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="h-[300px] flex items-center justify-center border-2 border-dashed rounded-md">
                    <div className="text-center text-muted-foreground">
                      <BarChart3 className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                     <p>Traffic Chart Placeholder</p>
+                     <p>{t("marketing.reports.trafficChartPlaceholder")}</p>
                    </div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Conversion Rate by Channel</CardTitle>
-                  <CardDescription>Which channels convert best</CardDescription>
+                  <CardTitle>{t("marketing.reports.conversionRate")}</CardTitle>
+                  <CardDescription>{t("marketing.reports.conversionRateDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="h-[300px] flex items-center justify-center border-2 border-dashed rounded-md">
                    <div className="text-center text-muted-foreground">
                      <TrendingUp className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                     <p>Conversion Chart Placeholder</p>
+                     <p>{t("marketing.reports.conversionChartPlaceholder")}</p>
                    </div>
                 </CardContent>
               </Card>
@@ -606,30 +606,30 @@ export function Marketing() {
         {/* Settings View */}
         {currentView === "settings" && (
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Campaign Settings</h3>
+            <h3 className="text-xl font-semibold">{t("marketing.settings.title")}</h3>
             <Card>
               <CardHeader>
-                <CardTitle>General Configuration</CardTitle>
-                <CardDescription>Manage your default campaign settings.</CardDescription>
+                <CardTitle>{t("marketing.settings.general")}</CardTitle>
+                <CardDescription>{t("marketing.settings.generalDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium">Default Sender Name</label>
+                  <label className="text-sm font-medium">{t("marketing.settings.senderName")}</label>
                   <Input defaultValue="Marketing Team" />
                 </div>
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium">Default Sender Email</label>
+                  <label className="text-sm font-medium">{t("marketing.settings.senderEmail")}</label>
                   <Input defaultValue="marketing@example.com" />
                 </div>
                 <div className="flex items-center space-x-2">
                   <input type="checkbox" id="track-opens" className="rounded border-gray-300" defaultChecked />
-                  <label htmlFor="track-opens" className="text-sm">Track email opens</label>
+                  <label htmlFor="track-opens" className="text-sm">{t("marketing.settings.trackOpens")}</label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input type="checkbox" id="track-clicks" className="rounded border-gray-300" defaultChecked />
-                  <label htmlFor="track-clicks" className="text-sm">Track link clicks</label>
+                  <label htmlFor="track-clicks" className="text-sm">{t("marketing.settings.trackClicks")}</label>
                 </div>
-                <Button>Save Settings</Button>
+                <Button>{t("marketing.settings.save")}</Button>
               </CardContent>
             </Card>
           </div>
@@ -639,18 +639,18 @@ export function Marketing() {
         {currentView === "content" && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">Content Management</h3>
-              <Button><Plus className="mr-2 h-4 w-4" /> New Article</Button>
+              <h3 className="text-xl font-semibold">{t("marketing.content.title")}</h3>
+              <Button><Plus className="mr-2 h-4 w-4" /> {t("marketing.content.newArticle")}</Button>
             </div>
             <Card>
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Author</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Last Modified</TableHead>
+                      <TableHead>{t("marketing.content.articleTitle")}</TableHead>
+                      <TableHead>{t("marketing.content.author")}</TableHead>
+                      <TableHead>{t("marketing.content.status")}</TableHead>
+                      <TableHead className="text-right">{t("marketing.content.lastModified")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -687,8 +687,8 @@ export function Marketing() {
         {currentView === "assets" && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">Asset Library</h3>
-              <Button variant="outline"><Plus className="mr-2 h-4 w-4" /> Upload Asset</Button>
+              <h3 className="text-xl font-semibold">{t("marketing.assets.title")}</h3>
+              <Button variant="outline"><Plus className="mr-2 h-4 w-4" /> {t("marketing.assets.upload")}</Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
@@ -696,7 +696,7 @@ export function Marketing() {
                   <div className="aspect-square bg-muted flex items-center justify-center relative">
                     <Image className="h-10 w-10 text-muted-foreground opacity-50" />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-sm font-medium">
-                      View Details
+                      {t("common.viewDetails")}
                     </div>
                   </div>
                   <CardFooter className="p-2 text-xs text-muted-foreground truncate">
@@ -712,50 +712,50 @@ export function Marketing() {
         {currentView === "leads" && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">Lead Generation Forms</h3>
-              <Button><Plus className="mr-2 h-4 w-4" /> Create Form</Button>
+              <h3 className="text-xl font-semibold">{t("marketing.leads.title")}</h3>
+              <Button><Plus className="mr-2 h-4 w-4" /> {t("marketing.leads.create")}</Button>
             </div>
             <Card>
               <CardHeader>
-                <CardTitle>Active Forms</CardTitle>
-                <CardDescription>Manage your lead capture forms and popups.</CardDescription>
+                <CardTitle>{t("marketing.leads.activeForms")}</CardTitle>
+                <CardDescription>{t("marketing.leads.activeFormsDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Form Name</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Views</TableHead>
-                      <TableHead>Submissions</TableHead>
-                      <TableHead>Conversion Rate</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>{t("marketing.leads.formName")}</TableHead>
+                      <TableHead>{t("marketing.leads.type")}</TableHead>
+                      <TableHead>{t("marketing.leads.views")}</TableHead>
+                      <TableHead>{t("marketing.leads.submissions")}</TableHead>
+                      <TableHead>{t("marketing.leads.conversionRate")}</TableHead>
+                      <TableHead>{t("marketing.leads.status")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <TableRow>
                       <TableCell className="font-medium">Newsletter Signup Footer</TableCell>
-                      <TableCell>Embedded</TableCell>
+                      <TableCell>{t("marketing.leads.types.embedded")}</TableCell>
                       <TableCell>12,500</TableCell>
                       <TableCell>450</TableCell>
                       <TableCell>3.6%</TableCell>
-                      <TableCell><Badge>Active</Badge></TableCell>
+                      <TableCell><Badge>{t("marketing.leads.statuses.active")}</Badge></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Exit Intent Popup</TableCell>
-                      <TableCell>Popup</TableCell>
+                      <TableCell>{t("marketing.leads.types.popup")}</TableCell>
                       <TableCell>3,200</TableCell>
                       <TableCell>85</TableCell>
                       <TableCell>2.6%</TableCell>
-                      <TableCell><Badge>Active</Badge></TableCell>
+                      <TableCell><Badge>{t("marketing.leads.statuses.active")}</Badge></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-medium">Summer Sale Registration</TableCell>
-                      <TableCell>Landing Page</TableCell>
+                      <TableCell>{t("marketing.leads.types.landingPage")}</TableCell>
                       <TableCell>1,500</TableCell>
                       <TableCell>320</TableCell>
                       <TableCell>21.3%</TableCell>
-                      <TableCell><Badge variant="secondary">Paused</Badge></TableCell>
+                      <TableCell><Badge variant="secondary">{t("marketing.leads.statuses.paused")}</Badge></TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -767,23 +767,23 @@ export function Marketing() {
         {/* Content Settings View */}
         {currentView === "contentSettings" && (
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Content Settings</h3>
+            <h3 className="text-xl font-semibold">{t("marketing.contentSettings.title")}</h3>
             <div className="grid gap-4 md:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Brand Guidelines</CardTitle>
-                  <CardDescription>Set default colors and fonts for your content.</CardDescription>
+                  <CardTitle>{t("marketing.contentSettings.brand")}</CardTitle>
+                  <CardDescription>{t("marketing.contentSettings.brandDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-2">
-                    <label className="text-sm font-medium">Primary Color</label>
+                    <label className="text-sm font-medium">{t("marketing.contentSettings.primaryColor")}</label>
                     <div className="flex gap-2 items-center">
                       <div className="w-8 h-8 rounded-full bg-blue-600 border"></div>
                       <Input defaultValue="#2563EB" className="w-32" />
                     </div>
                   </div>
                   <div className="grid gap-2">
-                    <label className="text-sm font-medium">Secondary Color</label>
+                    <label className="text-sm font-medium">{t("marketing.contentSettings.secondaryColor")}</label>
                     <div className="flex gap-2 items-center">
                       <div className="w-8 h-8 rounded-full bg-orange-500 border"></div>
                       <Input defaultValue="#F97316" className="w-32" />
@@ -793,17 +793,17 @@ export function Marketing() {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>SEO Defaults</CardTitle>
-                  <CardDescription>Default settings for search engine optimization.</CardDescription>
+                  <CardTitle>{t("marketing.contentSettings.seo")}</CardTitle>
+                  <CardDescription>{t("marketing.contentSettings.seoDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-2">
-                    <label className="text-sm font-medium">Default Meta Title Suffix</label>
+                    <label className="text-sm font-medium">{t("marketing.contentSettings.metaSuffix")}</label>
                     <Input defaultValue="| My Store Name" />
                   </div>
                   <div className="flex items-center space-x-2">
                     <input type="checkbox" id="index-content" className="rounded border-gray-300" defaultChecked />
-                    <label htmlFor="index-content" className="text-sm">Index content by default</label>
+                    <label htmlFor="index-content" className="text-sm">{t("marketing.contentSettings.indexContent")}</label>
                   </div>
                 </CardContent>
               </Card>
