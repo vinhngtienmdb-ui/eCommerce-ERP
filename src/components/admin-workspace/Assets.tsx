@@ -8,10 +8,10 @@ export function Assets() {
   const { t } = useTranslation()
 
   const assets = [
-    { id: "AST-001", name: "MacBook Pro M2", category: t("adminWorkspace.assets.laptop"), assignee: "Nguyễn Văn A", status: "inUse", condition: "Tốt" },
-    { id: "AST-002", name: "Dell UltraSharp 27", category: t("adminWorkspace.assets.monitor"), assignee: "Trần Thị B", status: "inUse", condition: "Tốt" },
-    { id: "AST-003", name: "Ghế Công Thái Học", category: t("adminWorkspace.assets.furniture"), assignee: "-", status: "available", condition: "Mới" },
-    { id: "AST-004", name: "ThinkPad X1 Carbon", category: t("adminWorkspace.assets.laptop"), assignee: "Lê Văn C", status: "maintenance", condition: "Lỗi màn hình" },
+    { id: "AST-001", name: "MacBook Pro M2", category: t("adminWorkspace.assets.laptop"), assignee: "Nguyễn Văn A", status: "inUse", condition: "Tốt", value: "$2,500", purchaseDate: "2023-01-15" },
+    { id: "AST-002", name: "Dell UltraSharp 27", category: t("adminWorkspace.assets.monitor"), assignee: "Trần Thị B", status: "inUse", condition: "Tốt", value: "$600", purchaseDate: "2023-03-10" },
+    { id: "AST-003", name: "Ghế Công Thái Học", category: t("adminWorkspace.assets.furniture"), assignee: "-", status: "available", condition: "Mới", value: "$450", purchaseDate: "2023-06-20" },
+    { id: "AST-004", name: "ThinkPad X1 Carbon", category: t("adminWorkspace.assets.laptop"), assignee: "Lê Văn C", status: "maintenance", condition: "Lỗi màn hình", value: "$1,800", purchaseDate: "2022-11-05" },
   ]
 
   const getStatusBadge = (status: string) => {
@@ -50,9 +50,9 @@ export function Assets() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {assets.map((asset) => (
-          <div key={asset.id} className="bg-card rounded-xl border p-4 shadow-sm hover:shadow-md transition-all">
+          <div key={asset.id} className="bg-card rounded-xl border p-4 shadow-sm hover:shadow-md transition-all group">
             <div className="flex items-start justify-between mb-4">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 {getIcon(asset.category)}
               </div>
               <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
@@ -70,7 +70,15 @@ export function Assets() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">{t("adminWorkspace.assets.condition")}:</span>
-                <span>{asset.condition}</span>
+                <span className={asset.condition === 'Lỗi màn hình' ? 'text-red-500 font-medium' : ''}>{asset.condition}</span>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-dashed">
+                <span className="text-muted-foreground text-[10px] uppercase">{t("adminWorkspace.assets.value")}:</span>
+                <span className="font-bold text-blue-600">{asset.value}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground text-[10px] uppercase">{t("adminWorkspace.assets.purchaseDate")}:</span>
+                <span className="text-[10px]">{asset.purchaseDate}</span>
               </div>
             </div>
             <div className="mt-4 pt-4 border-t flex items-center justify-between">

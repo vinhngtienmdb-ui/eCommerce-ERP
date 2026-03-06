@@ -32,6 +32,7 @@ import { Advertising } from "./pages/Advertising"
 import { Legal } from "./pages/Legal"
 import { SellerFinance } from "./pages/SellerFinance"
 import { SocialCommerce } from "./pages/SocialCommerce"
+import { BusinessPlanning } from "./pages/planning/BusinessPlanning"
 import { useTranslation } from "react-i18next"
 import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
 import { HRDashboard } from "./pages/hr/HRDashboard"
@@ -64,6 +65,7 @@ export default function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="customer-service" element={<CustomerService />} />
           <Route path="marketing" element={<Marketing />} />
+          <Route path="planning" element={<BusinessPlanning />} />
           <Route path="social" element={<SocialCommerce />} />
           <Route path="advertising" element={<Advertising />} />
           <Route path="affiliate" element={<Affiliate />} />

@@ -2,6 +2,7 @@ import { NavLink, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/src/lib/utils"
 import { useAppStore } from "@/src/store/useAppStore"
+import { useDevice } from "@/src/hooks/useDevice"
 import {
   LayoutDashboard,
   Package,
@@ -22,9 +23,11 @@ import {
   Headset,
   Briefcase,
   TrendingUp,
-  Target
+  Target,
+  X
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
+import { Button } from "@/src/components/ui/button"
 
 const navigation = [
   { nameKey: "dashboard", href: "/", icon: LayoutDashboard },
@@ -51,10 +54,18 @@ const navigation = [
   { nameKey: "customers", href: "/customers", icon: UsersRound },
   { nameKey: "customerService", href: "/customer-service", icon: Headset },
   { nameKey: "orders", href: "/orders", icon: ShoppingCart },
-  { nameKey: "marketing", href: "/marketing", icon: Megaphone },
-  { nameKey: "social", href: "/social", icon: MessageSquare },
-  { nameKey: "advertising", href: "/advertising", icon: Target },
-  { nameKey: "affiliate", href: "/affiliate", icon: Link },
+  { 
+    nameKey: "growthMarketing", 
+    href: "/marketing", 
+    icon: Megaphone,
+    subItems: [
+      { nameKey: "marketing", href: "/marketing" },
+      { nameKey: "social", href: "/social" },
+      { nameKey: "advertising", href: "/advertising" },
+      { nameKey: "affiliate", href: "/affiliate" },
+      { nameKey: "planning", href: "/planning" },
+    ]
+  },
   { nameKey: "purchasing", href: "/purchasing", icon: Truck },
   { nameKey: "legal", href: "/legal", icon: ShieldCheck },
   { 
@@ -98,9 +109,10 @@ const navigation = [
 ]
 
 export function Sidebar() {
-  const { isSidebarOpen } = useAppStore()
+  const { isSidebarOpen, setSidebarOpen } = useAppStore()
   const { t } = useTranslation()
   const location = useLocation()
+  const { isMobile, isTablet } = useDevice()
   
   // Keep track of expanded items
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
@@ -117,26 +129,33 @@ export function Sidebar() {
     }
   }, [location.pathname])
 
+  // Close sidebar on mobile when navigating
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false)
+    }
+  }, [location.pathname, isMobile, setSidebarOpen])
+
   const toggleExpand = (key: string, e: React.MouseEvent) => {
     e.preventDefault()
     setExpandedItems(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
-  return (
-    <div
-      className={cn(
-        "flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300",
-        isSidebarOpen ? "w-64" : "w-[70px]"
-      )}
-    >
-      <div className="flex h-16 items-center justify-center border-b border-sidebar-border px-4">
-        {isSidebarOpen ? (
-          <span className="text-xl font-bold text-sidebar-primary">E-Commerce ERP</span>
-        ) : (
-          <span className="text-xl font-bold text-sidebar-primary">ERP</span>
+  const sidebarContent = (
+    <>
+      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-bold text-sidebar-primary">
+            {isSidebarOpen || isMobile ? "E-Commerce ERP" : "ERP"}
+          </span>
+        </div>
+        {isMobile && (
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
+            <X className="h-5 w-5" />
+          </Button>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto py-4">
+      <div className="flex-1 overflow-y-auto py-4 scrollbar-hide">
         <nav className="space-y-1 px-2">
           {navigation.map((item) => {
             const isActive = location.pathname === item.href || (item.subItems && location.pathname.startsWith(item.href))
@@ -152,20 +171,20 @@ export function Sidebar() {
                       isActive
                         ? "bg-sidebar-accent text-sidebar-accent-foreground"
                         : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                      !isSidebarOpen && "justify-center"
+                      !isSidebarOpen && !isMobile && "justify-center"
                     )}
-                    title={!isSidebarOpen ? t(`nav.${item.nameKey}`) : undefined}
+                    title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
                   >
                     <div className="flex items-center">
                       <item.icon
                         className={cn(
                           "flex-shrink-0",
-                          isSidebarOpen ? "mr-3 h-5 w-5" : "h-6 w-6"
+                          isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
                         )}
                       />
-                      {isSidebarOpen && <span>{t(`nav.${item.nameKey}`)}</span>}
+                      {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
                     </div>
-                    {isSidebarOpen && (
+                    {(isSidebarOpen || isMobile) && (
                       isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
                     )}
                   </div>
@@ -178,23 +197,23 @@ export function Sidebar() {
                         isActive
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
                           : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                        !isSidebarOpen && "justify-center"
+                        !isSidebarOpen && !isMobile && "justify-center"
                       )
                     }
-                    title={!isSidebarOpen ? t(`nav.${item.nameKey}`) : undefined}
+                    title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
                   >
                     <item.icon
                       className={cn(
                         "flex-shrink-0",
-                        isSidebarOpen ? "mr-3 h-5 w-5" : "h-6 w-6"
+                        isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
                       )}
                     />
-                    {isSidebarOpen && <span>{t(`nav.${item.nameKey}`)}</span>}
+                    {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
                   </NavLink>
                 )}
 
                 {/* Sub-items */}
-                {item.subItems && isExpanded && isSidebarOpen && (
+                {item.subItems && isExpanded && (isSidebarOpen || isMobile) && (
                   <div className="mt-1 space-y-1 pl-9">
                     {item.subItems.map((subItem) => (
                       <NavLink
@@ -219,6 +238,39 @@ export function Sidebar() {
           })}
         </nav>
       </div>
+    </>
+  )
+
+  if (isMobile) {
+    return (
+      <>
+        {/* Overlay */}
+        {isSidebarOpen && (
+          <div 
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        <div
+          className={cn(
+            "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r bg-sidebar text-sidebar-foreground transition-transform duration-300 ease-in-out",
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          )}
+        >
+          {sidebarContent}
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300",
+        isSidebarOpen ? "w-64" : "w-[70px]"
+      )}
+    >
+      {sidebarContent}
     </div>
   )
 }

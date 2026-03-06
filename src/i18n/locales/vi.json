@@ -24,6 +24,7 @@
     "sellerApproval": "Phê duyệt người bán",
     "sellerRegistration": "Đăng ký người bán",
     "orders": "Đơn hàng",
+    "growthMarketing": "Tăng trưởng & Marketing",
     "marketing": "Kênh Marketing",
     "affiliate": "Tiếp thị liên kết",
     "purchasing": "Mua hàng",
@@ -41,10 +42,11 @@
     "performance": "Đánh giá & Đào tạo",
     "admin": "Quản trị",
     "adminWorkspace": "Hành chính & Workspace",
-    "assets": "Tài sản & Thiết bị",
-    "stationery": "Văn phòng phẩm",
-    "booking": "Đặt phòng & Xe",
-    "requests": "Đề xuất & Thanh toán",
+    "assets": "Quản lý Tài sản",
+    "stationery": "Văn phòng phẩm & Nhu yếu phẩm",
+    "booking": "Đặt phòng & Tài nguyên",
+    "requests": "Yêu cầu Hành chính",
+    "planning": "Chiến lược & Kế hoạch",
     "analytics": "Phân tích & BI",
     "sales": "Bán hàng",
     "loyalty": "Khách hàng thân thiết",
@@ -245,6 +247,8 @@
       "assignee": "Người sử dụng",
       "status": "Trạng thái",
       "condition": "Tình trạng",
+      "value": "Giá trị",
+      "purchaseDate": "Ngày mua",
       "laptop": "Laptop/PC",
       "monitor": "Màn hình",
       "furniture": "Bàn ghế",
@@ -262,7 +266,12 @@
       "status": "Trạng thái",
       "pending": "Chờ duyệt",
       "approved": "Đã duyệt",
-      "delivered": "Đã giao"
+      "delivered": "Đã giao",
+      "recentRequests": "Yêu cầu Gần đây",
+      "stockLevel": "Mức tồn kho",
+      "stockDesc": "Tình trạng kho hiện tại của các mặt hàng thiết yếu.",
+      "lowStock": "Cảnh báo tồn kho thấp",
+      "manageInventory": "Quản lý Kho"
     },
     "booking": {
       "bookRoom": "Đặt phòng họp",
@@ -439,7 +448,10 @@
     "searchPlaceholder": "Tìm kiếm sản phẩm, đơn hàng, người bán...",
     "profile": "Hồ sơ",
     "settings": "Cài đặt",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "notifications": "Thông báo",
+    "darkMode": "Chế độ tối",
+    "lightMode": "Chế độ sáng"
   },
   "dashboard": {
     "title": "Bảng điều khiển",
@@ -1510,19 +1522,82 @@
   },
   "adminDashboard": {
     "title": "Tổng quan Hành chính",
-    "description": "Công cụ và dịch vụ hành chính.",
+    "description": "Quản lý tài sản công ty, tài nguyên và các yêu cầu hành chính.",
     "totalAssets": "Tổng tài sản",
-    "itemsInInventory": "Mục trong kho",
+    "itemsInInventory": "Sản phẩm trong kho",
     "pendingRequests": "Yêu cầu chờ xử lý",
     "awaitingApproval": "Đang chờ phê duyệt",
     "roomBookings": "Đặt phòng họp",
-    "scheduledForToday": "Đã lên lịch hôm nay",
-    "stationeryOrders": "Đơn đặt văn phòng phẩm",
+    "scheduledForToday": "Lịch trình hôm nay",
+    "stationeryOrders": "Đơn văn phòng phẩm",
     "processing": "Đang xử lý",
-    "modules": "Module Hành chính",
-    "assetsDesc": "Quản lý tài sản và kho công ty.",
-    "stationeryDesc": "Đặt hàng và theo dõi văn phòng phẩm.",
-    "bookingDesc": "Đặt phòng họp và tài nguyên.",
-    "requestsDesc": "Gửi và quản lý yêu cầu hành chính."
+    "thisMonth": "tháng này",
+    "urgent": "Khẩn cấp",
+    "occupancyRate": "Tỷ lệ lấp đầy",
+    "spentThisWeek": "chi tiêu tuần này",
+    "resourceUtilization": "Sử dụng Tài nguyên",
+    "utilizationDesc": "Mức độ sử dụng hiện tại của các tài nguyên công ty.",
+    "recentActivity": "Hoạt động Gần đây",
+    "activityDesc": "Các cập nhật mới nhất từ các mô-đun hành chính.",
+    "modules": "Mô-đun Hành chính",
+    "assetsDesc": "Theo dõi và quản lý tài sản, thiết bị vật lý của công ty.",
+    "stationeryDesc": "Quản lý văn phòng phẩm và tồn kho nhu yếu phẩm.",
+    "bookingDesc": "Đặt phòng họp và các tài nguyên dùng chung.",
+    "requestsDesc": "Gửi và theo dõi các yêu cầu hành chính và cơ sở vật chất."
+  },
+  "planning": {
+    "title": "Chiến lược & Kế hoạch",
+    "description": "Xác định mục tiêu chiến lược, kế hoạch marketing và dự tính tài chính.",
+    "newPlan": "Kế hoạch mới",
+    "tabs": {
+      "overview": "Tổng quan",
+      "businessPlan": "Kế hoạch kinh doanh",
+      "marketingPlan": "Kế hoạch Marketing",
+      "pnlProjection": "Dự tính P&L",
+      "periodicGoals": "Mục tiêu định kỳ"
+    },
+    "stats": {
+      "targetRevenue": "Doanh thu mục tiêu",
+      "fromLastYear": "so với năm ngoái",
+      "achieved": "đã đạt được",
+      "projectedPnl": "Dự tính P&L",
+      "margin": "biên lợi nhuận",
+      "opEx": "Chi phí vận hành",
+      "netProfit": "Lợi nhuận ròng",
+      "activeCampaigns": "Chiến dịch đang chạy",
+      "startingSoon": "sắp bắt đầu",
+      "goalCompletion": "Hoàn thành mục tiêu",
+      "milestonesMet": "cột mốc đã đạt"
+    },
+    "overview": {
+      "revenueProjection": "Dự báo doanh thu",
+      "upcomingMilestones": "Cột mốc sắp tới",
+      "next30Days": "30 ngày tới"
+    },
+    "business": {
+      "strategicGoals": "Mục tiêu chiến lược",
+      "description": "Các mục tiêu kinh doanh chính và kế hoạch dài hạn.",
+      "goal": "Mục tiêu",
+      "category": "Danh mục",
+      "priority": "Ưu tiên",
+      "progress": "Tiến độ",
+      "deadline": "Hạn chót"
+    },
+    "pnl": {
+      "projectionTable": "Bảng dự tính P&L",
+      "description": "Ước tính hiệu quả tài chính cho năm tài chính hiện tại.",
+      "category": "Danh mục",
+      "totalRevenue": "Tổng doanh thu",
+      "cogs": "Giá vốn hàng bán (COGS)",
+      "grossProfit": "Lợi nhuận gộp",
+      "operatingExpenses": "Chi phí vận hành",
+      "netIncome": "Thu nhập ròng",
+      "expenseBreakdown": "Phân bổ chi phí"
+    },
+    "periodic": {
+      "inProgress": "Đang thực hiện",
+      "completed": "Đã hoàn thành",
+      "overdue": "Quá hạn"
+    }
   }
 }

@@ -24,6 +24,7 @@
     "sellerApproval": "Seller Approval",
     "sellerRegistration": "Seller Registration",
     "orders": "Orders",
+    "growthMarketing": "Growth & Marketing",
     "marketing": "Marketing Channel",
     "affiliate": "Affiliate",
     "purchasing": "Purchasing",
@@ -40,11 +41,12 @@
     "payroll": "Payroll",
     "performance": "Performance & Training",
     "admin": "Admin",
-    "adminWorkspace": "Admin Workspace",
-    "assets": "Assets & Equipment",
-    "stationery": "Stationery",
-    "booking": "Room & Car Booking",
-    "requests": "Requests & Expenses",
+    "adminWorkspace": "Administration & Workspace",
+    "assets": "Asset Management",
+    "stationery": "Stationery & Supplies",
+    "booking": "Room & Resource Booking",
+    "requests": "Administrative Requests",
+    "planning": "Strategy & Planning",
     "analytics": "BI & Analytics",
     "sales": "Sales",
     "loyalty": "Loyalty & Gamification",
@@ -244,6 +246,8 @@
       "assignee": "Assignee",
       "status": "Status",
       "condition": "Condition",
+      "value": "Value",
+      "purchaseDate": "Purchase Date",
       "laptop": "Laptop/PC",
       "monitor": "Monitor",
       "furniture": "Furniture",
@@ -261,7 +265,12 @@
       "status": "Status",
       "pending": "Pending",
       "approved": "Approved",
-      "delivered": "Delivered"
+      "delivered": "Delivered",
+      "recentRequests": "Recent Requests",
+      "stockLevel": "Stock Levels",
+      "stockDesc": "Current inventory status of essential items.",
+      "lowStock": "Low Stock Alert",
+      "manageInventory": "Manage Inventory"
     },
     "booking": {
       "bookRoom": "Book Room",
@@ -403,7 +412,10 @@
     "searchPlaceholder": "Search products, orders, sellers...",
     "profile": "Profile",
     "settings": "Settings",
-    "logout": "Log out"
+    "logout": "Log out",
+    "notifications": "Notifications",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1455,7 +1467,7 @@
   },
   "adminDashboard": {
     "title": "Admin Overview",
-    "description": "Administrative tools and services.",
+    "description": "Manage company assets, resources, and administrative requests.",
     "totalAssets": "Total Assets",
     "itemsInInventory": "Items in inventory",
     "pendingRequests": "Pending Requests",
@@ -1464,10 +1476,73 @@
     "scheduledForToday": "Scheduled for today",
     "stationeryOrders": "Stationery Orders",
     "processing": "Processing",
-    "modules": "Admin Modules",
-    "assetsDesc": "Manage company assets and inventory.",
-    "stationeryDesc": "Order and track stationery supplies.",
-    "bookingDesc": "Book meeting rooms and resources.",
-    "requestsDesc": "Submit and manage administrative requests."
+    "thisMonth": "this month",
+    "urgent": "Urgent",
+    "occupancyRate": "Occupancy rate",
+    "spentThisWeek": "spent this week",
+    "resourceUtilization": "Resource Utilization",
+    "utilizationDesc": "Current usage levels of company resources.",
+    "recentActivity": "Recent Activity",
+    "activityDesc": "Latest updates from administrative modules.",
+    "modules": "Administrative Modules",
+    "assetsDesc": "Track and manage company physical assets and equipment.",
+    "stationeryDesc": "Manage office supplies and stationery inventory.",
+    "bookingDesc": "Book meeting rooms and shared company resources.",
+    "requestsDesc": "Submit and track administrative and facility requests."
+  },
+  "planning": {
+    "title": "Strategy & Planning",
+    "description": "Define strategic goals, marketing plans, and financial projections.",
+    "newPlan": "New Plan",
+    "tabs": {
+      "overview": "Overview",
+      "businessPlan": "Business Plan",
+      "marketingPlan": "Marketing Plan",
+      "pnlProjection": "P&L Projection",
+      "periodicGoals": "Periodic Goals"
+    },
+    "stats": {
+      "targetRevenue": "Target Revenue",
+      "fromLastYear": "from last year",
+      "achieved": "achieved",
+      "projectedPnl": "Projected P&L",
+      "margin": "margin",
+      "opEx": "OpEx",
+      "netProfit": "Net Profit",
+      "activeCampaigns": "Active Campaigns",
+      "startingSoon": "starting soon",
+      "goalCompletion": "Goal Completion",
+      "milestonesMet": "milestones met"
+    },
+    "overview": {
+      "revenueProjection": "Revenue Projection",
+      "upcomingMilestones": "Upcoming Milestones",
+      "next30Days": "Next 30 days"
+    },
+    "business": {
+      "strategicGoals": "Strategic Goals",
+      "description": "Key business objectives and long-term targets.",
+      "goal": "Goal",
+      "category": "Category",
+      "priority": "Priority",
+      "progress": "Progress",
+      "deadline": "Deadline"
+    },
+    "pnl": {
+      "projectionTable": "P&L Projection Table",
+      "description": "Estimated financial performance for the current fiscal year.",
+      "category": "Category",
+      "totalRevenue": "Total Revenue",
+      "cogs": "Cost of Goods Sold (COGS)",
+      "grossProfit": "Gross Profit",
+      "operatingExpenses": "Operating Expenses",
+      "netIncome": "Net Income",
+      "expenseBreakdown": "Expense Breakdown"
+    },
+    "periodic": {
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "overdue": "Overdue"
+    }
   }
 }
