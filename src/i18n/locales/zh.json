@@ -24,7 +24,7 @@
     "sellerApproval": "卖家审批",
     "sellerRegistration": "卖家注册",
     "orders": "订单",
-    "growthMarketing": "增长与营销",
+    "growthMarketing": "营销",
     "marketing": "营销渠道",
     "affiliate": "联盟营销",
     "purchasing": "采购",
@@ -36,26 +36,39 @@
     "sellerFinance": "卖家金融支持",
     "withdrawals": "提现请求",
     "hr": "人力资源",
-    "coreHr": "核心人事 & 合同",
-    "timeAttendance": "考勤与休假",
-    "payroll": "薪资与福利",
-    "performance": "绩效与培训",
+    "hrPayroll": "薪资管理",
+    "hrSocialInsurance": "社会保险",
+    "hrRecruitment": "招聘管理",
+    "hrEmployees": "员工管理",
+    "hrTimeAttendance": "考勤管理",
+    "hrPerformance": "绩效管理",
+    "hrPit": "个人所得税",
+    "hrGoals": "目标管理",
+    "hrInfo": "人事信息",
     "admin": "管理",
-    "adminWorkspace": "行政与工作空间",
+    "adminWorkspace": "行政",
     "assets": "资产管理",
     "stationery": "办公用品与物资",
     "booking": "预订与资源管理",
     "requests": "行政请求",
     "planning": "战略与规划",
-    "analytics": "商业智能与分析",
+    "analytics": "分析",
     "sales": "销售",
     "loyalty": "客户忠诚度",
     "live": "直播中心",
     "customers": "客户",
-    "customerService": "客户服务",
+    "customerService": "客服",
     "social": "社交电商",
     "advertising": "广告系统",
-    "legal": "法务与品牌保护",
+    "legal": "合规",
+    "workspace": "工作空间",
+    "personalWork": "个人工作",
+    "internalChat": "内部聊天",
+    "email": "电子邮件",
+    "calendar": "日历",
+    "executive": "执行中心",
+    "direction": "方向",
+    "strategyKpi": "战略与 KPI",
     "settings": "设置"
   },
   "header": {
@@ -108,10 +121,15 @@
     "newHires": "新入职 (本月)",
     "onboardingCompleted": "入职完成",
     "modules": "HR 模块",
-    "coreHrDesc": "管理员工档案、合同和组织架构。",
-    "timeAttendanceDesc": "跟踪考勤、休假和排班。",
-    "payrollDesc": "处理薪资、税务和福利。",
-    "performanceDesc": "员工绩效评估和目标。"
+    "hrPayrollDesc": "处理薪资、税务和福利。",
+    "hrSocialInsuranceDesc": "管理社会保险和强制性保险。",
+    "hrRecruitmentDesc": "管理招聘流程和候选人。",
+    "hrEmployeesDesc": "管理员工档案和合同。",
+    "hrTimeAttendanceDesc": "跟踪考勤、休假和排班。",
+    "hrPerformanceDesc": "员工绩效评估和目标。",
+    "hrPitDesc": "管理个人所得税计算。",
+    "hrGoalsDesc": "管理公司和个人目标。",
+    "hrInfoDesc": "人事信息和政策。"
   },
   "adminDashboard": {
     "title": "行政概览",
@@ -753,6 +771,103 @@
       "createPO": "创建采购订单"
     }
   },
+  "paymentWallet": {
+    "title": "支付与内部钱包",
+    "depositOrders": "充值订单",
+    "transactionId": "交易 ID",
+    "type": "类型",
+    "amount": "金额",
+    "customer": "客户",
+    "status": "状态",
+    "availableBalance": "可用余额",
+    "pendingBalance": "待处理余额",
+    "deposit": "充值",
+    "withdraw": "提现",
+    "history": "交易历史",
+    "escrow": "托管交易 (Escrow)"
+  },
+  "hr": {
+    "title": "全面人力资源管理",
+    "description": "管理员工档案、考勤、薪资和培训。",
+    "tabs": {
+      "payroll": "薪资管理",
+      "socialInsurance": "社会保险",
+      "recruitment": "招聘管理",
+      "employees": "员工管理",
+      "time": "考勤管理",
+      "performance": "绩效管理",
+      "pit": "个人所得税",
+      "goals": "目标管理",
+      "info": "人事信息"
+    },
+    "core": {
+      "addEmployee": "添加员工",
+      "totalEmployees": "员工总数",
+      "thisMonth": "本月",
+      "onboarding": "入职培训",
+      "inProgress": "进行中",
+      "departments": "部门",
+      "active": "在职",
+      "employeeList": "员工档案",
+      "employeeListDesc": "管理员工档案和工作状态。",
+      "employeeId": "员工编号",
+      "name": "姓名",
+      "department": "部门",
+      "position": "职位",
+      "status": "状态",
+      "contracts": "劳动合同",
+      "contractType": "合同类型",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "signedDate": "签署日期"
+    },
+    "time": {
+      "leaveRequests": "休假申请",
+      "leaveRequestsDesc": "管理休假申请和加班。",
+      "employee": "员工",
+      "type": "类型",
+      "dates": "日期",
+      "status": "状态",
+      "attendanceOverview": "考勤概览",
+      "todayStats": "今日统计",
+      "present": "出勤",
+      "late": "迟到",
+      "absent": "缺勤",
+      "viewTimesheet": "查看考勤表"
+    },
+    "payroll": {
+      "title": "薪资管理",
+      "description": "管理薪资周期、计算和工资单。",
+      "runPayroll": "运行薪资",
+      "configFormulas": "配置公式",
+      "exportReport": "导出报告",
+      "period": "周期",
+      "totalEmployees": "员工人数",
+      "totalAmount": "总金额",
+      "status": "状态",
+      "payslips": "工资单",
+      "salaryStructure": "薪资结构",
+      "basicSalary": "基本工资",
+      "allowances": "津贴",
+      "deductions": "扣除",
+      "netSalary": "实发工资"
+    },
+    "performance": {
+      "kpiTitle": "目标与 KPI",
+      "kpiDesc": "跟踪公司和个人目标进度。",
+      "manageKPIs": "管理 KPI",
+      "reviews": "绩效评估",
+      "reviewCycle": "评估周期",
+      "reviewer": "评估人",
+      "rating": "评分"
+    },
+    "training": {
+      "title": "内部培训",
+      "description": "管理课程和员工培训进度。",
+      "completed": "已完成",
+      "courseCatalog": "课程目录"
+    }
+  },
   "finance": {
     "title": "财务与会计",
     "description": "根据法规管理财务和会计。",
@@ -870,6 +985,36 @@
       "view": "查看",
       "download": "下载",
       "send": "发送邮件"
+    }
+  },
+  "workspace": {
+    "title": "个人工作空间",
+    "description": "个人工作空间、内部沟通和时间管理。",
+    "tabs": {
+      "tasks": "任务",
+      "chat": "内部聊天",
+      "email": "电子邮件",
+      "calendar": "日历"
+    }
+  },
+  "executive": {
+    "title": "执行中心",
+    "description": "战略方向和监控核心业务绩效。",
+    "tabs": {
+      "direction": "董事会方向",
+      "strategy": "战略与 KPI"
+    },
+    "direction": {
+      "mission": "使命与愿景",
+      "vision": "规模与市场份额",
+      "competitors": "竞争对手分析",
+      "swot": "SWOT 分析"
+    },
+    "strategy": {
+      "plan": "战略",
+      "actions": "核心行动",
+      "kpiCriteria": "KPI 标准",
+      "evaluation": "监控与评估"
     }
   },
   "settings": {
@@ -1080,7 +1225,7 @@
     }
   },
   "legal": {
-    "title": "法务与品牌保护",
+    "title": "合规",
     "description": "管理版权注册、争议解决和合规监控。",
     "tabs": {
       "brandPortal": "品牌门户",
@@ -1286,7 +1431,7 @@
     }
   },
   "analytics": {
-    "title": "商业智能与分析",
+    "title": "分析",
     "description": "商业智能数据仓库、深度报告和欺诈警报。",
     "tabs": {
       "overview": "概览",

@@ -24,6 +24,9 @@ import {
   Briefcase,
   TrendingUp,
   Target,
+  Layout,
+  Mail,
+  Calendar,
   X
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
@@ -31,6 +34,17 @@ import { Button } from "@/src/components/ui/button"
 
 const navigation = [
   { nameKey: "dashboard", href: "/", icon: LayoutDashboard },
+  { 
+    nameKey: "workspace", 
+    href: "/workspace", 
+    icon: Layout,
+    subItems: [
+      { nameKey: "personalWork", href: "/workspace/tasks" },
+      { nameKey: "internalChat", href: "/workspace/chat" },
+      { nameKey: "email", href: "/workspace/email" },
+      { nameKey: "calendar", href: "/workspace/calendar" },
+    ]
+  },
   { 
     nameKey: "products", 
     href: "/products", 
@@ -69,6 +83,15 @@ const navigation = [
   { nameKey: "purchasing", href: "/purchasing", icon: Truck },
   { nameKey: "legal", href: "/legal", icon: ShieldCheck },
   { 
+    nameKey: "executive", 
+    href: "/executive", 
+    icon: Target,
+    subItems: [
+      { nameKey: "direction", href: "/executive/direction" },
+      { nameKey: "strategyKpi", href: "/executive/strategy" },
+    ]
+  },
+  { 
     nameKey: "finance", 
     href: "/finance", 
     icon: Wallet,
@@ -85,10 +108,15 @@ const navigation = [
     href: "/hr", 
     icon: UsersRound,
     subItems: [
-      { nameKey: "coreHr", href: "/hr/core" },
-      { nameKey: "timeAttendance", href: "/hr/time" },
-      { nameKey: "payroll", href: "/hr/payroll" },
-      { nameKey: "performance", href: "/hr/performance" },
+      { nameKey: "hrPayroll", href: "/hr/payroll" },
+      { nameKey: "hrSocialInsurance", href: "/hr/social-insurance" },
+      { nameKey: "hrRecruitment", href: "/hr/recruitment" },
+      { nameKey: "hrEmployees", href: "/hr/employees" },
+      { nameKey: "hrTimeAttendance", href: "/hr/time-attendance" },
+      { nameKey: "hrPerformance", href: "/hr/performance" },
+      { nameKey: "hrPit", href: "/hr/pit" },
+      { nameKey: "hrGoals", href: "/hr/goals" },
+      { nameKey: "hrInfo", href: "/hr/info" },
     ]
   },
   { 
@@ -117,7 +145,9 @@ export function Sidebar() {
   // Keep track of expanded items
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     products: location.pathname.startsWith('/products'),
-    finance: location.pathname.startsWith('/finance')
+    finance: location.pathname.startsWith('/finance'),
+    workspace: location.pathname.startsWith('/workspace'),
+    executive: location.pathname.startsWith('/executive')
   })
 
   useEffect(() => {
@@ -126,6 +156,12 @@ export function Sidebar() {
     }
     if (location.pathname.startsWith('/finance')) {
       setExpandedItems(prev => ({ ...prev, finance: true }))
+    }
+    if (location.pathname.startsWith('/workspace')) {
+      setExpandedItems(prev => ({ ...prev, workspace: true }))
+    }
+    if (location.pathname.startsWith('/executive')) {
+      setExpandedItems(prev => ({ ...prev, executive: true }))
     }
   }, [location.pathname])
 

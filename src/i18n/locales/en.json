@@ -24,7 +24,7 @@
     "sellerApproval": "Seller Approval",
     "sellerRegistration": "Seller Registration",
     "orders": "Orders",
-    "growthMarketing": "Growth & Marketing",
+    "growthMarketing": "Marketing",
     "marketing": "Marketing Channel",
     "affiliate": "Affiliate",
     "purchasing": "Purchasing",
@@ -36,25 +36,39 @@
     "sellerFinance": "Seller Finance",
     "withdrawals": "Withdrawal Requests",
     "hr": "HR",
-    "coreHr": "Core HR & Contracts",
-    "timeAttendance": "Time & Attendance",
-    "payroll": "Payroll",
-    "performance": "Performance & Training",
+    "hrPayroll": "Payroll",
+    "hrSocialInsurance": "Social Insurance",
+    "hrRecruitment": "Recruitment",
+    "hrEmployees": "Employees",
+    "hrTimeAttendance": "Timekeeping",
+    "hrPerformance": "Evaluation",
+    "hrPit": "Personal Income Tax",
+    "hrGoals": "Goals",
+    "hrInfo": "HR Information",
     "admin": "Admin",
-    "adminWorkspace": "Administration & Workspace",
+    "adminWorkspace": "Administration",
     "assets": "Asset Management",
     "stationery": "Stationery & Supplies",
     "booking": "Room & Resource Booking",
     "requests": "Administrative Requests",
     "planning": "Strategy & Planning",
-    "analytics": "BI & Analytics",
+    "analytics": "Analytics",
     "sales": "Sales",
     "loyalty": "Loyalty & Gamification",
     "live": "Live Hub",
     "customers": "Customers",
+    "customerService": "Customer Service",
     "social": "Social Commerce & Community",
     "advertising": "Advertising",
-    "legal": "Legal & Brand Protection",
+    "legal": "Legal Compliance",
+    "workspace": "Workspace",
+    "personalWork": "Personal Work",
+    "internalChat": "Internal Chat",
+    "email": "Email",
+    "calendar": "Calendar",
+    "executive": "Executive",
+    "direction": "Direction",
+    "strategyKpi": "Strategy & KPIs",
     "sellerFinance": "Supply Chain Finance",
     "settings": "Settings"
   },
@@ -124,6 +138,36 @@
       "status": "Status",
       "dataPrivacy": "Data Privacy",
       "ecommerceLaw": "E-commerce Law"
+    }
+  },
+  "workspace": {
+    "title": "Personal Workspace",
+    "description": "Personal work space, internal communication, and time management.",
+    "tabs": {
+      "tasks": "Tasks",
+      "chat": "Internal Chat",
+      "email": "Email",
+      "calendar": "Calendar"
+    }
+  },
+  "executive": {
+    "title": "Executive Center",
+    "description": "Strategic direction and monitoring core business performance.",
+    "tabs": {
+      "direction": "Board Direction",
+      "strategy": "Strategy & KPIs"
+    },
+    "direction": {
+      "mission": "Mission & Vision",
+      "vision": "Scale & Market Share",
+      "competitors": "Competitor Analysis",
+      "swot": "SWOT Analysis"
+    },
+    "strategy": {
+      "plan": "Strategy",
+      "actions": "Core Actions",
+      "kpiCriteria": "KPI Criteria",
+      "evaluation": "Monitoring & Evaluation"
     }
   },
   "sellerFinance": {
@@ -299,7 +343,7 @@
     }
   },
   "analytics": {
-    "title": "BI & Analytics",
+    "title": "Analytics",
     "description": "Business intelligence data warehouse, deep reports, and fraud detection.",
     "tabs": {
       "overview": "Overview",
@@ -653,14 +697,19 @@
     "escrow": "Escrow Transactions"
   },
   "hr": {
-      "title": "Comprehensive HR Management",
-      "description": "Manage employee profiles, time & attendance, payroll, and training.",
-      "tabs": {
-        "core": "Core HR & Employee Journey",
-        "time": "Time & Attendance",
-        "payroll": "Payroll & C&B",
-        "performance": "Performance & Training"
-      },
+    "title": "Comprehensive HR Management",
+    "description": "Manage employee profiles, time & attendance, payroll, and training.",
+    "tabs": {
+      "payroll": "Payroll",
+      "socialInsurance": "Social Insurance",
+      "recruitment": "Recruitment",
+      "employees": "Employees",
+      "time": "Timekeeping",
+      "performance": "Evaluation",
+      "pit": "PIT",
+      "goals": "Goals",
+      "info": "HR Info"
+    },
       "core": {
         "addEmployee": "Add Employee",
         "totalEmployees": "Total Employees",
@@ -1460,10 +1509,15 @@
     "newHires": "New Hires (Month)",
     "onboardingCompleted": "Onboarding completed",
     "modules": "HR Modules",
-    "coreHrDesc": "Manage employee profiles, contracts, and organization.",
-    "timeAttendanceDesc": "Track attendance, leaves, and shifts.",
-    "payrollDesc": "Process payroll, taxes, and benefits.",
-    "performanceDesc": "Employee performance reviews and goals."
+    "hrPayrollDesc": "Process payroll, taxes, and benefits.",
+    "hrSocialInsuranceDesc": "Manage social insurance and mandatory deductions.",
+    "hrRecruitmentDesc": "Manage recruitment process and candidates.",
+    "hrEmployeesDesc": "Manage employee profiles, contracts, and organization.",
+    "hrTimeAttendanceDesc": "Track attendance, leaves, and shifts.",
+    "hrPerformanceDesc": "Employee performance reviews and goals.",
+    "hrPitDesc": "Manage personal income tax calculations.",
+    "hrGoalsDesc": "Manage company and individual goals.",
+    "hrInfoDesc": "HR information and policies."
   },
   "adminDashboard": {
     "title": "Admin Overview",

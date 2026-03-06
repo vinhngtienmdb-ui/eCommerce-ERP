@@ -24,7 +24,7 @@
     "sellerApproval": "Phê duyệt người bán",
     "sellerRegistration": "Đăng ký người bán",
     "orders": "Đơn hàng",
-    "growthMarketing": "Tăng trưởng & Marketing",
+    "growthMarketing": "Marketing",
     "marketing": "Kênh Marketing",
     "affiliate": "Tiếp thị liên kết",
     "purchasing": "Mua hàng",
@@ -36,26 +36,39 @@
     "sellerFinance": "Hỗ trợ Tài chính Seller",
     "withdrawals": "Yêu cầu rút tiền",
     "hr": "Nhân sự",
-    "coreHr": "Hồ sơ & Hợp đồng",
-    "timeAttendance": "Chấm công & Nghỉ phép",
-    "payroll": "Lương & Thưởng",
-    "performance": "Đánh giá & Đào tạo",
+    "hrPayroll": "Tiền lương",
+    "hrSocialInsurance": "Bảo hiểm xã hội",
+    "hrRecruitment": "Tuyển dụng",
+    "hrEmployees": "Nhân viên",
+    "hrTimeAttendance": "Chấm công",
+    "hrPerformance": "Đánh giá",
+    "hrPit": "Thuế TNCN",
+    "hrGoals": "Mục tiêu",
+    "hrInfo": "Thông tin nhân sự",
     "admin": "Quản trị",
-    "adminWorkspace": "Hành chính & Workspace",
+    "adminWorkspace": "Hành chính",
     "assets": "Quản lý Tài sản",
     "stationery": "Văn phòng phẩm & Nhu yếu phẩm",
     "booking": "Đặt phòng & Tài nguyên",
     "requests": "Yêu cầu Hành chính",
     "planning": "Chiến lược & Kế hoạch",
-    "analytics": "Phân tích & BI",
+    "analytics": "Phân tích",
     "sales": "Bán hàng",
     "loyalty": "Khách hàng thân thiết",
     "live": "Live Hub",
     "customers": "Khách hàng",
-    "customerService": "CSKH & Vận hành",
+    "customerService": "CSKH",
     "social": "Cộng đồng & Mạng xã hội TMĐT",
     "advertising": "Hệ thống Quảng cáo",
-    "legal": "Pháp chế & Bảo vệ thương hiệu",
+    "legal": "Pháp chế tuần thủ",
+    "workspace": "Workspace",
+    "personalWork": "Công việc cá nhân",
+    "internalChat": "Chat nội bộ",
+    "email": "Email",
+    "calendar": "Lịch",
+    "executive": "Điều hành",
+    "direction": "Định hướng",
+    "strategyKpi": "Chiến lược & KPIs",
     "sellerFinance": "Hỗ trợ Tài chính Seller",
     "settings": "Cài đặt"
   },
@@ -94,7 +107,7 @@
     }
   },
   "legal": {
-    "title": "Pháp chế & Bảo vệ thương hiệu",
+    "title": "Pháp chế tuần thủ",
     "description": "Quản lý đăng ký bảo quyền, xử lý tranh chấp và giám sát tuân thủ pháp luật.",
     "tabs": {
       "brandPortal": "Brand Portal",
@@ -125,6 +138,36 @@
       "status": "Trạng thái",
       "dataPrivacy": "Bảo mật dữ liệu",
       "ecommerceLaw": "Luật TMĐT"
+    }
+  },
+  "workspace": {
+    "title": "Workspace Cá nhân",
+    "description": "Không gian làm việc cá nhân, trao đổi nội bộ và quản lý thời gian.",
+    "tabs": {
+      "tasks": "Công việc",
+      "chat": "Chat nội bộ",
+      "email": "Email",
+      "calendar": "Lịch"
+    }
+  },
+  "executive": {
+    "title": "Trung tâm Điều hành",
+    "description": "Định hướng chiến lược và theo dõi hiệu suất cốt lõi của doanh nghiệp.",
+    "tabs": {
+      "direction": "Định hướng BGĐ",
+      "strategy": "Chiến lược & KPIs"
+    },
+    "direction": {
+      "mission": "Sứ mệnh & Tầm nhìn",
+      "vision": "Tầm nhìn quy mô & Thị phần",
+      "competitors": "Phân tích đối thủ",
+      "swot": "Phân tích SWOT"
+    },
+    "strategy": {
+      "plan": "Chiến lược",
+      "actions": "Hành động cốt lõi",
+      "kpiCriteria": "Tiêu chí KPIs",
+      "evaluation": "Theo dõi & Đánh giá"
     }
   },
   "sellerFinance": {
@@ -300,7 +343,7 @@
     }
   },
   "analytics": {
-    "title": "Phân tích & BI",
+    "title": "Phân tích",
     "description": "Kho dữ liệu kinh doanh thông minh, báo cáo chuyên sâu và cảnh báo gian lận.",
     "tabs": {
       "overview": "Tổng quan",
@@ -708,14 +751,19 @@
     "escrow": "Giao dịch ký quỹ (Escrow)"
   },
   "hr": {
-      "title": "Quản trị Nguồn nhân lực toàn diện",
-      "description": "Quản lý hồ sơ nhân sự, chấm công, tính lương và đào tạo.",
-      "tabs": {
-        "core": "Core HR & Hành trình nhân viên",
-        "time": "Time & Attendance (Chấm công)",
-        "payroll": "Payroll & C&B (Lương bổng & Phúc lợi)",
-        "performance": "Performance & Training (Đánh giá & Đào tạo)"
-      },
+    "title": "Quản trị Nguồn nhân lực toàn diện",
+    "description": "Quản lý hồ sơ nhân sự, chấm công, tính lương và đào tạo.",
+    "tabs": {
+      "payroll": "Tiền lương",
+      "socialInsurance": "Bảo hiểm xã hội",
+      "recruitment": "Tuyển dụng",
+      "employees": "Nhân viên",
+      "time": "Chấm công",
+      "performance": "Đánh giá",
+      "pit": "Thuế TNCN",
+      "goals": "Mục tiêu",
+      "info": "Thông tin nhân sự"
+    },
       "core": {
         "addEmployee": "Thêm nhân viên",
         "totalEmployees": "Tổng nhân viên",
@@ -735,7 +783,16 @@
         "contractType": "Loại hợp đồng",
         "startDate": "Ngày bắt đầu",
         "endDate": "Ngày kết thúc",
-        "signedDate": "Ngày ký"
+        "signedDate": "Ngày ký",
+        "idCard": "CCCD/CMND",
+        "taxCode": "Mã số thuế",
+        "socialInsuranceNo": "Số sổ BHXH",
+        "probation": "Thử việc",
+        "definiteTerm": "Xác định thời hạn",
+        "indefiniteTerm": "Không xác định thời hạn",
+        "working": "Đang làm việc",
+        "maternity": "Nghỉ thai sản",
+        "resigned": "Đã nghỉ việc"
       },
       "time": {
         "leaveRequests": "Yêu cầu nghỉ phép",
@@ -755,7 +812,25 @@
         "startTime": "Giờ bắt đầu",
         "endTime": "Giờ kết thúc",
         "otRequests": "Đăng ký OT",
-        "otHours": "Số giờ OT"
+        "otHours": "Số giờ OT",
+        "annualLeave": "Phép năm",
+        "sickLeave": "Nghỉ ốm",
+        "maternityLeave": "Nghỉ thai sản",
+        "unpaidLeave": "Nghỉ không lương",
+        "overtime": "Làm thêm giờ",
+        "ot150": "Ngày thường (150%)",
+        "ot200": "Cuối tuần (200%)",
+        "ot300": "Lễ/Tết (300%)",
+        "attendanceMethods": "Phương thức chấm công",
+        "wifi": "Wifi Công ty",
+        "gps": "GPS Location",
+        "faceId": "Nhận diện khuôn mặt",
+        "qrCode": "Mã QR",
+        "workLocations": "Địa điểm làm việc",
+        "assignShifts": "Phân ca làm việc",
+        "leaveManagement": "Quản lý ngày phép",
+        "holidays": "Ngày nghỉ Lễ Tết",
+        "leaveRules": "Nguyên tắc phép năm"
       },
       "payroll": {
         "title": "Bảng lương",
@@ -771,17 +846,85 @@
         "salaryStructure": "Cấu trúc & Công thức lương",
         "basicSalary": "Lương cơ bản",
         "allowances": "Phụ cấp",
-        "deductions": "Khấu trừ",
+        "deductions": "Khấu trừ (BHXH, BHYT)",
+        "tax": "Thuế TNCN",
         "netSalary": "Thực nhận"
+      },
+      "socialInsurance": {
+        "title": "Quản lý Bảo hiểm xã hội",
+        "description": "Theo dõi quá trình đóng BHXH, BHYT, BHTN.",
+        "insuranceNo": "Số sổ BHXH",
+        "salaryBase": "Mức lương đóng BHXH",
+        "employeeRate": "NLĐ đóng (10.5%)",
+        "employerRate": "NSDLĐ đóng (21.5%)",
+        "status": "Trạng thái sổ"
+      },
+      "pit": {
+        "title": "Thuế Thu nhập cá nhân",
+        "description": "Quản lý mã số thuế, người phụ thuộc và quyết toán thuế.",
+        "taxCode": "Mã số thuế",
+        "dependents": "Người phụ thuộc",
+        "totalIncome": "Tổng thu nhập",
+        "taxableIncome": "Thu nhập tính thuế",
+        "taxAmount": "Thuế phải nộp"
+      },
+      "recruitment": {
+        "title": "Quản lý Tuyển dụng",
+        "description": "Theo dõi vị trí tuyển dụng và đồng bộ ứng viên qua API.",
+        "position": "Vị trí",
+        "quantity": "Số lượng",
+        "expectedSalary": "Mức lương dự kiến",
+        "status": "Trạng thái",
+        "candidates": "Ứng viên",
+        "channels": "Kênh tuyển dụng",
+        "syncApi": "Đồng bộ API",
+        "vietnamWorks": "VietnamWorks",
+        "topCv": "TopCV",
+        "linkedIn": "LinkedIn",
+        "lastSync": "Đồng bộ lần cuối",
+        "syncNow": "Đồng bộ ngay"
       },
       "performance": {
         "kpiTitle": "Mục tiêu & KPIs",
         "kpiDesc": "Theo dõi tiến độ thực hiện mục tiêu của công ty và cá nhân.",
         "manageKPIs": "Quản lý KPIs",
-        "reviews": "Đánh giá năng lực",
+        "reviews": "Đánh giá 360°",
         "reviewCycle": "Chu kỳ đánh giá",
         "reviewer": "Người đánh giá",
-        "rating": "Xếp loại"
+        "rating": "Xếp loại",
+        "okrs": "Quản trị OKRs",
+        "selfReview": "Tự đánh giá",
+        "managerReview": "Quản lý đánh giá",
+        "peerReview": "Đồng nghiệp đánh giá"
+      },
+      "goals": {
+        "title": "Quản trị Mục tiêu",
+        "description": "Thiết lập và theo dõi mục tiêu theo cấp độ và thời gian.",
+        "level": "Cấp độ",
+        "company": "Công ty",
+        "division": "Khối",
+        "department": "Phòng ban",
+        "individual": "Cá nhân",
+        "timeframe": "Thời gian",
+        "daily": "Hàng ngày",
+        "weekly": "Hàng tuần",
+        "monthly": "Hàng tháng",
+        "yearly": "Hàng năm",
+        "progress": "Tiến độ"
+      },
+      "info": {
+        "title": "Hồ sơ Nhân sự",
+        "description": "Quản lý thông tin cá nhân, tài liệu và mã QR.",
+        "uploadDoc": "Tải lên tài liệu",
+        "extractOcr": "Trích xuất OCR",
+        "generateQr": "Tạo mã QR",
+        "scanQr": "Quét mã QR",
+        "personalInfo": "Thông tin cá nhân",
+        "contactInfo": "Thông tin liên hệ",
+        "bankInfo": "Thông tin ngân hàng",
+        "education": "Trình độ học vấn",
+        "experience": "Kinh nghiệm làm việc",
+        "family": "Gia đình & Phụ thuộc"
       },
       "training": {
         "title": "Đào tạo nội bộ",
@@ -1515,10 +1658,15 @@
     "newHires": "Nhân viên mới (Tháng)",
     "onboardingCompleted": "Đã hoàn tất nhập môn",
     "modules": "Module Nhân sự",
-    "coreHrDesc": "Quản lý hồ sơ nhân viên, hợp đồng và tổ chức.",
-    "timeAttendanceDesc": "Theo dõi chấm công, nghỉ phép và ca làm việc.",
-    "payrollDesc": "Xử lý lương, thuế và phúc lợi.",
-    "performanceDesc": "Đánh giá hiệu suất và mục tiêu nhân viên."
+    "hrPayrollDesc": "Xử lý lương, thuế và phúc lợi.",
+    "hrSocialInsuranceDesc": "Quản lý bảo hiểm xã hội và các khoản trích theo lương.",
+    "hrRecruitmentDesc": "Quản lý quy trình tuyển dụng và ứng viên.",
+    "hrEmployeesDesc": "Quản lý hồ sơ nhân viên, hợp đồng và tổ chức.",
+    "hrTimeAttendanceDesc": "Theo dõi chấm công, nghỉ phép và ca làm việc.",
+    "hrPerformanceDesc": "Đánh giá hiệu suất và mục tiêu nhân viên.",
+    "hrPitDesc": "Quản lý thuế thu nhập cá nhân.",
+    "hrGoalsDesc": "Quản lý mục tiêu cá nhân và phòng ban.",
+    "hrInfoDesc": "Thông tin nhân sự và chính sách."
   },
   "adminDashboard": {
     "title": "Tổng quan Hành chính",

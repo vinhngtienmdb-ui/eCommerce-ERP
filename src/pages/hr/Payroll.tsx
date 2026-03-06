@@ -4,7 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src
 import { Button } from "@/src/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
 import { Badge } from "@/src/components/ui/badge"
-import { Download, FileText } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+import { Download, FileText, Settings, Edit, Trash2, Calculator, DollarSign, PieChart } from "lucide-react"
 
 interface PayrollPeriod {
   id: string
@@ -20,11 +22,15 @@ interface SalaryConfig {
   basic: string
   allowance: string
   deduction: string
+  tax: string
   net: string
 }
 
 export function Payroll() {
   const { t } = useTranslation()
+
+  const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
+  const canEdit = userRole === "Admin" || userRole === "HR Manager"
 
   const [payrolls, setPayrolls] = useState<PayrollPeriod[]>([
     { id: "PR-2023-10", period: "October 2023", count: 1230, amount: "15,400,000,000 ₫", status: "Completed" },
@@ -32,8 +38,8 @@ export function Payroll() {
   ])
 
   const [salaries] = useState<SalaryConfig[]>([
-    { id: "SAL-001", empName: "Nguyen Van A", basic: "25,000,000", allowance: "2,000,000", deduction: "1,500,000", net: "25,500,000" },
-    { id: "SAL-002", empName: "Tran Thi B", basic: "30,000,000", allowance: "3,000,000", deduction: "2,000,000", net: "31,000,000" },
+    { id: "SAL-001", empName: "Nguyen Van A", basic: "25,000,000", allowance: "2,000,000", deduction: "2,625,000", tax: "1,500,000", net: "22,875,000" },
+    { id: "SAL-002", empName: "Tran Thi B", basic: "30,000,000", allowance: "3,000,000", deduction: "3,150,000", tax: "2,500,000", net: "27,350,000" },
   ])
 
   const handleRunPayroll = (id: string) => {
@@ -55,94 +61,193 @@ export function Payroll() {
           <h1 className="text-3xl font-bold tracking-tight">{t("hr.tabs.payroll")}</h1>
           <p className="text-muted-foreground">{t("hr.payroll.description")}</p>
         </div>
+        <div className="flex gap-2 items-center">
+          <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="Role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Admin">Admin</SelectItem>
+              <SelectItem value="HR Manager">HR Manager</SelectItem>
+              <SelectItem value="Employee">Employee</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          {canEdit && (
+            <Button variant="outline">
+              <Settings className="mr-2 h-4 w-4" />
+              Cấu hình
+            </Button>
+          )}
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("hr.payroll.title")}</CardTitle>
-          <CardDescription>{t("hr.payroll.description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex justify-between mb-4">
-            <div className="space-x-2">
-              <Button>{t("hr.payroll.runPayroll")}</Button>
-              <Button variant="outline">{t("hr.payroll.configFormulas")}</Button>
-            </div>
-            <Button variant="outline">
-              <Download className="mr-2 h-4 w-4" />
-              {t("hr.payroll.exportReport")}
-            </Button>
-          </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("hr.payroll.period")}</TableHead>
-                <TableHead>{t("hr.payroll.totalEmployees")}</TableHead>
-                <TableHead>{t("hr.payroll.totalAmount")}</TableHead>
-                <TableHead>{t("hr.payroll.status")}</TableHead>
-                <TableHead className="text-right">{t("common.actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {payrolls.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.period}</TableCell>
-                  <TableCell>{item.count}</TableCell>
-                  <TableCell>{item.amount}</TableCell>
-                  <TableCell>
-                    <Badge variant={item.status === "Completed" ? "default" : item.status === "Processing" ? "outline" : "secondary"}>
-                      {item.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {item.status === "Draft" ? (
-                      <Button size="sm" onClick={() => handleRunPayroll(item.id)}>
-                        {t("hr.payroll.runPayroll")}
-                      </Button>
-                    ) : (
-                      <Button variant="ghost" size="sm">
-                        <FileText className="mr-2 h-4 w-4" />
-                        {t("hr.payroll.payslips")}
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Kỳ lương</TabsTrigger>
+          <TabsTrigger value="salary">Cấu trúc lương</TabsTrigger>
+          <TabsTrigger value="payslips">Phiếu lương</TabsTrigger>
+          <TabsTrigger value="config">Cấu hình & Công thức</TabsTrigger>
+        </TabsList>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("hr.payroll.salaryStructure")}</CardTitle>
-          <CardDescription>Employee salary configuration.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("hr.core.name")}</TableHead>
-                <TableHead>{t("hr.payroll.basicSalary")}</TableHead>
-                <TableHead>{t("hr.payroll.allowances")}</TableHead>
-                <TableHead>{t("hr.payroll.deductions")}</TableHead>
-                <TableHead>{t("hr.payroll.netSalary")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {salaries.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.empName}</TableCell>
-                  <TableCell>{item.basic} ₫</TableCell>
-                  <TableCell className="text-green-600">+{item.allowance} ₫</TableCell>
-                  <TableCell className="text-red-600">-{item.deduction} ₫</TableCell>
-                  <TableCell className="font-bold">{item.net} ₫</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Tổng quỹ lương tháng này</CardTitle>
+                <DollarSign className="h-4 w-4 text-green-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">15,600,000,000 ₫</div>
+                <p className="text-xs text-muted-foreground">+1.2% so với tháng trước</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Thuế TNCN dự kiến</CardTitle>
+                <PieChart className="h-4 w-4 text-blue-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">1,200,000,000 ₫</div>
+                <p className="text-xs text-muted-foreground">Đã khấu trừ tự động</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Bảo hiểm xã hội</CardTitle>
+                <FileText className="h-4 w-4 text-orange-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">850,000,000 ₫</div>
+                <p className="text-xs text-muted-foreground">Công ty đóng 21.5%</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("hr.payroll.title")}</CardTitle>
+              <CardDescription>{t("hr.payroll.description")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-between mb-4">
+                <div className="space-x-2">
+                  <Button>{t("hr.payroll.runPayroll")}</Button>
+                  <Button variant="outline">{t("hr.payroll.configFormulas")}</Button>
+                </div>
+                <Button variant="outline">
+                  <Download className="mr-2 h-4 w-4" />
+                  {t("hr.payroll.exportReport")}
+                </Button>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("hr.payroll.period")}</TableHead>
+                    <TableHead>{t("hr.payroll.totalEmployees")}</TableHead>
+                    <TableHead>{t("hr.payroll.totalAmount")}</TableHead>
+                    <TableHead>{t("hr.payroll.status")}</TableHead>
+                    <TableHead className="text-right">{t("common.actions")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {payrolls.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell className="font-medium">{item.period}</TableCell>
+                      <TableCell>{item.count}</TableCell>
+                      <TableCell>{item.amount}</TableCell>
+                      <TableCell>
+                        <Badge variant={item.status === "Completed" ? "default" : item.status === "Processing" ? "outline" : "secondary"}>
+                          {item.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item.status === "Draft" ? (
+                          <Button size="sm" onClick={() => handleRunPayroll(item.id)}>
+                            {t("hr.payroll.runPayroll")}
+                          </Button>
+                        ) : (
+                          <Button variant="ghost" size="sm">
+                            <FileText className="mr-2 h-4 w-4" />
+                            {t("hr.payroll.payslips")}
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="salary" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("hr.payroll.salaryStructure")}</CardTitle>
+              <CardDescription>Employee salary configuration.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("hr.core.name")}</TableHead>
+                    <TableHead>{t("hr.payroll.basicSalary")}</TableHead>
+                    <TableHead>{t("hr.payroll.allowances")}</TableHead>
+                    <TableHead>{t("hr.payroll.deductions")}</TableHead>
+                    <TableHead>{t("hr.payroll.tax")}</TableHead>
+                    <TableHead>{t("hr.payroll.netSalary")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {salaries.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell className="font-medium">{item.empName}</TableCell>
+                      <TableCell>{item.basic} ₫</TableCell>
+                      <TableCell className="text-green-600">+{item.allowance} ₫</TableCell>
+                      <TableCell className="text-red-600">-{item.deduction} ₫</TableCell>
+                      <TableCell className="text-red-600">-{item.tax} ₫</TableCell>
+                      <TableCell className="font-bold">{item.net} ₫</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="payslips" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Phiếu lương điện tử</CardTitle>
+              <CardDescription>Quản lý và gửi phiếu lương cho nhân viên</CardDescription>
+            </CardHeader>
+            <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
+              <div className="text-center space-y-2">
+                <FileText className="w-12 h-12 text-muted-foreground mx-auto" />
+                <h3 className="font-medium">Phiếu lương đang được cập nhật</h3>
+                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép xem trước và gửi phiếu lương hàng loạt qua email.</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="config" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Cấu hình & Công thức lương</CardTitle>
+              <CardDescription>Thiết lập các khoản phụ cấp, khấu trừ và công thức tính thuế</CardDescription>
+            </CardHeader>
+            <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
+              <div className="text-center space-y-2">
+                <Calculator className="w-12 h-12 text-muted-foreground mx-auto" />
+                <h3 className="font-medium">Cấu hình lương đang được cập nhật</h3>
+                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép tùy chỉnh công thức lương động (Excel-like formulas).</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

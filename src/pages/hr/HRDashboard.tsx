@@ -13,6 +13,7 @@ import {
   CalendarCheck
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card"
+import { Button } from "@/src/components/ui/button"
 
 export function HRDashboard() {
   const { t } = useTranslation()
@@ -20,40 +21,94 @@ export function HRDashboard() {
 
   const hrModules = [
     { 
-      id: "coreHr", 
-      title: "nav.coreHr", 
-      description: "hrDashboard.coreHrDesc", 
-      icon: Users, 
-      color: "text-blue-500", 
-      bg: "bg-blue-100",
-      href: "/hr/core"
-    },
-    { 
-      id: "timeAttendance", 
-      title: "nav.timeAttendance", 
-      description: "hrDashboard.timeAttendanceDesc", 
-      icon: Clock, 
-      color: "text-purple-500", 
-      bg: "bg-purple-100",
-      href: "/hr/time"
-    },
-    { 
-      id: "payroll", 
-      title: "nav.payroll", 
-      description: "hrDashboard.payrollDesc", 
+      id: "hrPayroll", 
+      title: "nav.hrPayroll", 
+      description: "hrDashboard.hrPayrollDesc", 
       icon: Banknote, 
       color: "text-green-500", 
       bg: "bg-green-100",
       href: "/hr/payroll"
     },
     { 
-      id: "performance", 
-      title: "nav.performance", 
-      description: "hrDashboard.performanceDesc", 
-      icon: Award, 
+      id: "hrSocialInsurance", 
+      title: "nav.hrSocialInsurance", 
+      description: "hrDashboard.hrSocialInsuranceDesc", 
+      icon: Briefcase, 
+      color: "text-blue-500", 
+      bg: "bg-blue-100",
+      href: "/hr/social-insurance"
+    },
+    { 
+      id: "hrRecruitment", 
+      title: "nav.hrRecruitment", 
+      description: "hrDashboard.hrRecruitmentDesc", 
+      icon: UserCheck, 
       color: "text-orange-500", 
       bg: "bg-orange-100",
+      href: "/hr/recruitment"
+    },
+    { 
+      id: "hrEmployees", 
+      title: "nav.hrEmployees", 
+      description: "hrDashboard.hrEmployeesDesc", 
+      icon: Users, 
+      color: "text-indigo-500", 
+      bg: "bg-indigo-100",
+      href: "/hr/employees"
+    },
+    { 
+      id: "hrTimeAttendance", 
+      title: "nav.hrTimeAttendance", 
+      description: "hrDashboard.hrTimeAttendanceDesc", 
+      icon: Clock, 
+      color: "text-purple-500", 
+      bg: "bg-purple-100",
+      href: "/hr/time-attendance"
+    },
+    { 
+      id: "hrLeave", 
+      title: "Quản lý ngày phép", 
+      description: "Cấu hình ngày nghỉ Lễ Tết, nguyên tắc phép năm và duyệt đơn xin nghỉ.", 
+      icon: CalendarCheck, 
+      color: "text-pink-500", 
+      bg: "bg-pink-100",
+      href: "/hr/leave"
+    },
+    { 
+      id: "hrPerformance", 
+      title: "nav.hrPerformance", 
+      description: "hrDashboard.hrPerformanceDesc", 
+      icon: Award, 
+      color: "text-yellow-500", 
+      bg: "bg-yellow-100",
       href: "/hr/performance"
+    },
+    { 
+      id: "hrPit", 
+      title: "nav.hrPit", 
+      description: "hrDashboard.hrPitDesc", 
+      icon: Banknote, 
+      color: "text-red-500", 
+      bg: "bg-red-100",
+      href: "/hr/pit"
+    },
+    { 
+      id: "hrGoals", 
+      title: "nav.hrGoals", 
+      description: "hrDashboard.hrGoalsDesc", 
+      icon: Star, 
+      color: "text-teal-500", 
+      bg: "bg-teal-100",
+      href: "/hr/goals"
+    },
+    { 
+      id: "hrInfo", 
+      title: "nav.hrInfo", 
+      description: "hrDashboard.hrInfoDesc", 
+      icon: HelpCircle, 
+      color: "text-gray-500", 
+      bg: "bg-gray-100",
+      href: "/hr/info"
     },
   ]
 
@@ -159,6 +214,80 @@ export function HRDashboard() {
             </Card>
           ))}
         </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Hoạt động gần đây</CardTitle>
+            <CardDescription>Các cập nhật mới nhất từ hệ thống nhân sự</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-green-100 rounded-full">
+                <UserCheck className="w-4 h-4 text-green-600" />
+              </div>
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">Nhân viên mới: Lê Văn C</p>
+                <p className="text-sm text-muted-foreground">Đã hoàn thành thủ tục Onboarding</p>
+              </div>
+              <div className="text-sm text-muted-foreground">2 giờ trước</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-purple-100 rounded-full">
+                <CalendarCheck className="w-4 h-4 text-purple-600" />
+              </div>
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">Đơn xin nghỉ phép: Phạm Thị D</p>
+                <p className="text-sm text-muted-foreground">Đã được phê duyệt bởi Quản lý</p>
+              </div>
+              <div className="text-sm text-muted-foreground">5 giờ trước</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-blue-100 rounded-full">
+                <Briefcase className="w-4 h-4 text-blue-600" />
+              </div>
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">Tuyển dụng: Lập trình viên Frontend</p>
+                <p className="text-sm text-muted-foreground">Có 3 ứng viên mới nộp hồ sơ</p>
+              </div>
+              <div className="text-sm text-muted-foreground">1 ngày trước</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Công việc sắp tới</CardTitle>
+            <CardDescription>Các nhiệm vụ nhân sự cần xử lý</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">Chốt bảng lương tháng này</p>
+                <p className="text-sm text-muted-foreground">Hạn chót: 25/11/2023</p>
+              </div>
+              <Button variant="outline" size="sm">Xử lý</Button>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">Đánh giá hiệu suất quý 4</p>
+                <p className="text-sm text-muted-foreground">Bắt đầu từ: 01/12/2023</p>
+              </div>
+              <Button variant="outline" size="sm">Xem</Button>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">Gia hạn hợp đồng: Trần Thị B</p>
+                <p className="text-sm text-muted-foreground">Hết hạn: 15/12/2023</p>
+              </div>
+              <Button variant="outline" size="sm">Chi tiết</Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

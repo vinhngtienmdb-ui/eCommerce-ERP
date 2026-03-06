@@ -16,10 +16,16 @@ import { Accounting } from "./pages/finance/Accounting"
 import { Reconciliation } from "./pages/finance/Reconciliation"
 import { PnL } from "./pages/finance/PnL"
 import PaymentWallet from "./pages/PaymentWallet"
-import { CoreHR } from "./pages/hr/CoreHR"
+import { Employees } from "./pages/hr/Employees"
 import { TimeAttendance } from "./pages/hr/TimeAttendance"
 import { Payroll } from "./pages/hr/Payroll"
 import { Performance } from "./pages/hr/Performance"
+import { SocialInsurance } from "./pages/hr/SocialInsurance"
+import { Recruitment } from "./pages/hr/Recruitment"
+import { PIT } from "./pages/hr/PIT"
+import { Goals } from "./pages/hr/Goals"
+import { HRInfo } from "./pages/hr/HRInfo"
+import { LeaveManagement } from "./pages/hr/LeaveManagement"
 import { AssetsPage } from "./pages/admin-workspace/AssetsPage"
 import { StationeryPage } from "./pages/admin-workspace/StationeryPage"
 import { BookingPage } from "./pages/admin-workspace/BookingPage"
@@ -33,6 +39,8 @@ import { Legal } from "./pages/Legal"
 import { SellerFinance } from "./pages/SellerFinance"
 import { SocialCommerce } from "./pages/SocialCommerce"
 import { BusinessPlanning } from "./pages/planning/BusinessPlanning"
+import PersonalWorkspace from "./pages/workspace/PersonalWorkspace"
+import ExecutiveCenter from "./pages/executive/ExecutiveCenter"
 import { useTranslation } from "react-i18next"
 import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
 import { HRDashboard } from "./pages/hr/HRDashboard"
@@ -55,6 +63,13 @@ export default function App() {
             <Route path="add" element={<AddProduct />} />
             <Route path="ai-tools" element={<FallbackRoute />} />
           </Route>
+          <Route path="workspace">
+            <Route index element={<PersonalWorkspace />} />
+            <Route path="tasks" element={<PersonalWorkspace />} />
+            <Route path="chat" element={<PersonalWorkspace />} />
+            <Route path="email" element={<PersonalWorkspace />} />
+            <Route path="calendar" element={<PersonalWorkspace />} />
+          </Route>
           <Route path="orders" element={<Orders />} />
           <Route path="sellers">
             <Route index element={<Navigate to="list" replace />} />
@@ -71,6 +86,11 @@ export default function App() {
           <Route path="affiliate" element={<Affiliate />} />
           <Route path="purchasing" element={<Purchasing />} />
           <Route path="legal" element={<Legal />} />
+          <Route path="executive">
+            <Route index element={<ExecutiveCenter />} />
+            <Route path="direction" element={<ExecutiveCenter />} />
+            <Route path="strategy" element={<ExecutiveCenter />} />
+          </Route>
           <Route path="finance">
             <Route index element={<FinanceDashboard />} />
             <Route path="accounting" element={<Accounting />} />
@@ -81,10 +101,16 @@ export default function App() {
           </Route>
           <Route path="hr">
             <Route index element={<HRDashboard />} />
-            <Route path="core" element={<CoreHR />} />
-            <Route path="time" element={<TimeAttendance />} />
             <Route path="payroll" element={<Payroll />} />
+            <Route path="social-insurance" element={<SocialInsurance />} />
+            <Route path="recruitment" element={<Recruitment />} />
+            <Route path="employees" element={<Employees />} />
+            <Route path="time-attendance" element={<TimeAttendance />} />
+            <Route path="leave" element={<LeaveManagement />} />
             <Route path="performance" element={<Performance />} />
+            <Route path="pit" element={<PIT />} />
+            <Route path="goals" element={<Goals />} />
+            <Route path="info" element={<HRInfo />} />
           </Route>
           <Route path="admin-workspace">
             <Route index element={<AdminDashboard />} />
