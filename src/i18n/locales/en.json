@@ -141,13 +141,146 @@
     }
   },
   "workspace": {
-    "title": "Personal Workspace",
+    "title": "Workspace",
     "description": "Personal work space, internal communication, and time management.",
     "tabs": {
+      "dashboard": "Dashboard",
       "tasks": "Tasks",
       "chat": "Internal Chat",
       "email": "Email",
       "calendar": "Calendar"
+    },
+    "dashboard": {
+      "welcome": "Welcome back",
+      "productivity": "Productivity",
+      "recentActivity": "Recent Activity",
+      "deadlines": "Upcoming Deadlines",
+      "teamStatus": "Team Status",
+      "tasksCompleted": "Tasks Completed",
+      "pendingReviews": "Pending Reviews",
+      "unreadEmails": "Unread Emails",
+      "upcomingEvents": "Upcoming Events",
+      "quickLinks": "Quick Links"
+    },
+    "tasks": {
+      "myTasks": "My Tasks",
+      "teamTasks": "Team Tasks",
+      "departmentTasks": "Department",
+      "companyTasks": "Company",
+      "kanban": "Kanban Board",
+      "list": "List View",
+      "createTask": "Create Task",
+      "searchTasks": "Search tasks...",
+      "filter": "Filter",
+      "status": "Status",
+      "priority": "Priority",
+      "assignee": "Assignee",
+      "dueDate": "Due Date",
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "review": "Review",
+      "done": "Done",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "activeTasks": "Active Tasks",
+      "completed": "Completed",
+      "viewTasks": "View Tasks",
+      "departmentInitiatives": "Department Initiatives",
+      "viewAllProjects": "View All Projects",
+      "strategicPillars": "Strategic Pillars",
+      "annualRevenueGoal": "Annual Revenue Goal",
+      "marketExpansion": "Market Expansion",
+      "employeeSatisfaction": "Employee Satisfaction"
+    },
+    "chat": {
+      "search": "Search...",
+      "channels": "Channels",
+      "directMessages": "Direct Messages",
+      "online": "Online",
+      "offline": "Offline",
+      "busy": "Busy",
+      "typeMessage": "Type a message...",
+      "today": "Today",
+      "myAccount": "My Account",
+      "topic": "Topic",
+      "send": "Send",
+      "tip": "Tip: Press Enter to send, Shift + Enter for new line"
+    },
+    "email": {
+      "connectTitle": "Connect your Email",
+      "connectDescription": "Integrate with Microsoft Outlook 365 (Enterprise) to manage your emails directly from the Workspace.",
+      "outlookIntegration": "Outlook 365 Integration",
+      "secureConnection": "Secure OAuth 2.0 Connection",
+      "connectButton": "Connect Outlook 365",
+      "connectDisclaimer": "By connecting, you agree to grant read/write access to your mailbox.",
+      "noteTitle": "Note",
+      "simulationNote": "This is a simulation. In a production environment, this would redirect to Microsoft's login page.",
+      "compose": "New Message",
+      "foldersTitle": "Folders",
+      "manage": "Manage",
+      "search": "Search mail",
+      "selectEmail": "Select an email to read",
+      "storageUsage": "Using {{used}} GB of {{total}} GB",
+      "toMe": "to me",
+      "placeholder": {
+        "greeting": "Hello,",
+        "body": "This is a simulated email content for the selected message. In a real integration, this would display the HTML body of the email fetched from the Microsoft Graph API.",
+        "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "signoff": "Best regards,",
+        "team": "The Team"
+      },
+      "folders": {
+        "inbox": "Inbox",
+        "sent": "Sent",
+        "drafts": "Drafts",
+        "starred": "Starred",
+        "archive": "Archive",
+        "trash": "Trash"
+      },
+      "labels": {
+        "urgent": "Urgent",
+        "projects": "Projects",
+        "personal": "Personal",
+        "important": "Important"
+      },
+      "actions": {
+        "reply": "Reply",
+        "replyAll": "Reply All",
+        "forward": "Forward"
+      }
+    },
+    "calendar": {
+      "schedule": "Schedule",
+      "today": "Today",
+      "month": "Month",
+      "week": "Week",
+      "day": "Day",
+      "newEvent": "New Event",
+      "upcomingEvents": "Upcoming events for today",
+      "quickActions": "Quick Actions",
+      "events": {
+        "teamSync": "Team Sync",
+        "projectReview": "Project Review",
+        "lunchClient": "Lunch with Client",
+        "designWorkshop": "Design Workshop",
+        "lunch": "Lunch"
+      },
+      "days": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      },
+      "actions": {
+        "scheduleMeeting": "Schedule Meeting",
+        "bookRoom": "Book Room",
+        "logTime": "Log Time",
+        "setLocation": "Set Location"
+      }
     }
   },
   "executive": {

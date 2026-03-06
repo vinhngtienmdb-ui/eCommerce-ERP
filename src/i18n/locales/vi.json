@@ -60,7 +60,7 @@
     "customerService": "CSKH",
     "social": "Cộng đồng & Mạng xã hội TMĐT",
     "advertising": "Hệ thống Quảng cáo",
-    "legal": "Pháp chế tuần thủ",
+    "legal": "Pháp chế tuân thủ",
     "workspace": "Workspace",
     "personalWork": "Công việc cá nhân",
     "internalChat": "Chat nội bộ",
@@ -107,19 +107,22 @@
     }
   },
   "legal": {
-    "title": "Pháp chế tuần thủ",
+    "title": "Pháp chế tuân thủ",
     "description": "Quản lý đăng ký bảo quyền, xử lý tranh chấp và giám sát tuân thủ pháp luật.",
     "tabs": {
       "brandPortal": "Brand Portal",
       "dispute": "Giải quyết tranh chấp",
-      "compliance": "Giám sát tuân thủ"
+      "compliance": "Giám sát tuân thủ",
+      "contracts": "Quản lý Hợp đồng"
     },
     "brandPortal": {
       "register": "Đăng ký bảo quyền",
       "brandName": "Tên thương hiệu",
       "owner": "Chủ sở hữu",
       "status": "Trạng thái",
-      "documents": "Tài liệu chứng minh"
+      "documents": "Tài liệu chứng minh",
+      "ipProtection": "Bảo vệ SHTT",
+      "authorizedDistributors": "Nhà phân phối ủy quyền"
     },
     "dispute": {
       "caseId": "Mã vụ việc",
@@ -129,7 +132,9 @@
       "status": "Trạng thái",
       "action": "Hành động",
       "counterfeit": "Hàng giả",
-      "ipViolation": "Vi phạm SHTT"
+      "ipViolation": "Vi phạm SHTT",
+      "mediation": "Hòa giải",
+      "evidence": "Bằng chứng"
     },
     "compliance": {
       "policy": "Chính sách",
@@ -137,17 +142,180 @@
       "lastAudit": "Lần kiểm tra cuối",
       "status": "Trạng thái",
       "dataPrivacy": "Bảo mật dữ liệu",
-      "ecommerceLaw": "Luật TMĐT"
+      "ecommerceLaw": "Luật TMĐT",
+      "auditLogs": "Nhật ký kiểm tra",
+      "riskAssessment": "Đánh giá rủi ro"
+    },
+    "contracts": {
+      "contractId": "Mã hợp đồng",
+      "partyA": "Bên A",
+      "partyB": "Bên B",
+      "type": "Loại hợp đồng",
+      "effectiveDate": "Ngày hiệu lực",
+      "expiryDate": "Ngày hết hạn",
+      "status": "Trạng thái",
+      "signed": "Đã ký",
+      "pending": "Chờ ký",
+      "expired": "Hết hạn"
     }
   },
   "workspace": {
-    "title": "Workspace Cá nhân",
+    "title": "Workspace",
     "description": "Không gian làm việc cá nhân, trao đổi nội bộ và quản lý thời gian.",
     "tabs": {
+      "dashboard": "Bảng điều khiển",
       "tasks": "Công việc",
       "chat": "Chat nội bộ",
       "email": "Email",
       "calendar": "Lịch"
+    },
+    "dashboard": {
+      "welcome": "Chào mừng trở lại",
+      "productivity": "Năng suất",
+      "recentActivity": "Hoạt động gần đây",
+      "deadlines": "Hạn chót sắp tới",
+      "teamStatus": "Trạng thái nhóm",
+      "tasksCompleted": "Công việc hoàn thành",
+      "pendingReviews": "Chờ duyệt",
+      "unreadEmails": "Email chưa đọc",
+      "upcomingEvents": "Sự kiện sắp tới",
+      "quickLinks": "Liên kết nhanh"
+    },
+    "tasks": {
+      "myTasks": "Công việc của tôi",
+      "teamTasks": "Công việc nhóm",
+      "departmentTasks": "Phòng ban",
+      "companyTasks": "Công ty",
+      "kanban": "Bảng Kanban",
+      "list": "Danh sách",
+      "createTask": "Tạo công việc",
+      "searchTasks": "Tìm kiếm công việc...",
+      "filter": "Bộ lọc",
+      "status": "Trạng thái",
+      "priority": "Độ ưu tiên",
+      "assignee": "Người thực hiện",
+      "dueDate": "Hạn chót",
+      "todo": "Cần làm",
+      "inProgress": "Đang làm",
+      "review": "Chờ duyệt",
+      "done": "Hoàn thành",
+      "high": "Cao",
+      "medium": "Trung bình",
+      "low": "Thấp",
+      "activeTasks": "Công việc đang làm",
+      "completed": "Hoàn thành",
+      "viewTasks": "Xem công việc",
+      "departmentInitiatives": "Sáng kiến phòng ban",
+      "viewAllProjects": "Xem tất cả dự án",
+      "strategicPillars": "Trụ cột chiến lược",
+      "annualRevenueGoal": "Mục tiêu doanh thu năm",
+      "marketExpansion": "Mở rộng thị trường",
+      "employeeSatisfaction": "Sự hài lòng nhân viên"
+    },
+    "chat": {
+      "search": "Tìm kiếm...",
+      "channels": "Kênh",
+      "directMessages": "Tin nhắn trực tiếp",
+      "online": "Trực tuyến",
+      "offline": "Ngoại tuyến",
+      "busy": "Bận",
+      "typeMessage": "Nhập tin nhắn...",
+      "today": "Hôm nay",
+      "myAccount": "Tài khoản của tôi",
+      "topic": "Chủ đề",
+      "send": "Gửi",
+      "tip": "Mẹo: Nhấn Enter để gửi, Shift + Enter để xuống dòng"
+    },
+    "email": {
+      "connectTitle": "Kết nối Email của bạn",
+      "connectDescription": "Tích hợp với Microsoft Outlook 365 (Enterprise) để quản lý email trực tiếp từ Workspace.",
+      "outlookIntegration": "Tích hợp Outlook 365",
+      "secureConnection": "Kết nối OAuth 2.0 An toàn",
+      "connectButton": "Kết nối Outlook 365",
+      "connectDisclaimer": "Bằng cách kết nối, bạn đồng ý cấp quyền đọc/ghi vào hộp thư của mình.",
+      "noteTitle": "Lưu ý",
+      "simulationNote": "Đây là mô phỏng. Trong môi trường thực tế, điều này sẽ chuyển hướng đến trang đăng nhập của Microsoft.",
+      "compose": "Soạn thư mới",
+      "foldersTitle": "Thư mục",
+      "manage": "Quản lý",
+      "search": "Tìm kiếm thư",
+      "selectEmail": "Chọn một email để đọc",
+      "storageUsage": "Đang sử dụng {{used}} GB trong tổng số {{total}} GB",
+      "toMe": "tới tôi",
+      "placeholder": {
+        "greeting": "Xin chào,",
+        "body": "Đây là nội dung email mô phỏng cho tin nhắn đã chọn. Trong tích hợp thực tế, phần này sẽ hiển thị nội dung HTML của email được lấy từ Microsoft Graph API.",
+        "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "signoff": "Trân trọng,",
+        "team": "Đội ngũ"
+      },
+      "connectOutlook": "Kết nối Outlook 365",
+      "disconnectOutlook": "Ngắt kết nối",
+      "inbox": "Hộp thư đến",
+      "sent": "Đã gửi",
+      "drafts": "Thư nháp",
+      "trash": "Thùng rác",
+      "archive": "Lưu trữ",
+      "searchEmail": "Tìm kiếm email...",
+      "to": "Tới",
+      "subject": "Chủ đề",
+      "reply": "Trả lời",
+      "forward": "Chuyển tiếp",
+      "folders": {
+        "inbox": "Hộp thư đến",
+        "sent": "Đã gửi",
+        "drafts": "Thư nháp",
+        "starred": "Có gắn sao",
+        "archive": "Lưu trữ",
+        "trash": "Thùng rác"
+      },
+      "labels": {
+        "urgent": "Khẩn cấp",
+        "projects": "Dự án",
+        "personal": "Cá nhân",
+        "important": "Quan trọng"
+      },
+      "actions": {
+        "reply": "Trả lời",
+        "replyAll": "Trả lời tất cả",
+        "forward": "Chuyển tiếp"
+      }
+    },
+    "calendar": {
+      "schedule": "Lịch trình",
+      "today": "Hôm nay",
+      "month": "Tháng",
+      "week": "Tuần",
+      "day": "Ngày",
+      "bookRoom": "Đặt phòng",
+      "logTime": "Chấm công",
+      "upcoming": "Sắp tới",
+      "allDay": "Cả ngày",
+      "newEvent": "Sự kiện mới",
+      "upcomingEvents": "Sự kiện sắp tới trong ngày",
+      "quickActions": "Hành động nhanh",
+      "events": {
+        "teamSync": "Đồng bộ nhóm",
+        "projectReview": "Đánh giá dự án",
+        "lunchClient": "Ăn trưa với khách hàng",
+        "designWorkshop": "Hội thảo thiết kế",
+        "lunch": "Ăn trưa"
+      },
+      "days": {
+        "sun": "CN",
+        "mon": "T2",
+        "tue": "T3",
+        "wed": "T4",
+        "thu": "T5",
+        "fri": "T6",
+        "sat": "T7"
+      },
+      "actions": {
+        "scheduleMeeting": "Lên lịch họp",
+        "bookRoom": "Đặt phòng",
+        "logTime": "Chấm công",
+        "setLocation": "Đặt địa điểm"
+      }
     }
   },
   "executive": {

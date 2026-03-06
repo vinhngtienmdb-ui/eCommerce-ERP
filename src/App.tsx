@@ -39,7 +39,7 @@ import { Legal } from "./pages/Legal"
 import { SellerFinance } from "./pages/SellerFinance"
 import { SocialCommerce } from "./pages/SocialCommerce"
 import { BusinessPlanning } from "./pages/planning/BusinessPlanning"
-import PersonalWorkspace from "./pages/workspace/PersonalWorkspace"
+import Workspace from "./pages/workspace"
 import ExecutiveCenter from "./pages/executive/ExecutiveCenter"
 import { useTranslation } from "react-i18next"
 import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
@@ -64,11 +64,11 @@ export default function App() {
             <Route path="ai-tools" element={<FallbackRoute />} />
           </Route>
           <Route path="workspace">
-            <Route index element={<PersonalWorkspace />} />
-            <Route path="tasks" element={<PersonalWorkspace />} />
-            <Route path="chat" element={<PersonalWorkspace />} />
-            <Route path="email" element={<PersonalWorkspace />} />
-            <Route path="calendar" element={<PersonalWorkspace />} />
+            <Route index element={<Workspace />} />
+            <Route path="tasks" element={<Workspace />} />
+            <Route path="chat" element={<Workspace />} />
+            <Route path="email" element={<Workspace />} />
+            <Route path="calendar" element={<Workspace />} />
           </Route>
           <Route path="orders" element={<Orders />} />
           <Route path="sellers">
