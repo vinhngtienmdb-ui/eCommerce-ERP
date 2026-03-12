@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "Settings": {
+      "title": "System Settings",
+      "description": "Global system configuration settings",
+      "type": "object",
+      "properties": {
+        "general": { "type": "object" },
+        "appearance": { "type": "object" },
+        "notifications": { "type": "object" },
+        "fees": { "type": "object" },
+        "categories": { "type": "array" },
+        "integrations": { "type": "object" },
+        "shipping": { "type": "object" }
+      }
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "Records of user actions for auditing",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "module": { "type": "string" },
+        "details": { "type": "string" },
+        "ipAddress": { "type": "string" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "action", "module", "timestamp"]
+    },
+    "UserRole": {
+      "title": "User Role",
+      "description": "Role and permissions for a user",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "role": { "type": "string" },
+        "permissions": { "type": "object" }
+      },
+      "required": ["uid", "role"]
+    }
+  },
+  "firestore": {
+    "/settings/global": {
+      "schema": "Settings",
+      "description": "Global system settings"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "System audit logs"
+    },
+    "/user_roles/{uid}": {
+      "schema": "UserRole",
+      "description": "User roles and permissions"
+    }
+  }
+}

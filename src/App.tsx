@@ -41,6 +41,7 @@ import { SocialCommerce } from "./pages/SocialCommerce"
 import { BusinessPlanning } from "./pages/planning/BusinessPlanning"
 import Workspace from "./pages/workspace"
 import ExecutiveCenter from "./pages/executive/ExecutiveCenter"
+import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
 import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
 import { HRDashboard } from "./pages/hr/HRDashboard"
@@ -54,6 +55,7 @@ function FallbackRoute() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" richColors />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -19,14 +19,17 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/src/components/ui/dialog"
-import { Search, Plus, Trash2 } from "lucide-react"
+import { Search, Plus, Trash2, Save } from "lucide-react"
 import { initialPlatformFees, type CategoryFee } from "@/src/data/fees"
+import { useSettingsStore } from "@/src/store/useSettingsStore"
 
 export function CategoryConfig() {
   const { t } = useTranslation()
-  const [platformFees, setPlatformFees] = useState<CategoryFee[]>(initialPlatformFees)
+  const { settings, updateSettings, loading } = useSettingsStore()
+  const [platformFees, setPlatformFees] = useState<CategoryFee[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isDirty, setIsDirty] = useState(false)
   const [newCategory, setNewCategory] = useState<Partial<CategoryFee>>({
     level1: "",
     level2: "",
@@ -34,6 +37,14 @@ export function CategoryConfig() {
     feeRateMall: 0,
     feeRateRegular: 0,
   })
+
+  useEffect(() => {
+    if (settings.categories) {
+      setPlatformFees(settings.categories)
+    } else {
+      setPlatformFees(initialPlatformFees)
+    }
+  }, [settings.categories])
 
   const filteredPlatformFees = platformFees.filter(fee => 
     fee.level1.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -45,11 +56,13 @@ export function CategoryConfig() {
     setPlatformFees(fees => fees.map(fee => 
       fee.id === id ? { ...fee, [field]: newRate } : fee
     ))
+    setIsDirty(true)
   }
 
   const handleDeleteCategory = (id: string) => {
     if (window.confirm(t("settings.fees.confirmDeleteDesc"))) {
       setPlatformFees(fees => fees.filter(fee => fee.id !== id))
+      setIsDirty(true)
     }
   }
 
@@ -67,6 +80,7 @@ export function CategoryConfig() {
     }
 
     setPlatformFees([categoryToAdd, ...platformFees])
+    setIsDirty(true)
     setIsAddDialogOpen(false)
     setNewCategory({
       level1: "",
@@ -77,6 +91,15 @@ export function CategoryConfig() {
     })
   }
 
+  const handleSave = async () => {
+    try {
+      await updateSettings('categories', platformFees)
+      setIsDirty(false)
+    } catch (error) {
+      console.error("Failed to save categories", error)
+    }
+  }
+
   return (
     <div className="space-y-8">
       <div className="rounded-xl border bg-card text-card-foreground shadow">
@@ -85,91 +108,93 @@ export function CategoryConfig() {
             <h3 className="text-lg font-semibold">{t("settings.fees.categoryManagement")}</h3>
             <p className="text-sm text-muted-foreground">{t("settings.fees.categoryManagementDesc")}</p>
           </div>
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder={t("settings.fees.searchCategory")}
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="flex items-center gap-2">
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder={t("settings.fees.searchCategory")}
+                className="pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t("settings.fees.addCategory")}</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t("settings.fees.addCategory")}</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label>{t("settings.fees.categoryLevel1")}</Label>
+                    <Input 
+                      placeholder={t("settings.fees.categoryLevel1Placeholder")}
+                      value={newCategory.level1}
+                      onChange={(e) => setNewCategory({ ...newCategory, level1: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>{t("settings.fees.categoryLevel2")}</Label>
+                    <Input 
+                      placeholder={t("settings.fees.categoryLevel2Placeholder")}
+                      value={newCategory.level2}
+                      onChange={(e) => setNewCategory({ ...newCategory, level2: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>{t("settings.fees.categoryLevel3")}</Label>
+                    <Input 
+                      placeholder={t("settings.fees.categoryLevel3Placeholder")}
+                      value={newCategory.level3}
+                      onChange={(e) => setNewCategory({ ...newCategory, level3: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>{t("settings.fees.feeRateMall")}</Label>
+                      <div className="relative">
+                        <Input 
+                          type="number" 
+                          value={newCategory.feeRateMall}
+                          onChange={(e) => setNewCategory({ ...newCategory, feeRateMall: parseFloat(e.target.value) || 0 })}
+                          className="pr-8 text-right"
+                          step="0.1"
+                        />
+                        <span className="absolute right-3 top-2.5 text-sm text-muted-foreground">%</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("settings.fees.feeRateRegular")}</Label>
+                      <div className="relative">
+                        <Input 
+                          type="number" 
+                          value={newCategory.feeRateRegular}
+                          onChange={(e) => setNewCategory({ ...newCategory, feeRateRegular: parseFloat(e.target.value) || 0 })}
+                          className="pr-8 text-right"
+                          step="0.1"
+                        />
+                        <span className="absolute right-3 top-2.5 text-sm text-muted-foreground">%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                    {t("common.cancel")}
+                  </Button>
+                  <Button onClick={handleAddCategory} disabled={!newCategory.level1 || !newCategory.level2}>
+                    {t("settings.fees.addCategory")}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                {t("settings.fees.addCategory")}
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{t("settings.fees.addCategory")}</DialogTitle>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="space-y-2">
-                  <Label>{t("settings.fees.categoryLevel1")}</Label>
-                  <Input 
-                    placeholder={t("settings.fees.categoryLevel1Placeholder")}
-                    value={newCategory.level1}
-                    onChange={(e) => setNewCategory({ ...newCategory, level1: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>{t("settings.fees.categoryLevel2")}</Label>
-                  <Input 
-                    placeholder={t("settings.fees.categoryLevel2Placeholder")}
-                    value={newCategory.level2}
-                    onChange={(e) => setNewCategory({ ...newCategory, level2: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>{t("settings.fees.categoryLevel3")}</Label>
-                  <Input 
-                    placeholder={t("settings.fees.categoryLevel3Placeholder")}
-                    value={newCategory.level3}
-                    onChange={(e) => setNewCategory({ ...newCategory, level3: e.target.value })}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{t("settings.fees.feeRateMall")}</Label>
-                    <div className="relative">
-                      <Input 
-                        type="number" 
-                        value={newCategory.feeRateMall}
-                        onChange={(e) => setNewCategory({ ...newCategory, feeRateMall: parseFloat(e.target.value) || 0 })}
-                        className="pr-8 text-right"
-                        step="0.1"
-                      />
-                      <span className="absolute right-3 top-2.5 text-sm text-muted-foreground">%</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{t("settings.fees.feeRateRegular")}</Label>
-                    <div className="relative">
-                      <Input 
-                        type="number" 
-                        value={newCategory.feeRateRegular}
-                        onChange={(e) => setNewCategory({ ...newCategory, feeRateRegular: parseFloat(e.target.value) || 0 })}
-                        className="pr-8 text-right"
-                        step="0.1"
-                      />
-                      <span className="absolute right-3 top-2.5 text-sm text-muted-foreground">%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                  {t("common.cancel")}
-                </Button>
-                <Button onClick={handleAddCategory} disabled={!newCategory.level1 || !newCategory.level2}>
-                  {t("settings.fees.addCategory")}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
         <div className="overflow-x-auto">
           <Table>
@@ -236,8 +261,32 @@ export function CategoryConfig() {
             </TableBody>
           </Table>
         </div>
-        <div className="p-4 border-t flex justify-end">
-          <Button>{t("settings.fees.saveChanges")}</Button>
+        <div className="p-4 border-t flex justify-between items-center bg-muted/50">
+          <div className="text-sm text-muted-foreground">
+            {isDirty && <span className="text-amber-600 font-medium flex items-center gap-1">
+              <Save className="h-3 w-3" /> {t("settings.general.unsavedChanges")}
+            </span>}
+          </div>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setPlatformFees(settings.categories || initialPlatformFees)
+                setIsDirty(false)
+              }}
+              disabled={!isDirty || loading}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button 
+              onClick={handleSave} 
+              disabled={!isDirty || loading}
+              className="gap-2"
+            >
+              <Save className="h-4 w-4" />
+              {t("settings.fees.saveChanges")}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

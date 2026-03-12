@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
-import { Percent, DollarSign } from "lucide-react"
+import { Percent, DollarSign, Save, X, RotateCcw } from "lucide-react"
 import { initialOtherFees, type OtherFee } from "@/src/data/fees"
+import { useSettingsStore } from "@/src/store/useSettingsStore"
+import { toast } from "sonner"
 
 function SimpleSwitch({ checked, onChange }: { checked: boolean, onChange: (checked: boolean) => void }) {
   return (
@@ -28,21 +30,64 @@ function SimpleSwitch({ checked, onChange }: { checked: boolean, onChange: (chec
 
 export function FeesConfig() {
   const { t } = useTranslation()
+  const { settings, updateSettings, loading } = useSettingsStore()
   const [otherFees, setOtherFees] = useState<OtherFee[]>(initialOtherFees)
+  const [isDirty, setIsDirty] = useState(false)
+
+  useEffect(() => {
+    if (settings.otherFees) {
+      setOtherFees(settings.otherFees)
+    }
+  }, [settings.otherFees])
 
   const handleOtherFeeChange = (id: string, field: keyof OtherFee, value: any) => {
     setOtherFees(fees => fees.map(fee => 
       fee.id === id ? { ...fee, [field]: value } : fee
     ))
+    setIsDirty(true)
   }
+
+  const handleSave = async () => {
+    try {
+      await updateSettings('otherFees', otherFees)
+      setIsDirty(false)
+      toast.success(t("settings.fees.saveSuccess") || "Đã lưu cấu hình phí")
+    } catch (error) {
+      toast.error(t("settings.fees.saveError") || "Lỗi khi lưu cấu hình")
+    }
+  }
+
+  const handleCancel = () => {
+    setOtherFees(settings.otherFees || initialOtherFees)
+    setIsDirty(false)
+  }
+
+  if (loading) return <div className="p-8 text-center">Đang tải...</div>
 
   return (
     <div className="space-y-8">
       {/* Other Fees Section */}
       <div className="rounded-xl border bg-card text-card-foreground shadow">
-        <div className="p-6 border-b">
-          <h3 className="text-lg font-semibold">{t("settings.fees.otherFees")}</h3>
-          <p className="text-sm text-muted-foreground">{t("settings.fees.otherFeesDesc")}</p>
+        <div className="p-6 border-b flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">{t("settings.fees.otherFees")}</h3>
+            <p className="text-sm text-muted-foreground">{t("settings.fees.otherFeesDesc")}</p>
+          </div>
+          {isDirty && (
+            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-4">
+              <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full border border-amber-100">
+                {t("settings.general.unsavedChanges")}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleCancel}>
+                <RotateCcw className="h-4 w-4 mr-1" />
+                {t("common.cancel")}
+              </Button>
+              <Button size="sm" onClick={handleSave}>
+                <Save className="h-4 w-4 mr-1" />
+                {t("settings.general.save")}
+              </Button>
+            </div>
+          )}
         </div>
         <div className="p-6">
           <div className="grid gap-6">
@@ -96,9 +141,6 @@ export function FeesConfig() {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="mt-6 flex justify-end">
-            <Button>{t("settings.fees.saveChanges")}</Button>
           </div>
         </div>
       </div>
