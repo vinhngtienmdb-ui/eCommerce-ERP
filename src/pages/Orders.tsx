@@ -18,7 +18,6 @@ import {
   Package, 
   Truck, 
   RotateCcw, 
-  Settings, 
   Eye, 
   Printer, 
   RefreshCw,
@@ -45,6 +44,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/ta
 import { FulfillmentTab } from "@/src/components/orders/FulfillmentTab"
 import { RMATab } from "@/src/components/orders/RMATab"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { toast } from "sonner"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -183,11 +183,11 @@ export function Orders() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
             <Download className="mr-2 h-4 w-4" />
             {t("common.export")}
           </Button>
@@ -277,7 +277,7 @@ export function Orders() {
             </div>
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader>
+                <TableHeader className="bg-muted/50">
                   <TableRow>
                     <TableHead className="w-[100px]">{t("orders.id")}</TableHead>
                     <TableHead>{t("orders.product")}</TableHead>
@@ -320,7 +320,7 @@ export function Orders() {
                       <TableCell>{order.shopName}</TableCell>
                       <TableCell>{order.customer}</TableCell>
                       <TableCell className="whitespace-nowrap">{order.date}</TableCell>
-                      <TableCell className="text-right font-semibold text-emerald-600">
+                      <TableCell className="text-right font-semibold text-primary">
                         {formatVND(order.total)}
                       </TableCell>
                       <TableCell>
@@ -346,12 +346,12 @@ export function Orders() {
                                 {t("orders.trackOrder")}
                               </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toast.info(t("common.featureComingSoon"))}>
                               <RefreshCw className="mr-2 h-4 w-4" />
                               {t("orders.updateStatus")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive">
+                            <DropdownMenuItem className="text-destructive" onClick={() => toast.info(t("common.featureComingSoon"))}>
                               {t("orders.cancelOrder")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -441,8 +441,8 @@ export function Orders() {
                 <h4 className="font-semibold text-sm uppercase text-muted-foreground tracking-wider">
                   {t("orders.total")}
                 </h4>
-                <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-                  <p className="text-2xl font-bold text-emerald-700">
+                <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <p className="text-2xl font-bold text-primary">
                     {selectedOrder && formatVND(selectedOrder.total)}
                   </p>
                 </div>
@@ -480,7 +480,7 @@ export function Orders() {
               </div>
               <div className="text-right">
                 <p className="text-sm font-medium text-muted-foreground">{t("orders.tracking.status")}</p>
-                <Badge variant="default" className="bg-blue-600">
+                <Badge variant="default" className="bg-primary">
                   {selectedOrder?.status === "delivered" ? t("orders.tracking.delivered") : t("orders.tracking.inTransit")}
                 </Badge>
               </div>

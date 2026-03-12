@@ -7,6 +7,7 @@ import {
   History, Database, Lock, ChevronRight
 } from "lucide-react"
 
+import { UserManagement } from "./UserManagement"
 import { GeneralSettings } from "@/src/components/settings/GeneralSettings"
 import { CategoryConfig } from "@/src/components/settings/CategoryConfig"
 import { FeesConfig } from "@/src/components/settings/FeesConfig"
@@ -75,6 +76,7 @@ export function Settings() {
       id: "security",
       title: t("settings.groups.security"),
       items: [
+        { id: "users", label: t("nav.users"), icon: User },
         { id: "roles", label: t("settings.tabs.roles"), icon: Users, adminOnly: true },
         { id: "security", label: t("settings.tabs.security"), icon: Shield },
         { id: "audit", label: t("settings.tabs.audit"), icon: History, adminOnly: true },
@@ -139,6 +141,7 @@ export function Settings() {
         <main className="flex-1 min-w-0">
           <div className="bg-card rounded-xl border shadow-sm p-6 min-h-[600px]">
             {activeTab === "general" && <GeneralSettings />}
+            {activeTab === "users" && <UserManagement />}
             {activeTab === "categories" && <CategoryConfig />}
             {activeTab === "fees" && (
               <div className="space-y-8">

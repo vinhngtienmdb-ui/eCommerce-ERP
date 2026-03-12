@@ -12,6 +12,7 @@ import { Input } from "@/src/components/ui/input";
 import { customersData } from "@/src/data/customers";
 import { initialEmployees, Employee } from "@/src/data/employees";
 import { initialTiers, Tier } from "@/src/data/tiers";
+import { toast } from "sonner";
 
 const performanceData = [
   { name: "Dir A", sales: 4000, teamSales: 2400 },
@@ -47,6 +48,7 @@ export function Sales() {
       setIsAddEmployeeOpen(false);
       setSelectedCustomerId("");
       setSelectedRole("");
+      toast.success(t("common.success"));
     }
   };
 
@@ -61,6 +63,7 @@ export function Sales() {
       setIsAddTierOpen(false);
       setNewTierName("");
       setNewTierCommission("");
+      toast.success(t("common.success"));
     }
   };
 
@@ -71,6 +74,7 @@ export function Sales() {
       setEditingTier(null);
       setNewTierName("");
       setNewTierCommission("");
+      toast.success(t("common.success"));
     }
   };
 
@@ -83,6 +87,7 @@ export function Sales() {
 
   const handleDeleteTier = (id: string) => {
     setTiers(tiers.filter(t => t.id !== id));
+    toast.success(t("common.deleted"));
   };
 
   return (

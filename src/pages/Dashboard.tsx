@@ -32,6 +32,7 @@ import {
 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -172,8 +173,8 @@ export function Dashboard() {
             >
               <CardContent className="p-6">
                 <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-400 cursor-pointer" />
-                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-blue-400 cursor-pointer" />
+                  <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info("Added to favorites"); }} />
+                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-blue-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info("Help clicked"); }} />
                 </div>
                 <div className="flex items-start gap-4">
                   <div className={`p-3 rounded-xl ${item.bg}`}>

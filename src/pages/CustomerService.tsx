@@ -5,25 +5,23 @@ import {
   PhoneCall, 
   Ticket, 
   Users, 
-  Search, 
   MoreHorizontal, 
   Send, 
   Phone, 
   User, 
   Clock, 
-  CheckCircle2, 
-  AlertCircle,
   MessageCircle,
   Facebook,
   Globe,
   Smartphone,
   Plus,
-  Settings
+  Settings,
+  ChevronRight,
+  LayoutDashboard
 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Badge } from "@/src/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { ScrollArea } from "@/src/components/ui/scroll-area"
@@ -53,6 +51,8 @@ import {
   SelectValue,
 } from "@/src/components/ui/select"
 import { Label } from "@/src/components/ui/label"
+import { cn } from "@/src/lib/utils"
+import { toast } from "sonner"
 
 export function CustomerService() {
   const { t } = useTranslation()
@@ -86,6 +86,7 @@ export function CustomerService() {
     setNewTeamName("")
     setNewTeamDesc("")
     setNewTeamRouting("all")
+    toast.success(t("customerService.teams.createdSuccess"))
   }
 
   const simulateIncomingCall = () => {
@@ -95,11 +96,19 @@ export function CustomerService() {
   const acceptCall = () => {
     setIsIncomingCall(false)
     setActiveCall(true)
+    toast.success(t("customerService.hotline.callAccepted"))
   }
 
+  const navItems = [
+    { id: "chat", label: t("customerService.tabs.chat"), icon: MessageSquare },
+    { id: "hotline", label: t("customerService.tabs.hotline"), icon: PhoneCall },
+    { id: "tickets", label: t("customerService.tabs.tickets"), icon: Ticket },
+    { id: "teams", label: t("customerService.tabs.teams"), icon: Users },
+  ]
+
   return (
-    <div className="space-y-6 h-[calc(100vh-100px)] flex flex-col">
-      <div className="flex items-center justify-between shrink-0">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{t("customerService.title")}</h2>
           <p className="text-muted-foreground">
@@ -114,315 +123,315 @@ export function CustomerService() {
         </div>
       </div>
 
-      <Tabs defaultValue="chat" className="flex-1 flex flex-col" onValueChange={setActiveTab}>
-        <TabsList className="w-full justify-start border-b rounded-none bg-transparent p-0 shrink-0">
-          <TabsTrigger 
-            value="chat" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6"
-          >
-            <MessageSquare className="mr-2 h-4 w-4" />
-            {t("customerService.tabs.chat")}
-          </TabsTrigger>
-          <TabsTrigger 
-            value="hotline" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6"
-          >
-            <PhoneCall className="mr-2 h-4 w-4" />
-            {t("customerService.tabs.hotline")}
-          </TabsTrigger>
-          <TabsTrigger 
-            value="tickets" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6"
-          >
-            <Ticket className="mr-2 h-4 w-4" />
-            {t("customerService.tabs.tickets")}
-          </TabsTrigger>
-          <TabsTrigger 
-            value="teams" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6"
-          >
-            <Users className="mr-2 h-4 w-4" />
-            {t("customerService.tabs.teams")}
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="chat" className="flex-1 flex gap-4 mt-4 data-[state=inactive]:hidden">
-          {/* Channel List */}
-          <Card className="w-64 flex flex-col shrink-0">
-            <CardHeader className="p-4 border-b">
-              <CardTitle className="text-sm font-medium">{t("customerService.chat.channels")}</CardTitle>
-            </CardHeader>
-            <ScrollArea className="flex-1">
-              <div className="p-2 space-y-2">
-                <Button variant="ghost" className="w-full justify-start gap-2 bg-accent">
-                  <MessageCircle className="h-4 w-4 text-blue-500" />
-                  <div className="flex flex-col items-start text-sm">
-                    <span className="font-medium">Zalo OA</span>
-                    <span className="text-xs text-muted-foreground">5 active</span>
-                  </div>
-                </Button>
-                <Button variant="ghost" className="w-full justify-start gap-2">
-                  <Facebook className="h-4 w-4 text-blue-600" />
-                  <div className="flex flex-col items-start text-sm">
-                    <span className="font-medium">Messenger</span>
-                    <span className="text-xs text-muted-foreground">3 active</span>
-                  </div>
-                </Button>
-                <Button variant="ghost" className="w-full justify-start gap-2">
-                  <Globe className="h-4 w-4 text-emerald-500" />
-                  <div className="flex flex-col items-start text-sm">
-                    <span className="font-medium">Live Chat</span>
-                    <span className="text-xs text-muted-foreground">2 active</span>
-                  </div>
-                </Button>
-                <Button variant="ghost" className="w-full justify-start gap-2">
-                  <Smartphone className="h-4 w-4 text-green-500" />
-                  <div className="flex flex-col items-start text-sm">
-                    <span className="font-medium">WhatsApp</span>
-                    <span className="text-xs text-muted-foreground">0 active</span>
-                  </div>
-                </Button>
-              </div>
-            </ScrollArea>
-          </Card>
-
-          {/* Chat Area */}
-          <Card className="flex-1 flex flex-col">
-            <CardHeader className="p-4 border-b flex flex-row items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div>
-                  <CardTitle className="text-base">Nguyễn Văn A</CardTitle>
-                  <CardDescription className="text-xs flex items-center gap-1">
-                    <span className="h-2 w-2 rounded-full bg-green-500" />
-                    Online via Zalo
-                  </CardDescription>
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Sidebar Navigation */}
+        <aside className="w-full md:w-64 space-y-6">
+          <nav className="space-y-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={cn(
+                  "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                  activeTab === item.id
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
                 </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Ticket className="h-4 w-4 mr-2" />
-                  Create Ticket
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-lg p-3 max-w-[80%]">
-                    <p className="text-sm">Chào shop, cho mình hỏi đơn hàng ORD-7352 bao giờ giao ạ?</p>
-                    <span className="text-[10px] text-muted-foreground mt-1 block">10:30 AM</span>
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <div className="bg-primary text-primary-foreground rounded-lg p-3 max-w-[80%]">
-                    <p className="text-sm">Dạ chào anh A, để em kiểm tra giúp anh nhé.</p>
-                    <span className="text-[10px] text-primary-foreground/70 mt-1 block">10:31 AM</span>
-                  </div>
-                </div>
-              </div>
-            </ScrollArea>
-            <div className="p-4 border-t flex gap-2">
-              <Input placeholder="Type a message..." />
-              <Button size="icon">
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
-          </Card>
+                {activeTab === item.id && <ChevronRight className="h-4 w-4" />}
+              </button>
+            ))}
+          </nav>
+        </aside>
 
-          {/* Customer Context Panel */}
-          <Card className="w-80 flex flex-col shrink-0">
-            <CardHeader className="p-4 border-b">
-              <CardTitle className="text-sm font-medium">{t("customerService.chat.customerInfo")}</CardTitle>
-            </CardHeader>
-            <ScrollArea className="flex-1">
-              <div className="p-4 space-y-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">Nguyễn Văn A</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span>0901234567</span>
-                  </div>
-                  <Badge variant="outline" className="mt-2">VIP Customer</Badge>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    {t("customerService.chat.recentOrders")}
-                  </h4>
-                  <div className="space-y-3">
-                    <div className="border rounded-md p-3 text-sm">
-                      <div className="flex justify-between mb-1">
-                        <span className="font-medium">ORD-7352</span>
-                        <Badge variant="secondary" className="text-[10px]">Shipping</Badge>
-                      </div>
-                      <p className="text-muted-foreground text-xs">iPhone 15 Pro Max</p>
-                      <p className="text-xs mt-1">Total: 34,990,000đ</p>
-                    </div>
-                    <div className="border rounded-md p-3 text-sm">
-                      <div className="flex justify-between mb-1">
-                        <span className="font-medium">ORD-7200</span>
-                        <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">Delivered</Badge>
-                      </div>
-                      <p className="text-muted-foreground text-xs">AirPods Pro 2</p>
-                      <p className="text-xs mt-1">Total: 5,990,000đ</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ScrollArea>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="hotline" className="flex-1 mt-4 data-[state=inactive]:hidden">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>{t("customerService.hotline.callHistory")}</CardTitle>
-              <CardDescription>Manage incoming and outgoing calls.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Caller</TableHead>
-                    <TableHead>Duration</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Agent</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">0901234567 (Nguyễn Văn A)</TableCell>
-                    <TableCell>05:23</TableCell>
-                    <TableCell><Badge variant="outline" className="bg-green-50 text-green-700">Completed</Badge></TableCell>
-                    <TableCell>10:30 AM</TableCell>
-                    <TableCell>Staff 1</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">0912345678 (Trần Thị B)</TableCell>
-                    <TableCell>00:00</TableCell>
-                    <TableCell><Badge variant="destructive">Missed</Badge></TableCell>
-                    <TableCell>09:15 AM</TableCell>
-                    <TableCell>-</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="tickets" className="flex-1 mt-4 data-[state=inactive]:hidden">
-          <Card className="h-full">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>{t("customerService.tabs.tickets")}</CardTitle>
-                <CardDescription>Manage support tickets and complaints.</CardDescription>
-              </div>
-              <Button>
-                <Ticket className="mr-2 h-4 w-4" />
-                {t("customerService.tickets.create")}
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Assignee</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">TKT-1001</TableCell>
-                    <TableCell>Wrong item delivered</TableCell>
-                    <TableCell>Nguyễn Văn A</TableCell>
-                    <TableCell><Badge variant="destructive">High</Badge></TableCell>
-                    <TableCell><Badge variant="secondary">In Progress</Badge></TableCell>
-                    <TableCell>Staff 1</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">TKT-1002</TableCell>
-                    <TableCell>Refund request</TableCell>
-                    <TableCell>Trần Thị B</TableCell>
-                    <TableCell><Badge variant="outline">Medium</Badge></TableCell>
-                    <TableCell><Badge variant="outline">Open</Badge></TableCell>
-                    <TableCell>-</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="teams" className="flex-1 mt-4 data-[state=inactive]:hidden">
-          <Card className="h-full">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>{t("customerService.teams.createGroup")}</CardTitle>
-                <CardDescription>Manage support teams and routing rules.</CardDescription>
-              </div>
-              <Button onClick={() => setIsCreateTeamOpen(true)}>
-                <Plus className="mr-2 h-4 w-4" />
-                {t("customerService.teams.createGroup")}
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t("customerService.teams.groupName")}</TableHead>
-                    <TableHead>{t("customerService.teams.description")}</TableHead>
-                    <TableHead>{t("customerService.teams.members")}</TableHead>
-                    <TableHead>{t("customerService.teams.routing")}</TableHead>
-                    <TableHead className="text-right">{t("common.actions")}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {teams.map((team) => (
-                    <TableRow key={team.id}>
-                      <TableCell className="font-medium">{team.name}</TableCell>
-                      <TableCell>{team.desc}</TableCell>
-                      <TableCell>
-                        <div className="flex -space-x-2">
-                          <Avatar className="h-8 w-8 border-2 border-background">
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>S1</AvatarFallback>
-                          </Avatar>
-                          {team.members > 1 && (
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted text-xs font-medium">
-                              +{team.members - 1}
-                            </div>
-                          )}
+        {/* Content Area */}
+        <main className="flex-1 min-w-0">
+          <div className="bg-card rounded-xl border shadow-sm p-6 min-h-[600px]">
+            {activeTab === "chat" && (
+              <div className="flex gap-4 h-[600px]">
+                {/* Channel List */}
+                <Card className="w-64 flex flex-col shrink-0">
+                  <CardHeader className="p-4 border-b">
+                    <CardTitle className="text-sm font-medium">{t("customerService.chat.channels")}</CardTitle>
+                  </CardHeader>
+                  <ScrollArea className="flex-1">
+                    <div className="p-2 space-y-2">
+                      <Button variant="ghost" className="w-full justify-start gap-2 bg-accent">
+                        <MessageCircle className="h-4 w-4 text-blue-500" />
+                        <div className="flex flex-col items-start text-sm">
+                          <span className="font-medium">Zalo OA</span>
+                          <span className="text-xs text-muted-foreground">5 active</span>
                         </div>
-                      </TableCell>
-                      <TableCell><Badge variant="outline">{t(`customerService.teams.routingRules.${team.routingLabel}`)}</Badge></TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="icon"><Settings className="h-4 w-4" /></Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <Facebook className="h-4 w-4 text-blue-600" />
+                        <div className="flex flex-col items-start text-sm">
+                          <span className="font-medium">Messenger</span>
+                          <span className="text-xs text-muted-foreground">3 active</span>
+                        </div>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <Globe className="h-4 w-4 text-emerald-500" />
+                        <div className="flex flex-col items-start text-sm">
+                          <span className="font-medium">Live Chat</span>
+                          <span className="text-xs text-muted-foreground">2 active</span>
+                        </div>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <Smartphone className="h-4 w-4 text-green-500" />
+                        <div className="flex flex-col items-start text-sm">
+                          <span className="font-medium">WhatsApp</span>
+                          <span className="text-xs text-muted-foreground">0 active</span>
+                        </div>
+                      </Button>
+                    </div>
+                  </ScrollArea>
+                </Card>
+
+                {/* Chat Area */}
+                <Card className="flex-1 flex flex-col">
+                  <CardHeader className="p-4 border-b flex flex-row items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <CardTitle className="text-base">Nguyễn Văn A</CardTitle>
+                        <CardDescription className="text-xs flex items-center gap-1">
+                          <span className="h-2 w-2 rounded-full bg-green-500" />
+                          Online via Zalo
+                        </CardDescription>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                        <Ticket className="h-4 w-4 mr-2" />
+                        Create Ticket
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <ScrollArea className="flex-1 p-4">
+                    <div className="space-y-4">
+                      <div className="flex justify-start">
+                        <div className="bg-muted rounded-lg p-3 max-w-[80%]">
+                          <p className="text-sm">Chào shop, cho mình hỏi đơn hàng ORD-7352 bao giờ giao ạ?</p>
+                          <span className="text-[10px] text-muted-foreground mt-1 block">10:30 AM</span>
+                        </div>
+                      </div>
+                      <div className="flex justify-end">
+                        <div className="bg-primary text-primary-foreground rounded-lg p-3 max-w-[80%]">
+                          <p className="text-sm">Dạ chào anh A, để em kiểm tra giúp anh nhé.</p>
+                          <span className="text-[10px] text-primary-foreground/70 mt-1 block">10:31 AM</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                  <div className="p-4 border-t flex gap-2">
+                    <Input placeholder="Type a message..." />
+                    <Button size="icon" onClick={() => toast.success(t("customerService.chat.messageSent"))}>
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </Card>
+
+                {/* Customer Context Panel */}
+                <Card className="w-80 flex flex-col shrink-0">
+                  <CardHeader className="p-4 border-b">
+                    <CardTitle className="text-sm font-medium">{t("customerService.chat.customerInfo")}</CardTitle>
+                  </CardHeader>
+                  <ScrollArea className="flex-1">
+                    <div className="p-4 space-y-6">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <User className="h-4 w-4 text-muted-foreground" />
+                          <span className="font-medium">Nguyễn Văn A</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Phone className="h-4 w-4 text-muted-foreground" />
+                          <span>0901234567</span>
+                        </div>
+                        <Badge variant="outline" className="mt-2">VIP Customer</Badge>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-medium flex items-center gap-2">
+                          <Clock className="h-4 w-4" />
+                          {t("customerService.chat.recentOrders")}
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="border rounded-md p-3 text-sm">
+                            <div className="flex justify-between mb-1">
+                              <span className="font-medium">ORD-7352</span>
+                              <Badge variant="secondary" className="text-[10px]">Shipping</Badge>
+                            </div>
+                            <p className="text-muted-foreground text-xs">iPhone 15 Pro Max</p>
+                            <p className="text-xs mt-1">Total: 34,990,000đ</p>
+                          </div>
+                          <div className="border rounded-md p-3 text-sm">
+                            <div className="flex justify-between mb-1">
+                              <span className="font-medium">ORD-7200</span>
+                              <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">Delivered</Badge>
+                            </div>
+                            <p className="text-muted-foreground text-xs">AirPods Pro 2</p>
+                            <p className="text-xs mt-1">Total: 5,990,000đ</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === "hotline" && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("customerService.hotline.callHistory")}</CardTitle>
+                  <CardDescription>Manage incoming and outgoing calls.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Caller</TableHead>
+                        <TableHead>Duration</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Time</TableHead>
+                        <TableHead>Agent</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell className="font-medium">0901234567 (Nguyễn Văn A)</TableCell>
+                        <TableCell>05:23</TableCell>
+                        <TableCell><Badge variant="outline" className="bg-green-50 text-green-700">Completed</Badge></TableCell>
+                        <TableCell>10:30 AM</TableCell>
+                        <TableCell>Staff 1</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">0912345678 (Trần Thị B)</TableCell>
+                        <TableCell>00:00</TableCell>
+                        <TableCell><Badge variant="destructive">Missed</Badge></TableCell>
+                        <TableCell>09:15 AM</TableCell>
+                        <TableCell>-</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            )}
+
+            {activeTab === "tickets" && (
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>{t("customerService.tabs.tickets")}</CardTitle>
+                    <CardDescription>Manage support tickets and complaints.</CardDescription>
+                  </div>
+                  <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
+                    <Ticket className="mr-2 h-4 w-4" />
+                    {t("customerService.tickets.create")}
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>Customer</TableHead>
+                        <TableHead>Priority</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Assignee</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell className="font-medium">TKT-1001</TableCell>
+                        <TableCell>Wrong item delivered</TableCell>
+                        <TableCell>Nguyễn Văn A</TableCell>
+                        <TableCell><Badge variant="destructive">High</Badge></TableCell>
+                        <TableCell><Badge variant="secondary">In Progress</Badge></TableCell>
+                        <TableCell>Staff 1</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">TKT-1002</TableCell>
+                        <TableCell>Refund request</TableCell>
+                        <TableCell>Trần Thị B</TableCell>
+                        <TableCell><Badge variant="outline">Medium</Badge></TableCell>
+                        <TableCell><Badge variant="outline">Open</Badge></TableCell>
+                        <TableCell>-</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "teams" && (
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>{t("customerService.teams.createGroup")}</CardTitle>
+                    <CardDescription>Manage support teams and routing rules.</CardDescription>
+                  </div>
+                  <Button onClick={() => setIsCreateTeamOpen(true)}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    {t("customerService.teams.createGroup")}
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{t("customerService.teams.groupName")}</TableHead>
+                        <TableHead>{t("customerService.teams.description")}</TableHead>
+                        <TableHead>{t("customerService.teams.members")}</TableHead>
+                        <TableHead>{t("customerService.teams.routing")}</TableHead>
+                        <TableHead className="text-right">{t("common.actions")}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {teams.map((team) => (
+                        <TableRow key={team.id}>
+                          <TableCell className="font-medium">{team.name}</TableCell>
+                          <TableCell>{team.desc}</TableCell>
+                          <TableCell>
+                            <div className="flex -space-x-2">
+                              <Avatar className="h-8 w-8 border-2 border-background">
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback>S1</AvatarFallback>
+                              </Avatar>
+                              {team.members > 1 && (
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted text-xs font-medium">
+                                  +{team.members - 1}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell><Badge variant="outline">{t(`customerService.teams.routingRules.${team.routingLabel}`)}</Badge></TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}><Settings className="h-4 w-4" /></Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </main>
+      </div>
 
       {/* Create Team Modal */}
       <Dialog open={isCreateTeamOpen} onOpenChange={setIsCreateTeamOpen}>
@@ -606,7 +615,7 @@ export function CustomerService() {
           </div>
 
           <DialogFooter>
-            <Button variant="destructive" onClick={() => setActiveCall(false)}>
+            <Button variant="destructive" onClick={() => { setActiveCall(false); toast.info(t("customerService.hotline.callEnded")); }}>
               End Call
             </Button>
           </DialogFooter>

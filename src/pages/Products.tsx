@@ -13,7 +13,6 @@ import { Badge } from "@/src/components/ui/badge"
 import { 
   Plus, 
   Search, 
-  Settings, 
   Wrench, 
   ChevronDown, 
   ArrowUpDown, 
@@ -28,6 +27,7 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { toast } from "sonner"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -70,16 +70,17 @@ export function Products() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">{t("products.title")}</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{t("products.title")}</h2>
+          <p className="text-muted-foreground">{t("products.description")}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="text-muted-foreground">
+          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
             {t("products.productSettings")} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
-          <Button variant="outline" className="text-muted-foreground">
+          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
             {t("products.batchTools")} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
-          <Button asChild className="bg-[#ee4d2d] hover:bg-[#d73211] text-white">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link to="/products/add">
               <Plus className="mr-2 h-4 w-4" />
               {t("products.addProduct")}
@@ -139,49 +140,21 @@ export function Products() {
         </Card>
       </div>
 
-      <div className="flex space-x-6 border-b overflow-x-auto">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "pb-3 text-sm font-medium transition-colors relative whitespace-nowrap",
-              activeTab === tab.id
-                ? "text-[#ee4d2d] border-b-2 border-[#ee4d2d]"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {tab.label} {tab.count !== undefined && `(${tab.count})`}
-          </button>
-        ))}
-      </div>
-
-      <div className="bg-[#e8f8f5] border border-[#b2dfdb] rounded-md p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-[#009688]">
-          <span className="text-xl">✨</span>
-          <span className="text-sm font-medium">{t("products.promo.text")}</span>
-        </div>
-        <Button variant="default" className="bg-[#009688] hover:bg-[#00796b] text-white h-8 text-xs">
-          {t("products.promo.details")}
-        </Button>
-      </div>
-
       <div className="rounded-xl border bg-card text-card-foreground shadow">
         <div className="border-b px-4">
           <div className="flex space-x-6 overflow-x-auto">
-            {subTabs.map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveSubTab(tab.id)}
+                onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "py-3 text-sm font-medium transition-colors relative flex items-center gap-1 whitespace-nowrap",
-                  activeSubTab === tab.id
-                    ? "text-[#ee4d2d] border-b-2 border-[#ee4d2d]"
+                  "py-4 text-sm font-medium transition-colors relative whitespace-nowrap",
+                  activeTab === tab.id
+                    ? "text-primary border-b-2 border-primary"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {tab.label} {tab.count !== undefined && `(${tab.count})`}
-                {tab.hasDot && <span className="w-2 h-2 rounded-full bg-[#ee4d2d] inline-block ml-1"></span>}
               </button>
             ))}
           </div>
@@ -213,37 +186,11 @@ export function Products() {
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="text-[#ee4d2d] border-[#ee4d2d] hover:bg-[#fff0ed]">
+              <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
                 {t("products.filters.apply")}
               </Button>
-              <Button variant="ghost">
+              <Button variant="ghost" onClick={() => setSearchTerm("")}>
                 {t("products.filters.reset")}
-              </Button>
-              <Button variant="ghost" className="text-muted-foreground">
-                {t("products.filters.expand")} <ChevronDown className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between pt-2">
-            <div className="text-sm font-medium">
-              {filteredProducts.length} {t("products.list.products")} <Badge variant="secondary" className="ml-2 font-normal text-xs">{t("products.list.potential")}</Badge>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="h-8 text-xs">
-                <ArrowUpDown className="mr-2 h-3 w-3" />
-                {t("products.list.sortBySuggestion")}
-              </Button>
-              <div className="flex items-center border rounded-md">
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none rounded-l-md">
-                  <List className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none rounded-r-md bg-muted">
-                  <LayoutGrid className="h-4 w-4" />
-                </Button>
-              </div>
-              <Button variant="outline" size="sm" className="h-8 text-xs text-[#ee4d2d] border-[#ee4d2d]">
-                {t("products.list.aiTool")}
               </Button>
             </div>
           </div>
@@ -273,7 +220,7 @@ export function Products() {
                     <span className="text-xs text-muted-foreground">SKU: {product.id}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-right font-medium text-[#ee4d2d]">
+                <TableCell className="text-right font-medium text-primary">
                   {formatVND(product.price)}
                 </TableCell>
                 <TableCell className="text-right">{product.stock}</TableCell>
@@ -284,7 +231,7 @@ export function Products() {
                 </TableCell>
                 <TableCell className="text-right">{product.rating} / 5.0</TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="sm" className="text-[#ee4d2d]">
+                  <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
                     {t("common.edit")}
                   </Button>
                 </TableCell>

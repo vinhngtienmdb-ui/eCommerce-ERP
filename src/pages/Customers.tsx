@@ -38,7 +38,6 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-
 import {
   Dialog,
   DialogContent,
@@ -47,18 +46,13 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/src/components/ui/dialog"
+import { toast } from "sonner"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
 import { customersData } from "@/src/data/customers"
-
-const callLogs = [
-  { id: "CALL-001", caller: "Nguyễn Văn A", phone: "0901234567", duration: "05:20", time: "2026-03-03 14:20", agent: "Nguyễn Thu Thảo", status: "completed" },
-  { id: "CALL-002", caller: "Khách lạ", phone: "0988777666", duration: "00:00", time: "2026-03-03 13:45", agent: "N/A", status: "missed" },
-  { id: "CALL-003", caller: "Lê Văn C", phone: "0923456789", duration: "12:15", time: "2026-03-03 10:30", agent: "Trần Minh Tâm", status: "completed" },
-]
 
 export function Customers() {
   const { t } = useTranslation()
@@ -81,7 +75,7 @@ export function Customers() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button>
+          <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
             <UserPlus className="mr-2 h-4 w-4" />
             {t("customers.crm.title")}
           </Button>
@@ -165,7 +159,7 @@ export function Customers() {
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
                     <Filter className="h-4 w-4" />
                   </Button>
                 </div>
@@ -221,7 +215,7 @@ export function Customers() {
                               <History className="mr-2 h-4 w-4" />
                               {t("customers.crm.purchaseHistory")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toast.info(t("common.featureComingSoon"))}>
                               <Users className="mr-2 h-4 w-4" />
                               {t("customers.crm.details")}
                             </DropdownMenuItem>

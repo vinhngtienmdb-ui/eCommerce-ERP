@@ -39,6 +39,7 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
+import { toast } from "sonner"
 
 export function Marketing() {
   const { t } = useTranslation()
@@ -261,7 +262,7 @@ export function Marketing() {
                     <CardDescription>{t("marketing.promotions.flashSaleDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700">{t("marketing.promotions.createFlashSale")}</Button>
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.promotions.createFlashSale")}</Button>
                   </CardContent>
                 </Card>
                 <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-200">
@@ -272,7 +273,7 @@ export function Marketing() {
                     <CardDescription>{t("marketing.promotions.voucherCenterDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">{t("marketing.promotions.createVoucher")}</Button>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.promotions.createVoucher")}</Button>
                   </CardContent>
                 </Card>
                 <Card className="bg-gradient-to-br from-green-50 to-white border-green-200">
@@ -283,7 +284,7 @@ export function Marketing() {
                     <CardDescription>{t("marketing.promotions.groupBuyDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-green-600 hover:bg-green-700">{t("marketing.promotions.createGroupBuy")}</Button>
+                    <Button className="w-full bg-green-600 hover:bg-green-700" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.promotions.createGroupBuy")}</Button>
                   </CardContent>
                 </Card>
               </div>
@@ -319,7 +320,7 @@ export function Marketing() {
                             <Badge>{promo.status}</Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">Edit</Button>
+                            <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>Edit</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -354,7 +355,7 @@ export function Marketing() {
                   <label className="text-sm font-medium">{t("marketing.social.schedule")}</label>
                   <Input type="datetime-local" />
                 </div>
-                <Button className="w-full">{t("marketing.social.createPost")}</Button>
+                <Button className="w-full" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.social.createPost")}</Button>
               </CardContent>
             </Card>
 
@@ -499,7 +500,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.email.title")}</h3>
-              <Button><Plus className="mr-2 h-4 w-4" /> {t("marketing.email.create")}</Button>
+              <Button onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.email.create")}</Button>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
@@ -640,7 +641,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.content.title")}</h3>
-              <Button><Plus className="mr-2 h-4 w-4" /> {t("marketing.content.newArticle")}</Button>
+              <Button onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.content.newArticle")}</Button>
             </div>
             <Card>
               <CardContent className="p-0">
@@ -688,7 +689,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.assets.title")}</h3>
-              <Button variant="outline"><Plus className="mr-2 h-4 w-4" /> {t("marketing.assets.upload")}</Button>
+              <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.assets.upload")}</Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
@@ -713,7 +714,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.leads.title")}</h3>
-              <Button><Plus className="mr-2 h-4 w-4" /> {t("marketing.leads.create")}</Button>
+              <Button onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.leads.create")}</Button>
             </div>
             <Card>
               <CardHeader>
