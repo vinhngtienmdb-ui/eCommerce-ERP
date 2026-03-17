@@ -41,6 +41,7 @@ export function AddProduct() {
 
   const [images, setImages] = useState<string[]>([])
   const [coverImage, setCoverImage] = useState<string | null>(null)
+  const [video, setVideo] = useState<string | null>(null)
   
   // Sales
   const [variants, setVariants] = useState<{name: string, options: string[]}[]>([])
