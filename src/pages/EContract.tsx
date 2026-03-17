@@ -30,17 +30,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { toast } from "sonner"
 
+import { useDataStore } from "@/src/store/useDataStore"
+
 const EContract = () => {
   const { t } = useTranslation()
+  const { eContracts: contracts } = useDataStore()
   const [isSigning, setIsSigning] = useState(false)
   const [selectedContract, setSelectedContract] = useState<any>(null)
-
-  const contracts = [
-    { id: "CTR-2026-001", title: "Employment Agreement - John Doe", type: "HR", party: "John Doe", status: "pending_me", date: "2026-03-15", security: "High" },
-    { id: "CTR-2026-002", title: "Supplier Master Agreement", type: "Purchasing", party: "Global Logistics Ltd", status: "signed", date: "2026-03-10", security: "Encrypted" },
-    { id: "CTR-2026-003", title: "Seller Terms & Conditions", type: "Legal", party: "FashionHub Store", status: "waiting_others", date: "2026-03-16", security: "Blockchain Verified" },
-    { id: "CTR-2026-004", title: "Non-Disclosure Agreement", type: "Legal", party: "Tech Partners Inc", status: "expired", date: "2026-01-05", security: "Standard" },
-  ]
 
   const handleSign = () => {
     setIsSigning(true)
