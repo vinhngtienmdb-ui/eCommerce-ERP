@@ -26,6 +26,8 @@ import {
   SelectValue,
 } from "@/src/components/ui/select"
 import { Badge } from "@/src/components/ui/badge"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
 import {
   Plus,
   FileText,
@@ -38,10 +40,105 @@ import {
   Calendar as CalendarIcon,
   Wallet
 } from "lucide-react"
+import { toast } from "sonner"
 
 export function Accounting() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("dashboard")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
+  const [newJournal, setNewJournal] = useState({
+    date: new Date().toISOString().split('T')[0],
+    number: "",
+    description: "",
+    account: "",
+    contraAccount: "",
+    debit: "",
+    credit: ""
+  })
+
+  const [newAccount, setNewAccount] = useState({
+    code: "",
+    name: "",
+    type: "Tài sản",
+    status: "Active"
+  })
+
+  const [accounts, setAccounts] = useState([
+    { code: "111", name: "Tiền mặt", type: "Tài sản", status: "Active" },
+    { code: "112", name: "Tiền gửi ngân hàng", type: "Tài sản", status: "Active" },
+    { code: "131", name: "Phải thu của khách hàng", type: "Tài sản", status: "Active" },
+    { code: "152", name: "Nguyên liệu, vật liệu", type: "Tài sản", status: "Active" },
+    { code: "156", name: "Hàng hóa", type: "Tài sản", status: "Active" },
+    { code: "211", name: "Tài sản cố định hữu hình", type: "Tài sản", status: "Active" },
+    { code: "331", name: "Phải trả cho người bán", type: "Nợ phải trả", status: "Active" },
+    { code: "333", name: "Thuế và các khoản phải nộp Nhà nước", type: "Nợ phải trả", status: "Active" },
+    { code: "411", name: "Vốn đầu tư của chủ sở hữu", type: "Vốn chủ sở hữu", status: "Active" },
+    { code: "511", name: "Doanh thu bán hàng và cung cấp dịch vụ", type: "Doanh thu", status: "Active" },
+    { code: "632", name: "Giá vốn hàng bán", type: "Chi phí", status: "Active" },
+    { code: "642", name: "Chi phí quản lý doanh nghiệp", type: "Chi phí", status: "Active" },
+  ])
+
+  const [journals, setJournals] = useState([
+    { id: "1", date: "2026-03-04", number: "PT-001", description: "Thu tiền bán hàng", account: "111 - Tiền mặt", contraAccount: "511", debit: "50,000,000", credit: "-" },
+    { id: "2", date: "2026-03-04", number: "PT-001", description: "Thu tiền bán hàng", account: "511 - Doanh thu", contraAccount: "111", debit: "-", credit: "50,000,000" },
+    { id: "3", date: "2026-03-04", number: "PC-001", description: "Thanh toán tiền điện", account: "642 - Chi phí QLDN", contraAccount: "111", debit: "2,000,000", credit: "-" },
+    { id: "4", date: "2026-03-04", number: "PC-001", description: "Thanh toán tiền điện", account: "111 - Tiền mặt", contraAccount: "642", debit: "-", credit: "2,000,000" },
+  ])
+
+  const handleCreateAccount = () => {
+    if (!newAccount.code || !newAccount.name) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+    
+    // Check if code already exists
+    if (accounts.some(acc => acc.code === newAccount.code)) {
+      toast.error("Mã tài khoản đã tồn tại")
+      return
+    }
+
+    setAccounts([...accounts, newAccount].sort((a, b) => a.code.localeCompare(b.code)))
+    setIsAccountModalOpen(false)
+    setNewAccount({
+      code: "",
+      name: "",
+      type: "Tài sản",
+      status: "Active"
+    })
+    toast.success("Đã thêm tài khoản mới")
+  }
+
+  const handleCreateJournal = () => {
+    if (!newJournal.number || !newJournal.description || !newJournal.account || !newJournal.contraAccount) {
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc")
+      return
+    }
+
+    const journal = {
+      id: Date.now().toString(),
+      date: newJournal.date,
+      number: newJournal.number,
+      description: newJournal.description,
+      account: newJournal.account,
+      contraAccount: newJournal.contraAccount,
+      debit: newJournal.debit ? parseInt(newJournal.debit).toLocaleString() : "-",
+      credit: newJournal.credit ? parseInt(newJournal.credit).toLocaleString() : "-"
+    }
+
+    setJournals([journal, ...journals])
+    setIsModalOpen(false)
+    setNewJournal({
+      date: new Date().toISOString().split('T')[0],
+      number: "",
+      description: "",
+      account: "",
+      contraAccount: "",
+      debit: "",
+      credit: ""
+    })
+    toast.success("Đã tạo bút toán mới")
+  }
 
   return (
     <div className="space-y-6">
@@ -57,12 +154,101 @@ export function Accounting() {
             <Download className="mr-2 h-4 w-4" />
             {t("common.export")}
           </Button>
-          <Button>
+          <Button onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             {t("finance.journal.create")}
           </Button>
         </div>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Tạo bút toán mới</DialogTitle>
+            <DialogDescription>
+              Nhập thông tin chi tiết cho bút toán sổ nhật ký chung.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="date" className="text-right">Ngày</Label>
+              <Input 
+                id="date" 
+                type="date"
+                value={newJournal.date} 
+                onChange={(e) => setNewJournal({...newJournal, date: e.target.value})}
+                className="col-span-3" 
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="number" className="text-right">Số CT</Label>
+              <Input 
+                id="number" 
+                value={newJournal.number} 
+                onChange={(e) => setNewJournal({...newJournal, number: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: PT-002"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">Diễn giải</Label>
+              <Input 
+                id="description" 
+                value={newJournal.description} 
+                onChange={(e) => setNewJournal({...newJournal, description: e.target.value})}
+                className="col-span-3" 
+                placeholder="Nội dung nghiệp vụ"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="account" className="text-right">Tài khoản</Label>
+              <Input 
+                id="account" 
+                value={newJournal.account} 
+                onChange={(e) => setNewJournal({...newJournal, account: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: 111 - Tiền mặt"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="contraAccount" className="text-right">TK Đối ứng</Label>
+              <Input 
+                id="contraAccount" 
+                value={newJournal.contraAccount} 
+                onChange={(e) => setNewJournal({...newJournal, contraAccount: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: 511"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="debit" className="text-right">Nợ</Label>
+              <Input 
+                id="debit" 
+                type="number"
+                value={newJournal.debit} 
+                onChange={(e) => setNewJournal({...newJournal, debit: e.target.value})}
+                className="col-span-3" 
+                placeholder="Số tiền Nợ"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="credit" className="text-right">Có</Label>
+              <Input 
+                id="credit" 
+                type="number"
+                value={newJournal.credit} 
+                onChange={(e) => setNewJournal({...newJournal, credit: e.target.value})}
+                className="col-span-3" 
+                placeholder="Số tiền Có"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleCreateJournal}>Lưu bút toán</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
@@ -152,7 +338,76 @@ export function Accounting() {
                   <Filter className="mr-2 h-4 w-4" />
                   {t("common.filters")}
                 </Button>
+                <Button onClick={() => setIsAccountModalOpen(true)}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Thêm tài khoản
+                </Button>
               </div>
+
+              <Dialog open={isAccountModalOpen} onOpenChange={setIsAccountModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Thêm tài khoản mới</DialogTitle>
+                    <DialogDescription>
+                      Thêm tài khoản mới vào hệ thống tài khoản kế toán.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="code" className="text-right">Mã TK</Label>
+                      <Input 
+                        id="code" 
+                        value={newAccount.code} 
+                        onChange={(e) => setNewAccount({...newAccount, code: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 111"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">Tên TK</Label>
+                      <Input 
+                        id="name" 
+                        value={newAccount.name} 
+                        onChange={(e) => setNewAccount({...newAccount, name: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: Tiền mặt"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="type" className="text-right">Loại TK</Label>
+                      <Select value={newAccount.type} onValueChange={(val) => setNewAccount({...newAccount, type: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn loại tài khoản" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Tài sản">Tài sản</SelectItem>
+                          <SelectItem value="Nợ phải trả">Nợ phải trả</SelectItem>
+                          <SelectItem value="Vốn chủ sở hữu">Vốn chủ sở hữu</SelectItem>
+                          <SelectItem value="Doanh thu">Doanh thu</SelectItem>
+                          <SelectItem value="Chi phí">Chi phí</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="status" className="text-right">Trạng thái</Label>
+                      <Select value={newAccount.status} onValueChange={(val) => setNewAccount({...newAccount, status: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn trạng thái" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Active">Hoạt động</SelectItem>
+                          <SelectItem value="Inactive">Ngừng hoạt động</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsAccountModalOpen(false)}>Hủy</Button>
+                    <Button onClick={handleCreateAccount}>Thêm tài khoản</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -163,26 +418,15 @@ export function Accounting() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {[
-                    { code: "111", name: "Tiền mặt", type: "Tài sản", status: "Active" },
-                    { code: "112", name: "Tiền gửi ngân hàng", type: "Tài sản", status: "Active" },
-                    { code: "131", name: "Phải thu của khách hàng", type: "Tài sản", status: "Active" },
-                    { code: "152", name: "Nguyên liệu, vật liệu", type: "Tài sản", status: "Active" },
-                    { code: "156", name: "Hàng hóa", type: "Tài sản", status: "Active" },
-                    { code: "211", name: "Tài sản cố định hữu hình", type: "Tài sản", status: "Active" },
-                    { code: "331", name: "Phải trả cho người bán", type: "Nợ phải trả", status: "Active" },
-                    { code: "333", name: "Thuế và các khoản phải nộp Nhà nước", type: "Nợ phải trả", status: "Active" },
-                    { code: "411", name: "Vốn đầu tư của chủ sở hữu", type: "Vốn chủ sở hữu", status: "Active" },
-                    { code: "511", name: "Doanh thu bán hàng và cung cấp dịch vụ", type: "Doanh thu", status: "Active" },
-                    { code: "632", name: "Giá vốn hàng bán", type: "Chi phí", status: "Active" },
-                    { code: "642", name: "Chi phí quản lý doanh nghiệp", type: "Chi phí", status: "Active" },
-                  ].map((account) => (
+                  {accounts.map((account) => (
                     <TableRow key={account.code}>
                       <TableCell className="font-medium">{account.code}</TableCell>
                       <TableCell>{account.name}</TableCell>
                       <TableCell>{account.type}</TableCell>
                       <TableCell>
-                        <Badge variant="secondary">{account.status}</Badge>
+                        <Badge variant={account.status === "Active" ? "secondary" : "outline"}>
+                          {account.status}
+                        </Badge>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -232,42 +476,17 @@ export function Accounting() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>2026-03-04</TableCell>
-                    <TableCell>PT-001</TableCell>
-                    <TableCell>Thu tiền bán hàng</TableCell>
-                    <TableCell>111 - Tiền mặt</TableCell>
-                    <TableCell>511</TableCell>
-                    <TableCell className="text-right">50,000,000</TableCell>
-                    <TableCell className="text-right">-</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>2026-03-04</TableCell>
-                    <TableCell>PT-001</TableCell>
-                    <TableCell>Thu tiền bán hàng</TableCell>
-                    <TableCell>511 - Doanh thu</TableCell>
-                    <TableCell>111</TableCell>
-                    <TableCell className="text-right">-</TableCell>
-                    <TableCell className="text-right">50,000,000</TableCell>
-                  </TableRow>
-                   <TableRow>
-                    <TableCell>2026-03-04</TableCell>
-                    <TableCell>PC-001</TableCell>
-                    <TableCell>Thanh toán tiền điện</TableCell>
-                    <TableCell>642 - Chi phí QLDN</TableCell>
-                    <TableCell>111</TableCell>
-                    <TableCell className="text-right">2,000,000</TableCell>
-                    <TableCell className="text-right">-</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>2026-03-04</TableCell>
-                    <TableCell>PC-001</TableCell>
-                    <TableCell>Thanh toán tiền điện</TableCell>
-                    <TableCell>111 - Tiền mặt</TableCell>
-                    <TableCell>642</TableCell>
-                    <TableCell className="text-right">-</TableCell>
-                    <TableCell className="text-right">2,000,000</TableCell>
-                  </TableRow>
+                  {journals.map((journal) => (
+                    <TableRow key={journal.id}>
+                      <TableCell>{journal.date}</TableCell>
+                      <TableCell>{journal.number}</TableCell>
+                      <TableCell>{journal.description}</TableCell>
+                      <TableCell>{journal.account}</TableCell>
+                      <TableCell>{journal.contraAccount}</TableCell>
+                      <TableCell className="text-right">{journal.debit}</TableCell>
+                      <TableCell className="text-right">{journal.credit}</TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </CardContent>

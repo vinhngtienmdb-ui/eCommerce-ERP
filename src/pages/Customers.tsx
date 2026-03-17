@@ -16,8 +16,14 @@ import {
   UserPlus,
   Settings,
   Zap,
-  Crown
+  Crown,
+  Brain,
+  TrendingDown,
+  AlertTriangle,
+  Loader2,
+  Sparkles
 } from "lucide-react"
+import { GoogleGenAI } from "@google/genai"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import {
@@ -54,11 +60,79 @@ const formatVND = (amount: number) => {
 
 import { customersData } from "@/src/data/customers"
 
+import { cn } from "@/src/lib/utils"
+import Markdown from "react-markdown"
+
 export function Customers() {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isAiLoading, setIsAiLoading] = useState(false)
+  const [aiInsights, setAiInsights] = useState<string | null>(null)
+
+  // AI Churn Prediction State
+  const [isChurnLoading, setIsChurnLoading] = useState(false)
+  const [churnPredictions, setChurnPredictions] = useState<Record<number, { risk: string, score: number }>>({})
+
+  const generateAiInsights = async () => {
+    setIsAiLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Analyze customer data for an e-commerce platform.
+        Current stats: ${customersData.length} total customers, ${customersData.filter(c => c.status === 'vip').length} VIPs.
+        
+        Provide a strategic segmentation analysis in Markdown format.
+        Include:
+        1. **Segmentation Overview**: Define 3-4 smart segments based on spending and frequency.
+        2. **Marketing Actions**: Specific actions for each segment to increase LTV or reduce churn.
+        3. **Growth Opportunities**: Where to focus marketing budget.
+        
+        Language: ${t("languageCode") || "English"}.`,
+      })
+      const response = await model
+      setAiInsights(response.text || null)
+    } catch (error) {
+      console.error("AI Insights Error:", error)
+      setAiInsights(t("customers.ai.insightsError"))
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
+
+  const predictChurn = async (customer: any) => {
+    setIsChurnLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Predict churn risk for this customer:
+        Name: ${customer.name}
+        Total Orders: ${customer.totalOrders}
+        Total Spent: ${customer.totalSpent}
+        Last Order: ${customer.lastOrder}
+        Status: ${customer.status}
+        
+        Provide a JSON response with:
+        - risk: "Low", "Medium", or "High"
+        - score: 0 to 100 (churn probability)
+        
+        Language: ${t("languageCode") || "English"}.`,
+        config: {
+          responseMimeType: "application/json"
+        }
+      })
+      const response = await model
+      const result = JSON.parse(response.text || "{}")
+      setChurnPredictions(prev => ({ ...prev, [customer.id]: result }))
+    } catch (error) {
+      console.error("Churn prediction error:", error)
+    } finally {
+      setIsChurnLoading(false)
+    }
+  }
 
   const handleViewHistory = (customer: any) => {
     setSelectedCustomer(customer)
@@ -133,6 +207,62 @@ export function Customers() {
         </Card>
       </div>
 
+      <Card className="bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-100">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2 text-indigo-700">
+              <Brain className="h-5 w-5" />
+              AI Customer Insights & Segmentation
+            </CardTitle>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={generateAiInsights}
+              disabled={isAiLoading}
+              className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-100"
+            >
+              {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            </Button>
+          </div>
+          <CardDescription className="text-indigo-600/80">
+            Phân tích hành vi mua sắm để tự động phân loại và gợi ý chiến dịch chăm sóc.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isAiLoading ? (
+            <div className="flex items-center gap-2 text-indigo-500/60 italic py-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Đang phân tích hành vi khách hàng...
+            </div>
+          ) : aiInsights ? (
+            <div className="space-y-4">
+              <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-white/50 p-4 rounded-xl border border-indigo-100">
+                {aiInsights}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">
+                  <Crown className="h-3 w-3 mr-1" /> VIP Retention: 95%
+                </Badge>
+                <Badge className="bg-amber-100 text-amber-700 border-amber-200">
+                  <AlertTriangle className="h-3 w-3 mr-1" /> Churn Risk: 12%
+                </Badge>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <Button 
+                variant="outline" 
+                onClick={generateAiInsights}
+                className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Phân tích Phân khúc Khách hàng
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       <Tabs defaultValue="crm" className="space-y-4">
         <TabsList className="flex flex-wrap h-auto p-1 bg-muted/50">
           <TabsTrigger value="crm" className="gap-2 py-2">
@@ -176,6 +306,7 @@ export function Customers() {
                     <TableHead className="text-right">{t("customers.crm.walletBalance")}</TableHead>
                     <TableHead>{t("customers.crm.lastOrder")}</TableHead>
                     <TableHead>{t("customers.crm.segment")}</TableHead>
+                    <TableHead>{t("customers.crm.churnRisk")}</TableHead>
                     <TableHead className="text-right">{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -201,6 +332,31 @@ export function Customers() {
                         <Badge variant={customer.status === 'vip' ? 'default' : customer.status === 'active' ? 'secondary' : 'outline'}>
                           {customer.status.toUpperCase()}
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {churnPredictions[customer.id] ? (
+                          <div className="flex items-center gap-2">
+                            <Badge className={cn(
+                              "text-[10px]",
+                              churnPredictions[customer.id].risk === "Low" && "bg-green-100 text-green-700 border-green-200",
+                              churnPredictions[customer.id].risk === "Medium" && "bg-yellow-100 text-yellow-700 border-yellow-200",
+                              churnPredictions[customer.id].risk === "High" && "bg-red-100 text-red-700 border-red-200"
+                            )}>
+                              {churnPredictions[customer.id].risk} ({churnPredictions[customer.id].score}%)
+                            </Badge>
+                          </div>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-6 text-[10px] px-2"
+                            onClick={() => predictChurn(customer)}
+                            disabled={isChurnLoading}
+                          >
+                            {isChurnLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                            {t("customers.ai.predictChurn")}
+                          </Button>
+                        )}
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>

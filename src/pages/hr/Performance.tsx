@@ -7,6 +7,11 @@ import { Badge } from "@/src/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Target, GraduationCap, Settings, Edit, Trash2, Plus, BarChart, BookOpen, Award } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 interface KPI {
   id: string
@@ -17,7 +22,7 @@ interface KPI {
 
 interface Review {
   id: string
-  empName: string
+  empId: string
   cycle: string
   reviewer: string
   rating: string
@@ -33,6 +38,7 @@ interface TrainingCourse {
 
 export function Performance() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
@@ -43,11 +49,11 @@ export function Performance() {
     { id: "KPI-003", title: "Product Launch Success", progress: 40, target: 100 },
   ])
 
-  const [reviews] = useState<Review[]>([
-    { id: "REV-001", empName: "Nguyen Van A", cycle: "Q3 2023", reviewer: "Manager X", rating: "Exceeds Expectations", type: "Manager" },
-    { id: "REV-002", empName: "Tran Thi B", cycle: "Q3 2023", reviewer: "Director Y", rating: "Outstanding", type: "Manager" },
-    { id: "REV-003", empName: "Le Van C", cycle: "Q3 2023", reviewer: "Self", rating: "Meets Expectations", type: "Self" },
-    { id: "REV-004", empName: "Nguyen Van A", cycle: "Q3 2023", reviewer: "Tran Thi B", rating: "Outstanding", type: "Peer" },
+  const [reviews, setReviews] = useState<Review[]>([
+    { id: "REV-001", empId: employees[0]?.id || "EMP-001", cycle: "Q3 2023", reviewer: "Manager X", rating: "Exceeds Expectations", type: "Manager" },
+    { id: "REV-002", empId: employees[1]?.id || "EMP-002", cycle: "Q3 2023", reviewer: "Director Y", rating: "Outstanding", type: "Manager" },
+    { id: "REV-003", empId: employees[2]?.id || "EMP-003", cycle: "Q3 2023", reviewer: "Self", rating: "Meets Expectations", type: "Self" },
+    { id: "REV-004", empId: employees[0]?.id || "EMP-001", cycle: "Q3 2023", reviewer: employees[1]?.name || "Tran Thi B", rating: "Outstanding", type: "Peer" },
   ])
 
   const [trainings] = useState<TrainingCourse[]>([
@@ -55,6 +61,43 @@ export function Performance() {
     { id: "TR-002", title: "Advanced React Patterns", enrolled: 50, completed: 10 },
     { id: "TR-003", title: "Effective Communication", enrolled: 300, completed: 250 },
   ])
+
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [newReview, setNewReview] = useState({
+    empId: "",
+    cycle: "Q4 2023",
+    reviewer: "",
+    rating: "Meets Expectations",
+    type: "Manager" as "Self" | "Manager" | "Peer",
+  })
+
+  const getEmployeeName = (empId: string) => {
+    const emp = employees.find(e => e.id === empId)
+    return emp ? emp.name : empId
+  }
+
+  const handleCreateReview = () => {
+    if (!newReview.empId || !newReview.reviewer) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const record: Review = {
+      id: `REV-${(reviews.length + 1).toString().padStart(3, '0')}`,
+      ...newReview
+    }
+
+    setReviews([record, ...reviews])
+    setIsReviewModalOpen(false)
+    setNewReview({
+      empId: "",
+      cycle: "Q4 2023",
+      reviewer: "",
+      rating: "Meets Expectations",
+      type: "Manager",
+    })
+    toast.success("Đã tạo đánh giá hiệu suất")
+  }
 
   return (
     <div className="space-y-6">
@@ -167,13 +210,90 @@ export function Performance() {
                 <CardDescription>Employee performance reviews.</CardDescription>
               </div>
               {canEdit && (
-                <Button size="sm">
+                <Button size="sm" onClick={() => setIsReviewModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
                   Tạo đánh giá
                 </Button>
               )}
             </CardHeader>
             <CardContent>
+              <Dialog open={isReviewModalOpen} onOpenChange={setIsReviewModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Tạo đánh giá hiệu suất</DialogTitle>
+                    <DialogDescription>
+                      Điền thông tin để tạo đánh giá hiệu suất mới cho nhân viên.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Select value={newReview.empId} onValueChange={(val) => setNewReview({...newReview, empId: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn nhân viên" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {employees.map(emp => (
+                            <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="cycle" className="text-right">Chu kỳ</Label>
+                      <Input 
+                        id="cycle" 
+                        value={newReview.cycle} 
+                        onChange={(e) => setNewReview({...newReview, cycle: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: Q4 2023"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="reviewer" className="text-right">Người đánh giá</Label>
+                      <Input 
+                        id="reviewer" 
+                        value={newReview.reviewer} 
+                        onChange={(e) => setNewReview({...newReview, reviewer: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="Tên người đánh giá"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="type" className="text-right">Loại đánh giá</Label>
+                      <Select value={newReview.type} onValueChange={(val: "Self" | "Manager" | "Peer") => setNewReview({...newReview, type: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn loại đánh giá" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Manager">Quản lý đánh giá</SelectItem>
+                          <SelectItem value="Self">Tự đánh giá</SelectItem>
+                          <SelectItem value="Peer">Đồng nghiệp đánh giá</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="rating" className="text-right">Xếp loại</Label>
+                      <Select value={newReview.rating} onValueChange={(val) => setNewReview({...newReview, rating: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn xếp loại" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Outstanding">Xuất sắc (Outstanding)</SelectItem>
+                          <SelectItem value="Exceeds Expectations">Vượt mong đợi (Exceeds)</SelectItem>
+                          <SelectItem value="Meets Expectations">Đạt yêu cầu (Meets)</SelectItem>
+                          <SelectItem value="Needs Improvement">Cần cải thiện (Improvement)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsReviewModalOpen(false)}>Hủy</Button>
+                    <Button onClick={handleCreateReview}>Tạo đánh giá</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -188,7 +308,7 @@ export function Performance() {
                 <TableBody>
                   {reviews.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.empName}</TableCell>
+                      <TableCell className="font-medium">{getEmployeeName(item.empId)}</TableCell>
                       <TableCell>{item.cycle}</TableCell>
                       <TableCell>{item.reviewer}</TableCell>
                       <TableCell>

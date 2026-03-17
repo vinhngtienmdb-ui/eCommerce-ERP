@@ -21,7 +21,8 @@ import {
   Users,
   CheckCircle2,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  FileSignature
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -414,6 +415,10 @@ export function SellersManagement({ defaultTab = "all", hideTabs = false }: Sell
                         <DropdownMenuItem onClick={() => openManageDialog(seller, "edit")}>
                           <FileCheck className="mr-2 h-4 w-4" />
                           {t("sellers.actions.edit")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/e-contract")}>
+                          <FileSignature className="mr-2 h-4 w-4" />
+                          Sign Contract
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-destructive">

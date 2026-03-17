@@ -22,14 +22,84 @@ import {
   Shield,
   Activity,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Sparkles,
+  Lightbulb,
+  BrainCircuit,
+  Loader2
 } from "lucide-react"
+import { GoogleGenAI } from "@google/genai"
 import { Badge } from "@/src/components/ui/badge"
 import { Progress } from "@/src/components/ui/progress"
+
+import Markdown from "react-markdown"
 
 const ExecutiveCenter = () => {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("direction")
+  const [aiAdvice, setAiAdvice] = useState<string | null>(null)
+  const [isAiLoading, setIsAiLoading] = useState(false)
+  const [isScenarioLoading, setIsScenarioLoading] = useState(false)
+  const [scenarioAnalysis, setScenarioAnalysis] = useState<string | null>(null)
+
+  const generateAiStrategy = async () => {
+    setIsAiLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Analyze the following SWOT for an e-commerce platform:
+        Strengths: Proprietary AI, strong engineering.
+        Weaknesses: Limited rural distribution.
+        Opportunities: B2B integration, emerging markets.
+        Threats: Regulatory changes, price wars.
+        
+        Goal: Reach $2B GMV by 2026.
+        
+        Provide 3-4 high-level strategic recommendations in Markdown format.
+        Include:
+        1. **Strategic Pillar**: The core focus area.
+        2. **Key Initiatives**: Specific actions to take.
+        3. **Expected Impact**: How it helps reach the $2B goal.
+        
+        Language: ${t("languageCode") || "English"}.`,
+      })
+      const response = await model
+      setAiAdvice(response.text || null)
+    } catch (error) {
+      console.error("AI Strategy Error:", error)
+      setAiAdvice(t("executive.ai.strategyError"))
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
+
+  const runScenarioPlanning = async () => {
+    setIsScenarioLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Run a strategic scenario planning for an e-commerce platform.
+        Scenario: "Aggressive competitor entry with 50% lower prices".
+        
+        Provide a response in Markdown format.
+        Include:
+        1. **Risk Assessment**: Impact on market share and margins.
+        2. **Defensive Strategy**: How to protect current customer base.
+        3. **Counter-Offensive**: Opportunities to exploit competitor weaknesses.
+        
+        Language: ${t("languageCode") || "English"}.`,
+      })
+      const response = await model
+      setScenarioAnalysis(response.text || null)
+    } catch (error) {
+      console.error("Scenario Planning Error:", error)
+      setScenarioAnalysis(t("executive.ai.scenarioError"))
+    } finally {
+      setIsScenarioLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#050505] text-white p-4 md:p-8 pt-6">
@@ -232,6 +302,109 @@ const ExecutiveCenter = () => {
                   <Button variant="outline" className="border-white/10 hover:bg-white/5">Quarterly</Button>
                 </div>
               </div>
+
+              <Card className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border-purple-500/30 text-white mb-12">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-xl font-bold flex items-center gap-2">
+                      <BrainCircuit className="h-6 w-6 text-purple-400" />
+                      AI Strategic Advisor
+                    </CardTitle>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={generateAiStrategy}
+                      disabled={isAiLoading}
+                      className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                    >
+                      {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  <CardDescription className="text-white/60">
+                    Phân tích SWOT và dữ liệu thị trường để đưa ra các quyết định điều hành.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {isAiLoading ? (
+                    <div className="flex items-center gap-2 text-purple-300/60 italic py-4">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t("executive.ai.analyzing")}
+                    </div>
+                  ) : aiAdvice ? (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-sm leading-relaxed markdown-body">
+                        <Markdown>{aiAdvice}</Markdown>
+                      </div>
+                      <div className="flex gap-4">
+                        <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/20">
+                          <TrendingUp className="h-3 w-3 mr-1" /> High Confidence
+                        </Badge>
+                        <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/20">
+                          <Lightbulb className="h-3 w-3 mr-1" /> Actionable
+                        </Badge>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Button 
+                        onClick={generateAiStrategy}
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                      >
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        {t("executive.ai.activateAdvisor")}
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border-blue-500/30 text-white mb-12">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-xl font-bold flex items-center gap-2">
+                      <Shield className="h-6 w-6 text-blue-400" />
+                      AI Scenario Planning
+                    </CardTitle>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={runScenarioPlanning}
+                      disabled={isScenarioLoading}
+                      className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                    >
+                      {isScenarioLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  <CardDescription className="text-white/60">
+                    Mô phỏng các kịch bản thị trường và chuẩn bị phương án ứng phó.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {isScenarioLoading ? (
+                    <div className="flex items-center gap-2 text-blue-300/60 italic py-4">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t("executive.ai.simulating")}
+                    </div>
+                  ) : scenarioAnalysis ? (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-sm leading-relaxed markdown-body">
+                        <Markdown>{scenarioAnalysis}</Markdown>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Button 
+                        onClick={runScenarioPlanning}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        {t("executive.ai.runScenario")}
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
               <div className="grid md:grid-cols-3 gap-8">
                 <Card className="bg-transparent border-white/10 text-white">
                   <CardHeader>

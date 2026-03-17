@@ -1,18 +1,36 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Monitor, Plus, Search, Filter, MoreVertical, Laptop, Armchair } from "lucide-react"
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 export function Assets() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
-  const assets = [
+  const [assets, setAssets] = useState([
     { id: "AST-001", name: "MacBook Pro M2", category: t("adminWorkspace.assets.laptop"), assignee: "Nguyễn Văn A", status: "inUse", condition: "Tốt", value: "$2,500", purchaseDate: "2023-01-15" },
     { id: "AST-002", name: "Dell UltraSharp 27", category: t("adminWorkspace.assets.monitor"), assignee: "Trần Thị B", status: "inUse", condition: "Tốt", value: "$600", purchaseDate: "2023-03-10" },
     { id: "AST-003", name: "Ghế Công Thái Học", category: t("adminWorkspace.assets.furniture"), assignee: "-", status: "available", condition: "Mới", value: "$450", purchaseDate: "2023-06-20" },
     { id: "AST-004", name: "ThinkPad X1 Carbon", category: t("adminWorkspace.assets.laptop"), assignee: "Lê Văn C", status: "maintenance", condition: "Lỗi màn hình", value: "$1,800", purchaseDate: "2022-11-05" },
-  ]
+  ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newAsset, setNewAsset] = useState({
+    name: "",
+    category: "Laptop",
+    assignee: "-",
+    status: "available",
+    condition: "Mới",
+    value: "",
+    purchaseDate: new Date().toISOString().split('T')[0]
+  })
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -29,6 +47,32 @@ export function Assets() {
     return <Armchair className="h-5 w-5" />
   }
 
+  const handleCreateAsset = () => {
+    if (!newAsset.name || !newAsset.value) {
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc")
+      return
+    }
+
+    const asset = {
+      id: `AST-${(assets.length + 1).toString().padStart(3, '0')}`,
+      ...newAsset,
+      value: `$${newAsset.value}`
+    }
+
+    setAssets([asset, ...assets])
+    setIsModalOpen(false)
+    setNewAsset({
+      name: "",
+      category: "Laptop",
+      assignee: "-",
+      status: "available",
+      condition: "Mới",
+      value: "",
+      purchaseDate: new Date().toISOString().split('T')[0]
+    })
+    toast.success("Đã thêm tài sản mới")
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -41,12 +85,91 @@ export function Assets() {
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
           </Button>
-          <Button>
+          <Button onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             {t("adminWorkspace.assets.create")}
           </Button>
         </div>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Thêm tài sản mới</DialogTitle>
+            <DialogDescription>
+              Điền thông tin chi tiết về tài sản.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">Tên tài sản</Label>
+              <Input 
+                id="name" 
+                value={newAsset.name} 
+                onChange={(e) => setNewAsset({...newAsset, name: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: MacBook Pro M3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="category" className="text-right">Danh mục</Label>
+              <Select value={newAsset.category} onValueChange={(val) => setNewAsset({...newAsset, category: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn danh mục" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Laptop">Laptop</SelectItem>
+                  <SelectItem value="Màn hình">Màn hình</SelectItem>
+                  <SelectItem value="Nội thất">Nội thất</SelectItem>
+                  <SelectItem value="Khác">Khác</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="assignee" className="text-right">Người sử dụng</Label>
+              <Select value={newAsset.assignee} onValueChange={(val) => setNewAsset({...newAsset, assignee: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn người sử dụng" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="-">Chưa cấp phát</SelectItem>
+                  {employees.map(emp => (
+                    <SelectItem key={emp.id} value={emp.name}>{emp.name} ({emp.dept})</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="status" className="text-right">Trạng thái</Label>
+              <Select value={newAsset.status} onValueChange={(val) => setNewAsset({...newAsset, status: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn trạng thái" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="available">Sẵn sàng</SelectItem>
+                  <SelectItem value="inUse">Đang sử dụng</SelectItem>
+                  <SelectItem value="maintenance">Bảo trì</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="value" className="text-right">Giá trị ($)</Label>
+              <Input 
+                id="value" 
+                type="number"
+                value={newAsset.value} 
+                onChange={(e) => setNewAsset({...newAsset, value: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: 1500"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleCreateAsset}>Lưu tài sản</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {assets.map((asset) => (

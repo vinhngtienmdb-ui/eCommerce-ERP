@@ -18,27 +18,91 @@ import {
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Badge } from "@/src/components/ui/badge"
-import {
-  Video,
-  Users,
-  DollarSign,
-  ShoppingCart,
-  MessageSquare,
-  Plus,
-  Pin,
-  PinOff,
-  Search,
-  StopCircle,
-  Calendar,
-  LayoutDashboard,
-  ChevronRight
+import { 
+  Video, 
+  Users, 
+  DollarSign, 
+  ShoppingCart, 
+  MessageSquare, 
+  Plus, 
+  Pin, 
+  PinOff, 
+  Search, 
+  StopCircle, 
+  Calendar, 
+  LayoutDashboard, 
+  ChevronRight,
+  Sparkles,
+  Loader2,
+  BrainCircuit,
+  MessageCircle
 } from "lucide-react"
 import { cn } from "@/src/lib/utils"
+import { GoogleGenAI } from "@google/genai"
+import Markdown from "react-markdown"
 
 export function LiveHub() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("dashboard")
   const [pinnedProducts, setPinnedProducts] = useState<string[]>(["PROD-001"])
+  const [isAiLoading, setIsAiLoading] = useState(false)
+  const [liveScript, setLiveScript] = useState<string | null>(null)
+  const [sentimentAnalysis, setSentimentAnalysis] = useState<string | null>(null)
+
+  const generateLiveScript = async () => {
+    setIsAiLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Generate a high-converting live stream script for an e-commerce seller.
+        Products: Áo thun Cotton Premium, Quần Jeans Slimfit, Giày Sneaker Basic.
+        Event: Mega Sale 3.3.
+        
+        Provide a script in Markdown format.
+        Include:
+        1. **Opening**: Hook the audience in the first 30 seconds.
+        2. **Product Showcase**: Key selling points for each product.
+        3. **Closing/CTA**: How to drive immediate purchases.
+        
+        Language: ${t("languageCode") || "English"}.`,
+      })
+      const response = await model
+      setLiveScript(response.text || null)
+    } catch (error) {
+      console.error("Live Script Error:", error)
+      setLiveScript(t("live.ai.scriptError"))
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
+
+  const analyzeLiveSentiment = async () => {
+    setIsAiLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Analyze the sentiment of a simulated live stream chat.
+        Context: E-commerce live stream for fashion products.
+        
+        Provide a brief report in Markdown format.
+        Include:
+        1. **Overall Sentiment**: Positive, Neutral, or Negative.
+        2. **Top Questions**: What are people asking about most?
+        3. **Engagement Advice**: How to improve the vibe right now.
+        
+        Language: ${t("languageCode") || "English"}.`,
+      })
+      const response = await model
+      setSentimentAnalysis(response.text || null)
+    } catch (error) {
+      console.error("Sentiment Analysis Error:", error)
+      setSentimentAnalysis(t("live.ai.sentimentError"))
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
 
   const togglePin = (id: string) => {
     setPinnedProducts(prev => 
@@ -67,6 +131,7 @@ export function LiveHub() {
         { id: "schedule", label: t("live.tabs.schedule"), icon: Calendar },
         { id: "activeSession", label: t("live.tabs.activeSession"), icon: Video },
         { id: "products", label: t("live.tabs.products"), icon: ShoppingCart },
+        { id: "aiTools", label: t("live.tabs.aiTools"), icon: BrainCircuit },
       ]
     }
   ]
@@ -257,7 +322,71 @@ export function LiveHub() {
               </div>
             )}
             
-            {activeTab === "products" && (
+            {activeTab === "aiTools" && (
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card className="border-indigo-100 bg-indigo-50/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-indigo-700">
+                      <Sparkles className="h-5 w-5" />
+                      {t("live.ai.scriptGenerator")}
+                    </CardTitle>
+                    <CardDescription>
+                      {t("live.ai.scriptDesc")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {isAiLoading ? (
+                      <div className="flex items-center gap-2 text-indigo-500/60 italic py-4">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        {t("live.ai.generatingScript")}
+                      </div>
+                    ) : liveScript ? (
+                      <div className="text-sm text-slate-700 leading-relaxed markdown-body bg-white p-4 rounded-xl border border-indigo-100 max-h-[400px] overflow-y-auto">
+                        <Markdown>{liveScript}</Markdown>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Button onClick={generateLiveScript} className="bg-indigo-600 hover:bg-indigo-700">
+                          <Sparkles className="mr-2 h-4 w-4" />
+                          {t("live.ai.generateScript")}
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className="border-emerald-100 bg-emerald-50/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-emerald-700">
+                      <MessageCircle className="h-5 w-5" />
+                      {t("live.ai.sentimentAnalysis")}
+                    </CardTitle>
+                    <CardDescription>
+                      {t("live.ai.sentimentDesc")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {isAiLoading ? (
+                      <div className="flex items-center gap-2 text-emerald-500/60 italic py-4">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        {t("live.ai.analyzingSentiment")}
+                      </div>
+                    ) : sentimentAnalysis ? (
+                      <div className="text-sm text-slate-700 leading-relaxed markdown-body bg-white p-4 rounded-xl border border-emerald-100">
+                        <Markdown>{sentimentAnalysis}</Markdown>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Button onClick={analyzeLiveSentiment} className="bg-emerald-600 hover:bg-emerald-700">
+                          <Sparkles className="mr-2 h-4 w-4" />
+                          {t("live.ai.runAnalysis")}
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
                 <Card>
                 <CardHeader>
                   <CardTitle>{t("live.tabs.products")}</CardTitle>

@@ -108,11 +108,47 @@ export function Header() {
           <span className="sr-only">Toggle theme</span>
         </Button>
 
-        <Button variant="ghost" size="icon" className="relative hidden sm:inline-flex">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
-          <span className="sr-only">Notifications</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative hidden sm:inline-flex">
+              <Bell className="h-5 w-5" />
+              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
+              <span className="sr-only">Notifications</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-80" align="end">
+            <DropdownMenuLabel className="flex justify-between items-center">
+              <span>{t("header.notifications")}</span>
+              <Button variant="ghost" size="sm" className="text-xs h-auto p-0">{t("header.markAllRead")}</Button>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="max-h-[300px] overflow-y-auto">
+              {[
+                { id: 1, title: "Đơn hàng mới #12345", time: "2 phút trước", type: "order" },
+                { id: 2, title: "Sản phẩm 'Áo thun' sắp hết hàng", time: "1 giờ trước", type: "inventory" },
+                { id: 3, title: "Khách hàng mới đăng ký", time: "3 giờ trước", type: "customer" },
+                { id: 4, title: "Chiến dịch Marketing đã kết thúc", time: "5 giờ trước", type: "marketing" },
+              ].map((notif) => (
+                <DropdownMenuItem key={notif.id} className="flex flex-col items-start gap-1 p-3 cursor-pointer">
+                  <div className="flex justify-between w-full">
+                    <span className="font-medium text-sm">{notif.title}</span>
+                    <span className="text-[10px] text-muted-foreground">{notif.time}</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {notif.type === "order" && "Bạn có một đơn hàng mới cần xử lý."}
+                    {notif.type === "inventory" && "Số lượng tồn kho còn dưới 5 sản phẩm."}
+                    {notif.type === "customer" && "Một khách hàng vừa tạo tài khoản mới."}
+                    {notif.type === "marketing" && "Xem báo cáo hiệu quả chiến dịch ngay."}
+                  </span>
+                </DropdownMenuItem>
+              ))}
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="justify-center text-xs text-primary font-medium">
+              {t("header.viewAllNotifications")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

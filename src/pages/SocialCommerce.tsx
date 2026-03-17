@@ -29,20 +29,10 @@ export function SocialCommerce() {
   const [activeTab, setActiveTab] = useState("feed")
   const [likedPosts, setLikedPosts] = useState<string[]>([])
   const [followedUsers, setFollowedUsers] = useState<string[]>(["USER-001"])
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false)
+  const [newPostContent, setNewPostContent] = useState("")
 
-  const toggleLike = (id: string) => {
-    setLikedPosts(prev => 
-      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
-    )
-  }
-
-  const toggleFollow = (id: string) => {
-    setFollowedUsers(prev => 
-      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
-    )
-  }
-
-  const posts = [
+  const [posts, setPosts] = useState([
     { 
       id: "POST-001", 
       user: { id: "USER-001", name: "Linh Beauty", avatar: "LB", isCreator: true },
@@ -63,7 +53,38 @@ export function SocialCommerce() {
       shares: 5,
       product: { name: "Bàn phím cơ Keychron K8", price: 1890000 }
     }
-  ]
+  ])
+
+  const handleCreatePost = () => {
+    if (!newPostContent.trim()) return
+
+    const newPost = {
+      id: `POST-${Date.now()}`,
+      user: { id: "ME", name: "You", avatar: "ME", isCreator: false },
+      content: newPostContent,
+      image: "https://picsum.photos/seed/newpost/600/400",
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      product: { name: "Sản phẩm đính kèm", price: 0 }
+    }
+
+    setPosts([newPost, ...posts])
+    setNewPostContent("")
+    setIsPostModalOpen(false)
+  }
+
+  const toggleLike = (id: string) => {
+    setLikedPosts(prev => 
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    )
+  }
+
+  const toggleFollow = (id: string) => {
+    setFollowedUsers(prev => 
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    )
+  }
 
   const groups = [
     { id: "GRP-001", name: "Hội Review Mỹ Phẩm", category: "Làm đẹp", members: "125K", postsPerDay: 450, isJoined: true },
@@ -106,7 +127,17 @@ export function SocialCommerce() {
                       <AvatarFallback>ME</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 space-y-4">
-                      <Input placeholder="Chia sẻ trải nghiệm mua sắm của bạn..." className="bg-muted/50 border-none" />
+                      <Input 
+                        placeholder="Chia sẻ trải nghiệm mua sắm của bạn..." 
+                        className="bg-muted/50 border-none" 
+                        value={newPostContent}
+                        onChange={(e) => setNewPostContent(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            handleCreatePost();
+                          }
+                        }}
+                      />
                       <div className="flex justify-between items-center">
                         <div className="flex gap-2">
                           <Button variant="ghost" size="sm" className="text-muted-foreground">
@@ -119,7 +150,7 @@ export function SocialCommerce() {
                             <ShoppingCart className="mr-2 h-4 w-4" /> Gắn SP
                           </Button>
                         </div>
-                        <Button size="sm">{t("socialCommerce.feed.createPost")}</Button>
+                        <Button size="sm" onClick={handleCreatePost}>{t("socialCommerce.feed.createPost")}</Button>
                       </div>
                     </div>
                   </div>

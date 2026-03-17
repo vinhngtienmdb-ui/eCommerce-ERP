@@ -6,7 +6,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/src/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
-import { Download, FileText, Settings, Edit, Trash2, Calculator, DollarSign, PieChart } from "lucide-react"
+import { Download, FileText, Settings, Edit, Trash2, Calculator, DollarSign, PieChart, Plus } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 interface PayrollPeriod {
   id: string
@@ -18,7 +23,7 @@ interface PayrollPeriod {
 
 interface SalaryConfig {
   id: string
-  empName: string
+  empId: string
   basic: string
   allowance: string
   deduction: string
@@ -28,19 +33,68 @@ interface SalaryConfig {
 
 export function Payroll() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
 
   const [payrolls, setPayrolls] = useState<PayrollPeriod[]>([
-    { id: "PR-2023-10", period: "October 2023", count: 1230, amount: "15,400,000,000 ₫", status: "Completed" },
-    { id: "PR-2023-11", period: "November 2023", count: 1234, amount: "15,600,000,000 ₫", status: "Draft" },
+    { id: "PR-2023-10", period: "October 2023", count: employees.length, amount: "15,400,000,000 ₫", status: "Completed" },
+    { id: "PR-2023-11", period: "November 2023", count: employees.length, amount: "15,600,000,000 ₫", status: "Draft" },
   ])
 
-  const [salaries] = useState<SalaryConfig[]>([
-    { id: "SAL-001", empName: "Nguyen Van A", basic: "25,000,000", allowance: "2,000,000", deduction: "2,625,000", tax: "1,500,000", net: "22,875,000" },
-    { id: "SAL-002", empName: "Tran Thi B", basic: "30,000,000", allowance: "3,000,000", deduction: "3,150,000", tax: "2,500,000", net: "27,350,000" },
+  const [salaries, setSalaries] = useState<SalaryConfig[]>([
+    { id: "SAL-001", empId: employees[0]?.id || "EMP-001", basic: "25,000,000", allowance: "2,000,000", deduction: "2,625,000", tax: "1,500,000", net: "22,875,000" },
+    { id: "SAL-002", empId: employees[1]?.id || "EMP-002", basic: "30,000,000", allowance: "3,000,000", deduction: "3,150,000", tax: "2,500,000", net: "27,350,000" },
   ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newSalary, setNewSalary] = useState({
+    empId: "",
+    basic: "",
+    allowance: "0",
+  })
+
+  const getEmployeeName = (empId: string) => {
+    const emp = employees.find(e => e.id === empId)
+    return emp ? emp.name : empId
+  }
+
+  const handleCreateSalary = () => {
+    if (!newSalary.empId || !newSalary.basic) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const basic = parseInt(newSalary.basic.replace(/,/g, ''))
+    const allowance = parseInt(newSalary.allowance.replace(/,/g, '')) || 0
+
+    if (isNaN(basic)) {
+      toast.error("Lương cơ bản không hợp lệ")
+      return
+    }
+
+    // Simplified calculations for demo
+    const deduction = basic * 0.105
+    const taxable = (basic + allowance) - deduction - 11000000
+    const tax = taxable > 0 ? taxable * 0.1 : 0
+    const net = (basic + allowance) - deduction - tax
+
+    const record: SalaryConfig = {
+      id: `SAL-${(salaries.length + 1).toString().padStart(3, '0')}`,
+      empId: newSalary.empId,
+      basic: basic.toLocaleString(),
+      allowance: allowance.toLocaleString(),
+      deduction: deduction.toLocaleString(),
+      tax: tax.toLocaleString(),
+      net: net.toLocaleString()
+    }
+
+    setSalaries([record, ...salaries])
+    setIsModalOpen(false)
+    setNewSalary({ empId: "", basic: "", allowance: "0" })
+    toast.success("Đã thêm cấu trúc lương")
+  }
 
   const handleRunPayroll = (id: string) => {
     setPayrolls(payrolls.map(p => 
@@ -188,6 +242,67 @@ export function Payroll() {
               <CardDescription>Employee salary configuration.</CardDescription>
             </CardHeader>
             <CardContent>
+              <div className="flex justify-between mb-4">
+                <Button onClick={() => setIsModalOpen(true)}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Thêm cấu trúc lương
+                </Button>
+                <Button variant="outline">
+                  <Download className="mr-2 h-4 w-4" />
+                  {t("hr.payroll.exportReport")}
+                </Button>
+              </div>
+
+              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Thêm cấu trúc lương</DialogTitle>
+                    <DialogDescription>
+                      Thiết lập cấu trúc lương cơ bản và phụ cấp cho nhân viên.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Select value={newSalary.empId} onValueChange={(val) => setNewSalary({...newSalary, empId: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn nhân viên" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {employees.map(emp => (
+                            <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="basic" className="text-right">Lương cơ bản</Label>
+                      <Input 
+                        id="basic" 
+                        value={newSalary.basic} 
+                        onChange={(e) => setNewSalary({...newSalary, basic: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 25000000"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="allowance" className="text-right">Phụ cấp</Label>
+                      <Input 
+                        id="allowance" 
+                        value={newSalary.allowance} 
+                        onChange={(e) => setNewSalary({...newSalary, allowance: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 2000000"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                    <Button onClick={handleCreateSalary}>Lưu cấu trúc</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -202,7 +317,7 @@ export function Payroll() {
                 <TableBody>
                   {salaries.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.empName}</TableCell>
+                      <TableCell className="font-medium">{getEmployeeName(item.empId)}</TableCell>
                       <TableCell>{item.basic} ₫</TableCell>
                       <TableCell className="text-green-600">+{item.allowance} ₫</TableCell>
                       <TableCell className="text-red-600">-{item.deduction} ₫</TableCell>

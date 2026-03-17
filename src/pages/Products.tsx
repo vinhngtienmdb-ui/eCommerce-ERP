@@ -21,13 +21,25 @@ import {
   Package,
   AlertTriangle,
   CheckCircle2,
-  XCircle
+  XCircle,
+  TrendingDown,
+  Sparkles,
+  Loader2
 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { cn } from "@/src/lib/utils"
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { toast } from "sonner"
+import { GoogleGenAI } from "@google/genai"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/src/components/ui/dialog"
+import Markdown from "react-markdown"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -45,7 +57,40 @@ export function Products() {
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("all")
   const [activeSubTab, setActiveSubTab] = useState("all")
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysisResult, setAnalysisResult] = useState<string | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { t } = useTranslation()
+
+  const runAiAnalysis = async () => {
+    setIsAnalyzing(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const inventoryData = initialProducts.map(p => ({
+        name: p.name,
+        stock: p.stock,
+        performance: p.performance
+      }))
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Analyze this inventory data and provide strategic recommendations for restocking, promotions, or liquidating slow-moving items.
+        Data: ${JSON.stringify(inventoryData)}
+        Language: ${t("common.languageCode") || "Vietnamese"}
+        Format: Markdown with clear sections.`,
+      })
+
+      if (response.text) {
+        setAnalysisResult(response.text)
+        setIsDialogOpen(true)
+      }
+    } catch (error) {
+      console.error("AI Analysis Error:", error)
+      toast.error(t("products.forecasting.analysisError"))
+    } finally {
+      setIsAnalyzing(false)
+    }
+  }
 
   const filteredProducts = initialProducts.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -139,6 +184,60 @@ export function Products() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100">
+        <CardHeader className="pb-2 flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-lg font-semibold flex items-center gap-2 text-blue-700">
+              <Sparkles className="h-5 w-5" />
+              {t("products.forecasting.title")}
+            </CardTitle>
+            <CardDescription className="text-blue-600/80">
+              {t("products.forecasting.description")}
+            </CardDescription>
+          </div>
+          <Button 
+            onClick={runAiAnalysis} 
+            disabled={isAnalyzing}
+            className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+          >
+            {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {t("products.forecasting.analyzeAll")}
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { name: "iPhone 15 Pro Max", stock: 50, velocity: 12, daysLeft: 4, trend: "up" },
+              { name: "MacBook Pro M3", stock: 20, velocity: 5, daysLeft: 4, trend: "stable" },
+              { name: "Sony WH-1000XM5", stock: 100, velocity: 25, daysLeft: 4, trend: "up" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center justify-between p-3 bg-white/50 rounded-lg border border-blue-100">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">{item.name}</p>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="text-[10px] h-4 bg-white">
+                      {item.stock} in stock
+                    </Badge>
+                    <span className="text-[10px] text-muted-foreground">
+                      {item.velocity} units/day
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-semibold text-rose-600 flex items-center justify-end">
+                    <TrendingDown className="h-3 w-3 mr-1" />
+                    {item.daysLeft} days left
+                  </p>
+                  <Button variant="link" size="sm" className="h-auto p-0 text-[10px] text-blue-600">
+                    {t("products.forecasting.restockNow")}
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="rounded-xl border bg-card text-card-foreground shadow">
         <div className="border-b px-4">
@@ -250,6 +349,22 @@ export function Products() {
           </TableBody>
         </Table>
       </div>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-blue-600" />
+              {t("products.forecasting.analysisResult")}
+            </DialogTitle>
+            <DialogDescription>
+              {t("products.forecasting.analysisSubtitle")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="prose prose-sm dark:prose-invert max-w-none mt-4">
+            <Markdown>{analysisResult || ""}</Markdown>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -7,6 +7,11 @@ import { Badge } from "@/src/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Clock, CheckCircle, XCircle, Wifi, MapPin, ScanFace, QrCode, Settings, Edit, Trash2, Plus, Calendar as CalendarIcon } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 interface WorkLocation {
   id: string
@@ -24,7 +29,7 @@ interface Shift {
 
 interface OTRequest {
   id: string
-  empName: string
+  empId: string
   date: string
   hours: number
   status: "Pending" | "Approved"
@@ -32,6 +37,7 @@ interface OTRequest {
 
 export function TimeAttendance() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
@@ -48,10 +54,48 @@ export function TimeAttendance() {
     { id: "SH-003", name: "Ca chiều", start: "14:00", end: "22:00" },
   ])
 
-  const [otRequests] = useState<OTRequest[]>([
-    { id: "OT-001", empName: "Nguyen Van A", date: "2023-10-25", hours: 2, status: "Approved" },
-    { id: "OT-002", empName: "Le Van C", date: "2023-10-26", hours: 4, status: "Pending" },
+  const [otRequests, setOtRequests] = useState<OTRequest[]>([
+    { id: "OT-001", empId: employees[0]?.id || "EMP-001", date: "2023-10-25", hours: 2, status: "Approved" },
+    { id: "OT-002", empId: employees[2]?.id || "EMP-003", date: "2023-10-26", hours: 4, status: "Pending" },
   ])
+
+  const [isOtModalOpen, setIsOtModalOpen] = useState(false)
+  const [newOt, setNewOt] = useState({
+    empId: "",
+    date: "",
+    hours: "1",
+  })
+
+  const getEmployeeName = (empId: string) => {
+    const emp = employees.find(e => e.id === empId)
+    return emp ? emp.name : empId
+  }
+
+  const handleCreateOt = () => {
+    if (!newOt.empId || !newOt.date || !newOt.hours) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const hours = parseFloat(newOt.hours)
+    if (isNaN(hours) || hours <= 0) {
+      toast.error("Số giờ OT không hợp lệ")
+      return
+    }
+
+    const record: OTRequest = {
+      id: `OT-${(otRequests.length + 1).toString().padStart(3, '0')}`,
+      empId: newOt.empId,
+      date: newOt.date,
+      hours: hours,
+      status: "Pending"
+    }
+
+    setOtRequests([record, ...otRequests])
+    setIsOtModalOpen(false)
+    setNewOt({ empId: "", date: "", hours: "1" })
+    toast.success("Đã đăng ký OT")
+  }
 
 
 
@@ -290,11 +334,69 @@ export function TimeAttendance() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>{t("hr.time.otRequests")}</CardTitle>
-            <CardDescription>Overtime registration.</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>{t("hr.time.otRequests")}</CardTitle>
+              <CardDescription>Overtime registration.</CardDescription>
+            </div>
+            <Button size="sm" onClick={() => setIsOtModalOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Đăng ký OT
+            </Button>
           </CardHeader>
           <CardContent>
+            <Dialog open={isOtModalOpen} onOpenChange={setIsOtModalOpen}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Đăng ký làm thêm giờ (OT)</DialogTitle>
+                  <DialogDescription>
+                    Điền thông tin để đăng ký làm thêm giờ.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                    <Select value={newOt.empId} onValueChange={(val) => setNewOt({...newOt, empId: val})}>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Chọn nhân viên" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {employees.map(emp => (
+                          <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="date" className="text-right">Ngày</Label>
+                    <Input 
+                      id="date" 
+                      type="date"
+                      value={newOt.date} 
+                      onChange={(e) => setNewOt({...newOt, date: e.target.value})}
+                      className="col-span-3" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="hours" className="text-right">Số giờ</Label>
+                    <Input 
+                      id="hours" 
+                      type="number"
+                      step="0.5"
+                      value={newOt.hours} 
+                      onChange={(e) => setNewOt({...newOt, hours: e.target.value})}
+                      className="col-span-3" 
+                      placeholder="VD: 2"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsOtModalOpen(false)}>Hủy</Button>
+                  <Button onClick={handleCreateOt}>Đăng ký</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <Table>
               <TableHeader>
                 <TableRow>
@@ -307,7 +409,7 @@ export function TimeAttendance() {
               <TableBody>
                 {otRequests.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-medium">{item.empName}</TableCell>
+                    <TableCell className="font-medium">{getEmployeeName(item.empId)}</TableCell>
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.hours}h</TableCell>
                     <TableCell>

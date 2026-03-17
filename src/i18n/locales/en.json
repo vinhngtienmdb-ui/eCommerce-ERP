@@ -11,9 +11,18 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "status": "Status",
-    "moduleUnderConstruction": "Module under construction"
+    "moduleUnderConstruction": "Module under construction",
+    "languageCode": "English"
   },
   "nav": {
+    "groups": {
+      "management": "Management",
+      "commerce": "Commerce",
+      "growth": "Growth",
+      "operations": "Operations",
+      "corporate": "Corporate",
+      "system": "System"
+    },
     "dashboard": "Dashboard",
     "products": "Product Management",
     "allProducts": "All Products",
@@ -47,10 +56,12 @@
     "hrInfo": "HR Information",
     "admin": "Admin",
     "adminWorkspace": "Administration",
+    "kolKoc": "KOL/KOC Management",
     "assets": "Asset Management",
     "stationery": "Stationery & Supplies",
     "booking": "Room & Resource Booking",
     "requests": "Administrative Requests",
+    "documents": "Document Management",
     "planning": "Strategy & Planning",
     "analytics": "Analytics",
     "sales": "Sales",
@@ -71,6 +82,12 @@
     "direction": "Direction",
     "strategyKpi": "Strategy & KPIs",
     "sellerFinance": "Supply Chain Finance",
+    "automation": "Smart Automation",
+    "marketIntelligence": "Market Intelligence",
+    "contentStudio": "AI Content Studio",
+    "loyalty": "Loyalty & Gamification",
+    "logistics": "Logistics Tower",
+    "eContract": "E-Contract & Signature",
     "settings": "Settings"
   },
   "socialCommerce": {
@@ -155,13 +172,20 @@
       "welcome": "Welcome back",
       "productivity": "Productivity",
       "recentActivity": "Recent Activity",
+      "recentActivityDesc": "Updates from your team",
       "deadlines": "Upcoming Deadlines",
       "teamStatus": "Team Status",
+      "teamStatusDesc": "Who's online now",
       "tasksCompleted": "Tasks Completed",
       "pendingReviews": "Pending Reviews",
       "unreadEmails": "Unread Emails",
       "upcomingEvents": "Upcoming Events",
-      "quickLinks": "Quick Links"
+      "quickLinks": "Quick Links",
+      "quickLinksDesc": "Your favorite tools",
+      "dailyFocus": "Daily Focus",
+      "dailyFocusDesc": "Key priorities for today",
+      "announcements": "Announcements",
+      "announcementsDesc": "Latest company updates"
     },
     "tasks": {
       "myTasks": "My Tasks",
@@ -565,7 +589,13 @@
       "totalSpent": "Total Spent",
       "lastOrder": "Last Order",
       "walletBalance": "Wallet Balance",
-      "details": "Customer Details"
+      "details": "Customer Details",
+      "segment": "Segment",
+      "churnRisk": "Churn Risk"
+    },
+    "ai": {
+      "insightsError": "Unable to analyze customer data at this time.",
+      "predictChurn": "Predict Churn"
     },
     "chat": {
       "title": "Omni-channel Support",
@@ -586,12 +616,36 @@
       "missedCalls": "Missed Calls"
     }
   },
+  "executive": {
+    "ai": {
+      "strategyError": "Unable to connect to AI Strategic Advisor at this time.",
+      "scenarioError": "Unable to run scenario planning at this time.",
+      "analyzing": "AI Advisor is analyzing market scenarios...",
+      "simulating": "Simulating market scenarios...",
+      "activateAdvisor": "Activate AI Strategic Advisor",
+      "runScenario": "Run AI Scenario Planning"
+    }
+  },
+  "finance": {
+    "ai": {
+      "forecastError": "Unable to forecast finance at this time.",
+      "anomalyError": "Unable to detect anomalies at this time.",
+      "calculating": "Calculating financial metrics...",
+      "scanning": "Scanning for anomalies...",
+      "generateForecast": "Smart Finance Forecast",
+      "anomalyDetection": "Anomaly Detection",
+      "anomalyDesc": "Detect unusual transactions or fraud signs.",
+      "runFullScan": "Run Full AI Scan"
+    }
+  },
   "header": {
     "searchPlaceholder": "Search products, orders, sellers...",
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Log out",
     "notifications": "Notifications",
+    "markAllRead": "Mark all as read",
+    "viewAllNotifications": "View all notifications",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode"
   },
@@ -607,7 +661,15 @@
     "revenueOverview": "Revenue Overview",
     "revenueDesc": "Monthly GMV performance for the current year.",
     "weeklyOrders": "Weekly Orders",
-    "weeklyOrdersDesc": "Order volume over the last 7 days."
+    "weeklyOrdersDesc": "Order volume over the last 7 days.",
+    "aiBriefing": {
+      "title": "AI Daily Briefing",
+      "description": "Intelligent insights based on your platform's current performance.",
+      "loading": "Analyzing data...",
+      "placeholder": "Your daily briefing will appear here.",
+      "tip1": "Revenue is up, consider scaling ads.",
+      "tip2": "Product count dropped, check inventory."
+    }
   },
   "products": {
     "title": "Products",
@@ -615,6 +677,15 @@
     "addProduct": "Add 1 new product",
     "searchPlaceholder": "Search Product Name, SKU...",
     "id": "Product ID",
+    "forecasting": {
+      "title": "AI Inventory Forecasting",
+      "description": "Predictive stock analysis based on sales velocity and trends.",
+      "restockNow": "Restock Now",
+      "analyzeAll": "Analyze with AI",
+      "analysisResult": "AI Inventory Analysis Result",
+      "analysisSubtitle": "Intelligent analysis based on current inventory data.",
+      "analysisError": "Error analyzing inventory with AI."
+    },
     "name": "Product Name",
     "category": "Category",
     "seller": "Seller",
@@ -680,6 +751,10 @@
       "selectCategory": "Select category",
       "description": "Description",
       "productDescription": "Product Description",
+      "generateWithAi": "Generate with AI",
+      "nameRequiredForAi": "Please enter a product name so AI can generate a description.",
+      "aiGeneratedSuccess": "Product description generated successfully!",
+      "aiGeneratedError": "Error generating description with AI. Please try again.",
       "descriptionPlaceholder": "Enter product description or insert image",
       "salesInfo": "Sales Info",
       "salesInfoHint": "Can be adjusted after selecting category",
@@ -1050,6 +1125,7 @@
       "title": "Campaigns",
       "description": "Create campaigns, goals, timing, budget.",
       "create": "Create Campaign",
+      "createDesc": "Fill in the details to create a new marketing campaign.",
       "overview": "Overview of your marketing campaigns and their performance (P&L).",
       "name": "Campaign Name",
       "status": "Status",
@@ -1064,6 +1140,7 @@
     },
     "promotions": {
       "create": "Create Promotion",
+      "createDesc": "Fill in the details to create a new promotion.",
       "flashSale": "Flash Sale",
       "flashSaleDesc": "Create time-limited offers.",
       "createFlashSale": "Create Flash Sale",
@@ -1124,6 +1201,7 @@
       "title": "Email Marketing",
       "description": "Bulk email, templates, A/B testing.",
       "create": "Create Campaign",
+      "createDesc": "Fill in the details to create a new email marketing campaign.",
       "subscribers": "Total Subscribers",
       "avgOpenRate": "Avg. Open Rate",
       "avgClickRate": "Avg. Click Rate",
@@ -1160,6 +1238,7 @@
       "title": "Content Management",
       "description": "Articles, landing pages, ad content.",
       "newArticle": "New Article",
+      "createDesc": "Fill in the details to create a new content article.",
       "articleTitle": "Title",
       "author": "Author",
       "status": "Status",
@@ -1174,6 +1253,7 @@
       "title": "Lead Generation Forms",
       "description": "Embedded forms, popups, integrations.",
       "create": "Create Form",
+      "createDesc": "Fill in the details to create a new lead capture form.",
       "activeForms": "Active Forms",
       "activeFormsDesc": "Manage your lead capture forms and popups.",
       "formName": "Form Name",
@@ -1191,6 +1271,17 @@
         "active": "Active",
         "paused": "Paused"
       }
+    },
+    "ai": {
+      "title": "AI Content Assistant",
+      "description": "Generate creative marketing content using Gemini AI.",
+      "generate": "AI Generate",
+      "generating": "Generating...",
+      "promptLabel": "What do you want to write about?",
+      "promptPlaceholder": "e.g. Summer fashion trends for 2024",
+      "promptRequired": "Please enter a prompt",
+      "success": "Content generated successfully!",
+      "error": "Failed to generate content. Please try again."
     },
     "contentSettings": {
       "title": "Content Settings",
@@ -1731,6 +1822,57 @@
       "inProgress": "In Progress",
       "completed": "Completed",
       "overdue": "Overdue"
+    }
+  },
+  "customerService": {
+    "title": "Customer Service",
+    "description": "Manage multi-channel chat, hotline, and support tickets.",
+    "tabs": {
+      "chat": "Omni-channel Chat",
+      "hotline": "Hotline",
+      "tickets": "Tickets",
+      "teams": "Teams"
+    },
+    "chat": {
+      "channels": "Channels",
+      "customerInfo": "Customer Info",
+      "recentOrders": "Recent Orders",
+      "messageSent": "Message sent successfully"
+    },
+    "hotline": {
+      "simulateCall": "Simulate Incoming Call",
+      "incomingCall": "Incoming Call",
+      "activeCall": "Active Call",
+      "callAccepted": "Call accepted",
+      "callEnded": "Call ended",
+      "reject": "Reject",
+      "accept": "Accept",
+      "callHistory": "Call History"
+    },
+    "tickets": {
+      "create": "Create Ticket"
+    },
+    "teams": {
+      "createGroup": "Create Team",
+      "groupName": "Team Name",
+      "description": "Description",
+      "members": "Members",
+      "routing": "Routing Rule",
+      "createdSuccess": "Team created successfully",
+      "routingRules": {
+        "all": "All Inquiries",
+        "vip": "VIP Only",
+        "tech": "Technical",
+        "complaint": "Complaints"
+      }
+    },
+    "ai": {
+      "sentimentTitle": "AI Sentiment Analysis",
+      "analyzing": "Analyzing sentiment...",
+      "runAnalysis": "Run AI Analysis",
+      "sentimentError": "Error analyzing sentiment.",
+      "refreshReplies": "Refresh Suggestions",
+      "repliesError": "Error generating suggested replies."
     }
   }
 }

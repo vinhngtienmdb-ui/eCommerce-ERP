@@ -7,6 +7,10 @@ import { Button } from "@/src/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Plus, RefreshCw, Link as LinkIcon, Settings, Edit, Trash2, Briefcase, Users, Calendar, FileText } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
+import { toast } from "sonner"
 
 interface JobPosition {
   id: string
@@ -25,19 +29,49 @@ export function Recruitment() {
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
 
-  const [positions] = useState<JobPosition[]>([
+  const [positions, setPositions] = useState<JobPosition[]>([
     { id: "JOB-001", title: "Senior Frontend Developer", department: "Engineering", quantity: 2, expectedSalary: "25,000,000 - 40,000,000", status: "Open", candidates: 15, channels: ["VietnamWorks", "TopCV"] },
     { id: "JOB-002", title: "Marketing Executive", department: "Marketing", quantity: 1, expectedSalary: "12,000,000 - 18,000,000", status: "Open", candidates: 32, channels: ["TopCV", "LinkedIn"] },
     { id: "JOB-003", title: "HR Manager", department: "HR", quantity: 1, expectedSalary: "30,000,000 - 50,000,000", status: "Closed", candidates: 8, channels: ["LinkedIn"] },
   ])
 
   const [isSyncing, setIsSyncing] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newJob, setNewJob] = useState({
+    title: "",
+    department: "Engineering",
+    quantity: "1",
+    expectedSalary: "",
+  })
 
   const handleSync = () => {
     setIsSyncing(true)
     setTimeout(() => {
       setIsSyncing(false)
     }, 2000)
+  }
+
+  const handleCreateJob = () => {
+    if (!newJob.title || !newJob.expectedSalary) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const record: JobPosition = {
+      id: `JOB-${(positions.length + 1).toString().padStart(3, '0')}`,
+      title: newJob.title,
+      department: newJob.department,
+      quantity: parseInt(newJob.quantity) || 1,
+      expectedSalary: newJob.expectedSalary,
+      status: "Draft",
+      candidates: 0,
+      channels: []
+    }
+
+    setPositions([record, ...positions])
+    setIsModalOpen(false)
+    setNewJob({ title: "", department: "Engineering", quantity: "1", expectedSalary: "" })
+    toast.success("Đã tạo tin tuyển dụng")
   }
 
   return (
@@ -120,7 +154,7 @@ export function Recruitment() {
             </CardHeader>
             <CardContent>
               <div className="flex justify-between mb-4">
-                <Button>
+                <Button onClick={() => setIsModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
                   Tạo tin tuyển dụng
                 </Button>
@@ -129,6 +163,69 @@ export function Recruitment() {
                   {isSyncing ? "Đang đồng bộ..." : t("hr.recruitment.syncNow")}
                 </Button>
               </div>
+
+              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Tạo tin tuyển dụng</DialogTitle>
+                    <DialogDescription>
+                      Điền thông tin để tạo tin tuyển dụng mới.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="title" className="text-right">Vị trí</Label>
+                      <Input 
+                        id="title" 
+                        value={newJob.title} 
+                        onChange={(e) => setNewJob({...newJob, title: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: Senior Frontend Developer"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="department" className="text-right">Phòng ban</Label>
+                      <Select value={newJob.department} onValueChange={(val) => setNewJob({...newJob, department: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn phòng ban" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Engineering">Kỹ thuật (Engineering)</SelectItem>
+                          <SelectItem value="Marketing">Marketing</SelectItem>
+                          <SelectItem value="HR">Nhân sự (HR)</SelectItem>
+                          <SelectItem value="Sales">Kinh doanh (Sales)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="quantity" className="text-right">Số lượng</Label>
+                      <Input 
+                        id="quantity" 
+                        type="number"
+                        value={newJob.quantity} 
+                        onChange={(e) => setNewJob({...newJob, quantity: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 1"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="expectedSalary" className="text-right">Mức lương</Label>
+                      <Input 
+                        id="expectedSalary" 
+                        value={newJob.expectedSalary} 
+                        onChange={(e) => setNewJob({...newJob, expectedSalary: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 25,000,000 - 40,000,000"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                    <Button onClick={handleCreateJob}>Tạo tin</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Table>
                 <TableHeader>
                   <TableRow>

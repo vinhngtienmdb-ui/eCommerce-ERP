@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 import {
   Card,
   CardContent,
@@ -38,6 +39,7 @@ import {
 
 export function Legal() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("brandPortal")
 
   const brands = [
@@ -440,7 +442,7 @@ export function Legal() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => navigate("/e-contract")}>
                           <FileSignature className="h-4 w-4" />
                         </Button>
                       </TableCell>

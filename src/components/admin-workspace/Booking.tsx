@@ -6,22 +6,36 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Card, CardContent } from "@/src/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 export function Booking() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
   const [activeTab, setActiveTab] = useState("rooms")
 
-  const rooms = [
+  const [rooms, setRooms] = useState([
     { id: "RM-01", name: "Phòng họp A (Tầng 3)", capacity: 10, time: "14:00 - 15:30, Hôm nay", purpose: "Họp team Marketing", status: "confirmed", amenities: ["TV", "Whiteboard", "AC"] },
     { id: "RM-02", name: "Phòng họp Lớn (Tầng 4)", capacity: 30, time: "09:00 - 11:00, Ngày mai", purpose: "Đào tạo nhân sự mới", status: "pending", amenities: ["Projector", "Sound System", "AC"] },
     { id: "RM-03", name: "Phòng họp B (Tầng 3)", capacity: 8, time: "Trống", purpose: "-", status: "available", amenities: ["TV", "AC"] },
-  ]
+  ])
 
-  const cars = [
+  const [cars, setCars] = useState([
     { id: "CAR-01", name: "Toyota Innova (51H-123.45)", driver: "Nguyễn Văn Tài", time: "08:00 - 17:00, Hôm nay", purpose: "Đi gặp đối tác tại Bình Dương", status: "confirmed", fuel: "85%" },
     { id: "CAR-02", name: "Ford Transit (51B-678.90)", driver: "Trần Văn Xế", time: "06:00 - 18:00, Thứ 6", purpose: "Đưa đón team đi sự kiện", status: "pending", fuel: "60%" },
     { id: "CAR-03", name: "VinFast VF8 (51K-999.99)", driver: "Lê Văn Điện", time: "Trống", purpose: "-", status: "available", fuel: "100%" },
-  ]
+  ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newBooking, setNewBooking] = useState({
+    resourceId: "",
+    requester: "",
+    time: "",
+    purpose: ""
+  })
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -31,6 +45,44 @@ export function Booking() {
       case 'cancelled': return <Badge variant="destructive">{t("adminWorkspace.booking.cancelled")}</Badge>
       default: return null
     }
+  }
+
+  const handleCreateBooking = () => {
+    if (!newBooking.resourceId || !newBooking.requester || !newBooking.time || !newBooking.purpose) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    if (activeTab === "rooms") {
+      const roomIndex = rooms.findIndex(r => r.id === newBooking.resourceId)
+      if (roomIndex > -1) {
+        const updatedRooms = [...rooms]
+        updatedRooms[roomIndex] = {
+          ...updatedRooms[roomIndex],
+          time: newBooking.time,
+          purpose: newBooking.purpose,
+          status: "pending"
+        }
+        setRooms(updatedRooms)
+        toast.success("Đã gửi yêu cầu đặt phòng")
+      }
+    } else {
+      const carIndex = cars.findIndex(c => c.id === newBooking.resourceId)
+      if (carIndex > -1) {
+        const updatedCars = [...cars]
+        updatedCars[carIndex] = {
+          ...updatedCars[carIndex],
+          time: newBooking.time,
+          purpose: newBooking.purpose,
+          status: "pending"
+        }
+        setCars(updatedCars)
+        toast.success("Đã gửi yêu cầu đặt xe")
+      }
+    }
+
+    setIsModalOpen(false)
+    setNewBooking({ resourceId: "", requester: "", time: "", purpose: "" })
   }
 
   return (
@@ -50,12 +102,83 @@ export function Booking() {
         </Tabs>
 
         <div className="flex gap-2">
-          <Button className="shadow-sm">
+          <Button className="shadow-sm" onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             {activeTab === "rooms" ? t("adminWorkspace.booking.bookRoom") : t("adminWorkspace.booking.bookCar")}
           </Button>
         </div>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{activeTab === "rooms" ? "Đặt phòng họp" : "Đặt xe công tác"}</DialogTitle>
+            <DialogDescription>
+              Điền thông tin để gửi yêu cầu {activeTab === "rooms" ? "đặt phòng" : "đặt xe"}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="resource" className="text-right">
+                {activeTab === "rooms" ? "Phòng" : "Xe"}
+              </Label>
+              <Select value={newBooking.resourceId} onValueChange={(val) => setNewBooking({...newBooking, resourceId: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder={`Chọn ${activeTab === "rooms" ? "phòng" : "xe"}`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {activeTab === "rooms" ? (
+                    rooms.map(room => (
+                      <SelectItem key={room.id} value={room.id}>{room.name}</SelectItem>
+                    ))
+                  ) : (
+                    cars.map(car => (
+                      <SelectItem key={car.id} value={car.id}>{car.name}</SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="requester" className="text-right">Người yêu cầu</Label>
+              <Select value={newBooking.requester} onValueChange={(val) => setNewBooking({...newBooking, requester: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn người yêu cầu" />
+                </SelectTrigger>
+                <SelectContent>
+                  {employees.map(emp => (
+                    <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="time" className="text-right">Thời gian</Label>
+              <Input 
+                id="time" 
+                value={newBooking.time} 
+                onChange={(e) => setNewBooking({...newBooking, time: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: 14:00 - 15:30, Hôm nay"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="purpose" className="text-right">Mục đích</Label>
+              <Input 
+                id="purpose" 
+                value={newBooking.purpose} 
+                onChange={(e) => setNewBooking({...newBooking, purpose: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: Họp team Marketing"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleCreateBooking}>Gửi yêu cầu</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-md">

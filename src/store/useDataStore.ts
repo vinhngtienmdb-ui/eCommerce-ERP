@@ -1,0 +1,105 @@
+import { create } from 'zustand'
+
+export interface Employee {
+  id: string
+  name: string
+  dept: string
+  pos: string
+  status: "Active" | "Maternity" | "Resigned" | "Onboarding"
+  email: string
+  phone: string
+  joinDate: string
+  idCard: string
+  taxCode: string
+  socialInsuranceNo: string
+  dob?: string
+  gender?: "Male" | "Female" | "Other"
+  address?: string
+  bankName?: string
+  bankAccount?: string
+  emergencyContactName?: string
+  emergencyContactPhone?: string
+}
+
+export interface User {
+  id: string
+  employeeId?: string
+  name: string
+  email: string
+  role: string
+  department: string
+  status: "active" | "inactive"
+  lastActive: string
+  avatar?: string
+}
+
+interface DataState {
+  employees: Employee[]
+  users: User[]
+  addEmployee: (emp: Employee) => void
+  updateEmployee: (id: string, data: Partial<Employee>) => void
+  deleteEmployee: (id: string) => void
+  addUser: (user: User) => void
+  updateUser: (id: string, data: Partial<User>) => void
+  deleteUser: (id: string) => void
+  syncEmployeeToUser: (emp: Employee) => void
+}
+
+const initialEmployees: Employee[] = [
+  { id: "EMP-001", name: "Nguyễn Văn A", dept: "Ban Giám Đốc", pos: "Giám đốc", status: "Active", email: "vana@example.com", phone: "0901234567", joinDate: "2022-03-15", idCard: "001090123456", taxCode: "8012345678", socialInsuranceNo: "7912345678" },
+  { id: "EMP-002", name: "Trần Thị B", dept: "Phòng Kinh Doanh", pos: "Trưởng phòng", status: "Active", email: "thib@example.com", phone: "0909876543", joinDate: "2021-06-01", idCard: "002090987654", taxCode: "8023456789", socialInsuranceNo: "7923456789" },
+  { id: "EMP-003", name: "Lê Văn C", dept: "Phòng Nhân Sự", pos: "Chuyên viên", status: "Onboarding", email: "vanc@example.com", phone: "0912345678", joinDate: "2023-10-01", idCard: "003091234567", taxCode: "8034567890", socialInsuranceNo: "7934567890" },
+  { id: "EMP-004", name: "Phạm Thị D", dept: "Phòng Marketing", pos: "Nhân viên", status: "Maternity", email: "thid@example.com", phone: "0987654321", joinDate: "2020-11-20", idCard: "004098765432", taxCode: "8045678901", socialInsuranceNo: "7945678901" },
+]
+
+const initialUsers: User[] = [
+  { id: "1", employeeId: "EMP-001", name: "Nguyễn Văn A", email: "vana@example.com", role: "Admin", department: "Ban Giám Đốc", status: "active", lastActive: "Vừa xong" },
+  { id: "2", employeeId: "EMP-002", name: "Trần Thị B", email: "thib@example.com", role: "Sales", department: "Phòng Kinh Doanh", status: "active", lastActive: "2 giờ trước" },
+  { id: "3", employeeId: "EMP-003", name: "Lê Văn C", email: "vanc@example.com", role: "HR", department: "Phòng Nhân Sự", status: "inactive", lastActive: "3 ngày trước" },
+  { id: "4", employeeId: "EMP-004", name: "Phạm Thị D", email: "thid@example.com", role: "Marketing", department: "Phòng Marketing", status: "active", lastActive: "1 giờ trước" },
+]
+
+export const useDataStore = create<DataState>((set) => ({
+  employees: initialEmployees,
+  users: initialUsers,
+  addEmployee: (emp) => set((state) => ({ employees: [...state.employees, emp] })),
+  updateEmployee: (id, data) => set((state) => ({
+    employees: state.employees.map(e => e.id === id ? { ...e, ...data } : e)
+  })),
+  deleteEmployee: (id) => set((state) => ({
+    employees: state.employees.filter(e => e.id !== id)
+  })),
+  addUser: (user) => set((state) => ({ users: [...state.users, user] })),
+  updateUser: (id, data) => set((state) => ({
+    users: state.users.map(u => u.id === id ? { ...u, ...data } : u)
+  })),
+  deleteUser: (id) => set((state) => ({
+    users: state.users.filter(u => u.id !== id)
+  })),
+  syncEmployeeToUser: (emp) => set((state) => {
+    const existingUser = state.users.find(u => u.employeeId === emp.id)
+    if (existingUser) {
+      return {
+        users: state.users.map(u => u.employeeId === emp.id ? {
+          ...u,
+          name: emp.name,
+          email: emp.email,
+          department: emp.dept,
+          status: emp.status === "Active" ? "active" : "inactive"
+        } : u)
+      }
+    } else {
+      const newUser: User = {
+        id: Math.random().toString(36).substr(2, 9),
+        employeeId: emp.id,
+        name: emp.name,
+        email: emp.email,
+        role: "Employee",
+        department: emp.dept,
+        status: emp.status === "Active" ? "active" : "inactive",
+        lastActive: "Chưa đăng nhập"
+      }
+      return { users: [...state.users, newUser] }
+    }
+  })
+}))

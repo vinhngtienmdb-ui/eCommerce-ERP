@@ -17,9 +17,18 @@
     "upload": "Tải lên",
     "selectFile": "Chọn tệp tin",
     "status": "Trạng thái",
-    "moduleUnderConstruction": "Mô-đun đang được xây dựng"
+    "moduleUnderConstruction": "Mô-đun đang được xây dựng",
+    "languageCode": "Vietnamese"
   },
   "nav": {
+    "groups": {
+      "management": "Quản lý",
+      "commerce": "Thương mại",
+      "growth": "Tăng trưởng",
+      "operations": "Vận hành",
+      "corporate": "Doanh nghiệp",
+      "system": "Hệ thống"
+    },
     "dashboard": "Bảng điều khiển",
     "products": "Quản Lý Sản Phẩm",
     "allProducts": "Tất Cả Sản Phẩm",
@@ -53,10 +62,12 @@
     "hrInfo": "Thông tin nhân sự",
     "admin": "Quản trị",
     "adminWorkspace": "Hành chính",
+    "kolKoc": "Quản lý KOL/KOC",
     "assets": "Quản lý Tài sản",
     "stationery": "Văn phòng phẩm & Nhu yếu phẩm",
     "booking": "Đặt phòng & Tài nguyên",
     "requests": "Yêu cầu Hành chính",
+    "documents": "Quản lý văn bản",
     "planning": "Chiến lược & Kế hoạch",
     "analytics": "Phân tích",
     "sales": "Bán hàng",
@@ -77,6 +88,12 @@
     "direction": "Định hướng",
     "strategyKpi": "Chiến lược & KPIs",
     "sellerFinance": "Hỗ trợ Tài chính Seller",
+    "automation": "Tự động hóa Thông minh",
+    "marketIntelligence": "Tình báo Thị trường",
+    "contentStudio": "Xưởng Nội dung AI",
+    "loyalty": "Khách hàng Thân thiết",
+    "logistics": "Tháp Logistics",
+    "eContract": "Hợp đồng & Ký số",
     "settings": "Cài đặt"
   },
   "socialCommerce": {
@@ -180,13 +197,20 @@
       "welcome": "Chào mừng trở lại",
       "productivity": "Năng suất",
       "recentActivity": "Hoạt động gần đây",
+      "recentActivityDesc": "Cập nhật từ nhóm của bạn",
       "deadlines": "Hạn chót sắp tới",
       "teamStatus": "Trạng thái nhóm",
+      "teamStatusDesc": "Ai đang trực tuyến",
       "tasksCompleted": "Công việc hoàn thành",
       "pendingReviews": "Chờ duyệt",
       "unreadEmails": "Email chưa đọc",
       "upcomingEvents": "Sự kiện sắp tới",
-      "quickLinks": "Liên kết nhanh"
+      "quickLinks": "Liên kết nhanh",
+      "quickLinksDesc": "Công cụ yêu thích của bạn",
+      "dailyFocus": "Tiêu điểm trong ngày",
+      "dailyFocusDesc": "Các ưu tiên chính cho hôm nay",
+      "announcements": "Thông báo",
+      "announcementsDesc": "Cập nhật mới nhất từ công ty"
     },
     "tasks": {
       "myTasks": "Công việc của tôi",
@@ -603,7 +627,12 @@
       "details": "Hồ sơ 360 độ",
       "segment": "Phân khúc",
       "walletBalance": "Số dư ví",
-      "tags": "Thẻ phân loại"
+      "tags": "Thẻ phân loại",
+      "churnRisk": "Rủi ro rời bỏ"
+    },
+    "ai": {
+      "insightsError": "Không thể phân tích dữ liệu khách hàng lúc này.",
+      "predictChurn": "Dự đoán rời bỏ"
     }
   },
   "customerService": {
@@ -662,12 +691,36 @@
       }
     }
   },
+  "executive": {
+    "ai": {
+      "strategyError": "Không thể kết nối với cố vấn chiến lược AI lúc này.",
+      "scenarioError": "Không thể chạy mô phỏng kịch bản lúc này.",
+      "analyzing": "Cố vấn AI đang phân tích các kịch bản thị trường...",
+      "simulating": "Đang mô phỏng các kịch bản thị trường...",
+      "activateAdvisor": "Kích hoạt Cố vấn Chiến lược AI",
+      "runScenario": "Chạy Mô phỏng Kịch bản AI"
+    }
+  },
+  "finance": {
+    "ai": {
+      "forecastError": "Không thể dự báo tài chính lúc này.",
+      "anomalyError": "Không thể quét bất thường lúc này.",
+      "calculating": "Đang tính toán các chỉ số tài chính...",
+      "scanning": "Đang quét các giao dịch bất thường...",
+      "generateForecast": "Dự báo Tài chính Thông minh",
+      "anomalyDetection": "Phát hiện Bất thường",
+      "anomalyDesc": "Phát hiện các giao dịch bất thường hoặc dấu hiệu gian lận.",
+      "runFullScan": "Chạy quét AI toàn diện"
+    }
+  },
   "header": {
     "searchPlaceholder": "Tìm kiếm sản phẩm, đơn hàng, người bán...",
     "profile": "Hồ sơ",
     "settings": "Cài đặt",
     "logout": "Đăng xuất",
     "notifications": "Thông báo",
+    "markAllRead": "Đánh dấu đã đọc",
+    "viewAllNotifications": "Xem tất cả thông báo",
     "darkMode": "Chế độ tối",
     "lightMode": "Chế độ sáng"
   },
@@ -683,7 +736,15 @@
     "revenueOverview": "Tổng quan doanh thu",
     "revenueDesc": "Hiệu suất GMV hàng tháng trong năm hiện tại.",
     "weeklyOrders": "Đơn hàng hàng tuần",
-    "weeklyOrdersDesc": "Khối lượng đơn hàng trong 7 ngày qua."
+    "weeklyOrdersDesc": "Khối lượng đơn hàng trong 7 ngày qua.",
+    "aiBriefing": {
+      "title": "Bản tin AI hàng ngày",
+      "description": "Thông tin chi tiết thông minh dựa trên hiệu suất hiện tại của nền tảng.",
+      "loading": "Đang phân tích dữ liệu...",
+      "placeholder": "Bản tin hàng ngày của bạn sẽ xuất hiện ở đây.",
+      "tip1": "Doanh thu tăng, hãy cân nhắc mở rộng quảng cáo.",
+      "tip2": "Số lượng sản phẩm giảm, hãy kiểm tra kho hàng."
+    }
   },
   "products": {
     "title": "Sản phẩm",
@@ -691,6 +752,15 @@
     "addProduct": "Thêm 1 sản phẩm mới",
     "searchPlaceholder": "Tìm Tên sản phẩm, SKU sản phẩm...",
     "id": "Mã sản phẩm",
+    "forecasting": {
+      "title": "Dự báo kho hàng AI",
+      "description": "Phân tích tồn kho dự đoán dựa trên tốc độ bán hàng và xu hướng.",
+      "restockNow": "Nhập hàng ngay",
+      "analyzeAll": "Phân tích bằng AI",
+      "analysisResult": "Kết quả phân tích kho hàng AI",
+      "analysisSubtitle": "Phân tích thông minh dựa trên dữ liệu tồn kho hiện tại.",
+      "analysisError": "Lỗi khi phân tích kho hàng bằng AI."
+    },
     "name": "Tên sản phẩm",
     "category": "Ngành hàng",
     "seller": "Người bán",
@@ -756,6 +826,10 @@
       "selectCategory": "Chọn ngành hàng",
       "description": "Mô tả",
       "productDescription": "Mô tả sản phẩm",
+      "generateWithAi": "Tạo bằng AI",
+      "nameRequiredForAi": "Vui lòng nhập tên sản phẩm để AI có thể tạo mô tả.",
+      "aiGeneratedSuccess": "Đã tạo mô tả sản phẩm thành công!",
+      "aiGeneratedError": "Lỗi khi tạo mô tả bằng AI. Vui lòng thử lại.",
       "descriptionPlaceholder": "Nhập mô tả sản phẩm hoặc tải lên hình ảnh",
       "salesInfo": "Thông tin bán hàng",
       "salesInfoHint": "Có thể điều chỉnh sau khi chọn ngành hàng",
@@ -1240,6 +1314,7 @@
       "title": "Chiến dịch",
       "description": "Tạo chiến dịch, mục tiêu, thời gian, ngân sách.",
       "create": "Tạo chiến dịch",
+      "createDesc": "Điền thông tin chi tiết để tạo chiến dịch marketing mới.",
       "overview": "Tổng quan về các chiến dịch marketing và hiệu quả (P&L).",
       "name": "Tên chiến dịch",
       "status": "Trạng thái",
@@ -1254,6 +1329,7 @@
     },
     "promotions": {
       "create": "Tạo khuyến mãi",
+      "createDesc": "Điền thông tin chi tiết để tạo khuyến mãi mới.",
       "flashSale": "Flash Sale",
       "flashSaleDesc": "Tạo ưu đãi giới hạn thời gian.",
       "createFlashSale": "Tạo Flash Sale",
@@ -1314,6 +1390,7 @@
       "title": "Email Marketing",
       "description": "Gửi email hàng loạt, mẫu, A/B test.",
       "create": "Tạo chiến dịch",
+      "createDesc": "Điền thông tin chi tiết để tạo chiến dịch email marketing mới.",
       "subscribers": "Tổng người đăng ký",
       "avgOpenRate": "Tỷ lệ mở TB",
       "avgClickRate": "Tỷ lệ click TB",
@@ -1350,6 +1427,7 @@
       "title": "Quản lý nội dung",
       "description": "Bài viết, landing page, bài quảng cáo.",
       "newArticle": "Bài viết mới",
+      "createDesc": "Điền thông tin chi tiết để tạo bài viết mới.",
       "articleTitle": "Tiêu đề",
       "author": "Tác giả",
       "status": "Trạng thái",
@@ -1364,6 +1442,7 @@
       "title": "Form thu thập lead",
       "description": "Form nhúng, popup, tích hợp.",
       "create": "Tạo Form",
+      "createDesc": "Điền thông tin chi tiết để tạo form thu thập lead mới.",
       "activeForms": "Form đang hoạt động",
       "activeFormsDesc": "Quản lý form thu thập khách hàng tiềm năng và popup.",
       "formName": "Tên Form",
@@ -1381,6 +1460,17 @@
         "active": "Hoạt động",
         "paused": "Tạm dừng"
       }
+    },
+    "ai": {
+      "title": "Trợ lý Nội dung AI",
+      "description": "Tạo nội dung marketing sáng tạo bằng Gemini AI.",
+      "generate": "AI Tạo nội dung",
+      "generating": "Đang tạo...",
+      "promptLabel": "Bạn muốn viết về chủ đề gì?",
+      "promptPlaceholder": "VD: Xu hướng thời trang hè 2024",
+      "promptRequired": "Vui lòng nhập chủ đề",
+      "success": "Đã tạo nội dung thành công!",
+      "error": "Không thể tạo nội dung. Vui lòng thử lại."
     },
     "contentSettings": {
       "title": "Thiết lập nội dung",
@@ -1982,6 +2072,57 @@
       "inProgress": "Đang thực hiện",
       "completed": "Đã hoàn thành",
       "overdue": "Quá hạn"
+    }
+  },
+  "customerService": {
+    "title": "Chăm sóc khách hàng",
+    "description": "Quản lý chat đa kênh, hotline và ticket hỗ trợ.",
+    "tabs": {
+      "chat": "Chat đa kênh",
+      "hotline": "Hotline",
+      "tickets": "Tickets",
+      "teams": "Đội ngũ"
+    },
+    "chat": {
+      "channels": "Kênh hỗ trợ",
+      "customerInfo": "Thông tin khách hàng",
+      "recentOrders": "Đơn hàng gần đây",
+      "messageSent": "Gửi tin nhắn thành công"
+    },
+    "hotline": {
+      "simulateCall": "Giả lập cuộc gọi đến",
+      "incomingCall": "Cuộc gọi đến",
+      "activeCall": "Cuộc gọi đang hoạt động",
+      "callAccepted": "Đã chấp nhận cuộc gọi",
+      "callEnded": "Cuộc gọi đã kết thúc",
+      "reject": "Từ chối",
+      "accept": "Chấp nhận",
+      "callHistory": "Lịch sử cuộc gọi"
+    },
+    "tickets": {
+      "create": "Tạo Ticket"
+    },
+    "teams": {
+      "createGroup": "Tạo đội ngũ",
+      "groupName": "Tên đội ngũ",
+      "description": "Mô tả",
+      "members": "Thành viên",
+      "routing": "Quy tắc điều hướng",
+      "createdSuccess": "Tạo đội ngũ thành công",
+      "routingRules": {
+        "all": "Tất cả yêu cầu",
+        "vip": "Chỉ khách VIP",
+        "tech": "Kỹ thuật",
+        "complaint": "Khiếu nại"
+      }
+    },
+    "ai": {
+      "sentimentTitle": "Phân tích sắc thái AI",
+      "analyzing": "Đang phân tích sắc thái...",
+      "runAnalysis": "Chạy phân tích AI",
+      "sentimentError": "Lỗi khi phân tích sắc thái.",
+      "refreshReplies": "Làm mới gợi ý",
+      "repliesError": "Lỗi khi tạo câu trả lời gợi ý."
     }
   }
 }

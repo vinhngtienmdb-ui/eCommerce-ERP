@@ -7,10 +7,15 @@ import { Button } from "@/src/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Download, Plus, Settings, Edit, Trash2, FileText, Percent } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 interface InsuranceRecord {
   id: string
-  empName: string
+  empId: string
   insuranceNo: string
   salaryBase: string
   employeeRate: string
@@ -20,15 +25,59 @@ interface InsuranceRecord {
 
 export function SocialInsurance() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
 
-  const [records] = useState<InsuranceRecord[]>([
-    { id: "INS-001", empName: "Nguyen Van A", insuranceNo: "7912345678", salaryBase: "25,000,000", employeeRate: "2,625,000", employerRate: "5,375,000", status: "Active" },
-    { id: "INS-002", empName: "Tran Thi B", insuranceNo: "7923456789", salaryBase: "30,000,000", employeeRate: "3,150,000", employerRate: "6,450,000", status: "Active" },
-    { id: "INS-003", empName: "Le Van C", insuranceNo: "7934567890", salaryBase: "15,000,000", employeeRate: "1,575,000", employerRate: "3,225,000", status: "Pending" },
+  const [records, setRecords] = useState<InsuranceRecord[]>([
+    { id: "INS-001", empId: "EMP-001", insuranceNo: "7912345678", salaryBase: "25,000,000", employeeRate: "2,625,000", employerRate: "5,375,000", status: "Active" },
+    { id: "INS-002", empId: "EMP-002", insuranceNo: "7923456789", salaryBase: "30,000,000", employeeRate: "3,150,000", employerRate: "6,450,000", status: "Active" },
+    { id: "INS-003", empId: "EMP-003", insuranceNo: "7934567890", salaryBase: "15,000,000", employeeRate: "1,575,000", employerRate: "3,225,000", status: "Pending" },
   ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newRecord, setNewRecord] = useState({
+    empId: "",
+    insuranceNo: "",
+    salaryBase: "",
+  })
+
+  const getEmployeeName = (empId: string) => {
+    const emp = employees.find(e => e.id === empId)
+    return emp ? emp.name : empId
+  }
+
+  const handleCreateRecord = () => {
+    if (!newRecord.empId || !newRecord.insuranceNo || !newRecord.salaryBase) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const salary = parseInt(newRecord.salaryBase.replace(/,/g, ''))
+    if (isNaN(salary)) {
+      toast.error("Lương cơ bản không hợp lệ")
+      return
+    }
+
+    const employeeRate = (salary * 0.105).toLocaleString()
+    const employerRate = (salary * 0.215).toLocaleString()
+
+    const record: InsuranceRecord = {
+      id: `INS-${(records.length + 1).toString().padStart(3, '0')}`,
+      empId: newRecord.empId,
+      insuranceNo: newRecord.insuranceNo,
+      salaryBase: salary.toLocaleString(),
+      employeeRate,
+      employerRate,
+      status: "Pending"
+    }
+
+    setRecords([record, ...records])
+    setIsModalOpen(false)
+    setNewRecord({ empId: "", insuranceNo: "", salaryBase: "" })
+    toast.success("Đã thêm hồ sơ bảo hiểm")
+  }
 
   return (
     <div className="space-y-6">
@@ -73,7 +122,7 @@ export function SocialInsurance() {
             </CardHeader>
             <CardContent>
               <div className="flex justify-between mb-4">
-                <Button>
+                <Button onClick={() => setIsModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
                   Thêm hồ sơ
                 </Button>
@@ -82,6 +131,57 @@ export function SocialInsurance() {
                   {t("hr.payroll.exportReport")}
                 </Button>
               </div>
+
+              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Thêm hồ sơ bảo hiểm</DialogTitle>
+                    <DialogDescription>
+                      Điền thông tin để tạo hồ sơ bảo hiểm mới cho nhân viên.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Select value={newRecord.empId} onValueChange={(val) => setNewRecord({...newRecord, empId: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn nhân viên" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {employees.map(emp => (
+                            <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="insuranceNo" className="text-right">Số sổ BHXH</Label>
+                      <Input 
+                        id="insuranceNo" 
+                        value={newRecord.insuranceNo} 
+                        onChange={(e) => setNewRecord({...newRecord, insuranceNo: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 7912345678"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="salaryBase" className="text-right">Lương cơ bản</Label>
+                      <Input 
+                        id="salaryBase" 
+                        value={newRecord.salaryBase} 
+                        onChange={(e) => setNewRecord({...newRecord, salaryBase: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 25000000"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                    <Button onClick={handleCreateRecord}>Thêm hồ sơ</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -97,7 +197,7 @@ export function SocialInsurance() {
                 <TableBody>
                   {records.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.empName}</TableCell>
+                      <TableCell className="font-medium">{getEmployeeName(item.empId)}</TableCell>
                       <TableCell>{item.insuranceNo}</TableCell>
                       <TableCell>{item.salaryBase} ₫</TableCell>
                       <TableCell className="text-red-600">-{item.employeeRate} ₫</TableCell>

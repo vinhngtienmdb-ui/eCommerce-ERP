@@ -23,8 +23,16 @@ import {
   ClipboardList,
   HelpCircle,
   Star,
-  ArrowLeft
+  ArrowLeft,
+  Sparkles,
+  Loader2,
+  Play,
+  Pause,
+  ArrowRight,
+  Settings2,
+  Zap
 } from "lucide-react"
+import { GoogleGenAI } from "@google/genai"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/src/components/ui/card"
@@ -40,30 +48,258 @@ import {
 } from "@/src/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { toast } from "sonner"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/src/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 
 export function Marketing() {
   const { t } = useTranslation()
   const [currentView, setCurrentView] = useState<string>("dashboard")
 
   // Mock Data for Campaigns
-  const [campaigns] = useState([
+  const [campaigns, setCampaigns] = useState([
     { id: 1, name: "Summer Sale 2024", status: "active", budget: 50000000, revenue: 120000000, pnl: 70000000, roi: 140, platform: "Multi-channel" },
     { id: 2, name: "New Product Launch", status: "planned", budget: 30000000, revenue: 0, pnl: -30000000, roi: 0, platform: "Facebook, TikTok" },
     { id: 3, name: "Flash Sale 6.6", status: "completed", budget: 20000000, revenue: 85000000, pnl: 65000000, roi: 325, platform: "App" },
   ])
 
+  const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false)
+  const [newCampaignName, setNewCampaignName] = useState("")
+  const [newCampaignBudget, setNewCampaignBudget] = useState("")
+  const [newCampaignPlatform, setNewCampaignPlatform] = useState("")
+
+  const handleCreateCampaign = () => {
+    if (!newCampaignName || !newCampaignBudget || !newCampaignPlatform) {
+      toast.error(t("common.error"))
+      return
+    }
+
+    const newCampaign = {
+      id: campaigns.length + 1,
+      name: newCampaignName,
+      status: "planned",
+      budget: parseInt(newCampaignBudget),
+      revenue: 0,
+      pnl: 0,
+      roi: 0,
+      platform: newCampaignPlatform
+    }
+
+    setCampaigns([...campaigns, newCampaign])
+    setIsCreateCampaignOpen(false)
+    setNewCampaignName("")
+    setNewCampaignBudget("")
+    setNewCampaignPlatform("")
+    toast.success(t("common.success"))
+  }
+
   // Mock Data for Social Posts
-  const [posts] = useState([
+  const [posts, setPosts] = useState([
     { id: 1, content: "Giảm giá 50% cho tất cả sản phẩm hè!", platform: "facebook", status: "published", engagement: 1200, date: "2024-06-01" },
     { id: 2, content: "Review sản phẩm mới - Siêu phẩm 2024", platform: "tiktok", status: "scheduled", engagement: 0, date: "2024-06-05" },
   ])
 
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
+  const [newPostContent, setNewPostContent] = useState("")
+  const [newPostPlatform, setNewPostPlatform] = useState("")
+
+  const handleCreatePost = () => {
+    if (!newPostContent || !newPostPlatform) {
+      toast.error(t("common.error"))
+      return
+    }
+
+    const newPost = {
+      id: posts.length + 1,
+      content: newPostContent,
+      platform: newPostPlatform,
+      status: "draft",
+      engagement: 0,
+      date: new Date().toISOString().split('T')[0]
+    }
+
+    setPosts([...posts, newPost])
+    setIsCreatePostOpen(false)
+    setNewPostContent("")
+    setNewPostPlatform("")
+    toast.success(t("common.success"))
+  }
+
   // Mock Data for Promotions
-  const [promotions] = useState([
+  const [promotions, setPromotions] = useState([
     { id: 1, name: "Flash Sale 12H", type: "flash_sale", discount: "50%", start: "12:00", end: "14:00", status: "active" },
     { id: 2, name: "Voucher 100K", type: "voucher", discount: "100.000đ", start: "2024-06-01", end: "2024-06-30", status: "active" },
     { id: 3, name: "Mua chung giá rẻ", type: "group_buy", discount: "30%", start: "2024-06-10", end: "2024-06-15", status: "upcoming" },
   ])
+
+  const [isCreatePromotionOpen, setIsCreatePromotionOpen] = useState(false)
+  const [newPromoName, setNewPromoName] = useState("")
+  const [newPromoType, setNewPromoType] = useState("")
+  const [newPromoDiscount, setNewPromoDiscount] = useState("")
+
+  const handleCreatePromotion = () => {
+    if (!newPromoName || !newPromoType || !newPromoDiscount) {
+      toast.error(t("common.error"))
+      return
+    }
+
+    const newPromotion = {
+      id: promotions.length + 1,
+      name: newPromoName,
+      type: newPromoType,
+      discount: newPromoDiscount,
+      start: new Date().toISOString().split('T')[0],
+      end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +7 days
+      status: "upcoming"
+    }
+
+    setPromotions([...promotions, newPromotion])
+    setIsCreatePromotionOpen(false)
+    setNewPromoName("")
+    setNewPromoType("")
+    setNewPromoDiscount("")
+    toast.success(t("common.success"))
+  }
+
+  // Mock Data for Email Campaigns
+  const [emailCampaigns, setEmailCampaigns] = useState([
+    { id: 1, name: "Monthly Newsletter - June", status: "Sent", sent: 14500, openRate: "28%", clickRate: "4.5%", date: "2024-06-01" },
+    { id: 2, name: "Product Launch Announcement", status: "Draft", sent: "-", openRate: "-", clickRate: "-", date: "Created 2 days ago" },
+  ])
+
+  const [isCreateEmailOpen, setIsCreateEmailOpen] = useState(false)
+  const [newEmailName, setNewEmailName] = useState("")
+
+  const handleCreateEmail = () => {
+    if (!newEmailName) {
+      toast.error(t("common.error"))
+      return
+    }
+
+    const newEmail = {
+      id: emailCampaigns.length + 1,
+      name: newEmailName,
+      status: "Draft",
+      sent: "-",
+      openRate: "-",
+      clickRate: "-",
+      date: new Date().toISOString().split('T')[0]
+    }
+
+    setEmailCampaigns([...emailCampaigns, newEmail])
+    setIsCreateEmailOpen(false)
+    setNewEmailName("")
+    toast.success(t("common.success"))
+  }
+
+  // Mock Data for Articles
+  const [articles, setArticles] = useState([
+    { id: 1, title: "Top 10 Summer Fashion Trends", author: "Sarah Jenkins", status: "Published", lastModified: "2 hours ago" },
+    { id: 2, title: "How to Choose the Right Skincare", author: "Mike Ross", status: "Draft", lastModified: "Yesterday" },
+  ])
+
+  const [isCreateArticleOpen, setIsCreateArticleOpen] = useState(false)
+  const [newArticleTitle, setNewArticleTitle] = useState("")
+
+  const handleCreateArticle = () => {
+    if (!newArticleTitle) {
+      toast.error(t("common.error"))
+      return
+    }
+
+    const newArticle = {
+      id: articles.length + 1,
+      title: newArticleTitle,
+      author: "Current User",
+      status: "Draft",
+      lastModified: "Just now"
+    }
+
+    setArticles([...articles, newArticle])
+    setIsCreateArticleOpen(false)
+    setNewArticleTitle("")
+    toast.success(t("common.success"))
+  }
+
+  // Mock Data for Leads Forms
+  const [leadForms, setLeadForms] = useState([
+    { id: 1, name: "Newsletter Signup Footer", type: "embedded", views: 12500, submissions: 450, conversionRate: "3.6%", status: "active" },
+    { id: 2, name: "Exit Intent Popup", type: "popup", views: 3200, submissions: 85, conversionRate: "2.6%", status: "active" },
+    { id: 3, name: "Summer Sale Registration", type: "landingPage", views: 1500, submissions: 320, conversionRate: "21.3%", status: "paused" },
+  ])
+
+  const [isCreateLeadFormOpen, setIsCreateLeadFormOpen] = useState(false)
+  const [newLeadFormName, setNewLeadFormName] = useState("")
+  const [newLeadFormType, setNewLeadFormType] = useState("")
+
+  const handleCreateLeadForm = () => {
+    if (!newLeadFormName || !newLeadFormType) {
+      toast.error(t("common.error"))
+      return
+    }
+
+    const newForm = {
+      id: leadForms.length + 1,
+      name: newLeadFormName,
+      type: newLeadFormType,
+      views: 0,
+      submissions: 0,
+      conversionRate: "0%",
+      status: "active"
+    }
+
+    setLeadForms([...leadForms, newForm])
+    setIsCreateLeadFormOpen(false)
+    setNewLeadFormName("")
+    setNewLeadFormType("")
+    toast.success(t("common.success"))
+  }
+
+  // AI Content Generation
+  const [isAiDialogOpen, setIsAiDialogOpen] = useState(false)
+  const [aiPrompt, setAiPrompt] = useState("")
+  const [isAiGenerating, setIsAiGenerating] = useState(false)
+  const [automations, setAutomations] = useState([
+    { id: 1, name: "Welcome Email", trigger: "New Customer", action: "Send Email", status: "active", runs: 1240 },
+    { id: 2, name: "Abandoned Cart", trigger: "Cart Inactive > 2h", action: "Push Notification", status: "active", runs: 856 },
+    { id: 3, name: "VIP Birthday", trigger: "Customer Birthday", action: "Send Voucher", status: "paused", runs: 45 },
+  ])
+
+  const handleAiGenerate = async () => {
+    if (!aiPrompt) {
+      toast.error(t("marketing.ai.promptRequired"))
+      return
+    }
+
+    setIsAiGenerating(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Generate a catchy marketing article title and a short summary (max 200 characters) for: ${aiPrompt}. Return as JSON with keys "title" and "summary".`,
+        config: { responseMimeType: "application/json" }
+      })
+
+      const result = JSON.parse(response.text || "{}")
+      if (result.title) {
+        const newArticle = {
+          id: articles.length + 1,
+          title: result.title,
+          author: "AI Assistant",
+          status: "Draft",
+          lastModified: "Just now"
+        }
+        setArticles([newArticle, ...articles])
+        toast.success(t("marketing.ai.success"))
+        setIsAiDialogOpen(false)
+        setAiPrompt("")
+      }
+    } catch (error) {
+      console.error("AI Generation Error:", error)
+      toast.error(t("marketing.ai.error"))
+    } finally {
+      setIsAiGenerating(false)
+    }
+  }
 
   const marketingCampaigns = [
     { id: "campaigns", title: t("marketing.campaigns.title"), description: t("marketing.campaigns.description"), icon: Megaphone, color: "text-pink-500", bg: "bg-pink-100" },
@@ -71,6 +307,7 @@ export function Marketing() {
     { id: "messages", title: t("marketing.messages.title"), description: t("marketing.messages.description"), icon: MessageSquare, color: "text-green-500", bg: "bg-green-100" },
     { id: "social", title: t("marketing.social.title"), description: t("marketing.social.description"), icon: Share2, color: "text-purple-500", bg: "bg-purple-100" },
     { id: "reports", title: t("marketing.reports.title"), description: t("marketing.reports.description"), icon: BarChart3, color: "text-cyan-500", bg: "bg-cyan-100" },
+    { id: "automations", title: "Automations", description: "Tự động hóa quy trình marketing và bán hàng.", icon: Zap, color: "text-amber-500", bg: "bg-amber-100" },
     { id: "settings", title: t("marketing.settings.title"), description: t("marketing.settings.description"), icon: Settings, color: "text-gray-500", bg: "bg-gray-100" },
   ]
 
@@ -159,6 +396,93 @@ export function Marketing() {
           <ArrowLeft className="w-4 h-4" /> {t("marketing.backToDashboard")}
         </Button>
 
+        {currentView === "automations" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tight">Marketing Automations</h2>
+                <p className="text-muted-foreground">Tự động hóa các quy trình chăm sóc khách hàng và bán hàng.</p>
+              </div>
+              <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Plus className="mr-2 h-4 w-4" />
+                Create Automation
+              </Button>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card className="bg-emerald-50/50 border-emerald-100">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-emerald-700">Total Runs</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-emerald-700">2,141</div>
+                  <p className="text-xs text-emerald-600">+12% from last month</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-blue-50/50 border-blue-100">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-blue-700">Active Workflows</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-blue-700">8</div>
+                  <p className="text-xs text-blue-600">2 paused</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-purple-50/50 border-purple-100">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-purple-700">Conversion Rate</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-purple-700">4.2%</div>
+                  <p className="text-xs text-purple-600">via automated flows</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Active Workflows</CardTitle>
+                <CardDescription>Quản lý các kịch bản tự động hóa đang chạy.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {automations.map((flow) => (
+                    <div key={flow.id} className="flex items-center justify-between p-4 border rounded-xl hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className={`p-2 rounded-lg ${flow.status === 'active' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                          <Zap className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{flow.name}</h4>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {flow.trigger}</span>
+                            <ArrowRight className="h-3 w-3" />
+                            <span>{flow.action}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right mr-4">
+                          <p className="text-sm font-medium">{flow.runs.toLocaleString()}</p>
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Runs</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            {flow.status === 'active' ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Settings2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {currentView === "campaigns" && (
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
@@ -211,11 +535,17 @@ export function Marketing() {
           </div>
 
           <Card>
-            <CardHeader>
-              <CardTitle>{t("marketing.tabs.campaigns")}</CardTitle>
-              <CardDescription>
-                {t("marketing.campaigns.overview")}
-              </CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>{t("marketing.tabs.campaigns")}</CardTitle>
+                <CardDescription>
+                  {t("marketing.campaigns.overview")}
+                </CardDescription>
+              </div>
+              <Button onClick={() => setIsCreateCampaignOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                {t("marketing.campaigns.create")}
+              </Button>
             </CardHeader>
             <CardContent>
               <Table>
@@ -262,7 +592,7 @@ export function Marketing() {
                     <CardDescription>{t("marketing.promotions.flashSaleDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.promotions.createFlashSale")}</Button>
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700" onClick={() => { setNewPromoType("flash_sale"); setIsCreatePromotionOpen(true); }}>{t("marketing.promotions.createFlashSale")}</Button>
                   </CardContent>
                 </Card>
                 <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-200">
@@ -273,7 +603,7 @@ export function Marketing() {
                     <CardDescription>{t("marketing.promotions.voucherCenterDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.promotions.createVoucher")}</Button>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => { setNewPromoType("voucher"); setIsCreatePromotionOpen(true); }}>{t("marketing.promotions.createVoucher")}</Button>
                   </CardContent>
                 </Card>
                 <Card className="bg-gradient-to-br from-green-50 to-white border-green-200">
@@ -284,7 +614,7 @@ export function Marketing() {
                     <CardDescription>{t("marketing.promotions.groupBuyDesc")}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-green-600 hover:bg-green-700" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.promotions.createGroupBuy")}</Button>
+                    <Button className="w-full bg-green-600 hover:bg-green-700" onClick={() => { setNewPromoType("group_buy"); setIsCreatePromotionOpen(true); }}>{t("marketing.promotions.createGroupBuy")}</Button>
                   </CardContent>
                 </Card>
               </div>
@@ -343,19 +673,35 @@ export function Marketing() {
                 <div className="grid gap-2">
                   <label className="text-sm font-medium">{t("marketing.social.platform")}</label>
                   <div className="flex gap-4">
-                    <Button variant="outline" className="flex-1 gap-2"><Facebook className="h-4 w-4" /> Facebook</Button>
-                    <Button variant="outline" className="flex-1 gap-2"><Video className="h-4 w-4" /> TikTok</Button>
+                    <Button 
+                      variant={newPostPlatform === "facebook" ? "default" : "outline"} 
+                      className="flex-1 gap-2"
+                      onClick={() => setNewPostPlatform("facebook")}
+                    >
+                      <Facebook className="h-4 w-4" /> Facebook
+                    </Button>
+                    <Button 
+                      variant={newPostPlatform === "tiktok" ? "default" : "outline"} 
+                      className="flex-1 gap-2"
+                      onClick={() => setNewPostPlatform("tiktok")}
+                    >
+                      <Video className="h-4 w-4" /> TikTok
+                    </Button>
                   </div>
                 </div>
                 <div className="grid gap-2">
                   <label className="text-sm font-medium">{t("marketing.social.content")}</label>
-                  <Input placeholder="What's on your mind?" />
+                  <Input 
+                    placeholder="What's on your mind?" 
+                    value={newPostContent}
+                    onChange={(e) => setNewPostContent(e.target.value)}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <label className="text-sm font-medium">{t("marketing.social.schedule")}</label>
                   <Input type="datetime-local" />
                 </div>
-                <Button className="w-full" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("marketing.social.createPost")}</Button>
+                <Button className="w-full" onClick={handleCreatePost}>{t("marketing.social.createPost")}</Button>
               </CardContent>
             </Card>
 
@@ -500,7 +846,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.email.title")}</h3>
-              <Button onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.email.create")}</Button>
+              <Button onClick={() => setIsCreateEmailOpen(true)}><Plus className="mr-2 h-4 w-4" /> {t("marketing.email.create")}</Button>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
@@ -548,22 +894,16 @@ export function Marketing() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">Monthly Newsletter - June</TableCell>
-                      <TableCell><Badge>Sent</Badge></TableCell>
-                      <TableCell>14,500</TableCell>
-                      <TableCell>28%</TableCell>
-                      <TableCell>4.5%</TableCell>
-                      <TableCell className="text-right">2024-06-01</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Product Launch Announcement</TableCell>
-                      <TableCell><Badge variant="secondary">Draft</Badge></TableCell>
-                      <TableCell>-</TableCell>
-                      <TableCell>-</TableCell>
-                      <TableCell>-</TableCell>
-                      <TableCell className="text-right">Created 2 days ago</TableCell>
-                    </TableRow>
+                    {emailCampaigns.map((campaign) => (
+                      <TableRow key={campaign.id}>
+                        <TableCell className="font-medium">{campaign.name}</TableCell>
+                        <TableCell><Badge variant={campaign.status === "Sent" ? "default" : "secondary"}>{campaign.status}</Badge></TableCell>
+                        <TableCell>{campaign.sent}</TableCell>
+                        <TableCell>{campaign.openRate}</TableCell>
+                        <TableCell>{campaign.clickRate}</TableCell>
+                        <TableCell className="text-right">{campaign.date}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -641,7 +981,13 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.content.title")}</h3>
-              <Button onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.content.newArticle")}</Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setIsAiDialogOpen(true)}>
+                  <Sparkles className="mr-2 h-4 w-4 text-purple-500" />
+                  {t("marketing.ai.generate")}
+                </Button>
+                <Button onClick={() => setIsCreateArticleOpen(true)}><Plus className="mr-2 h-4 w-4" /> {t("marketing.content.newArticle")}</Button>
+              </div>
             </div>
             <Card>
               <CardContent className="p-0">
@@ -655,28 +1001,19 @@ export function Marketing() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-blue-500" />
-                          Top 10 Summer Fashion Trends
-                        </div>
-                      </TableCell>
-                      <TableCell>Sarah Jenkins</TableCell>
-                      <TableCell><Badge>Published</Badge></TableCell>
-                      <TableCell className="text-right">2 hours ago</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-gray-400" />
-                          How to Choose the Right Skincare
-                        </div>
-                      </TableCell>
-                      <TableCell>Mike Ross</TableCell>
-                      <TableCell><Badge variant="outline">Draft</Badge></TableCell>
-                      <TableCell className="text-right">Yesterday</TableCell>
-                    </TableRow>
+                    {articles.map((article) => (
+                      <TableRow key={article.id}>
+                        <TableCell className="font-medium">
+                          <div className="flex items-center gap-2">
+                            <FileText className={`h-4 w-4 ${article.status === "Published" ? "text-blue-500" : "text-gray-400"}`} />
+                            {article.title}
+                          </div>
+                        </TableCell>
+                        <TableCell>{article.author}</TableCell>
+                        <TableCell><Badge variant={article.status === "Published" ? "default" : "outline"}>{article.status}</Badge></TableCell>
+                        <TableCell className="text-right">{article.lastModified}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -714,7 +1051,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.leads.title")}</h3>
-              <Button onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.leads.create")}</Button>
+              <Button onClick={() => setIsCreateLeadFormOpen(true)}><Plus className="mr-2 h-4 w-4" /> {t("marketing.leads.create")}</Button>
             </div>
             <Card>
               <CardHeader>
@@ -734,30 +1071,16 @@ export function Marketing() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">Newsletter Signup Footer</TableCell>
-                      <TableCell>{t("marketing.leads.types.embedded")}</TableCell>
-                      <TableCell>12,500</TableCell>
-                      <TableCell>450</TableCell>
-                      <TableCell>3.6%</TableCell>
-                      <TableCell><Badge>{t("marketing.leads.statuses.active")}</Badge></TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Exit Intent Popup</TableCell>
-                      <TableCell>{t("marketing.leads.types.popup")}</TableCell>
-                      <TableCell>3,200</TableCell>
-                      <TableCell>85</TableCell>
-                      <TableCell>2.6%</TableCell>
-                      <TableCell><Badge>{t("marketing.leads.statuses.active")}</Badge></TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Summer Sale Registration</TableCell>
-                      <TableCell>{t("marketing.leads.types.landingPage")}</TableCell>
-                      <TableCell>1,500</TableCell>
-                      <TableCell>320</TableCell>
-                      <TableCell>21.3%</TableCell>
-                      <TableCell><Badge variant="secondary">{t("marketing.leads.statuses.paused")}</Badge></TableCell>
-                    </TableRow>
+                    {leadForms.map((form) => (
+                      <TableRow key={form.id}>
+                        <TableCell className="font-medium">{form.name}</TableCell>
+                        <TableCell>{t(`marketing.leads.types.${form.type}`)}</TableCell>
+                        <TableCell>{form.views.toLocaleString()}</TableCell>
+                        <TableCell>{form.submissions.toLocaleString()}</TableCell>
+                        <TableCell>{form.conversionRate}</TableCell>
+                        <TableCell><Badge variant={form.status === "active" ? "default" : "secondary"}>{t(`marketing.leads.statuses.${form.status}`)}</Badge></TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -834,6 +1157,228 @@ export function Marketing() {
       </div>
 
       {renderContent()}
+
+      <Dialog open={isCreateCampaignOpen} onOpenChange={setIsCreateCampaignOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("marketing.campaigns.create")}</DialogTitle>
+            <DialogDescription>
+              {t("marketing.campaigns.createDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.campaigns.name")}</label>
+              <Input 
+                placeholder={t("marketing.campaigns.name")} 
+                value={newCampaignName}
+                onChange={(e) => setNewCampaignName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.campaigns.budget")}</label>
+              <Input 
+                type="number"
+                placeholder={t("marketing.campaigns.budget")} 
+                value={newCampaignBudget}
+                onChange={(e) => setNewCampaignBudget(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.campaigns.platform")}</label>
+              <Select value={newCampaignPlatform} onValueChange={setNewCampaignPlatform}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("marketing.campaigns.platform")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Facebook">Facebook</SelectItem>
+                  <SelectItem value="TikTok">TikTok</SelectItem>
+                  <SelectItem value="Google Ads">Google Ads</SelectItem>
+                  <SelectItem value="Multi-channel">Multi-channel</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreateCampaignOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleCreateCampaign}>{t("common.save")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCreatePromotionOpen} onOpenChange={setIsCreatePromotionOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("marketing.promotions.create")}</DialogTitle>
+            <DialogDescription>
+              {t("marketing.promotions.createDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.promotions.name")}</label>
+              <Input 
+                placeholder={t("marketing.promotions.name")} 
+                value={newPromoName}
+                onChange={(e) => setNewPromoName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.promotions.type")}</label>
+              <Select value={newPromoType} onValueChange={setNewPromoType}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("marketing.promotions.type")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="flash_sale">{t("marketing.promotions.flashSale")}</SelectItem>
+                  <SelectItem value="voucher">{t("marketing.promotions.voucherCenter")}</SelectItem>
+                  <SelectItem value="group_buy">{t("marketing.promotions.groupBuy")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.promotions.discount")}</label>
+              <Input 
+                placeholder={t("marketing.promotions.discount")} 
+                value={newPromoDiscount}
+                onChange={(e) => setNewPromoDiscount(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreatePromotionOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleCreatePromotion}>{t("common.save")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCreateEmailOpen} onOpenChange={setIsCreateEmailOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("marketing.email.create")}</DialogTitle>
+            <DialogDescription>
+              {t("marketing.email.createDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.email.campaignName")}</label>
+              <Input 
+                placeholder={t("marketing.email.campaignName")} 
+                value={newEmailName}
+                onChange={(e) => setNewEmailName(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreateEmailOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleCreateEmail}>{t("common.save")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCreateArticleOpen} onOpenChange={setIsCreateArticleOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("marketing.content.newArticle")}</DialogTitle>
+            <DialogDescription>
+              {t("marketing.content.createDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.content.articleTitle")}</label>
+              <Input 
+                placeholder={t("marketing.content.articleTitle")} 
+                value={newArticleTitle}
+                onChange={(e) => setNewArticleTitle(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreateArticleOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleCreateArticle}>{t("common.save")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCreateLeadFormOpen} onOpenChange={setIsCreateLeadFormOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("marketing.leads.create")}</DialogTitle>
+            <DialogDescription>
+              {t("marketing.leads.createDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.leads.formName")}</label>
+              <Input 
+                placeholder={t("marketing.leads.formName")} 
+                value={newLeadFormName}
+                onChange={(e) => setNewLeadFormName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.leads.type")}</label>
+              <Select value={newLeadFormType} onValueChange={setNewLeadFormType}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("marketing.leads.type")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="embedded">{t("marketing.leads.types.embedded")}</SelectItem>
+                  <SelectItem value="popup">{t("marketing.leads.types.popup")}</SelectItem>
+                  <SelectItem value="landingPage">{t("marketing.leads.types.landingPage")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreateLeadFormOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleCreateLeadForm}>{t("common.save")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isAiDialogOpen} onOpenChange={setIsAiDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-500" />
+              {t("marketing.ai.title")}
+            </DialogTitle>
+            <DialogDescription>
+              {t("marketing.ai.description")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t("marketing.ai.promptLabel")}</label>
+              <Input 
+                placeholder={t("marketing.ai.promptPlaceholder")} 
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                disabled={isAiGenerating}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAiDialogOpen(false)} disabled={isAiGenerating}>
+              {t("common.cancel")}
+            </Button>
+            <Button onClick={handleAiGenerate} disabled={isAiGenerating}>
+              {isAiGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("marketing.ai.generating")}
+                </>
+              ) : (
+                t("marketing.ai.generate")
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

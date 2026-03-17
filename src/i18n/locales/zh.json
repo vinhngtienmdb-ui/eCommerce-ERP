@@ -11,9 +11,18 @@
     "delete": "删除",
     "cancel": "取消",
     "status": "状态",
-    "moduleUnderConstruction": "模块建设中"
+    "moduleUnderConstruction": "模块建设中",
+    "languageCode": "Chinese"
   },
   "nav": {
+    "groups": {
+      "management": "管理",
+      "commerce": "商务",
+      "growth": "增长",
+      "operations": "运营",
+      "corporate": "企业",
+      "system": "系统"
+    },
     "dashboard": "仪表盘",
     "products": "产品管理",
     "allProducts": "所有产品",
@@ -47,6 +56,7 @@
     "hrInfo": "人事信息",
     "admin": "管理",
     "adminWorkspace": "行政",
+    "kolKoc": "KOL/KOC 管理",
     "assets": "资产管理",
     "stationery": "办公用品与物资",
     "booking": "预订与资源管理",
@@ -69,7 +79,35 @@
     "executive": "执行中心",
     "direction": "方向",
     "strategyKpi": "战略与 KPI",
+    "automation": "智能自动化",
+    "marketIntelligence": "市场情报",
+    "contentStudio": "AI 内容工作室",
+    "loyalty": "忠诚度与游戏化",
+    "logistics": "物流控制塔",
+    "eContract": "电子合同与签名",
     "settings": "设置"
+  },
+  "executive": {
+    "ai": {
+      "strategyError": "目前无法连接到 AI 战略顾问。",
+      "scenarioError": "目前无法运行情景规划。",
+      "analyzing": "AI 顾问正在分析市场情景...",
+      "simulating": "正在模拟市场情景...",
+      "activateAdvisor": "激活 AI 战略顾问",
+      "runScenario": "运行 AI 情景规划"
+    }
+  },
+  "finance": {
+    "ai": {
+      "forecastError": "目前无法预测财务状况。",
+      "anomalyError": "目前无法检测异常。",
+      "calculating": "正在计算财务指标...",
+      "scanning": "正在扫描异常交易...",
+      "generateForecast": "智能财务预测",
+      "anomalyDetection": "异常检测",
+      "anomalyDesc": "检测异常交易或欺诈迹象。",
+      "runFullScan": "运行全面 AI 扫描"
+    }
   },
   "header": {
     "searchPlaceholder": "搜索产品、订单、卖家...",
@@ -77,6 +115,8 @@
     "settings": "设置",
     "logout": "登出",
     "notifications": "通知",
+    "markAllRead": "全部标记为已读",
+    "viewAllNotifications": "查看所有通知",
     "darkMode": "深色模式",
     "lightMode": "浅色模式"
   },
@@ -92,7 +132,15 @@
     "revenueOverview": "收入概览",
     "revenueDesc": "本年度每月 GMV 表现。",
     "weeklyOrders": "每周订单",
-    "weeklyOrdersDesc": "过去 7 天的订单量。"
+    "weeklyOrdersDesc": "过去 7 天的订单量。",
+    "aiBriefing": {
+      "title": "AI 每日简报",
+      "description": "基于平台当前绩效的智能洞察。",
+      "loading": "正在分析数据...",
+      "placeholder": "您的每日简报将显示在这里。",
+      "tip1": "收入增长，考虑扩大广告规模。",
+      "tip2": "产品数量下降，检查库存。"
+    }
   },
   "financeDashboard": {
     "title": "财务概览",
@@ -217,6 +265,15 @@
     "addProduct": "添加 1 个新产品",
     "searchPlaceholder": "搜索产品名称，SKU...",
     "id": "产品 ID",
+    "forecasting": {
+      "title": "AI 库存预测",
+      "description": "基于销售速度和趋势的预测性库存分析。",
+      "restockNow": "立即补货",
+      "analyzeAll": "AI 智能分析",
+      "analysisResult": "AI 库存分析结果",
+      "analysisSubtitle": "基于当前库存数据的智能分析。",
+      "analysisError": "AI 分析库存时出错。"
+    },
     "name": "产品名称",
     "category": "类别",
     "seller": "卖家",
@@ -282,6 +339,10 @@
       "selectCategory": "选择类别",
       "description": "描述",
       "productDescription": "产品描述",
+      "generateWithAi": "AI 生成描述",
+      "nameRequiredForAi": "请输入产品名称，以便 AI 生成描述。",
+      "aiGeneratedSuccess": "产品描述生成成功！",
+      "aiGeneratedError": "AI 生成描述时出错。请重试。",
       "descriptionPlaceholder": "输入描述或插入图片",
       "salesInfo": "销售信息",
       "salesInfoHint": "选择类别后可调整",
@@ -503,6 +564,7 @@
       "title": "活动",
       "description": "创建活动、目标、时间、预算。",
       "create": "创建活动",
+      "createDesc": "填写详细信息以创建新的营销活动。",
       "overview": "营销活动及其表现 (P&L) 概览。",
       "name": "活动名称",
       "status": "状态",
@@ -517,6 +579,7 @@
     },
     "promotions": {
       "create": "创建促销",
+      "createDesc": "填写详细信息以创建新的促销活动。",
       "flashSale": "限时抢购",
       "flashSaleDesc": "创建限时优惠。",
       "createFlashSale": "创建限时抢购",
@@ -577,6 +640,7 @@
       "title": "邮件营销",
       "description": "批量发送邮件、模板、A/B 测试。",
       "create": "创建活动",
+      "createDesc": "填写详细信息以创建新的邮件营销活动。",
       "subscribers": "总订阅者",
       "avgOpenRate": "平均打开率",
       "avgClickRate": "平均点击率",
@@ -613,6 +677,7 @@
       "title": "内容管理",
       "description": "文章、落地页、广告内容。",
       "newArticle": "新建文章",
+      "createDesc": "填写详细信息以创建新文章。",
       "articleTitle": "标题",
       "author": "作者",
       "status": "状态",
@@ -627,6 +692,7 @@
       "title": "潜在客户表单",
       "description": "嵌入表单、弹窗、集成。",
       "create": "创建表单",
+      "createDesc": "填写详细信息以创建新的潜在客户捕获表单。",
       "activeForms": "活跃表单",
       "activeFormsDesc": "管理潜在客户捕获表单和弹窗。",
       "formName": "表单名称",
@@ -644,6 +710,17 @@
         "active": "活跃",
         "paused": "已暂停"
       }
+    },
+    "ai": {
+      "title": "AI 内容助手",
+      "description": "使用 Gemini AI 生成创意营销内容。",
+      "generate": "AI 生成",
+      "generating": "生成中...",
+      "promptLabel": "你想写什么？",
+      "promptPlaceholder": "例如：2024 年夏季时尚趋势",
+      "promptRequired": "请输入提示词",
+      "success": "内容生成成功！",
+      "error": "生成内容失败。请重试。"
     },
     "contentSettings": {
       "title": "内容设置",
@@ -1000,14 +1077,21 @@
     "dashboard": {
       "welcome": "欢迎回来",
       "productivity": "生产力",
-      "recentActivity": "最近活动",
+      "recentActivity": "近期活动",
+      "recentActivityDesc": "来自团队的更新",
       "deadlines": "即将到来的截止日期",
       "teamStatus": "团队状态",
+      "teamStatusDesc": "谁在线",
       "tasksCompleted": "已完成任务",
       "pendingReviews": "待审核",
       "unreadEmails": "未读邮件",
-      "upcomingEvents": "即将到来的事件",
-      "quickLinks": "快速链接"
+      "upcomingEvents": "即将到来的活动",
+      "quickLinks": "快速链接",
+      "quickLinksDesc": "您最喜欢的工具",
+      "dailyFocus": "今日焦点",
+      "dailyFocusDesc": "今日关键优先事项",
+      "announcements": "公告",
+      "announcementsDesc": "公司最新动态"
     },
     "tasks": {
       "myTasks": "我的任务",
@@ -1665,63 +1749,63 @@
       "details": "360 档案",
       "segment": "细分",
       "walletBalance": "钱包余额",
-      "tags": "标签"
+      "tags": "标签",
+      "churnRisk": "流失风险"
+    },
+    "ai": {
+      "insightsError": "目前无法分析客户数据。",
+      "predictChurn": "预测流失"
     }
   },
   "customerService": {
-    "title": "客户服务中心",
-    "description": "多渠道客户支持、热线和工单管理。",
+    "title": "客户服务",
+    "description": "管理多渠道聊天、热线和支持工单。",
     "tabs": {
-      "chat": "多渠道聊天",
+      "chat": "全渠道聊天",
       "hotline": "热线",
-      "tickets": "工单管理",
-      "teams": "客服团队"
+      "tickets": "工单",
+      "teams": "团队"
     },
     "chat": {
-      "channels": "支持渠道",
+      "channels": "渠道",
       "customerInfo": "客户信息",
       "recentOrders": "最近订单",
-      "lookupPlaceholder": "搜索电话/订单号...",
-      "zaloOA": "Zalo 公众号",
-      "zaloPersonal": "Zalo 个人",
-      "messenger": "Messenger",
-      "whatsapp": "WhatsApp",
-      "wechat": "微信"
+      "messageSent": "消息发送成功"
     },
     "hotline": {
-      "incomingCall": "来电...",
-      "accept": "接听",
-      "reject": "拒绝",
-      "callHistory": "通话记录",
       "simulateCall": "模拟来电",
+      "incomingCall": "来电",
       "activeCall": "通话中",
-      "customerContext": "客户背景"
+      "callAccepted": "通话已接听",
+      "callEnded": "通话已结束",
+      "reject": "拒绝",
+      "accept": "接听",
+      "callHistory": "通话历史"
     },
     "tickets": {
-      "create": "创建工单",
-      "subject": "主题",
-      "priority": "优先级",
-      "status": "状态",
-      "assignee": "处理人",
-      "high": "高",
-      "medium": "中",
-      "low": "低",
-      "open": "新建",
-      "in_progress": "处理中",
-      "resolved": "已解决"
+      "create": "创建工单"
     },
     "teams": {
-      "createGroup": "创建客服组",
-      "groupName": "组名",
+      "createGroup": "创建团队",
+      "groupName": "团队名称",
       "description": "描述",
       "members": "成员",
-      "routing": "路由",
+      "routing": "路由规则",
+      "createdSuccess": "团队创建成功",
       "routingRules": {
-        "all": "所有来电",
-        "vip": "仅 VIP 客户",
-        "tech": "技术问题",
+        "all": "所有查询",
+        "vip": "仅限 VIP",
+        "tech": "技术支持",
         "complaint": "投诉"
       }
+    },
+    "ai": {
+      "sentimentTitle": "AI 情感分析",
+      "analyzing": "正在分析情感...",
+      "runAnalysis": "运行 AI 分析",
+      "sentimentError": "分析情感时出错。",
+      "refreshReplies": "刷新建议",
+      "repliesError": "生成建议回复时出错。"
     }
   }
 }

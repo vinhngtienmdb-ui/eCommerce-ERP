@@ -25,35 +25,39 @@ import {
   Calendar as CalendarIcon,
   ArrowUpCircle,
   ArrowDownCircle,
-  AlertCircle
+  AlertCircle,
+  ChevronRight,
+  MessageSquare,
+  Paperclip
 } from "lucide-react"
-import { motion } from "motion/react"
+import { motion, AnimatePresence } from "motion/react"
 
 export function Tasks() {
   const { t } = useTranslation()
   const [view, setView] = useState("kanban")
+  const [activeTab, setActiveTab] = useState("my-tasks")
 
   const tasks = [
-    { id: 1, title: "Q1 Financial Report", status: "In Progress", priority: "High", assignee: "Alice", dueDate: "2024-03-15", project: "Finance" },
-    { id: 2, title: "Update Website Homepage", status: "To Do", priority: "Medium", assignee: "Bob", dueDate: "2024-03-20", project: "Marketing" },
-    { id: 3, title: "Client Meeting Preparation", status: "Completed", priority: "High", assignee: "Charlie", dueDate: "2024-03-10", project: "Sales" },
-    { id: 4, title: "Server Maintenance", status: "To Do", priority: "Low", assignee: "Dave", dueDate: "2024-03-25", project: "IT" },
-    { id: 5, title: "Onboard New Hires", status: "In Progress", priority: "Medium", assignee: "Eve", dueDate: "2024-03-18", project: "HR" },
+    { id: 1, title: "Q1 Financial Report", status: "In Progress", priority: "High", assignee: "Alice", dueDate: "2024-03-15", project: "Finance", comments: 3, attachments: 2 },
+    { id: 2, title: "Update Website Homepage", status: "To Do", priority: "Medium", assignee: "Bob", dueDate: "2024-03-20", project: "Marketing", comments: 0, attachments: 1 },
+    { id: 3, title: "Client Meeting Preparation", status: "Completed", priority: "High", assignee: "Charlie", dueDate: "2024-03-10", project: "Sales", comments: 5, attachments: 4 },
+    { id: 4, title: "Server Maintenance", status: "To Do", priority: "Low", assignee: "Dave", dueDate: "2024-03-25", project: "IT", comments: 1, attachments: 0 },
+    { id: 5, title: "Onboard New Hires", status: "In Progress", priority: "Medium", assignee: "Eve", dueDate: "2024-03-18", project: "HR", comments: 2, attachments: 3 },
   ]
 
   const columns = [
-    { id: "todo", title: t('workspace.tasks.todo'), status: "To Do", color: "bg-slate-100 dark:bg-slate-800" },
-    { id: "in-progress", title: t('workspace.tasks.inProgress'), status: "In Progress", color: "bg-blue-50 dark:bg-blue-900/20" },
-    { id: "review", title: t('workspace.tasks.review'), status: "Review", color: "bg-purple-50 dark:bg-purple-900/20" },
-    { id: "completed", title: t('workspace.tasks.completed'), status: "Completed", color: "bg-green-50 dark:bg-green-900/20" },
+    { id: "todo", title: t('workspace.tasks.todo'), status: "To Do", color: "bg-slate-100/50 dark:bg-slate-800/50", dot: "bg-slate-400" },
+    { id: "in-progress", title: t('workspace.tasks.inProgress'), status: "In Progress", color: "bg-indigo-50/50 dark:bg-indigo-900/10", dot: "bg-indigo-500" },
+    { id: "review", title: t('workspace.tasks.review'), status: "Review", color: "bg-amber-50/50 dark:bg-amber-900/10", dot: "bg-amber-500" },
+    { id: "completed", title: t('workspace.tasks.completed'), status: "Completed", color: "bg-emerald-50/50 dark:bg-emerald-900/10", dot: "bg-emerald-500" },
   ]
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case "High": return <ArrowUpCircle className="h-4 w-4 text-red-500" />
-      case "Medium": return <AlertCircle className="h-4 w-4 text-yellow-500" />
-      case "Low": return <ArrowDownCircle className="h-4 w-4 text-blue-500" />
-      default: return <Circle className="h-4 w-4 text-gray-500" />
+      case "High": return <ArrowUpCircle className="h-3.5 w-3.5 text-rose-500" />
+      case "Medium": return <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+      case "Low": return <ArrowDownCircle className="h-3.5 w-3.5 text-sky-500" />
+      default: return <Circle className="h-3.5 w-3.5 text-slate-400" />
     }
   }
 
@@ -77,281 +81,203 @@ export function Tasks() {
   }
 
   return (
-    <div className="space-y-4 h-full flex flex-col">
+    <div className="space-y-6 h-full flex flex-col pb-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-2xl font-bold tracking-tight">{t('workspace.tabs.tasks')}</h2>
-          <Badge variant="outline" className="ml-2">12 {t('workspace.tasks.activeTasks')}</Badge>
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">{t('workspace.tabs.tasks')}</h2>
+          <p className="text-sm text-slate-500 mt-1">Manage and track your team's progress</p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center bg-muted rounded-lg p-1">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             <Button 
               variant={view === "kanban" ? "secondary" : "ghost"} 
               size="sm" 
               onClick={() => setView("kanban")}
-              className="h-8 px-2"
+              className={`h-8 px-3 rounded-lg text-xs font-bold transition-all ${view === "kanban" ? "bg-white dark:bg-slate-700 shadow-sm" : "text-slate-500"}`}
             >
-              <LayoutGrid className="h-4 w-4 mr-2" />
+              <LayoutGrid className="h-3.5 w-3.5 mr-2" />
               {t('workspace.tasks.kanban')}
             </Button>
             <Button 
               variant={view === "list" ? "secondary" : "ghost"} 
               size="sm" 
               onClick={() => setView("list")}
-              className="h-8 px-2"
+              className={`h-8 px-3 rounded-lg text-xs font-bold transition-all ${view === "list" ? "bg-white dark:bg-slate-700 shadow-sm" : "text-slate-500"}`}
             >
-              <ListIcon className="h-4 w-4 mr-2" />
+              <ListIcon className="h-3.5 w-3.5 mr-2" />
               {t('workspace.tasks.list')}
             </Button>
           </div>
-          <Button size="sm">
+          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 dark:shadow-none rounded-xl">
             <Plus className="h-4 w-4 mr-2" />
             {t('workspace.tasks.createTask')}
           </Button>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder={t('workspace.tasks.searchTasks')} className="pl-8" />
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="relative w-full md:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Input 
+            placeholder={t('workspace.tasks.searchTasks')} 
+            className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 rounded-xl" 
+          />
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-2" />
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <Button variant="outline" size="sm" className="rounded-xl border-slate-200 dark:border-slate-800 font-bold text-xs h-9">
+            <Filter className="h-3.5 w-3.5 mr-2" />
             {t('workspace.tasks.filter')}
           </Button>
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <div className="flex -space-x-2">
+            {[1, 2, 3].map((i) => (
+              <Avatar key={i} className="h-8 w-8 border-2 border-white dark:border-slate-900 shadow-sm">
+                <AvatarImage src={`https://i.pravatar.cc/150?u=task-user-${i}`} />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+            ))}
+            <div className="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold border-2 border-white dark:border-slate-900 text-slate-500">
+              +5
+            </div>
+          </div>
         </div>
       </div>
 
-      <Tabs defaultValue="my-tasks" className="flex-1 flex flex-col">
-        <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
-          <TabsTrigger value="my-tasks" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2">{t('workspace.tasks.myTasks')}</TabsTrigger>
-          <TabsTrigger value="team" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2">{t('workspace.tasks.teamTasks')}</TabsTrigger>
-          <TabsTrigger value="department" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2">{t('workspace.tasks.departmentTasks')}</TabsTrigger>
-          <TabsTrigger value="company" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2">{t('workspace.tasks.companyTasks')}</TabsTrigger>
+      <Tabs defaultValue="my-tasks" className="flex-1 flex flex-col" onValueChange={setActiveTab}>
+        <TabsList className="w-full justify-start border-b border-slate-100 dark:border-slate-800 rounded-none h-auto p-0 bg-transparent space-x-6">
+          {["my-tasks", "team", "department", "company"].map((tab) => (
+            <TabsTrigger 
+              key={tab}
+              value={tab} 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-indigo-600 data-[state=active]:bg-transparent px-2 py-3 text-sm font-bold text-slate-500 data-[state=active]:text-indigo-600 transition-all"
+            >
+              {t(`workspace.tasks.${tab.replace("-", "T")}`)}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <TabsContent value="my-tasks" className="flex-1 mt-4">
-          {view === "kanban" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full overflow-x-auto pb-4">
-              {columns.map((col) => (
-                <div key={col.id} className={`flex flex-col rounded-lg p-4 ${col.color} min-w-[280px]`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-sm">{col.title}</h3>
-                    <Badge variant="secondary" className="bg-background/50">
-                      {tasks.filter(t => t.status === col.status).length}
-                    </Badge>
-                  </div>
-                  <div className="space-y-3 flex-1">
-                    {tasks.filter(t => t.status === col.status).map((task) => (
-                      <motion.div
-                        key={task.id}
-                        layoutId={`task-${task.id}`}
-                        whileHover={{ y: -2 }}
-                        className="bg-background p-3 rounded-md shadow-sm border cursor-pointer hover:shadow-md transition-all"
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <Badge variant="outline" className="text-[10px] px-1 py-0 h-5">
-                            {task.project}
-                          </Badge>
-                          <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 -mt-2">
-                            <MoreHorizontal className="h-3 w-3" />
-                          </Button>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab + view}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="flex-1"
+          >
+            <TabsContent value={activeTab} className="flex-1 mt-6 h-full">
+              {view === "kanban" ? (
+                <div className="flex gap-6 h-full overflow-x-auto pb-6 scrollbar-hide">
+                  {columns.map((col) => (
+                    <div key={col.id} className={`flex flex-col rounded-2xl p-4 ${col.color} min-w-[300px] w-[300px] border border-slate-100 dark:border-slate-800/50`}>
+                      <div className="flex items-center justify-between mb-5 px-1">
+                        <div className="flex items-center gap-2">
+                          <div className={`h-2 w-2 rounded-full ${col.dot}`} />
+                          <h3 className="font-bold text-sm text-slate-700 dark:text-slate-300">{col.title}</h3>
                         </div>
-                        <h4 className="font-medium text-sm mb-2">{task.title}</h4>
-                        <div className="flex items-center justify-between mt-3">
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            {getPriorityIcon(task.priority)}
-                            <span>{task.dueDate}</span>
+                        <Badge variant="secondary" className="bg-white dark:bg-slate-900 text-slate-500 border-none shadow-sm text-[10px] font-bold px-2">
+                          {tasks.filter(t => t.status === col.status).length}
+                        </Badge>
+                      </div>
+                      <div className="space-y-4 flex-1">
+                        {tasks.filter(t => t.status === col.status).map((task) => (
+                            <motion.div
+                              key={task.id}
+                              layoutId={`task-${task.id}`}
+                              whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                              className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer group"
+                            >
+                            <div className="flex justify-between items-start mb-3">
+                              <Badge className="bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-none text-[9px] font-bold uppercase tracking-wider px-2 py-0.5">
+                                {task.project}
+                              </Badge>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                                <MoreHorizontal className="h-4 w-4 text-slate-400" />
+                              </Button>
+                            </div>
+                            <h4 className="font-bold text-sm text-slate-900 dark:text-slate-50 mb-3 leading-snug group-hover:text-indigo-600 transition-colors">{task.title}</h4>
+                            
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase">
+                                {getPriorityIcon(task.priority)}
+                                <span>{getPriorityLabel(task.priority)}</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase">
+                                <CalendarIcon className="h-3 w-3" />
+                                <span>{task.dueDate}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-3 border-t border-slate-50 dark:border-slate-800">
+                              <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-1 text-slate-400">
+                                  <MessageSquare className="h-3 w-3" />
+                                  <span className="text-[10px] font-bold">{task.comments}</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-slate-400">
+                                  <Paperclip className="h-3 w-3" />
+                                  <span className="text-[10px] font-bold">{task.attachments}</span>
+                                </div>
+                              </div>
+                              <Avatar className="h-7 w-7 border-2 border-white dark:border-slate-800 shadow-sm">
+                                <AvatarImage src={`https://i.pravatar.cc/150?u=${task.assignee}`} />
+                                <AvatarFallback className="text-[10px] font-bold">{task.assignee[0]}</AvatarFallback>
+                              </Avatar>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                      <Button variant="ghost" className="w-full mt-4 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 rounded-xl text-xs font-bold">
+                        <Plus className="h-4 w-4 mr-2" />
+                        {t('workspace.tasks.createTask')}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+                  <div className="grid grid-cols-12 gap-4 p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 font-bold text-[10px] uppercase tracking-wider text-slate-500">
+                    <div className="col-span-5">Task Name</div>
+                    <div className="col-span-2">{t('workspace.tasks.status')}</div>
+                    <div className="col-span-2">{t('workspace.tasks.priority')}</div>
+                    <div className="col-span-2">{t('workspace.tasks.dueDate')}</div>
+                    <div className="col-span-1 text-right">Assignee</div>
+                  </div>
+                  <div className="divide-y divide-slate-50 dark:divide-slate-800">
+                    {tasks.map((task) => (
+                      <div key={task.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors text-sm group cursor-pointer">
+                        <div className="col-span-5 font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                          <div className="h-5 w-5 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:border-indigo-500 transition-colors">
+                            {task.status === "Completed" && <CheckCircle2 className="h-3 w-3 text-emerald-500" />}
                           </div>
-                          <Avatar className="h-6 w-6">
-                            <AvatarFallback className="text-[10px]">{task.assignee[0]}</AvatarFallback>
+                          {task.title}
+                        </div>
+                        <div className="col-span-2">
+                          <Badge variant="secondary" className="rounded-full px-3 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-none">
+                            {getStatusLabel(task.status)}
+                          </Badge>
+                        </div>
+                        <div className="col-span-2 flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                          {getPriorityIcon(task.priority)}
+                          {getPriorityLabel(task.priority)}
+                        </div>
+                        <div className="col-span-2 flex items-center gap-2 text-xs font-bold text-slate-400 uppercase">
+                          <CalendarIcon className="h-3.5 w-3.5" />
+                          {task.dueDate}
+                        </div>
+                        <div className="col-span-1 flex justify-end">
+                          <Avatar className="h-8 w-8 border-2 border-white dark:border-slate-800 shadow-sm">
+                            <AvatarImage src={`https://i.pravatar.cc/150?u=${task.assignee}`} />
+                            <AvatarFallback className="text-[10px] font-bold">{task.assignee[0]}</AvatarFallback>
                           </Avatar>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
-                  <Button variant="ghost" className="w-full mt-2 text-muted-foreground hover:text-foreground">
-                    <Plus className="h-4 w-4 mr-2" />
-                    {t('workspace.tasks.createTask')}
-                  </Button>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="border rounded-md">
-              <div className="grid grid-cols-12 gap-4 p-4 border-b bg-muted/50 font-medium text-sm">
-                <div className="col-span-5">Task Name</div>
-                <div className="col-span-2">{t('workspace.tasks.status')}</div>
-                <div className="col-span-2">{t('workspace.tasks.priority')}</div>
-                <div className="col-span-2">{t('workspace.tasks.dueDate')}</div>
-                <div className="col-span-1">{t('workspace.tasks.assignee')}</div>
-              </div>
-              {tasks.map((task) => (
-                <div key={task.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-0 items-center hover:bg-muted/20 transition-colors text-sm">
-                  <div className="col-span-5 font-medium flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-                    {task.title}
-                  </div>
-                  <div className="col-span-2">
-                    <Badge variant="secondary">{getStatusLabel(task.status)}</Badge>
-                  </div>
-                  <div className="col-span-2 flex items-center gap-2">
-                    {getPriorityIcon(task.priority)}
-                    {getPriorityLabel(task.priority)}
-                  </div>
-                  <div className="col-span-2 flex items-center gap-2 text-muted-foreground">
-                    <CalendarIcon className="h-3 w-3" />
-                    {task.dueDate}
-                  </div>
-                  <div className="col-span-1">
-                    <Avatar className="h-6 w-6">
-                      <AvatarFallback className="text-[10px]">{task.assignee[0]}</AvatarFallback>
-                    </Avatar>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-        {/* Placeholders for other tabs */}
-        <TabsContent value="team" className="mt-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              { name: "Alice Smith", role: "Senior Developer", tasks: 5, completed: 12, avatar: "https://i.pravatar.cc/150?u=alice" },
-              { name: "Bob Jones", role: "Designer", tasks: 3, completed: 8, avatar: "https://i.pravatar.cc/150?u=bob" },
-              { name: "Charlie Brown", role: "Product Manager", tasks: 7, completed: 15, avatar: "https://i.pravatar.cc/150?u=charlie" },
-              { name: "Dave Wilson", role: "QA Engineer", tasks: 4, completed: 10, avatar: "https://i.pravatar.cc/150?u=dave" },
-            ].map((member, i) => (
-              <Card key={i}>
-                <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={member.avatar} />
-                    <AvatarFallback>{member.name[0]}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle className="text-base">{member.name}</CardTitle>
-                    <CardDescription>{member.role}</CardDescription>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div className="bg-muted/50 p-2 rounded-md">
-                      <div className="text-2xl font-bold">{member.tasks}</div>
-                      <div className="text-xs text-muted-foreground">{t('workspace.tasks.activeTasks')}</div>
-                    </div>
-                    <div className="bg-green-50 dark:bg-green-900/10 p-2 rounded-md">
-                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">{member.completed}</div>
-                      <div className="text-xs text-muted-foreground">{t('workspace.tasks.completed')}</div>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full mt-4" size="sm">
-                    {t('workspace.tasks.viewTasks')}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value="department" className="mt-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">{t('workspace.tasks.departmentInitiatives')}</h3>
-              <Button variant="outline" size="sm">{t('workspace.tasks.viewAllProjects')}</Button>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              {[
-                { title: "Q1 Product Launch", progress: 75, status: "On Track", lead: "Charlie Brown", due: "Mar 30" },
-                { title: "Website Redesign", progress: 40, status: "At Risk", lead: "Bob Jones", due: "Apr 15" },
-                { title: "Internal Tool Migration", progress: 90, status: "On Track", lead: "Alice Smith", due: "Mar 10" },
-                { title: "Customer Feedback Loop", progress: 20, status: "Delayed", lead: "Dave Wilson", due: "May 01" },
-              ].map((project, i) => (
-                <Card key={i}>
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start">
-                      <CardTitle className="text-base">{project.title}</CardTitle>
-                      <Badge variant={project.status === "On Track" ? "default" : project.status === "At Risk" ? "destructive" : "secondary"}>
-                        {project.status}
-                      </Badge>
-                    </div>
-                    <CardDescription>Lead: {project.lead} • Due: {project.due}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Progress</span>
-                        <span>{project.progress}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full ${project.status === "At Risk" ? "bg-red-500" : project.status === "Delayed" ? "bg-yellow-500" : "bg-primary"}`} 
-                          style={{ width: `${project.progress}%` }} 
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="company" className="mt-4">
-          <div className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-3">
-              <Card className="bg-primary text-primary-foreground">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{t('workspace.tasks.annualRevenueGoal')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">$12.5M</div>
-                  <div className="text-sm opacity-80">Target: $15M (83%)</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{t('workspace.tasks.marketExpansion')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">3 New Regions</div>
-                  <div className="text-sm text-muted-foreground">Launched in Q1</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{t('workspace.tasks.employeeSatisfaction')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">4.8/5.0</div>
-                  <div className="text-sm text-muted-foreground">Based on recent survey</div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">{t('workspace.tasks.strategicPillars')}</h3>
-              <div className="space-y-4">
-                {[
-                  { title: "Customer Obsession", desc: "Improve NPS by 10 points", status: "On Track" },
-                  { title: "Operational Excellence", desc: "Reduce cloud costs by 15%", status: "At Risk" },
-                  { title: "Innovation", desc: "Launch 2 new AI-powered features", status: "On Track" },
-                ].map((pillar, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 border rounded-lg bg-card">
-                    <div>
-                      <h4 className="font-semibold">{pillar.title}</h4>
-                      <p className="text-sm text-muted-foreground">{pillar.desc}</p>
-                    </div>
-                    <Badge variant={pillar.status === "On Track" ? "outline" : "destructive"}>{pillar.status}</Badge>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </TabsContent>
+              )}
+            </TabsContent>
+          </motion.div>
+        </AnimatePresence>
       </Tabs>
     </div>
   )

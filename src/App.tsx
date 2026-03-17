@@ -30,6 +30,7 @@ import { AssetsPage } from "./pages/admin-workspace/AssetsPage"
 import { StationeryPage } from "./pages/admin-workspace/StationeryPage"
 import { BookingPage } from "./pages/admin-workspace/BookingPage"
 import { RequestsPage } from "./pages/admin-workspace/RequestsPage"
+import { DocumentsPage } from "./pages/admin-workspace/DocumentsPage"
 import { Analytics } from "./pages/Analytics"
 import { Sales } from "./pages/Sales"
 import { Settings } from "./pages/Settings"
@@ -39,13 +40,21 @@ import { Legal } from "./pages/Legal"
 import { SellerFinance } from "./pages/SellerFinance"
 import { SocialCommerce } from "./pages/SocialCommerce"
 import { BusinessPlanning } from "./pages/planning/BusinessPlanning"
+import KolManagement from "./pages/KolManagement"
 import Workspace from "./pages/workspace"
 import ExecutiveCenter from "./pages/executive/ExecutiveCenter"
+import Automation from "./pages/Automation"
+import MarketIntelligence from "./pages/MarketIntelligence"
+import ContentStudio from "./pages/ContentStudio"
+import Loyalty from "./pages/Loyalty"
+import Logistics from "./pages/Logistics"
+import EContract from "./pages/EContract"
 import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
 import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
 import { HRDashboard } from "./pages/hr/HRDashboard"
 import { AdminDashboard } from "./pages/admin-workspace/AdminDashboard"
+import { AiAssistant } from "./components/AiAssistant"
 
 function FallbackRoute() {
   const { t } = useTranslation()
@@ -56,6 +65,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" richColors />
+      <AiAssistant />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
@@ -80,6 +90,7 @@ export default function App() {
             <Route path="registration" element={<SellerRegistrationPage />} />
           </Route>
           <Route path="customers" element={<Customers />} />
+          <Route path="kol-koc" element={<KolManagement />} />
           <Route path="customer-service" element={<CustomerService />} />
           <Route path="marketing" element={<Marketing />} />
           <Route path="planning" element={<BusinessPlanning />} />
@@ -120,10 +131,17 @@ export default function App() {
             <Route path="stationery" element={<StationeryPage />} />
             <Route path="booking" element={<BookingPage />} />
             <Route path="requests" element={<RequestsPage />} />
+            <Route path="documents" element={<DocumentsPage />} />
           </Route>
           <Route path="analytics" element={<Analytics />} />
           <Route path="sales" element={<Sales />} />
           <Route path="live" element={<LiveHub />} />
+          <Route path="automation" element={<Automation />} />
+          <Route path="market-intelligence" element={<MarketIntelligence />} />
+          <Route path="content-studio" element={<ContentStudio />} />
+          <Route path="loyalty" element={<Loyalty />} />
+          <Route path="logistics" element={<Logistics />} />
+          <Route path="e-contract" element={<EContract />} />
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<FallbackRoute />} />
         </Route>

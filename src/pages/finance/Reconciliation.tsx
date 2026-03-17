@@ -19,16 +19,54 @@ import {
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Badge } from "@/src/components/ui/badge"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import {
   Search,
   Filter,
   FileText,
-  Download
+  Download,
+  Plus
 } from "lucide-react"
+import { toast } from "sonner"
 
 export function Reconciliation() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("reconciliation")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newInvoice, setNewInvoice] = useState({
+    type: "vat",
+    recipient: "",
+    amount: ""
+  })
+
+  const [invoices, setInvoices] = useState([
+    { id: "INV-001", type: "vat", recipient: "Nguyen Van A", amount: 1250000, date: "2026-03-04", status: "Sent" },
+    { id: "INV-002", type: "commission", recipient: "Shop XYZ", amount: 450000, date: "2026-03-04", status: "Draft" },
+    { id: "INV-003", type: "vat", recipient: "Tran Thi B", amount: 890000, date: "2026-03-03", status: "Sent" },
+  ])
+
+  const handleCreateInvoice = () => {
+    if (!newInvoice.recipient || !newInvoice.amount) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const invoice = {
+      id: `INV-${(invoices.length + 1).toString().padStart(3, '0')}`,
+      type: newInvoice.type,
+      recipient: newInvoice.recipient,
+      amount: parseInt(newInvoice.amount),
+      date: new Date().toISOString().split('T')[0],
+      status: "Draft"
+    }
+
+    setInvoices([invoice, ...invoices])
+    setIsModalOpen(false)
+    setNewInvoice({ type: "vat", recipient: "", amount: "" })
+    toast.success("Đã tạo hóa đơn mới")
+  }
 
   return (
     <div className="space-y-6">
@@ -124,7 +162,62 @@ export function Reconciliation() {
                   <Filter className="mr-2 h-4 w-4" />
                   {t("common.filters")}
                 </Button>
+                <Button onClick={() => setIsModalOpen(true)}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Tạo hóa đơn
+                </Button>
               </div>
+
+              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Tạo hóa đơn mới</DialogTitle>
+                    <DialogDescription>
+                      Điền thông tin chi tiết để tạo hóa đơn.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="type" className="text-right">Loại hóa đơn</Label>
+                      <Select value={newInvoice.type} onValueChange={(val) => setNewInvoice({...newInvoice, type: val})}>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn loại hóa đơn" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="vat">Hóa đơn GTGT</SelectItem>
+                          <SelectItem value="commission">Hóa đơn hoa hồng</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="recipient" className="text-right">Người nhận</Label>
+                      <Input 
+                        id="recipient" 
+                        value={newInvoice.recipient} 
+                        onChange={(e) => setNewInvoice({...newInvoice, recipient: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="Tên người nhận / Công ty"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="amount" className="text-right">Số tiền (VNĐ)</Label>
+                      <Input 
+                        id="amount" 
+                        type="number"
+                        value={newInvoice.amount} 
+                        onChange={(e) => setNewInvoice({...newInvoice, amount: e.target.value})}
+                        className="col-span-3" 
+                        placeholder="VD: 5000000"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                    <Button onClick={handleCreateInvoice}>Tạo hóa đơn</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -138,11 +231,7 @@ export function Reconciliation() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {[
-                    { id: "INV-001", type: "vat", recipient: "Nguyen Van A", amount: 1250000, date: "2026-03-04", status: "Sent" },
-                    { id: "INV-002", type: "commission", recipient: "Shop XYZ", amount: 450000, date: "2026-03-04", status: "Draft" },
-                    { id: "INV-003", type: "vat", recipient: "Tran Thi B", amount: 890000, date: "2026-03-03", status: "Sent" },
-                  ].map((item) => (
+                  {invoices.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium">{item.id}</TableCell>
                       <TableCell>

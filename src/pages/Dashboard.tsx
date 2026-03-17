@@ -5,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card"
+import { Button } from "@/src/components/ui/button"
+import { Badge } from "@/src/components/ui/badge"
 import {
   Area,
   AreaChart,
@@ -28,8 +30,15 @@ import {
   BarChart3, 
   UsersRound,
   Star,
-  HelpCircle
+  HelpCircle,
+  Sparkles,
+  Loader2,
+  TrendingUp,
+  AlertTriangle,
+  Lightbulb
 } from "lucide-react"
+import { GoogleGenAI } from "@google/genai"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
@@ -62,6 +71,30 @@ export function Dashboard() {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
+  const [aiBriefing, setAiBriefing] = useState<string | null>(null)
+  const [isAiLoading, setIsAiLoading] = useState(false)
+
+  const fetchAiBriefing = async () => {
+    setIsAiLoading(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: "You are an expert e-commerce analyst. Based on these mock stats: Revenue +20%, Sellers +180%, Orders +19%, Products -201. Provide a concise 3-sentence daily briefing for the admin. Focus on one positive trend, one concern, and one actionable advice. Return as plain text.",
+      })
+      setAiBriefing(response.text || null)
+    } catch (error) {
+      console.error("AI Briefing Error:", error)
+      setAiBriefing("Unable to load AI briefing at this time.")
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAiBriefing()
+  }, [])
+
   const modules = [
     { title: "nav.products", icon: Package, color: "text-blue-500", bg: "bg-blue-100", href: "/products", description: "Manage your product catalog" },
     { title: "nav.orders", icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-100", href: "/orders", description: "Track and process orders" },
@@ -83,6 +116,51 @@ export function Dashboard() {
           </p>
         </div>
       </div>
+
+      <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-100">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2 text-purple-700">
+              <Sparkles className="h-5 w-5" />
+              {t("dashboard.aiBriefing.title")}
+            </CardTitle>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={fetchAiBriefing} 
+              disabled={isAiLoading}
+              className="text-purple-600 hover:text-purple-700 hover:bg-purple-100"
+            >
+              {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <TrendingUp className="h-4 w-4" />}
+            </Button>
+          </div>
+          <CardDescription className="text-purple-600/80">
+            {t("dashboard.aiBriefing.description")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isAiLoading ? (
+            <div className="flex items-center gap-2 text-muted-foreground italic py-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {t("dashboard.aiBriefing.loading")}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-sm leading-relaxed text-slate-700">
+                {aiBriefing || t("dashboard.aiBriefing.placeholder")}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border-emerald-200">
+                  <Lightbulb className="h-3 w-3 mr-1" /> {t("dashboard.aiBriefing.tip1")}
+                </Badge>
+                <Badge variant="secondary" className="bg-amber-100 text-amber-700 border-amber-200">
+                  <AlertTriangle className="h-3 w-3 mr-1" /> {t("dashboard.aiBriefing.tip2")}
+                </Badge>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>

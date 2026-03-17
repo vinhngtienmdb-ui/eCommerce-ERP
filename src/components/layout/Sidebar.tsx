@@ -13,6 +13,12 @@ import {
   Truck,
   Wallet,
   UsersRound,
+  Zap,
+  Globe,
+  PenTool,
+  Trophy,
+  Navigation,
+  FileSignature,
   Settings,
   ShieldCheck,
   Video,
@@ -32,108 +38,145 @@ import {
 import React, { useState, useEffect } from "react"
 import { Button } from "@/src/components/ui/button"
 
-const navigation = [
-  { nameKey: "dashboard", href: "/", icon: LayoutDashboard },
-  { 
-    nameKey: "workspace", 
-    href: "/workspace", 
-    icon: Layout,
-    subItems: [
-      { nameKey: "personalWork", href: "/workspace/tasks" },
-      { nameKey: "internalChat", href: "/workspace/chat" },
-      { nameKey: "email", href: "/workspace/email" },
-      { nameKey: "calendar", href: "/workspace/calendar" },
+const navigationGroups = [
+  {
+    titleKey: "management",
+    items: [
+      { nameKey: "dashboard", href: "/", icon: LayoutDashboard },
+      { 
+        nameKey: "workspace", 
+        href: "/workspace", 
+        icon: Layout,
+        subItems: [
+          { nameKey: "personalWork", href: "/workspace/tasks" },
+          { nameKey: "internalChat", href: "/workspace/chat" },
+          { nameKey: "email", href: "/workspace/email" },
+          { nameKey: "calendar", href: "/workspace/calendar" },
+        ]
+      },
+      { 
+        nameKey: "executive", 
+        href: "/executive", 
+        icon: Target,
+        subItems: [
+          { nameKey: "direction", href: "/executive/direction" },
+          { nameKey: "strategyKpi", href: "/executive/strategy" },
+        ]
+      },
+      { nameKey: "analytics", href: "/analytics", icon: ShieldCheck },
     ]
   },
-  { 
-    nameKey: "products", 
-    href: "/products", 
-    icon: Package,
-    subItems: [
-      { nameKey: "allProducts", href: "/products/all" },
-      { nameKey: "addProduct", href: "/products/add" },
-      { nameKey: "aiOptimization", href: "/products/ai-tools" },
+  {
+    titleKey: "commerce",
+    items: [
+      { 
+        nameKey: "products", 
+        href: "/products", 
+        icon: Package,
+        subItems: [
+          { nameKey: "allProducts", href: "/products/all" },
+          { nameKey: "addProduct", href: "/products/add" },
+          { nameKey: "aiOptimization", href: "/products/ai-tools" },
+        ]
+      },
+      { 
+        nameKey: "sellers", 
+        href: "/sellers", 
+        icon: Users,
+        subItems: [
+          { nameKey: "sellerList", href: "/sellers/list" },
+          { nameKey: "sellerApproval", href: "/sellers/approval" },
+          { nameKey: "sellerRegistration", href: "/sellers/registration" },
+        ]
+      },
+      { nameKey: "customers", href: "/customers", icon: UsersRound },
+      { nameKey: "orders", href: "/orders", icon: ShoppingCart },
+      { nameKey: "sales", href: "/sales", icon: TrendingUp },
+      { nameKey: "live", href: "/live", icon: Video },
     ]
   },
-  { 
-    nameKey: "sellers", 
-    href: "/sellers", 
-    icon: Users,
-    subItems: [
-      { nameKey: "sellerList", href: "/sellers/list" },
-      { nameKey: "sellerApproval", href: "/sellers/approval" },
-      { nameKey: "sellerRegistration", href: "/sellers/registration" },
+  {
+    titleKey: "growth",
+    items: [
+      { 
+        nameKey: "growthMarketing", 
+        href: "/marketing", 
+        icon: Megaphone,
+        subItems: [
+          { nameKey: "marketing", href: "/marketing" },
+          { nameKey: "social", href: "/social" },
+          { nameKey: "advertising", href: "/advertising" },
+          { nameKey: "affiliate", href: "/affiliate" },
+          { nameKey: "planning", href: "/planning" },
+        ]
+      },
+      { nameKey: "contentStudio", href: "/content-studio", icon: PenTool },
+      { nameKey: "loyalty", href: "/loyalty", icon: Trophy },
+      { nameKey: "marketIntelligence", href: "/market-intelligence", icon: Globe },
     ]
   },
-  { nameKey: "customers", href: "/customers", icon: UsersRound },
-  { nameKey: "customerService", href: "/customer-service", icon: Headset },
-  { nameKey: "orders", href: "/orders", icon: ShoppingCart },
-  { 
-    nameKey: "growthMarketing", 
-    href: "/marketing", 
-    icon: Megaphone,
-    subItems: [
-      { nameKey: "marketing", href: "/marketing" },
-      { nameKey: "social", href: "/social" },
-      { nameKey: "advertising", href: "/advertising" },
-      { nameKey: "affiliate", href: "/affiliate" },
-      { nameKey: "planning", href: "/planning" },
+  {
+    titleKey: "operations",
+    items: [
+      { nameKey: "purchasing", href: "/purchasing", icon: Truck },
+      { nameKey: "logistics", href: "/logistics", icon: Navigation },
+      { nameKey: "automation", href: "/automation", icon: Zap },
+      { nameKey: "customerService", href: "/customer-service", icon: Headset },
     ]
   },
-  { nameKey: "purchasing", href: "/purchasing", icon: Truck },
-  { nameKey: "legal", href: "/legal", icon: ShieldCheck },
-  { 
-    nameKey: "executive", 
-    href: "/executive", 
-    icon: Target,
-    subItems: [
-      { nameKey: "direction", href: "/executive/direction" },
-      { nameKey: "strategyKpi", href: "/executive/strategy" },
+  {
+    titleKey: "corporate",
+    items: [
+      { 
+        nameKey: "finance", 
+        href: "/finance", 
+        icon: Wallet,
+        subItems: [
+          { nameKey: "accounting", href: "/finance/accounting" },
+          { nameKey: "reconciliation", href: "/finance/reconciliation" },
+          { nameKey: "pnl", href: "/finance/pnl" },
+          { nameKey: "paymentWallet", href: "/finance/payment-wallet" },
+          { nameKey: "sellerFinance", href: "/finance/seller-finance" },
+        ]
+      },
+      { 
+        nameKey: "hr", 
+        href: "/hr", 
+        icon: UsersRound,
+        subItems: [
+          { nameKey: "hrPayroll", href: "/hr/payroll" },
+          { nameKey: "hrSocialInsurance", href: "/hr/social-insurance" },
+          { nameKey: "hrRecruitment", href: "/hr/recruitment" },
+          { nameKey: "hrEmployees", href: "/hr/employees" },
+          { nameKey: "hrTimeAttendance", href: "/hr/time-attendance" },
+          { nameKey: "hrPerformance", href: "/hr/performance" },
+          { nameKey: "hrPit", href: "/hr/pit" },
+          { nameKey: "hrGoals", href: "/hr/goals" },
+          { nameKey: "hrInfo", href: "/hr/info" },
+        ]
+      },
+      { 
+        nameKey: "adminWorkspace", 
+        href: "/admin-workspace", 
+        icon: Briefcase,
+        subItems: [
+          { nameKey: "assets", href: "/admin-workspace/assets" },
+          { nameKey: "stationery", href: "/admin-workspace/stationery" },
+          { nameKey: "booking", href: "/admin-workspace/booking" },
+          { nameKey: "requests", href: "/admin-workspace/requests" },
+          { nameKey: "documents", href: "/admin-workspace/documents" },
+        ]
+      },
+      { nameKey: "legal", href: "/legal", icon: ShieldCheck },
+      { nameKey: "eContract", href: "/e-contract", icon: FileSignature },
     ]
   },
-  { 
-    nameKey: "finance", 
-    href: "/finance", 
-    icon: Wallet,
-    subItems: [
-      { nameKey: "accounting", href: "/finance/accounting" },
-      { nameKey: "reconciliation", href: "/finance/reconciliation" },
-      { nameKey: "pnl", href: "/finance/pnl" },
-      { nameKey: "paymentWallet", href: "/finance/payment-wallet" },
-      { nameKey: "sellerFinance", href: "/finance/seller-finance" },
+  {
+    titleKey: "system",
+    items: [
+      { nameKey: "settings", href: "/settings", icon: Settings },
     ]
-  },
-  { 
-    nameKey: "hr", 
-    href: "/hr", 
-    icon: UsersRound,
-    subItems: [
-      { nameKey: "hrPayroll", href: "/hr/payroll" },
-      { nameKey: "hrSocialInsurance", href: "/hr/social-insurance" },
-      { nameKey: "hrRecruitment", href: "/hr/recruitment" },
-      { nameKey: "hrEmployees", href: "/hr/employees" },
-      { nameKey: "hrTimeAttendance", href: "/hr/time-attendance" },
-      { nameKey: "hrPerformance", href: "/hr/performance" },
-      { nameKey: "hrPit", href: "/hr/pit" },
-      { nameKey: "hrGoals", href: "/hr/goals" },
-      { nameKey: "hrInfo", href: "/hr/info" },
-    ]
-  },
-  { 
-    nameKey: "adminWorkspace", 
-    href: "/admin-workspace", 
-    icon: Briefcase,
-    subItems: [
-      { nameKey: "assets", href: "/admin-workspace/assets" },
-      { nameKey: "stationery", href: "/admin-workspace/stationery" },
-      { nameKey: "booking", href: "/admin-workspace/booking" },
-      { nameKey: "requests", href: "/admin-workspace/requests" },
-    ]
-  },
-  { nameKey: "analytics", href: "/analytics", icon: ShieldCheck },
-  { nameKey: "sales", href: "/sales", icon: TrendingUp },
-  { nameKey: "live", href: "/live", icon: Video },
-  { nameKey: "settings", href: "/settings", icon: Settings },
+  }
 ]
 
 export function Sidebar() {
@@ -192,86 +235,95 @@ export function Sidebar() {
         )}
       </div>
       <div className="flex-1 overflow-y-auto py-4 scrollbar-hide">
-        <nav className="space-y-1 px-2">
-          {navigation.map((item) => {
-            const isActive = location.pathname === item.href || (item.subItems && location.pathname.startsWith(item.href))
-            const isExpanded = expandedItems[item.nameKey]
+        <nav className="space-y-6 px-2">
+          {navigationGroups.map((group) => (
+            <div key={group.titleKey} className="space-y-1">
+              {(isSidebarOpen || isMobile) && (
+                <h3 className="px-3 text-[10px] font-bold uppercase tracking-widest text-sidebar-foreground/40 mb-2">
+                  {t(`nav.groups.${group.titleKey}`)}
+                </h3>
+              )}
+              {group.items.map((item) => {
+                const isActive = location.pathname === item.href || (item.subItems && location.pathname.startsWith(item.href))
+                const isExpanded = expandedItems[item.nameKey]
 
-            return (
-              <div key={item.nameKey}>
-                {item.subItems ? (
-                  <div
-                    onClick={(e) => toggleExpand(item.nameKey, e)}
-                    className={cn(
-                      "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer",
-                      isActive
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                      !isSidebarOpen && !isMobile && "justify-center"
-                    )}
-                    title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
-                  >
-                    <div className="flex items-center">
-                      <item.icon
+                return (
+                  <div key={item.nameKey}>
+                    {item.subItems ? (
+                      <div
+                        onClick={(e) => toggleExpand(item.nameKey, e)}
                         className={cn(
-                          "flex-shrink-0",
-                          isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
+                          "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer",
+                          isActive
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                          !isSidebarOpen && !isMobile && "justify-center"
                         )}
-                      />
-                      {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
-                    </div>
-                    {(isSidebarOpen || isMobile) && (
-                      isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
-                    )}
-                  </div>
-                ) : (
-                  <NavLink
-                    to={item.href}
-                    className={({ isActive }) =>
-                      cn(
-                        "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors",
-                        isActive
-                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
-                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                        !isSidebarOpen && !isMobile && "justify-center"
-                      )
-                    }
-                    title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
-                  >
-                    <item.icon
-                      className={cn(
-                        "flex-shrink-0",
-                        isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
-                      )}
-                    />
-                    {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
-                  </NavLink>
-                )}
-
-                {/* Sub-items */}
-                {item.subItems && isExpanded && (isSidebarOpen || isMobile) && (
-                  <div className="mt-1 space-y-1 pl-9">
-                    {item.subItems.map((subItem) => (
+                        title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
+                      >
+                        <div className="flex items-center">
+                          <item.icon
+                            className={cn(
+                              "flex-shrink-0",
+                              isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
+                            )}
+                          />
+                          {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
+                        </div>
+                        {(isSidebarOpen || isMobile) && (
+                          isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
+                        )}
+                      </div>
+                    ) : (
                       <NavLink
-                        key={subItem.nameKey}
-                        to={subItem.href}
+                        to={item.href}
                         className={({ isActive }) =>
                           cn(
-                            "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+                            "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors",
                             isActive
-                              ? "text-sidebar-primary font-semibold bg-sidebar-accent/50"
-                              : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/30"
+                              ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
+                              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                            !isSidebarOpen && !isMobile && "justify-center"
                           )
                         }
+                        title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
                       >
-                        {t(`nav.${subItem.nameKey}`)}
+                        <item.icon
+                          className={cn(
+                            "flex-shrink-0",
+                            isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
+                          )}
+                        />
+                        {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
                       </NavLink>
-                    ))}
+                    )}
+
+                    {/* Sub-items */}
+                    {item.subItems && isExpanded && (isSidebarOpen || isMobile) && (
+                      <div className="mt-1 space-y-1 pl-9">
+                        {item.subItems.map((subItem) => (
+                          <NavLink
+                            key={subItem.nameKey}
+                            to={subItem.href}
+                            className={({ isActive }) =>
+                              cn(
+                                "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+                                isActive
+                                  ? "text-sidebar-primary font-semibold bg-sidebar-accent/50"
+                                  : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/30"
+                              )
+                            }
+                          >
+                            {t(`nav.${subItem.nameKey}`)}
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            )
-          })}
+                )
+              })}
+            </div>
+          ))}
         </nav>
       </div>
     </>

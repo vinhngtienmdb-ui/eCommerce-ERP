@@ -45,16 +45,49 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { toast } from "sonner"
 
 export function Purchasing() {
   const { t } = useTranslation()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newRequisition, setNewRequisition] = useState({
+    requester: "",
+    item: "",
+    quantity: "",
+    priority: "medium"
+  })
 
   // Mock Data for Requisitions
-  const [requisitions] = useState([
+  const [requisitions, setRequisitions] = useState([
     { id: "PR-2024-001", requester: "IT Department", item: "MacBook Pro M3", quantity: 5, date: "2024-03-01", status: "pending", priority: "high" },
     { id: "PR-2024-002", requester: "Marketing", item: "Printing Paper A4", quantity: 50, date: "2024-03-02", status: "approved", priority: "medium" },
     { id: "PR-2024-003", requester: "HR", item: "Office Chairs", quantity: 10, date: "2024-03-03", status: "rejected", priority: "low" },
   ])
+
+  const handleCreateRequisition = () => {
+    if (!newRequisition.requester || !newRequisition.item || !newRequisition.quantity) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const req = {
+      id: `PR-2024-${(requisitions.length + 1).toString().padStart(3, '0')}`,
+      requester: newRequisition.requester,
+      item: newRequisition.item,
+      quantity: parseInt(newRequisition.quantity),
+      date: new Date().toISOString().split('T')[0],
+      status: "pending",
+      priority: newRequisition.priority
+    }
+
+    setRequisitions([req, ...requisitions])
+    setIsModalOpen(false)
+    setNewRequisition({ requester: "", item: "", quantity: "", priority: "medium" })
+    toast.success("Đã tạo yêu cầu mua hàng mới")
+  }
 
   // Mock Data for Suppliers
   const [suppliers] = useState([
@@ -88,11 +121,72 @@ export function Purchasing() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button>
+          <Button onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> {t("purchasing.requisitions.create")}
           </Button>
         </div>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Tạo yêu cầu mua hàng</DialogTitle>
+            <DialogDescription>
+              Điền thông tin chi tiết để tạo yêu cầu mua sắm mới.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="requester" className="text-right">Phòng ban</Label>
+              <Input 
+                id="requester" 
+                value={newRequisition.requester} 
+                onChange={(e) => setNewRequisition({...newRequisition, requester: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: IT Department"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="item" className="text-right">Mặt hàng</Label>
+              <Input 
+                id="item" 
+                value={newRequisition.item} 
+                onChange={(e) => setNewRequisition({...newRequisition, item: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: MacBook Pro M3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="quantity" className="text-right">Số lượng</Label>
+              <Input 
+                id="quantity" 
+                type="number"
+                value={newRequisition.quantity} 
+                onChange={(e) => setNewRequisition({...newRequisition, quantity: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: 5"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="priority" className="text-right">Độ ưu tiên</Label>
+              <Select value={newRequisition.priority} onValueChange={(val) => setNewRequisition({...newRequisition, priority: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn độ ưu tiên" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Thấp</SelectItem>
+                  <SelectItem value="medium">Trung bình</SelectItem>
+                  <SelectItem value="high">Cao</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleCreateRequisition}>Tạo yêu cầu</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Tabs defaultValue="requisitions" className="space-y-4">
         <TabsList>

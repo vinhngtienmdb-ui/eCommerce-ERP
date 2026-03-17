@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
+import { motion } from "motion/react"
 import { 
   Users, 
   Clock, 
@@ -10,10 +11,13 @@ import {
   Star,
   HelpCircle,
   UserCheck,
-  CalendarCheck
+  CalendarCheck,
+  MoreHorizontal,
+  Search
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card"
 import { Button } from "@/src/components/ui/button"
+import { Badge } from "@/src/components/ui/badge"
 
 export function HRDashboard() {
   const { t } = useTranslation()
@@ -25,8 +29,8 @@ export function HRDashboard() {
       title: "nav.hrPayroll", 
       description: "hrDashboard.hrPayrollDesc", 
       icon: Banknote, 
-      color: "text-green-500", 
-      bg: "bg-green-100",
+      color: "text-emerald-600", 
+      bg: "bg-emerald-50",
       href: "/hr/payroll"
     },
     { 
@@ -34,8 +38,8 @@ export function HRDashboard() {
       title: "nav.hrSocialInsurance", 
       description: "hrDashboard.hrSocialInsuranceDesc", 
       icon: Briefcase, 
-      color: "text-blue-500", 
-      bg: "bg-blue-100",
+      color: "text-blue-600", 
+      bg: "bg-blue-50",
       href: "/hr/social-insurance"
     },
     { 
@@ -43,8 +47,8 @@ export function HRDashboard() {
       title: "nav.hrRecruitment", 
       description: "hrDashboard.hrRecruitmentDesc", 
       icon: UserCheck, 
-      color: "text-orange-500", 
-      bg: "bg-orange-100",
+      color: "text-orange-600", 
+      bg: "bg-orange-50",
       href: "/hr/recruitment"
     },
     { 
@@ -52,8 +56,8 @@ export function HRDashboard() {
       title: "nav.hrEmployees", 
       description: "hrDashboard.hrEmployeesDesc", 
       icon: Users, 
-      color: "text-indigo-500", 
-      bg: "bg-indigo-100",
+      color: "text-indigo-600", 
+      bg: "bg-indigo-50",
       href: "/hr/employees"
     },
     { 
@@ -61,8 +65,8 @@ export function HRDashboard() {
       title: "nav.hrTimeAttendance", 
       description: "hrDashboard.hrTimeAttendanceDesc", 
       icon: Clock, 
-      color: "text-purple-500", 
-      bg: "bg-purple-100",
+      color: "text-purple-600", 
+      bg: "bg-purple-50",
       href: "/hr/time-attendance"
     },
     { 
@@ -70,8 +74,8 @@ export function HRDashboard() {
       title: "Quản lý ngày phép", 
       description: "Cấu hình ngày nghỉ Lễ Tết, nguyên tắc phép năm và duyệt đơn xin nghỉ.", 
       icon: CalendarCheck, 
-      color: "text-pink-500", 
-      bg: "bg-pink-100",
+      color: "text-pink-600", 
+      bg: "bg-pink-50",
       href: "/hr/leave"
     },
     { 
@@ -79,8 +83,8 @@ export function HRDashboard() {
       title: "nav.hrPerformance", 
       description: "hrDashboard.hrPerformanceDesc", 
       icon: Award, 
-      color: "text-yellow-500", 
-      bg: "bg-yellow-100",
+      color: "text-yellow-600", 
+      bg: "bg-yellow-50",
       href: "/hr/performance"
     },
     { 
@@ -88,8 +92,8 @@ export function HRDashboard() {
       title: "nav.hrPit", 
       description: "hrDashboard.hrPitDesc", 
       icon: Banknote, 
-      color: "text-red-500", 
-      bg: "bg-red-100",
+      color: "text-rose-600", 
+      bg: "bg-rose-50",
       href: "/hr/pit"
     },
     { 
@@ -97,8 +101,8 @@ export function HRDashboard() {
       title: "nav.hrGoals", 
       description: "hrDashboard.hrGoalsDesc", 
       icon: Star, 
-      color: "text-teal-500", 
-      bg: "bg-teal-100",
+      color: "text-teal-600", 
+      bg: "bg-teal-50",
       href: "/hr/goals"
     },
     { 
@@ -106,108 +110,73 @@ export function HRDashboard() {
       title: "nav.hrInfo", 
       description: "hrDashboard.hrInfoDesc", 
       icon: HelpCircle, 
-      color: "text-gray-500", 
-      bg: "bg-gray-100",
+      color: "text-slate-600", 
+      bg: "bg-slate-100",
       href: "/hr/info"
     },
   ]
 
   return (
-    <div className="space-y-8 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="space-y-8 p-8 pt-6"
+    >
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">{t("nav.hr")}</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t("nav.hr")}</h2>
+          <p className="text-slate-500 mt-1">
             {t("hrDashboard.description")}
           </p>
         </div>
+        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-200">
+          {t("common.create")}
+        </Button>
       </div>
 
       {/* Summary Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("hrDashboard.totalEmployees")}</CardTitle>
-            <div className="p-2 bg-blue-100 rounded-full">
-              <Users className="h-4 w-4 text-blue-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">124</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {t("hrDashboard.activeEmployees")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("hrDashboard.onLeaveToday")}</CardTitle>
-            <div className="p-2 bg-purple-100 rounded-full">
-              <CalendarCheck className="h-4 w-4 text-purple-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {t("hrDashboard.leaveDetails")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("hrDashboard.openPositions")}</CardTitle>
-            <div className="p-2 bg-orange-100 rounded-full">
-              <Briefcase className="h-4 w-4 text-orange-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">5</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {t("hrDashboard.hiringInProgress")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("hrDashboard.newHires")}</CardTitle>
-            <div className="p-2 bg-green-100 rounded-full">
-              <UserCheck className="h-4 w-4 text-green-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {t("hrDashboard.onboardingCompleted")}
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { title: t("hrDashboard.totalEmployees"), value: "124", desc: t("hrDashboard.activeEmployees"), icon: Users, color: "text-blue-600", bg: "bg-blue-100" },
+          { title: t("hrDashboard.onLeaveToday"), value: "3", desc: t("hrDashboard.leaveDetails"), icon: CalendarCheck, color: "text-purple-600", bg: "bg-purple-100" },
+          { title: t("hrDashboard.openPositions"), value: "5", desc: t("hrDashboard.hiringInProgress"), icon: Briefcase, color: "text-orange-600", bg: "bg-orange-100" },
+          { title: t("hrDashboard.newHires"), value: "2", desc: t("hrDashboard.onboardingCompleted"), icon: UserCheck, color: "text-emerald-600", bg: "bg-emerald-100" },
+        ].map((stat, i) => (
+          <Card key={i} className="rounded-2xl border-slate-100 shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-bold text-slate-500">{stat.title}</CardTitle>
+              <div className={`p-2 ${stat.bg} rounded-xl`}>
+                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+              <p className="text-xs text-slate-400 mt-1 font-medium">
+                {stat.desc}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       {/* Modules */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-          <h3 className="text-lg font-semibold text-blue-600">{t("hrDashboard.modules")}</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h3 className="text-lg font-bold text-slate-900 mb-4">{t("hrDashboard.modules")}</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {hrModules.map((item) => (
             <Card 
               key={item.id} 
-              className="hover:shadow-md transition-shadow cursor-pointer relative group"
+              className="hover:shadow-md transition-all cursor-pointer rounded-2xl border-slate-100 group"
               onClick={() => navigate(item.href)}
             >
               <CardContent className="p-6">
-                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-400 cursor-pointer" />
-                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-blue-400 cursor-pointer" />
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-xl ${item.bg}`}>
-                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                <div className="flex flex-col items-center text-center gap-4">
+                  <div className={`p-4 rounded-2xl ${item.bg}`}>
+                    <item.icon className={`w-8 h-8 ${item.color}`} />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="font-semibold">{t(item.title)}</h4>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{t(item.description)}</p>
+                    <h4 className="font-bold text-slate-900">{t(item.title)}</h4>
+                    <p className="text-xs text-slate-500 line-clamp-2">{t(item.description)}</p>
                   </div>
                 </div>
               </CardContent>
@@ -216,79 +185,55 @@ export function HRDashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="rounded-2xl border-slate-100 shadow-sm">
           <CardHeader>
-            <CardTitle>Hoạt động gần đây</CardTitle>
+            <CardTitle className="font-bold">Hoạt động gần đây</CardTitle>
             <CardDescription>Các cập nhật mới nhất từ hệ thống nhân sự</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-green-100 rounded-full">
-                <UserCheck className="w-4 h-4 text-green-600" />
+          <CardContent className="space-y-6">
+            {[
+              { icon: UserCheck, color: "text-emerald-600", bg: "bg-emerald-100", title: "Nhân viên mới: Lê Văn C", desc: "Đã hoàn thành thủ tục Onboarding", time: "2 giờ trước" },
+              { icon: CalendarCheck, color: "text-purple-600", bg: "bg-purple-100", title: "Đơn xin nghỉ phép: Phạm Thị D", desc: "Đã được phê duyệt bởi Quản lý", time: "5 giờ trước" },
+              { icon: Briefcase, color: "text-blue-600", bg: "bg-blue-100", title: "Tuyển dụng: Lập trình viên Frontend", desc: "Có 3 ứng viên mới nộp hồ sơ", time: "1 ngày trước" },
+            ].map((act, i) => (
+              <div key={i} className="flex items-center gap-4">
+                <div className={`p-2.5 ${act.bg} rounded-xl`}>
+                  <act.icon className={`w-5 h-5 ${act.color}`} />
+                </div>
+                <div className="flex-1 space-y-0.5">
+                  <p className="text-sm font-bold text-slate-900 leading-none">{act.title}</p>
+                  <p className="text-xs text-slate-500">{act.desc}</p>
+                </div>
+                <div className="text-xs font-medium text-slate-400">{act.time}</div>
               </div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Nhân viên mới: Lê Văn C</p>
-                <p className="text-sm text-muted-foreground">Đã hoàn thành thủ tục Onboarding</p>
-              </div>
-              <div className="text-sm text-muted-foreground">2 giờ trước</div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-purple-100 rounded-full">
-                <CalendarCheck className="w-4 h-4 text-purple-600" />
-              </div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Đơn xin nghỉ phép: Phạm Thị D</p>
-                <p className="text-sm text-muted-foreground">Đã được phê duyệt bởi Quản lý</p>
-              </div>
-              <div className="text-sm text-muted-foreground">5 giờ trước</div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-blue-100 rounded-full">
-                <Briefcase className="w-4 h-4 text-blue-600" />
-              </div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Tuyển dụng: Lập trình viên Frontend</p>
-                <p className="text-sm text-muted-foreground">Có 3 ứng viên mới nộp hồ sơ</p>
-              </div>
-              <div className="text-sm text-muted-foreground">1 ngày trước</div>
-            </div>
+            ))}
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-2xl border-slate-100 shadow-sm">
           <CardHeader>
-            <CardTitle>Công việc sắp tới</CardTitle>
+            <CardTitle className="font-bold">Công việc sắp tới</CardTitle>
             <CardDescription>Các nhiệm vụ nhân sự cần xử lý</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Chốt bảng lương tháng này</p>
-                <p className="text-sm text-muted-foreground">Hạn chót: 25/11/2023</p>
+          <CardContent className="space-y-6">
+            {[
+              { color: "bg-rose-500", title: "Chốt bảng lương tháng này", desc: "Hạn chót: 25/11/2023" },
+              { color: "bg-amber-500", title: "Đánh giá hiệu suất quý 4", desc: "Bắt đầu từ: 01/12/2023" },
+              { color: "bg-blue-500", title: "Gia hạn hợp đồng: Trần Thị B", desc: "Hết hạn: 15/12/2023" },
+            ].map((task, i) => (
+              <div key={i} className="flex items-center gap-4">
+                <div className={`w-2 h-2 ${task.color} rounded-full`}></div>
+                <div className="flex-1 space-y-0.5">
+                  <p className="text-sm font-bold text-slate-900 leading-none">{task.title}</p>
+                  <p className="text-xs text-slate-500">{task.desc}</p>
+                </div>
+                <Button variant="outline" size="sm" className="rounded-lg text-xs font-bold border-slate-200">Xử lý</Button>
               </div>
-              <Button variant="outline" size="sm">Xử lý</Button>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Đánh giá hiệu suất quý 4</p>
-                <p className="text-sm text-muted-foreground">Bắt đầu từ: 01/12/2023</p>
-              </div>
-              <Button variant="outline" size="sm">Xem</Button>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Gia hạn hợp đồng: Trần Thị B</p>
-                <p className="text-sm text-muted-foreground">Hết hạn: 15/12/2023</p>
-              </div>
-              <Button variant="outline" size="sm">Chi tiết</Button>
-            </div>
+            ))}
           </CardContent>
         </Card>
       </div>
-    </div>
+    </motion.div>
   )
 }

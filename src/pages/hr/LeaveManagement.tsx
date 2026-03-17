@@ -7,6 +7,11 @@ import { Button } from "@/src/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Plus, Settings, Edit, Trash2, Check, X, Calendar, PieChart } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 interface LeaveRule {
   id: string
@@ -25,7 +30,7 @@ interface Holiday {
 
 interface LeaveRequest {
   id: string
-  empName: string
+  empId: string
   type: string
   dates: string
   status: "Pending" | "Approved" | "Rejected"
@@ -34,6 +39,7 @@ interface LeaveRequest {
 
 export function LeaveManagement() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
@@ -54,10 +60,18 @@ export function LeaveManagement() {
   ])
 
   const [requests, setRequests] = useState<LeaveRequest[]>([
-    { id: "REQ-001", empName: "Nguyen Van A", type: "Phép năm", dates: "2023-11-01 - 2023-11-03", status: "Pending", reason: "Family vacation" },
-    { id: "REQ-002", empName: "Tran Thi B", type: "Nghỉ ốm", dates: "2023-10-30", status: "Approved", reason: "Flu" },
-    { id: "REQ-003", empName: "Le Van C", type: "Nghỉ thai sản", dates: "2023-11-05 - 2024-05-05", status: "Pending", reason: "Maternity" },
+    { id: "REQ-001", empId: "EMP-001", type: "Phép năm", dates: "2023-11-01 - 2023-11-03", status: "Pending", reason: "Family vacation" },
+    { id: "REQ-002", empId: "EMP-002", type: "Nghỉ ốm", dates: "2023-10-30", status: "Approved", reason: "Flu" },
+    { id: "REQ-003", empId: "EMP-003", type: "Nghỉ thai sản", dates: "2023-11-05 - 2024-05-05", status: "Pending", reason: "Maternity" },
   ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newRequest, setNewRequest] = useState({
+    empId: "",
+    type: "",
+    dates: "",
+    reason: ""
+  })
 
   const handleApprove = (id: string) => {
     setRequests(requests.map(r => r.id === id ? { ...r, status: "Approved" } : r))
@@ -66,6 +80,33 @@ export function LeaveManagement() {
   const handleReject = (id: string) => {
     setRequests(requests.map(r => r.id === id ? { ...r, status: "Rejected" } : r))
   }
+
+  const handleCreateRequest = () => {
+    if (!newRequest.empId || !newRequest.type || !newRequest.dates || !newRequest.reason) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const request: LeaveRequest = {
+      id: `REQ-${(requests.length + 1).toString().padStart(3, '0')}`,
+      empId: newRequest.empId,
+      type: newRequest.type,
+      dates: newRequest.dates,
+      reason: newRequest.reason,
+      status: "Pending"
+    }
+
+    setRequests([request, ...requests])
+    setIsModalOpen(false)
+    setNewRequest({ empId: "", type: "", dates: "", reason: "" })
+    toast.success("Đã gửi đơn xin nghỉ phép")
+  }
+
+  const getEmployeeName = (empId: string) => {
+    const emp = employees.find(e => e.id === empId)
+    return emp ? emp.name : empId
+  }
+
 
   return (
     <div className="space-y-6">
@@ -104,10 +145,80 @@ export function LeaveManagement() {
 
         <TabsContent value="requests" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Đơn xin nghỉ phép</CardTitle>
-              <CardDescription>Quản lý và phê duyệt đơn xin nghỉ phép của nhân viên</CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Đơn xin nghỉ phép</CardTitle>
+                <CardDescription>Quản lý và phê duyệt đơn xin nghỉ phép của nhân viên</CardDescription>
+              </div>
+              <Button size="sm" onClick={() => setIsModalOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Tạo đơn nghỉ phép
+              </Button>
             </CardHeader>
+
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Tạo đơn xin nghỉ phép</DialogTitle>
+                  <DialogDescription>
+                    Điền thông tin để gửi yêu cầu nghỉ phép.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                    <Select value={newRequest.empId} onValueChange={(val) => setNewRequest({...newRequest, empId: val})}>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Chọn nhân viên" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {employees.map(emp => (
+                          <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="type" className="text-right">Loại phép</Label>
+                    <Select value={newRequest.type} onValueChange={(val) => setNewRequest({...newRequest, type: val})}>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Chọn loại phép" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {rules.map(rule => (
+                          <SelectItem key={rule.id} value={rule.type}>{rule.type}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="dates" className="text-right">Thời gian</Label>
+                    <Input 
+                      id="dates" 
+                      value={newRequest.dates} 
+                      onChange={(e) => setNewRequest({...newRequest, dates: e.target.value})}
+                      className="col-span-3" 
+                      placeholder="VD: 2024-03-20 - 2024-03-22"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="reason" className="text-right">Lý do</Label>
+                    <Input 
+                      id="reason" 
+                      value={newRequest.reason} 
+                      onChange={(e) => setNewRequest({...newRequest, reason: e.target.value})}
+                      className="col-span-3" 
+                      placeholder="VD: Việc gia đình"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                  <Button onClick={handleCreateRequest}>Gửi yêu cầu</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <CardContent>
               <Table>
                 <TableHeader>
@@ -123,7 +234,7 @@ export function LeaveManagement() {
                 <TableBody>
                   {requests.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.empName}</TableCell>
+                      <TableCell className="font-medium">{getEmployeeName(item.empId)}</TableCell>
                       <TableCell>{item.type}</TableCell>
                       <TableCell>{item.dates}</TableCell>
                       <TableCell>{item.reason}</TableCell>

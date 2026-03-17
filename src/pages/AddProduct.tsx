@@ -3,14 +3,47 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Textarea } from "@/src/components/ui/textarea"
 import { useTranslation } from "react-i18next"
-import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCart, ChevronDown } from "lucide-react"
+import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCart, ChevronDown, Sparkles, Loader2 } from "lucide-react"
 import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { toast } from "sonner"
+import { GoogleGenAI } from "@google/genai"
 
 export function AddProduct() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("basic")
+  const [productName, setProductName] = useState("")
+  const [description, setDescription] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
+
+  const generateDescription = async () => {
+    if (!productName) {
+      toast.error(t("products.add.nameRequiredForAi"))
+      return
+    }
+
+    setIsGenerating(true)
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Generate a professional, engaging product description for an e-commerce site. 
+        Product Name: ${productName}
+        Language: ${t("common.languageCode") || "Vietnamese"}
+        Format: Markdown with bullet points for features.`,
+      })
+      
+      if (response.text) {
+        setDescription(response.text)
+        toast.success(t("products.add.aiGeneratedSuccess"))
+      }
+    } catch (error) {
+      console.error("AI Generation Error:", error)
+      toast.error(t("products.add.aiGeneratedError"))
+    } finally {
+      setIsGenerating(false)
+    }
+  }
 
   const suggestions = [
     { id: 1, text: t("products.add.sug1"), done: false },
@@ -157,8 +190,13 @@ export function AddProduct() {
                   </div>
                   <div>
                     <div className="relative">
-                      <Input placeholder={t("products.add.productNamePlaceholder")} className="pr-16" />
-                      <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">0/120</span>
+                      <Input 
+                        placeholder={t("products.add.productNamePlaceholder")} 
+                        className="pr-16" 
+                        value={productName}
+                        onChange={(e) => setProductName(e.target.value)}
+                      />
+                      <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{productName.length}/120</span>
                     </div>
                   </div>
                 </div>
@@ -181,14 +219,26 @@ export function AddProduct() {
                 <div className="grid grid-cols-[200px_1fr] gap-4">
                   <div className="text-sm font-medium pt-2">
                     <span className="text-destructive">*</span> {t("products.add.productDescription")}
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-4 w-full gap-2 text-xs h-8 border-primary/50 text-primary hover:bg-primary/5"
+                      onClick={generateDescription}
+                      disabled={isGenerating}
+                    >
+                      {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                      {t("products.add.generateWithAi")}
+                    </Button>
                   </div>
                   <div>
                     <div className="relative">
                       <Textarea 
                         placeholder={t("products.add.descriptionPlaceholder")} 
                         className="min-h-[200px] resize-y pb-8"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                       />
-                      <span className="absolute right-3 bottom-3 text-xs text-muted-foreground">0/3000</span>
+                      <span className="absolute right-3 bottom-3 text-xs text-muted-foreground">{description.length}/3000</span>
                     </div>
                   </div>
                 </div>

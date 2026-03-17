@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
+import { GoogleGenAI } from "@google/genai"
 import { 
   MessageSquare, 
   PhoneCall, 
@@ -17,7 +18,12 @@ import {
   Plus,
   Settings,
   ChevronRight,
-  LayoutDashboard
+  LayoutDashboard,
+  Sparkles,
+  Loader2,
+  Smile,
+  Meh,
+  Frown
 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -53,6 +59,7 @@ import {
 import { Label } from "@/src/components/ui/label"
 import { cn } from "@/src/lib/utils"
 import { toast } from "sonner"
+import Markdown from "react-markdown"
 
 export function CustomerService() {
   const { t } = useTranslation()
@@ -60,6 +67,89 @@ export function CustomerService() {
   const [isIncomingCall, setIsIncomingCall] = useState(false)
   const [activeCall, setActiveCall] = useState(false)
   const [isCreateTeamOpen, setIsCreateTeamOpen] = useState(false)
+
+  // AI Sentiment State
+  const [isAnalyzingSentiment, setIsAnalyzingSentiment] = useState(false)
+  const [sentimentResult, setSentimentResult] = useState<{
+    score: number;
+    label: string;
+    summary: string;
+  } | null>(null)
+
+  // AI Suggested Replies State
+  const [isGeneratingReplies, setIsGeneratingReplies] = useState(false)
+  const [suggestedReplies, setSuggestedReplies] = useState<string[]>([])
+  const [chatInput, setChatInput] = useState("")
+
+  const runSentimentAnalysis = async () => {
+    setIsAnalyzingSentiment(true)
+    try {
+      const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = genAI.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Analyze the sentiment of a customer based on this context: 
+        Customer: Nguyễn Văn A. 
+        Recent message: "Chào shop, cho mình hỏi đơn hàng ORD-7352 bao giờ giao ạ?"
+        Recent orders: ORD-7352 (Shipping), ORD-7200 (Delivered).
+        Customer status: VIP.
+        
+        Provide a JSON response with:
+        - score: 0 to 100 (0 very negative, 100 very positive)
+        - label: "Positive", "Neutral", or "Negative"
+        - summary: 1 sentence explaining why.
+        
+        Language: ${t("languageCode") || "English"}.`,
+        config: {
+          responseMimeType: "application/json"
+        }
+      })
+
+      const response = await model
+      const result = JSON.parse(response.text || "{}")
+      setSentimentResult(result)
+    } catch (error) {
+      console.error("Sentiment analysis error:", error)
+      toast.error(t("customerService.ai.sentimentError"))
+    } finally {
+      setIsAnalyzingSentiment(false)
+    }
+  }
+
+  const generateReplies = async () => {
+    setIsGeneratingReplies(true)
+    try {
+      const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      const model = genAI.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Generate 3 short, professional, and helpful suggested replies for a customer service agent.
+        Customer message: "Chào shop, cho mình hỏi đơn hàng ORD-7352 bao giờ giao ạ?"
+        Context: Order ORD-7352 is currently in "Shipping" status.
+        Agent should be polite and helpful.
+        
+        Provide a JSON array of 3 strings.
+        Language: ${t("languageCode") || "English"}.`,
+        config: {
+          responseMimeType: "application/json"
+        }
+      })
+
+      const response = await model
+      const result = JSON.parse(response.text || "[]")
+      setSuggestedReplies(result)
+    } catch (error) {
+      console.error("Generate replies error:", error)
+      toast.error(t("customerService.ai.repliesError"))
+    } finally {
+      setIsGeneratingReplies(false)
+    }
+  }
+
+  useEffect(() => {
+    if (activeTab === "chat") {
+      runSentimentAnalysis()
+      generateReplies()
+    }
+  }, [activeTab])
   
   // Team Management State
   const [teams, setTeams] = useState([
@@ -234,11 +324,47 @@ export function CustomerService() {
                       </div>
                     </div>
                   </ScrollArea>
-                  <div className="p-4 border-t flex gap-2">
-                    <Input placeholder="Type a message..." />
-                    <Button size="icon" onClick={() => toast.success(t("customerService.chat.messageSent"))}>
-                      <Send className="h-4 w-4" />
-                    </Button>
+                  <div className="p-4 border-t space-y-4">
+                    {suggestedReplies.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {suggestedReplies.map((reply, idx) => (
+                          <Button 
+                            key={idx} 
+                            variant="outline" 
+                            size="sm" 
+                            className="text-xs h-auto py-1 px-2 max-w-[200px] truncate"
+                            onClick={() => setChatInput(reply)}
+                          >
+                            {reply}
+                          </Button>
+                        ))}
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-auto py-1 px-2 text-xs text-primary"
+                          onClick={generateReplies}
+                          disabled={isGeneratingReplies}
+                        >
+                          {isGeneratingReplies ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
+                          {t("customerService.ai.refreshReplies")}
+                        </Button>
+                      </div>
+                    )}
+                    <div className="flex gap-2">
+                      <Input 
+                        placeholder="Type a message..." 
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                      />
+                      <Button size="icon" onClick={() => {
+                        if (chatInput.trim()) {
+                          toast.success(t("customerService.chat.messageSent"))
+                          setChatInput("")
+                        }
+                      }}>
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </Card>
 
@@ -249,6 +375,76 @@ export function CustomerService() {
                   </CardHeader>
                   <ScrollArea className="flex-1">
                     <div className="p-4 space-y-6">
+                      {/* AI Sentiment Analysis */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium flex items-center gap-2">
+                            <Sparkles className="h-4 w-4 text-primary" />
+                            {t("customerService.ai.sentimentTitle")}
+                          </h4>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6" 
+                            onClick={runSentimentAnalysis}
+                            disabled={isAnalyzingSentiment}
+                          >
+                            <Loader2 className={cn("h-3 w-3", isAnalyzingSentiment && "animate-spin")} />
+                          </Button>
+                        </div>
+                        
+                        {isAnalyzingSentiment ? (
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground animate-pulse">
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            {t("customerService.ai.analyzing")}
+                          </div>
+                        ) : sentimentResult ? (
+                          <div className="p-3 rounded-lg bg-muted/50 border space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                {sentimentResult.label === "Positive" && <Smile className="h-4 w-4 text-green-500" />}
+                                {sentimentResult.label === "Neutral" && <Meh className="h-4 w-4 text-yellow-500" />}
+                                {sentimentResult.label === "Negative" && <Frown className="h-4 w-4 text-red-500" />}
+                                <span className={cn(
+                                  "text-sm font-bold",
+                                  sentimentResult.label === "Positive" && "text-green-600",
+                                  sentimentResult.label === "Neutral" && "text-yellow-600",
+                                  sentimentResult.label === "Negative" && "text-red-600"
+                                )}>
+                                  {sentimentResult.label}
+                                </span>
+                              </div>
+                              <span className="text-xs font-medium">{sentimentResult.score}/100</span>
+                            </div>
+                            <div className="w-full bg-muted rounded-full h-1.5">
+                              <div 
+                                className={cn(
+                                  "h-1.5 rounded-full transition-all duration-500",
+                                  sentimentResult.label === "Positive" && "bg-green-500",
+                                  sentimentResult.label === "Neutral" && "bg-yellow-500",
+                                  sentimentResult.label === "Negative" && "bg-red-500"
+                                )}
+                                style={{ width: `${sentimentResult.score}%` }}
+                              />
+                            </div>
+                            <p className="text-xs text-muted-foreground italic">
+                              "{sentimentResult.summary}"
+                            </p>
+                          </div>
+                        ) : (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full text-xs"
+                            onClick={runSentimentAnalysis}
+                          >
+                            {t("customerService.ai.runAnalysis")}
+                          </Button>
+                        )}
+                      </div>
+
+                      <Separator />
+
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4 text-muted-foreground" />

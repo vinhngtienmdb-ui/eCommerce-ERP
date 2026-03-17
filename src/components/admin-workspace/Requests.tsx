@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { DollarSign, Plus, Search, Filter, FileText, CheckCircle2, Clock, XCircle } from "lucide-react"
 import { Badge } from "@/src/components/ui/badge"
@@ -5,16 +6,30 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
 import { Card, CardContent } from "@/src/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 export function Requests() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
-  const requests = [
+  const [requests, setRequests] = useState([
     { id: "REQ-001", type: t("adminWorkspace.requests.purchase"), requester: "Phòng Marketing", amount: 15000000, date: "2026-03-04", status: "pending", priority: "High" },
     { id: "REQ-002", type: t("adminWorkspace.requests.payment"), requester: "Phòng Hành chính", amount: 2500000, date: "2026-03-02", status: "approved", priority: "Medium" },
     { id: "REQ-003", type: t("adminWorkspace.requests.travel"), requester: "Nguyễn Văn A (Sales)", amount: 5000000, date: "2026-02-28", status: "rejected", priority: "Low" },
     { id: "REQ-004", type: t("adminWorkspace.requests.purchase"), requester: "Phòng IT", amount: 45000000, date: "2026-03-05", status: "pending", priority: "High" },
-  ]
+  ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newRequest, setNewRequest] = useState({
+    type: "Mua sắm",
+    requester: "",
+    amount: "",
+    priority: "Medium"
+  })
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -23,6 +38,28 @@ export function Requests() {
       case 'rejected': return <Badge variant="destructive" className="font-medium"><XCircle className="mr-1 h-3 w-3" />Từ chối</Badge>
       default: return null
     }
+  }
+
+  const handleCreateRequest = () => {
+    if (!newRequest.requester || !newRequest.amount) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const request = {
+      id: `REQ-${(requests.length + 1).toString().padStart(3, '0')}`,
+      type: newRequest.type,
+      requester: newRequest.requester,
+      amount: parseInt(newRequest.amount),
+      date: new Date().toISOString().split('T')[0],
+      status: "pending",
+      priority: newRequest.priority
+    }
+
+    setRequests([request, ...requests])
+    setIsModalOpen(false)
+    setNewRequest({ type: "Mua sắm", requester: "", amount: "", priority: "Medium" })
+    toast.success("Đã tạo yêu cầu mới")
   }
 
   return (
@@ -84,12 +121,80 @@ export function Requests() {
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
           </Button>
-          <Button className="h-10 shadow-sm">
+          <Button className="h-10 shadow-sm" onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             {t("adminWorkspace.requests.create")}
           </Button>
         </div>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Tạo yêu cầu mới</DialogTitle>
+            <DialogDescription>
+              Điền thông tin để tạo yêu cầu hành chính mới.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="type" className="text-right">Loại yêu cầu</Label>
+              <Select value={newRequest.type} onValueChange={(val) => setNewRequest({...newRequest, type: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn loại" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Mua sắm">Mua sắm</SelectItem>
+                  <SelectItem value="Thanh toán">Thanh toán</SelectItem>
+                  <SelectItem value="Công tác">Công tác</SelectItem>
+                  <SelectItem value="Khác">Khác</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="requester" className="text-right">Người yêu cầu</Label>
+              <Select value={newRequest.requester} onValueChange={(val) => setNewRequest({...newRequest, requester: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn người yêu cầu" />
+                </SelectTrigger>
+                <SelectContent>
+                  {employees.map(emp => (
+                    <SelectItem key={emp.id} value={emp.name}>{emp.name} ({emp.dept})</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="amount" className="text-right">Số tiền (VNĐ)</Label>
+              <Input 
+                id="amount" 
+                type="number"
+                value={newRequest.amount} 
+                onChange={(e) => setNewRequest({...newRequest, amount: e.target.value})}
+                className="col-span-3" 
+                placeholder="VD: 5000000"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="priority" className="text-right">Mức độ</Label>
+              <Select value={newRequest.priority} onValueChange={(val) => setNewRequest({...newRequest, priority: val})}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn mức độ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Low">Thấp</SelectItem>
+                  <SelectItem value="Medium">Trung bình</SelectItem>
+                  <SelectItem value="High">Cao</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleCreateRequest}>Tạo yêu cầu</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Card className="overflow-hidden border-none shadow-sm">
         <div className="rounded-xl border overflow-hidden">

@@ -5,18 +5,73 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Badge } from "@/src/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog";
+import { Label } from "@/src/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
 import { Wallet, ShieldCheck, ArrowDownLeft, ArrowUpRight, History, Search, Filter } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export default function PaymentWallet() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("wallet");
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+  const [newTransaction, setNewTransaction] = useState({
+    amount: "",
+    method: "bank_transfer",
+    customer: "Nguyễn Văn A"
+  });
 
-  const depositOrders = [
+  const [depositOrders, setDepositOrders] = useState([
     { id: "TXN12345", type: "Nạp tiền (MOMO)", amount: 1000000, customer: "Nguyễn Văn A", status: "Thành công" },
     { id: "TXN12347", type: "Nạp tiền (Banking)", amount: 5000000, customer: "Trần Thị B", status: "Đang xử lý" },
     { id: "TXN12348", type: "Nạp tiền (ZaloPay)", amount: 200000, customer: "Lê Văn C", status: "Thành công" },
-  ];
+  ]);
+
+  const [withdrawals, setWithdrawals] = useState([
+    { id: "WDR-001", requester: "Nguyen Van A", type: "user", amount: 500000, bank: "VCB - 1234567890", date: "2026-03-04", status: "pending" },
+    { id: "WDR-002", requester: "Shop XYZ", type: "seller", amount: 15000000, bank: "TCB - 0987654321", date: "2026-03-04", status: "approved" },
+    { id: "WDR-003", requester: "Tran Thi B", type: "user", amount: 200000, bank: "MB - 1122334455", date: "2026-03-03", status: "rejected" },
+  ]);
+
+  const handleDeposit = () => {
+    if (!newTransaction.amount) {
+      toast.error("Vui lòng nhập số tiền");
+      return;
+    }
+    const order = {
+      id: `TXN${Math.floor(Math.random() * 100000)}`,
+      type: `Nạp tiền (${newTransaction.method === 'bank_transfer' ? 'Banking' : newTransaction.method === 'momo' ? 'MOMO' : 'ZaloPay'})`,
+      amount: parseInt(newTransaction.amount),
+      customer: newTransaction.customer,
+      status: "Đang xử lý"
+    };
+    setDepositOrders([order, ...depositOrders]);
+    setIsDepositModalOpen(false);
+    setNewTransaction({ amount: "", method: "bank_transfer", customer: "Nguyễn Văn A" });
+    toast.success("Đã tạo yêu cầu nạp tiền");
+  };
+
+  const handleWithdraw = () => {
+    if (!newTransaction.amount) {
+      toast.error("Vui lòng nhập số tiền");
+      return;
+    }
+    const withdrawal = {
+      id: `WDR-${Math.floor(Math.random() * 1000)}`,
+      requester: newTransaction.customer,
+      type: "user",
+      amount: parseInt(newTransaction.amount),
+      bank: "VCB - 1234567890",
+      date: new Date().toISOString().split('T')[0],
+      status: "pending"
+    };
+    setWithdrawals([withdrawal, ...withdrawals]);
+    setIsWithdrawModalOpen(false);
+    setNewTransaction({ amount: "", method: "bank_transfer", customer: "Nguyễn Văn A" });
+    toast.success("Đã tạo yêu cầu rút tiền");
+  };
 
   return (
     <div className="space-y-6">
@@ -50,10 +105,77 @@ export default function PaymentWallet() {
               </CardContent>
             </Card>
             <div className="flex gap-2 items-center">
-              <Button><ArrowDownLeft className="mr-2 h-4 w-4" /> {t("paymentWallet.deposit")}</Button>
-              <Button variant="outline"><ArrowUpRight className="mr-2 h-4 w-4" /> {t("paymentWallet.withdraw")}</Button>
+              <Button onClick={() => setIsDepositModalOpen(true)}><ArrowDownLeft className="mr-2 h-4 w-4" /> {t("paymentWallet.deposit")}</Button>
+              <Button variant="outline" onClick={() => setIsWithdrawModalOpen(true)}><ArrowUpRight className="mr-2 h-4 w-4" /> {t("paymentWallet.withdraw")}</Button>
             </div>
           </div>
+
+          <Dialog open={isDepositModalOpen} onOpenChange={setIsDepositModalOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Nạp tiền</DialogTitle>
+                <DialogDescription>
+                  Nhập số tiền và phương thức để nạp tiền vào ví.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="amount" className="text-right">Số tiền</Label>
+                  <Input 
+                    id="amount" 
+                    type="number"
+                    value={newTransaction.amount} 
+                    onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="method" className="text-right">Phương thức</Label>
+                  <Select value={newTransaction.method} onValueChange={(val) => setNewTransaction({...newTransaction, method: val})}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Chọn phương thức" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bank_transfer">Chuyển khoản</SelectItem>
+                      <SelectItem value="momo">MOMO</SelectItem>
+                      <SelectItem value="zalopay">ZaloPay</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsDepositModalOpen(false)}>Hủy</Button>
+                <Button onClick={handleDeposit}>Xác nhận nạp</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isWithdrawModalOpen} onOpenChange={setIsWithdrawModalOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Rút tiền</DialogTitle>
+                <DialogDescription>
+                  Nhập số tiền cần rút về tài khoản ngân hàng.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="amount" className="text-right">Số tiền</Label>
+                  <Input 
+                    id="amount" 
+                    type="number"
+                    value={newTransaction.amount} 
+                    onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
+                    className="col-span-3" 
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsWithdrawModalOpen(false)}>Hủy</Button>
+                <Button onClick={handleWithdraw}>Xác nhận rút</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           
           <Card>
             <CardHeader>
@@ -149,11 +271,7 @@ export default function PaymentWallet() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {[
-                    { id: "WDR-001", requester: "Nguyen Van A", type: "user", amount: 500000, bank: "VCB - 1234567890", date: "2026-03-04", status: "pending" },
-                    { id: "WDR-002", requester: "Shop XYZ", type: "seller", amount: 15000000, bank: "TCB - 0987654321", date: "2026-03-04", status: "approved" },
-                    { id: "WDR-003", requester: "Tran Thi B", type: "user", amount: 200000, bank: "MB - 1122334455", date: "2026-03-03", status: "rejected" },
-                  ].map((item) => (
+                  {withdrawals.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium">{item.id}</TableCell>
                       <TableCell>{item.requester}</TableCell>

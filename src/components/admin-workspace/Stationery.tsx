@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { PenTool, Plus, Search, Filter, Box, CheckCircle2, Clock, Truck, ArrowDownRight } from "lucide-react"
 import { Badge } from "@/src/components/ui/badge"
@@ -6,16 +7,30 @@ import { Input } from "@/src/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card"
 import { Progress } from "@/src/components/ui/progress"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { useDataStore } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 export function Stationery() {
   const { t } = useTranslation()
+  const { employees } = useDataStore()
 
-  const requests = [
+  const [requests, setRequests] = useState([
     { id: "VPP-001", item: "Giấy A4 Double A", qty: 5, unit: "Ram", dept: "Marketing", status: "pending", date: "2024-03-01" },
     { id: "VPP-002", item: "Bút bi Thiên Long", qty: 20, unit: "Hộp", dept: "Sales", status: "approved", date: "2024-03-02" },
     { id: "VPP-003", item: "Sổ tay nhân viên", qty: 10, unit: "Cuốn", dept: "HR", status: "delivered", date: "2024-03-03" },
     { id: "VPP-004", item: "Mực in HP 85A", qty: 2, unit: "Hộp", dept: "IT", status: "pending", date: "2024-03-04" },
-  ]
+  ])
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newRequest, setNewRequest] = useState({
+    item: "Giấy A4 Double A",
+    qty: "",
+    unit: "Ram",
+    dept: ""
+  })
 
   const stockLevels = [
     { item: "Giấy A4", stock: 85, min: 20, unit: "Ram" },
@@ -31,6 +46,28 @@ export function Stationery() {
       case 'delivered': return <Badge variant="default" className="bg-emerald-500 font-medium"><Truck className="mr-1 h-3 w-3" />{t("adminWorkspace.stationery.delivered")}</Badge>
       default: return null
     }
+  }
+
+  const handleCreateRequest = () => {
+    if (!newRequest.qty || !newRequest.dept) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const request = {
+      id: `VPP-${(requests.length + 1).toString().padStart(3, '0')}`,
+      item: newRequest.item,
+      qty: parseInt(newRequest.qty),
+      unit: newRequest.unit,
+      dept: newRequest.dept,
+      status: "pending",
+      date: new Date().toISOString().split('T')[0]
+    }
+
+    setRequests([request, ...requests])
+    setIsModalOpen(false)
+    setNewRequest({ item: "Giấy A4 Double A", qty: "", unit: "Ram", dept: "" })
+    toast.success("Đã gửi yêu cầu cấp phát VPP")
   }
 
   return (
@@ -87,7 +124,7 @@ export function Stationery() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">{t("adminWorkspace.stationery.recentRequests")}</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={() => setIsModalOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 {t("adminWorkspace.stationery.request")}
               </Button>
@@ -103,6 +140,77 @@ export function Stationery() {
               </Button>
             </div>
           </CardHeader>
+
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Yêu cầu cấp phát VPP</DialogTitle>
+                <DialogDescription>
+                  Điền thông tin để yêu cầu văn phòng phẩm mới.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="item" className="text-right">Vật phẩm</Label>
+                  <Select value={newRequest.item} onValueChange={(val) => setNewRequest({...newRequest, item: val})}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Chọn vật phẩm" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {stockLevels.map(stock => (
+                        <SelectItem key={stock.item} value={stock.item}>{stock.item}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="qty" className="text-right">Số lượng</Label>
+                  <Input 
+                    id="qty" 
+                    type="number"
+                    value={newRequest.qty} 
+                    onChange={(e) => setNewRequest({...newRequest, qty: e.target.value})}
+                    className="col-span-3" 
+                    placeholder="VD: 5"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="unit" className="text-right">Đơn vị</Label>
+                  <Select value={newRequest.unit} onValueChange={(val) => setNewRequest({...newRequest, unit: val})}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Chọn đơn vị" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Ram">Ram</SelectItem>
+                      <SelectItem value="Hộp">Hộp</SelectItem>
+                      <SelectItem value="Cuốn">Cuốn</SelectItem>
+                      <SelectItem value="Cái">Cái</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="dept" className="text-right">Phòng ban</Label>
+                  <Select value={newRequest.dept} onValueChange={(val) => setNewRequest({...newRequest, dept: val})}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Chọn phòng ban" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Ban Giám Đốc">Ban Giám Đốc</SelectItem>
+                      <SelectItem value="Phòng Kinh Doanh">Phòng Kinh Doanh</SelectItem>
+                      <SelectItem value="Phòng Nhân Sự">Phòng Nhân Sự</SelectItem>
+                      <SelectItem value="Phòng Marketing">Phòng Marketing</SelectItem>
+                      <SelectItem value="Phòng IT">Phòng IT</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                <Button onClick={handleCreateRequest}>Gửi yêu cầu</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
           <CardContent>
             <div className="rounded-md border overflow-hidden">
               <Table>

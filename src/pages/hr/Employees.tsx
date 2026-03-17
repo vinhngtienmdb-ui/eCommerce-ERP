@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -9,25 +10,13 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
-import { Search, Filter, Plus, Users, CheckCircle, Briefcase, Edit, Trash2, Settings, FileText, TrendingUp, Network } from "lucide-react"
-
-interface Employee {
-  id: string
-  name: string
-  dept: string
-  pos: string
-  status: "Active" | "Maternity" | "Resigned" | "Onboarding"
-  email: string
-  phone: string
-  joinDate: string
-  idCard: string
-  taxCode: string
-  socialInsuranceNo: string
-}
+import { Search, Filter, Plus, Users, CheckCircle, Briefcase, Edit, Trash2, Settings, FileText, TrendingUp, Network, FileSignature } from "lucide-react"
+import { useDataStore, Employee } from "@/src/store/useDataStore"
+import { toast } from "sonner"
 
 interface Contract {
   id: string
-  empName: string
+  empId: string
   type: "Probation" | "Definite Term" | "Indefinite Term"
   startDate: string
   endDate: string
@@ -36,21 +25,16 @@ interface Contract {
 
 export function Employees() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { employees, addEmployee, updateEmployee, deleteEmployee, syncEmployeeToUser } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
 
-  const [employees, setEmployees] = useState<Employee[]>([
-    { id: "EMP-001", name: "Nguyen Van A", dept: "Engineering", pos: "Senior Dev", status: "Active", email: "a.nguyen@company.com", phone: "0901234567", joinDate: "2022-03-15", idCard: "001090123456", taxCode: "8012345678", socialInsuranceNo: "7912345678" },
-    { id: "EMP-002", name: "Tran Thi B", dept: "Marketing", pos: "Marketing Lead", status: "Active", email: "b.tran@company.com", phone: "0909876543", joinDate: "2021-06-01", idCard: "002090987654", taxCode: "8023456789", socialInsuranceNo: "7923456789" },
-    { id: "EMP-003", name: "Le Van C", dept: "Sales", pos: "Sales Executive", status: "Onboarding", email: "c.le@company.com", phone: "0912345678", joinDate: "2023-10-01", idCard: "003091234567", taxCode: "8034567890", socialInsuranceNo: "7934567890" },
-    { id: "EMP-004", name: "Pham Thi D", dept: "HR", pos: "Recruiter", status: "Maternity", email: "d.pham@company.com", phone: "0987654321", joinDate: "2020-11-20", idCard: "004098765432", taxCode: "8045678901", socialInsuranceNo: "7945678901" },
-  ])
-
-  const [contracts] = useState<Contract[]>([
-    { id: "CT-001", empName: "Nguyen Van A", type: "Indefinite Term", startDate: "2022-03-15", endDate: "-", status: "Active" },
-    { id: "CT-002", empName: "Tran Thi B", type: "Definite Term", startDate: "2021-06-01", endDate: "2023-06-01", status: "Active" },
-    { id: "CT-003", empName: "Le Van C", type: "Probation", startDate: "2023-10-01", endDate: "2023-12-01", status: "Active" },
+  const [contracts, setContracts] = useState<Contract[]>([
+    { id: "CT-001", empId: employees[0]?.id || "EMP-001", type: "Indefinite Term", startDate: "2022-03-15", endDate: "-", status: "Active" },
+    { id: "CT-002", empId: employees[1]?.id || "EMP-002", type: "Definite Term", startDate: "2021-06-01", endDate: "2023-06-01", status: "Active" },
+    { id: "CT-003", empId: employees[2]?.id || "EMP-003", type: "Probation", startDate: "2023-10-01", endDate: "2023-12-01", status: "Active" },
   ])
 
   const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false)
@@ -68,13 +52,31 @@ export function Employees() {
     joinDate: new Date().toISOString().split('T')[0]
   })
 
+  const [isContractModalOpen, setIsContractModalOpen] = useState(false)
+  const [newContract, setNewContract] = useState({
+    empId: "",
+    type: "Definite Term" as Contract["type"],
+    startDate: "",
+    endDate: "",
+  })
+
+  const getEmployeeName = (empId: string) => {
+    const emp = employees.find(e => e.id === empId)
+    return emp ? emp.name : empId
+  }
+
   const handleAddEmployee = () => {
     if (newEmployee.name && newEmployee.dept && newEmployee.pos) {
       if (editingEmployee) {
-        setEmployees(employees.map(emp => emp.id === editingEmployee.id ? { ...emp, ...newEmployee } as Employee : emp))
+        updateEmployee(editingEmployee.id, newEmployee)
+        syncEmployeeToUser({ ...editingEmployee, ...newEmployee } as Employee)
+        toast.success("Cập nhật nhân viên thành công")
       } else {
         const id = `EMP-${(employees.length + 1).toString().padStart(3, '0')}`
-        setEmployees([...employees, { ...newEmployee, id } as Employee])
+        const emp = { ...newEmployee, id } as Employee
+        addEmployee(emp)
+        syncEmployeeToUser(emp)
+        toast.success("Thêm nhân viên thành công")
       }
       setIsAddEmployeeOpen(false)
       setEditingEmployee(null)
@@ -90,6 +92,8 @@ export function Employees() {
         status: "Onboarding",
         joinDate: new Date().toISOString().split('T')[0]
       })
+    } else {
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc")
     }
   }
 
@@ -100,7 +104,29 @@ export function Employees() {
   }
 
   const handleDelete = (id: string) => {
-    setEmployees(employees.filter(emp => emp.id !== id))
+    deleteEmployee(id)
+    toast.success("Đã xóa nhân viên")
+  }
+
+  const handleCreateContract = () => {
+    if (!newContract.empId || !newContract.startDate) {
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc")
+      return
+    }
+
+    const record: Contract = {
+      id: `CT-${(contracts.length + 1).toString().padStart(3, '0')}`,
+      empId: newContract.empId,
+      type: newContract.type,
+      startDate: newContract.startDate,
+      endDate: newContract.endDate || "-",
+      status: "Active"
+    }
+
+    setContracts([record, ...contracts])
+    setIsContractModalOpen(false)
+    setNewContract({ empId: "", type: "Definite Term", startDate: "", endDate: "" })
+    toast.success("Đã tạo hợp đồng mới")
   }
 
   return (
@@ -150,83 +176,76 @@ export function Employees() {
                   {t("hr.core.employeeListDesc")}
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    {t("hr.core.name")}
-                  </Label>
-                  <Input
-                    id="name"
-                    value={newEmployee.name}
-                    onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="email" className="text-right">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={newEmployee.email}
-                    onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="dept" className="text-right">
-                    {t("hr.core.department")}
-                  </Label>
-                  <Select 
-                    value={newEmployee.dept} 
-                    onValueChange={(value) => setNewEmployee({ ...newEmployee, dept: value })}
-                  >
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder={t("hr.core.department")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Engineering">Engineering</SelectItem>
-                      <SelectItem value="Marketing">Marketing</SelectItem>
-                      <SelectItem value="Sales">Sales</SelectItem>
-                      <SelectItem value="HR">HR</SelectItem>
-                      <SelectItem value="Finance">Finance</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="pos" className="text-right">
-                    {t("hr.core.position")}
-                  </Label>
-                  <Input
-                    id="pos"
-                    value={newEmployee.pos}
-                    onChange={(e) => setNewEmployee({ ...newEmployee, pos: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="idCard" className="text-right">
-                    {t("hr.core.idCard")}
-                  </Label>
-                  <Input
-                    id="idCard"
-                    value={newEmployee.idCard}
-                    onChange={(e) => setNewEmployee({ ...newEmployee, idCard: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="taxCode" className="text-right">
-                    {t("hr.core.taxCode")}
-                  </Label>
-                  <Input
-                    id="taxCode"
-                    value={newEmployee.taxCode}
-                    onChange={(e) => setNewEmployee({ ...newEmployee, taxCode: e.target.value })}
-                    className="col-span-3"
-                  />
-                </div>
+              <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
+                <Tabs defaultValue="personal" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="personal">Cá nhân</TabsTrigger>
+                    <TabsTrigger value="work">Công việc</TabsTrigger>
+                    <TabsTrigger value="finance">Tài chính</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="personal" className="space-y-4 pt-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">Họ tên</Label>
+                      <Input id="name" value={newEmployee.name} onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="dob" className="text-right">Ngày sinh</Label>
+                      <Input id="dob" type="date" value={newEmployee.dob} onChange={(e) => setNewEmployee({ ...newEmployee, dob: e.target.value })} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="gender" className="text-right">Giới tính</Label>
+                      <Select value={newEmployee.gender} onValueChange={(v: any) => setNewEmployee({ ...newEmployee, gender: v })}>
+                        <SelectTrigger className="col-span-3"><SelectValue placeholder="Giới tính" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Male">Nam</SelectItem>
+                          <SelectItem value="Female">Nữ</SelectItem>
+                          <SelectItem value="Other">Khác</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="address" className="text-right">Địa chỉ</Label>
+                      <Input id="address" value={newEmployee.address} onChange={(e) => setNewEmployee({ ...newEmployee, address: e.target.value })} className="col-span-3" />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="work" className="space-y-4 pt-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="dept" className="text-right">Phòng ban</Label>
+                      <Select value={newEmployee.dept} onValueChange={(v) => setNewEmployee({ ...newEmployee, dept: v })}>
+                        <SelectTrigger className="col-span-3"><SelectValue placeholder="Phòng ban" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Engineering">Engineering</SelectItem>
+                          <SelectItem value="Marketing">Marketing</SelectItem>
+                          <SelectItem value="Sales">Sales</SelectItem>
+                          <SelectItem value="HR">HR</SelectItem>
+                          <SelectItem value="Finance">Finance</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="pos" className="text-right">Vị trí</Label>
+                      <Input id="pos" value={newEmployee.pos} onChange={(e) => setNewEmployee({ ...newEmployee, pos: e.target.value })} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="joinDate" className="text-right">Ngày vào</Label>
+                      <Input id="joinDate" type="date" value={newEmployee.joinDate} onChange={(e) => setNewEmployee({ ...newEmployee, joinDate: e.target.value })} className="col-span-3" />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="finance" className="space-y-4 pt-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="taxCode" className="text-right">Mã số thuế</Label>
+                      <Input id="taxCode" value={newEmployee.taxCode} onChange={(e) => setNewEmployee({ ...newEmployee, taxCode: e.target.value })} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="bankName" className="text-right">Ngân hàng</Label>
+                      <Input id="bankName" value={newEmployee.bankName} onChange={(e) => setNewEmployee({ ...newEmployee, bankName: e.target.value })} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="bankAccount" className="text-right">Số TK</Label>
+                      <Input id="bankAccount" value={newEmployee.bankAccount} onChange={(e) => setNewEmployee({ ...newEmployee, bankAccount: e.target.value })} className="col-span-3" />
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
               <DialogFooter>
                 <Button type="submit" onClick={handleAddEmployee}>{t("common.save") || "Save"}</Button>
@@ -346,11 +365,83 @@ export function Employees() {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>{t("hr.core.contracts")}</CardTitle>
-          <CardDescription>Manage employee labor contracts.</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>{t("hr.core.contracts")}</CardTitle>
+            <CardDescription>Manage employee labor contracts.</CardDescription>
+          </div>
+          {canEdit && (
+            <Button size="sm" onClick={() => setIsContractModalOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Tạo hợp đồng
+            </Button>
+          )}
         </CardHeader>
         <CardContent>
+          <Dialog open={isContractModalOpen} onOpenChange={setIsContractModalOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Tạo hợp đồng mới</DialogTitle>
+                <DialogDescription>
+                  Điền thông tin để tạo hợp đồng lao động mới.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                  <Select value={newContract.empId} onValueChange={(val) => setNewContract({...newContract, empId: val})}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Chọn nhân viên" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {employees.map(emp => (
+                        <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="type" className="text-right">Loại hợp đồng</Label>
+                  <Select value={newContract.type} onValueChange={(val: any) => setNewContract({...newContract, type: val})}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Chọn loại hợp đồng" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Probation">{t("hr.core.probation")}</SelectItem>
+                      <SelectItem value="Definite Term">{t("hr.core.definiteTerm")}</SelectItem>
+                      <SelectItem value="Indefinite Term">{t("hr.core.indefiniteTerm")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="startDate" className="text-right">Ngày bắt đầu</Label>
+                  <Input 
+                    id="startDate" 
+                    type="date"
+                    value={newContract.startDate} 
+                    onChange={(e) => setNewContract({...newContract, startDate: e.target.value})}
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="endDate" className="text-right">Ngày kết thúc</Label>
+                  <Input 
+                    id="endDate" 
+                    type="date"
+                    value={newContract.endDate} 
+                    onChange={(e) => setNewContract({...newContract, endDate: e.target.value})}
+                    className="col-span-3" 
+                    placeholder="Bỏ trống nếu không xác định thời hạn"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsContractModalOpen(false)}>Hủy</Button>
+                <Button onClick={handleCreateContract}>Tạo hợp đồng</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
           <Table>
             <TableHeader>
               <TableRow>
@@ -359,12 +450,13 @@ export function Employees() {
                 <TableHead>{t("hr.core.startDate")}</TableHead>
                 <TableHead>{t("hr.core.endDate")}</TableHead>
                 <TableHead>{t("hr.core.status")}</TableHead>
+                <TableHead className="text-right">Ký số</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {contracts.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.empName}</TableCell>
+                  <TableCell className="font-medium">{getEmployeeName(item.empId)}</TableCell>
                   <TableCell>
                     {item.type === "Probation" ? t("hr.core.probation") : 
                      item.type === "Definite Term" ? t("hr.core.definiteTerm") : 
@@ -374,6 +466,11 @@ export function Employees() {
                   <TableCell>{item.endDate}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{item.status}</Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="sm" onClick={() => navigate("/e-contract")}>
+                      <FileSignature className="h-4 w-4 text-blue-600" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

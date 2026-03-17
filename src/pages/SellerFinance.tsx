@@ -19,29 +19,64 @@ import {
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Badge } from "@/src/components/ui/badge"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
 import {
   Search,
   TrendingUp,
   DollarSign,
   CreditCard,
   Percent,
-  CalendarClock
+  CalendarClock,
+  Plus
 } from "lucide-react"
+import { toast } from "sonner"
 
 export function SellerFinance() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("credit")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newPayout, setNewPayout] = useState({
+    seller: "",
+    amount: ""
+  })
 
-  const credits = [
+  const [credits, setCredits] = useState([
     { id: "SEL-001", name: "Fashion Store VN", score: 850, performance: t("sellerFinance.credit.excellent"), limit: 500000000, status: "approved" },
     { id: "SEL-002", name: "Tech Gadgets", score: 720, performance: t("sellerFinance.credit.good"), limit: 200000000, status: "pending" },
     { id: "SEL-003", name: "Home Decor", score: 610, performance: t("sellerFinance.credit.average"), limit: 50000000, status: "rejected" },
-  ]
+  ])
 
-  const payouts = [
+  const [payouts, setPayouts] = useState([
     { id: "PAY-101", seller: "Fashion Store VN", amount: 150000000, fee: 1500000, net: 148500000, date: "2026-03-05", status: "processing" },
     { id: "PAY-102", seller: "Tech Gadgets", amount: 45000000, fee: 450000, net: 44550000, date: "2026-03-02", status: "completed" },
-  ]
+  ])
+
+  const handleRequestPayout = () => {
+    if (!newPayout.seller || !newPayout.amount) {
+      toast.error("Vui lòng điền đầy đủ thông tin")
+      return
+    }
+
+    const amount = parseInt(newPayout.amount)
+    const fee = amount * 0.01 // 1% fee
+    const net = amount - fee
+
+    const payout = {
+      id: `PAY-${Math.floor(Math.random() * 1000)}`,
+      seller: newPayout.seller,
+      amount: amount,
+      fee: fee,
+      net: net,
+      date: new Date().toISOString().split('T')[0],
+      status: "processing"
+    }
+
+    setPayouts([payout, ...payouts])
+    setIsModalOpen(false)
+    setNewPayout({ seller: "", amount: "" })
+    toast.success("Đã gửi yêu cầu thanh toán sớm")
+  }
 
   return (
     <div className="space-y-6">
@@ -180,10 +215,50 @@ export function SellerFinance() {
                 <CardTitle>{t("sellerFinance.tabs.earlyPayout")}</CardTitle>
                 <CardDescription>Manage early payout requests from sellers</CardDescription>
               </div>
-              <Button>
+              <Button onClick={() => setIsModalOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
                 {t("sellerFinance.earlyPayout.requestPayout")}
               </Button>
             </CardHeader>
+
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Yêu cầu thanh toán sớm</DialogTitle>
+                  <DialogDescription>
+                    Nhập thông tin để yêu cầu thanh toán sớm (Phí 1%).
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="seller" className="text-right">Tên cửa hàng</Label>
+                    <Input 
+                      id="seller" 
+                      value={newPayout.seller} 
+                      onChange={(e) => setNewPayout({...newPayout, seller: e.target.value})}
+                      className="col-span-3" 
+                      placeholder="VD: Fashion Store VN"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="amount" className="text-right">Số tiền (VNĐ)</Label>
+                    <Input 
+                      id="amount" 
+                      type="number"
+                      value={newPayout.amount} 
+                      onChange={(e) => setNewPayout({...newPayout, amount: e.target.value})}
+                      className="col-span-3" 
+                      placeholder="VD: 50000000"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                  <Button onClick={handleRequestPayout}>Gửi yêu cầu</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <CardContent>
               <Table>
                 <TableHeader>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { motion } from "motion/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
 import { Trophy, Users, DollarSign, TrendingUp, Network, UserPlus, Plus, Trash2, Pencil, Award, Target, Gift, Zap, RotateCcw } from "lucide-react";
@@ -91,82 +92,70 @@ export function Sales() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">{t("sales.title")}</h2>
-        <p className="text-muted-foreground">{t("sales.description")}</p>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="space-y-8 p-8 pt-6"
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t("sales.title")}</h2>
+          <p className="text-slate-500 mt-1">{t("sales.description")}</p>
+        </div>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">{t("sales.tabs.overview")}</TabsTrigger>
-          <TabsTrigger value="hierarchy">{t("sales.performance.hierarchy")}</TabsTrigger>
-          <TabsTrigger value="employees">Nhân viên</TabsTrigger>
-          <TabsTrigger value="tiers">Cấp bậc & Hoa hồng</TabsTrigger>
-          <TabsTrigger value="loyalty">Loyalty & Gamification</TabsTrigger>
-          <TabsTrigger value="tracking">{t("sales.tabs.tracking")}</TabsTrigger>
+        <TabsList className="bg-slate-100 p-1 rounded-xl">
+          <TabsTrigger value="overview" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">{t("sales.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="hierarchy" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">{t("sales.performance.hierarchy")}</TabsTrigger>
+          <TabsTrigger value="employees" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Nhân viên</TabsTrigger>
+          <TabsTrigger value="tiers" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Cấp bậc & Hoa hồng</TabsTrigger>
+          <TabsTrigger value="loyalty" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Loyalty & Gamification</TabsTrigger>
+          <TabsTrigger value="tracking" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">{t("sales.tabs.tracking")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("sales.overview.totalRevenue")}</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">$125,430.00</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("sales.overview.activeSales")}</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{employees.length}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("sales.overview.topPerformer")}</CardTitle>
-                <Trophy className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">Nguyen Van A</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("sales.overview.commissionPayout")}</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">$8,200.00</div>
-              </CardContent>
-            </Card>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { title: t("sales.overview.totalRevenue"), value: "$125,430.00", icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-100" },
+              { title: t("sales.overview.activeSales"), value: employees.length.toString(), icon: Users, color: "text-blue-600", bg: "bg-blue-100" },
+              { title: t("sales.overview.topPerformer"), value: "Nguyen Van A", icon: Trophy, color: "text-amber-600", bg: "bg-amber-100" },
+              { title: t("sales.overview.commissionPayout"), value: "$8,200.00", icon: TrendingUp, color: "text-rose-600", bg: "bg-rose-100" },
+            ].map((stat, i) => (
+              <Card key={i} className="rounded-2xl border-slate-100 shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-bold text-slate-500">{stat.title}</CardTitle>
+                  <div className={`p-2 ${stat.bg} rounded-xl`}>
+                    <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </TabsContent>
 
         <TabsContent value="hierarchy" className="space-y-4">
-          <Card>
+          <Card className="rounded-2xl border-slate-100 shadow-sm">
             <CardHeader>
-              <CardTitle>{t("sales.performance.hierarchy")}</CardTitle>
+              <CardTitle className="text-lg font-bold">{t("sales.performance.hierarchy")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-center p-8 border rounded-lg">
-                <Network className="h-16 w-16 text-muted-foreground" />
-                <span className="ml-4 text-lg">Sales Hierarchy: {tiers.map(t => t.name).join(" -> ")}</span>
+              <div className="flex items-center justify-center p-12 border-2 border-dashed rounded-2xl bg-slate-50">
+                <Network className="h-16 w-16 text-slate-400" />
+                <span className="ml-4 text-lg font-medium text-slate-600">Sales Hierarchy: {tiers.map(t => t.name).join(" -> ")}</span>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="employees" className="space-y-4">
-          <Card>
+          <Card className="rounded-2xl border-slate-100 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Quản lý Nhân viên</CardTitle>
-              <Button onClick={() => setIsAddEmployeeOpen(true)}>
+              <CardTitle className="text-lg font-bold">Quản lý Nhân viên</CardTitle>
+              <Button onClick={() => setIsAddEmployeeOpen(true)} className="rounded-xl">
                 <UserPlus className="mr-2 h-4 w-4" />
                 Thêm nhân viên
               </Button>
@@ -183,7 +172,7 @@ export function Sales() {
                 <TableBody>
                   {employees.map((emp) => (
                     <TableRow key={emp.id}>
-                      <TableCell>{emp.name}</TableCell>
+                      <TableCell className="font-medium">{emp.name}</TableCell>
                       <TableCell>{emp.role}</TableCell>
                       <TableCell>{emp.status}</TableCell>
                     </TableRow>
@@ -195,10 +184,10 @@ export function Sales() {
         </TabsContent>
 
         <TabsContent value="tiers" className="space-y-4">
-          <Card>
+          <Card className="rounded-2xl border-slate-100 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Cấp bậc & Hoa hồng</CardTitle>
-              <Button onClick={() => setIsAddTierOpen(true)}>
+              <CardTitle className="text-lg font-bold">Cấp bậc & Hoa hồng</CardTitle>
+              <Button onClick={() => setIsAddTierOpen(true)} className="rounded-xl">
                 <Plus className="mr-2 h-4 w-4" />
                 Thêm cấp bậc
               </Button>
@@ -209,20 +198,20 @@ export function Sales() {
                   <TableRow>
                     <TableHead>Tên cấp bậc</TableHead>
                     <TableHead>Hoa hồng (%)</TableHead>
-                    <TableHead>Thao tác</TableHead>
+                    <TableHead className="text-right">Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {tiers.map((tier) => (
                     <TableRow key={tier.id}>
-                      <TableCell>{tier.name}</TableCell>
+                      <TableCell className="font-medium">{tier.name}</TableCell>
                       <TableCell>{tier.commission}%</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => openEditTier(tier)}>
+                      <TableCell className="flex justify-end gap-2">
+                        <Button variant="ghost" size="sm" onClick={() => openEditTier(tier)} className="rounded-lg">
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteTier(tier.id)}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteTier(tier.id)} className="rounded-lg text-rose-500">
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -234,38 +223,26 @@ export function Sales() {
         </TabsContent>
 
         <TabsContent value="loyalty" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Hạng thành viên</CardTitle>
-                <Award className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">Gold</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Điểm tích lũy</CardTitle>
-                <Gift className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">1250</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Đặc quyền</CardTitle>
-                <Zap className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-sm">Giảm 10% mọi đơn hàng, Freeship</div>
-              </CardContent>
-            </Card>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              { title: "Hạng thành viên", value: "Gold", icon: Award },
+              { title: "Điểm tích lũy", value: "1250", icon: Gift },
+              { title: "Đặc quyền", value: "Giảm 10%, Freeship", icon: Zap },
+            ].map((item, i) => (
+              <Card key={i} className="rounded-2xl border-slate-100 shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm font-bold text-slate-500">{item.title}</CardTitle>
+                  <item.icon className="h-4 w-4 text-slate-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-slate-900">{item.value}</div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-          <Card>
+          <Card className="rounded-2xl border-slate-100 shadow-sm">
             <CardHeader>
-              <CardTitle>Danh sách hạng thành viên</CardTitle>
+              <CardTitle className="text-lg font-bold">Danh sách hạng thành viên</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -285,45 +262,45 @@ export function Sales() {
               </Table>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="rounded-2xl border-slate-100 shadow-sm">
             <CardHeader>
-              <CardTitle>Gamification</CardTitle>
+              <CardTitle className="text-lg font-bold">Gamification</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <h4 className="font-medium">Nhiệm vụ hàng ngày</h4>
-                <div className="flex items-center justify-between p-2 border rounded">
-                  <span>Đăng nhập mỗi ngày</span>
-                  <Button size="sm">Nhận 10 pts</Button>
+            <CardContent className="grid gap-6 md:grid-cols-2">
+              <div className="space-y-4">
+                <h4 className="font-bold text-slate-900">Nhiệm vụ hàng ngày</h4>
+                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <span className="text-sm font-medium">Đăng nhập mỗi ngày</span>
+                  <Button size="sm" className="rounded-lg">Nhận 10 pts</Button>
                 </div>
-                <div className="flex items-center justify-between p-2 border rounded">
-                  <span>Đặt 1 đơn hàng</span>
-                  <Button size="sm">Nhận 50 pts</Button>
+                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <span className="text-sm font-medium">Đặt 1 đơn hàng</span>
+                  <Button size="sm" className="rounded-lg">Nhận 50 pts</Button>
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-center p-6 border rounded">
-                <RotateCcw className="h-16 w-16 text-primary mb-4" />
-                <Button>Vòng quay may mắn</Button>
+              <div className="flex flex-col items-center justify-center p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                <RotateCcw className="h-12 w-12 text-blue-600 mb-4" />
+                <Button className="rounded-xl">Vòng quay may mắn</Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="tracking" className="space-y-4">
-          <Card>
+          <Card className="rounded-2xl border-slate-100 shadow-sm">
             <CardHeader>
-              <CardTitle>{t("sales.tracking.title")}</CardTitle>
+              <CardTitle className="text-lg font-bold">{t("sales.tracking.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={performanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="name" stroke="#64748b" />
+                  <YAxis stroke="#64748b" />
+                  <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                   <Legend />
-                  <Bar dataKey="sales" name={t("sales.performance.individual")} fill="#8884d8" />
-                  <Bar dataKey="teamSales" name={t("sales.performance.team")} fill="#82ca9d" />
+                  <Bar dataKey="sales" name={t("sales.performance.individual")} fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="teamSales" name={t("sales.performance.team")} fill="#10b981" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -332,14 +309,14 @@ export function Sales() {
       </Tabs>
 
       <Dialog open={isAddEmployeeOpen} onOpenChange={setIsAddEmployeeOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
             <DialogTitle>Thêm nhân viên từ khách hàng</DialogTitle>
             <DialogDescription>Chọn khách hàng và gán cấp bậc cho họ.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Select onValueChange={setSelectedCustomerId}>
-              <SelectTrigger>
+              <SelectTrigger className="rounded-xl">
                 <SelectValue placeholder="Chọn khách hàng" />
               </SelectTrigger>
               <SelectContent>
@@ -349,7 +326,7 @@ export function Sales() {
               </SelectContent>
             </Select>
             <Select onValueChange={setSelectedRole}>
-              <SelectTrigger>
+              <SelectTrigger className="rounded-xl">
                 <SelectValue placeholder="Chọn cấp bậc" />
               </SelectTrigger>
               <SelectContent>
@@ -360,42 +337,42 @@ export function Sales() {
             </Select>
           </div>
           <DialogFooter>
-            <Button onClick={handleAddEmployee}>Thêm</Button>
+            <Button onClick={handleAddEmployee} className="rounded-xl">Thêm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={isAddTierOpen} onOpenChange={setIsAddTierOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
             <DialogTitle>Thêm cấp bậc mới</DialogTitle>
             <DialogDescription>Nhập tên cấp bậc và tỷ lệ hoa hồng.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <Input placeholder="Tên cấp bậc" value={newTierName} onChange={(e) => setNewTierName(e.target.value)} />
-            <Input type="number" placeholder="Hoa hồng (%)" value={newTierCommission} onChange={(e) => setNewTierCommission(e.target.value)} />
+            <Input placeholder="Tên cấp bậc" value={newTierName} onChange={(e) => setNewTierName(e.target.value)} className="rounded-xl" />
+            <Input type="number" placeholder="Hoa hồng (%)" value={newTierCommission} onChange={(e) => setNewTierCommission(e.target.value)} className="rounded-xl" />
           </div>
           <DialogFooter>
-            <Button onClick={handleAddTier}>Thêm</Button>
+            <Button onClick={handleAddTier} className="rounded-xl">Thêm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={isEditTierOpen} onOpenChange={setIsEditTierOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
             <DialogTitle>Sửa cấp bậc</DialogTitle>
             <DialogDescription>Cập nhật tên cấp bậc và tỷ lệ hoa hồng.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <Input placeholder="Tên cấp bậc" value={newTierName} onChange={(e) => setNewTierName(e.target.value)} />
-            <Input type="number" placeholder="Hoa hồng (%)" value={newTierCommission} onChange={(e) => setNewTierCommission(e.target.value)} />
+            <Input placeholder="Tên cấp bậc" value={newTierName} onChange={(e) => setNewTierName(e.target.value)} className="rounded-xl" />
+            <Input type="number" placeholder="Hoa hồng (%)" value={newTierCommission} onChange={(e) => setNewTierCommission(e.target.value)} className="rounded-xl" />
           </div>
           <DialogFooter>
-            <Button onClick={handleEditTier}>Lưu</Button>
+            <Button onClick={handleEditTier} className="rounded-xl">Lưu</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }

@@ -1,27 +1,63 @@
-import React from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { 
-  Calendar as CalendarIcon, 
   ChevronLeft, 
   ChevronRight, 
-  Plus,
-  Clock,
-  MapPin,
-  Users
+  Plus, 
+  Calendar as CalendarIcon, 
+  Clock, 
+  MapPin, 
+  Users, 
+  MoreHorizontal,
+  Search,
+  Filter,
+  Grid,
+  List,
+  Settings,
+  Bell,
+  Video
 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card"
-import { Badge } from "@/src/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { ScrollArea } from "@/src/components/ui/scroll-area"
+import { Separator } from "@/src/components/ui/separator"
+import { Badge } from "@/src/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
+import { motion, AnimatePresence } from "motion/react"
 
 export function Calendar() {
   const { t } = useTranslation()
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [view, setView] = useState("month")
+
   const events = [
-    { id: 1, title: t('workspace.calendar.events.teamSync'), time: "09:00 AM - 10:00 AM", type: "meeting", color: "bg-blue-500", attendees: ["A", "B", "C"] },
-    { id: 2, title: t('workspace.calendar.events.projectReview'), time: "11:00 AM - 12:30 PM", type: "work", color: "bg-purple-500", attendees: ["D", "E"] },
-    { id: 3, title: t('workspace.calendar.events.lunchClient'), time: "01:00 PM - 02:00 PM", type: "personal", color: "bg-green-500", attendees: ["F"] },
-    { id: 4, title: t('workspace.calendar.events.designWorkshop'), time: "03:00 PM - 05:00 PM", type: "workshop", color: "bg-orange-500", attendees: ["G", "H", "I", "J"] },
+    { 
+      id: 1, 
+      title: t('workspace.calendar.events.teamSync'), 
+      time: "10:00 AM - 11:00 AM", 
+      type: "Meeting", 
+      color: "bg-indigo-500",
+      attendees: ["https://i.pravatar.cc/150?u=alice", "https://i.pravatar.cc/150?u=bob"],
+      location: "Zoom"
+    },
+    { 
+      id: 2, 
+      title: t('workspace.calendar.events.projectReview'), 
+      time: "2:00 PM - 3:30 PM", 
+      type: "Review", 
+      color: "bg-emerald-500",
+      attendees: ["https://i.pravatar.cc/150?u=charlie"],
+      location: "Conference Room A"
+    },
+    { 
+      id: 3, 
+      title: t('workspace.calendar.events.designWorkshop'), 
+      time: "4:00 PM - 5:00 PM", 
+      type: "Workshop", 
+      color: "bg-amber-500",
+      attendees: ["https://i.pravatar.cc/150?u=david", "https://i.pravatar.cc/150?u=eve"],
+      location: "Design Lab"
+    },
   ]
 
   const days = [
@@ -33,175 +69,202 @@ export function Calendar() {
     t('workspace.calendar.days.fri'),
     t('workspace.calendar.days.sat'),
   ]
-  const currentDate = new Date()
-  const currentMonth = currentDate.toLocaleString('default', { month: 'long' })
-  const currentYear = currentDate.getFullYear()
-
-  // Generate calendar grid (simplified for demo)
-  const generateCalendarDays = () => {
-    const daysArray = []
-    for (let i = 1; i <= 31; i++) {
-      daysArray.push(i)
-    }
-    return daysArray
-  }
+  
+  const monthName = currentDate.toLocaleString('default', { month: 'long' })
+  const year = currentDate.getFullYear()
 
   return (
-    <div className="flex h-[calc(100vh-200px)] gap-4">
-      {/* Main Calendar View */}
-      <div className="flex-1 flex flex-col bg-background border rounded-lg overflow-hidden shadow-sm">
-        <div className="p-4 border-b flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold tracking-tight">{currentMonth} {currentYear}</h2>
-            <div className="flex items-center border rounded-md">
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-r-none border-r">
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="h-8 rounded-none px-3 font-normal">
-                {t('workspace.calendar.today')}
-              </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-l-none border-l">
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex border rounded-md overflow-hidden">
-              <Button variant="ghost" size="sm" className="rounded-none border-r h-8 px-3">{t('workspace.calendar.month')}</Button>
-              <Button variant="secondary" size="sm" className="rounded-none border-r h-8 px-3">{t('workspace.calendar.week')}</Button>
-              <Button variant="ghost" size="sm" className="rounded-none h-8 px-3">{t('workspace.calendar.day')}</Button>
-            </div>
-            <Button size="sm" className="h-8">
-              <Plus className="h-4 w-4 mr-2" />
-              {t('workspace.calendar.newEvent')}
-            </Button>
-          </div>
+    <div className="flex h-[calc(100vh-180px)] border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-950 shadow-sm">
+      {/* Sidebar */}
+      <div className="w-72 border-r border-slate-100 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-900/20">
+        <div className="p-6">
+          <Button className="w-full justify-start h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 dark:shadow-none font-bold">
+            <Plus className="h-4 w-4 mr-2" />
+            {t('workspace.calendar.newEvent')}
+          </Button>
         </div>
 
-        <div className="flex-1 flex flex-col">
-          {/* Week Header */}
-          <div className="grid grid-cols-7 border-b bg-muted/20">
-            {days.map((day) => (
-              <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground border-r last:border-r-0">
-                {day}
-              </div>
-            ))}
+        <ScrollArea className="flex-1 px-4">
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4 px-2">
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">My Calendars</h3>
+              <Settings className="h-3.5 w-3.5 text-slate-400 hover:text-indigo-600 cursor-pointer transition-colors" />
+            </div>
+            <div className="space-y-1">
+              {[
+                { name: "Personal", color: "bg-indigo-500", active: true },
+                { name: "Work", color: "bg-emerald-500", active: true },
+                { name: "Project X", color: "bg-amber-500", active: false },
+                { name: "Holidays", color: "bg-rose-500", active: true },
+              ].map((cal) => (
+                <Button key={cal.name} variant="ghost" className="w-full justify-start h-9 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 text-xs font-bold group">
+                  <div className={`h-2.5 w-2.5 rounded-full mr-3 ${cal.active ? cal.color : "bg-slate-200 dark:bg-slate-800"}`} />
+                  {cal.name}
+                  {cal.active && <div className="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-600" />}
+                </Button>
+              ))}
+            </div>
           </div>
-          
-          {/* Calendar Grid (Month View Simulation) */}
-          <div className="flex-1 grid grid-cols-7 grid-rows-5">
-            {Array.from({ length: 35 }).map((_, i) => {
-              const day = i - 3 // Offset for start of month
-              const isCurrentMonth = day > 0 && day <= 31
-              const isToday = day === currentDate.getDate()
-              
-              return (
-                <div 
-                  key={i} 
-                  className={`border-b border-r p-2 min-h-[100px] relative group hover:bg-muted/10 transition-colors ${!isCurrentMonth ? 'bg-muted/5 text-muted-foreground/50' : ''}`}
-                >
-                  <div className="flex justify-between items-start">
-                    <span className={`text-sm font-medium h-6 w-6 flex items-center justify-center rounded-full ${isToday ? 'bg-primary text-primary-foreground' : ''}`}>
-                      {isCurrentMonth ? day : ''}
-                    </span>
-                    {isCurrentMonth && (
-                      <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Plus className="h-3 w-3" />
-                      </Button>
-                    )}
+
+          <div>
+            <div className="flex items-center justify-between mb-4 px-2">
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('workspace.calendar.upcomingEvents')}</h3>
+              <Badge variant="secondary" className="bg-slate-200 dark:bg-slate-800 text-slate-500 border-none text-[9px] font-bold px-1.5">3</Badge>
+            </div>
+            <div className="space-y-4">
+              {events.map((event) => (
+                <div key={event.id} className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge className={`${event.color} text-white border-none text-[9px] font-bold uppercase tracking-tighter px-1.5 py-0`}>
+                      {event.type}
+                    </Badge>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase">{event.time.split(' - ')[0]}</span>
                   </div>
-                  
-                  {/* Simulated Events */}
-                  {isCurrentMonth && day === 5 && (
-                    <div className="mt-1 p-1 bg-blue-100 dark:bg-blue-900/30 border-l-2 border-blue-500 rounded text-[10px] font-medium text-blue-700 dark:text-blue-300 truncate cursor-pointer hover:brightness-95">
-                      9:00 AM {t('workspace.calendar.events.teamSync')}
-                    </div>
-                  )}
-                  {isCurrentMonth && day === 12 && (
-                    <div className="mt-1 p-1 bg-purple-100 dark:bg-purple-900/30 border-l-2 border-purple-500 rounded text-[10px] font-medium text-purple-700 dark:text-purple-300 truncate cursor-pointer hover:brightness-95">
-                      11:00 AM {t('workspace.calendar.events.projectReview')}
-                    </div>
-                  )}
-                  {isCurrentMonth && day === 12 && (
-                    <div className="mt-1 p-1 bg-green-100 dark:bg-green-900/30 border-l-2 border-green-500 rounded text-[10px] font-medium text-green-700 dark:text-green-300 truncate cursor-pointer hover:brightness-95">
-                      1:00 PM {t('workspace.calendar.events.lunch')}
-                    </div>
-                  )}
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 transition-colors truncate">{event.title}</h4>
+                  <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-400 font-medium">
+                    <MapPin className="h-3 w-3" />
+                    <span className="truncate">{event.location}</span>
+                  </div>
                 </div>
-              )
-            })}
+              ))}
+            </div>
+          </div>
+        </ScrollArea>
+
+        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30">
+            <Bell className="h-5 w-5 text-indigo-600" />
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-tighter">Next Event</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">Team Sync in 15m</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Side Panel: Upcoming Events */}
-      <div className="w-80 flex flex-col gap-4">
-        <Card className="flex-1 flex flex-col">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">{t('workspace.calendar.schedule')}</CardTitle>
-            <CardDescription>{t('workspace.calendar.upcomingEvents')}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 p-0">
-            <ScrollArea className="h-full px-4 pb-4">
-              <div className="space-y-4">
-                {events.map((event) => (
-                  <div key={event.id} className="flex gap-3 group">
-                    <div className="flex flex-col items-center">
-                      <span className="text-xs font-medium text-muted-foreground w-12 text-right">
-                        {event.time.split(' - ')[0]}
+      {/* Main Calendar Area */}
+      <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-slate-950">
+        {/* Header */}
+        <div className="h-16 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between px-6 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md sticky top-0 z-10">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center">
+                <CalendarIcon className="h-5 w-5 text-indigo-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50">{monthName} {year}</h3>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Today is March 17, 2026</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl">
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-500 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 shadow-sm transition-all">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm" className="h-8 px-3 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800">
+                {t('workspace.calendar.today')}
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-500 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 shadow-sm transition-all">
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="relative hidden md:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <input 
+                placeholder="Search events..." 
+                className="pl-9 pr-4 h-10 w-48 bg-slate-50 dark:bg-slate-900 border-none rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 transition-all" 
+              />
+            </div>
+            <Separator orientation="vertical" className="h-6 mx-1" />
+            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl">
+              {["day", "week", "month"].map((v) => (
+                <Button
+                  key={v}
+                  variant="ghost"
+                  size="sm"
+                  className={`h-8 px-4 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${
+                    view === v 
+                      ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm" 
+                      : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
+                  }`}
+                  onClick={() => setView(v)}
+                >
+                  {t(`workspace.calendar.${v}`)}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Calendar Grid */}
+        <ScrollArea className="flex-1">
+          <div className="p-6">
+            <div className="grid grid-cols-7 gap-px bg-slate-100 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+              {days.map((day) => (
+                <div key={day} className="bg-slate-50 dark:bg-slate-900 p-4 text-center">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{day}</span>
+                </div>
+              ))}
+              {Array.from({ length: 35 }).map((_, i) => {
+                const dayNum = i - 2;
+                const isToday = dayNum === 17;
+                const isCurrentMonth = dayNum > 0 && dayNum <= 31;
+                
+                return (
+                  <div 
+                    key={i} 
+                    className={`min-h-[140px] p-3 bg-white dark:bg-slate-950 transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-900/50 relative group ${
+                      !isCurrentMonth ? "opacity-30" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <span className={`text-sm font-bold h-7 w-7 flex items-center justify-center rounded-full transition-all ${
+                        isToday 
+                          ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none scale-110" 
+                          : "text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-100"
+                      }`}>
+                        {dayNum > 0 && dayNum <= 31 ? dayNum : ""}
                       </span>
-                      <div className={`w-0.5 h-full bg-border my-1 group-last:hidden`} />
+                      {isCurrentMonth && (
+                        <Button variant="ghost" size="icon" className="h-6 w-6 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-indigo-600">
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      )}
                     </div>
-                    <div className={`flex-1 p-3 rounded-lg border bg-card hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden`}>
-                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${event.color}`} />
-                      <h4 className="font-semibold text-sm mb-1">{event.title}</h4>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                        <Clock className="h-3 w-3" />
-                        {event.time}
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex -space-x-2">
-                          {event.attendees.map((att, i) => (
-                            <Avatar key={i} className="h-5 w-5 border-2 border-background">
-                              <AvatarFallback className="text-[8px]">{att}</AvatarFallback>
-                            </Avatar>
-                          ))}
+                    
+                    <div className="space-y-1.5">
+                      {isToday && events.slice(0, 2).map((event) => (
+                        <motion.div 
+                          key={event.id}
+                          initial={{ opacity: 0, x: -5 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className={`${event.color} p-1.5 rounded-lg text-white shadow-sm cursor-pointer hover:brightness-110 transition-all overflow-hidden`}
+                        >
+                          <p className="text-[10px] font-bold truncate leading-tight">{event.title}</p>
+                          <div className="flex items-center gap-1 mt-0.5 opacity-80">
+                            <Clock className="h-2 w-2" />
+                            <span className="text-[8px] font-bold uppercase">{event.time.split(' - ')[0]}</span>
+                          </div>
+                        </motion.div>
+                      ))}
+                      {dayNum === 20 && (
+                        <div className="bg-amber-500 p-1.5 rounded-lg text-white shadow-sm cursor-pointer hover:brightness-110 transition-all overflow-hidden">
+                          <p className="text-[10px] font-bold truncate leading-tight">Workshop</p>
+                          <div className="flex items-center gap-1 mt-0.5 opacity-80">
+                            <Video className="h-2 w-2" />
+                            <span className="text-[8px] font-bold uppercase">4:00 PM</span>
+                          </div>
                         </div>
-                        <Badge variant="outline" className="text-[10px] h-5 px-1.5">
-                          {event.type}
-                        </Badge>
-                      </div>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">{t('workspace.calendar.quickActions')}</CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-2">
-            <Button variant="outline" size="sm" className="justify-start h-auto py-2 px-3 text-xs">
-              <CalendarIcon className="h-3 w-3 mr-2" />
-              {t('workspace.calendar.actions.scheduleMeeting')}
-            </Button>
-            <Button variant="outline" size="sm" className="justify-start h-auto py-2 px-3 text-xs">
-              <Users className="h-3 w-3 mr-2" />
-              {t('workspace.calendar.actions.bookRoom')}
-            </Button>
-            <Button variant="outline" size="sm" className="justify-start h-auto py-2 px-3 text-xs">
-              <Clock className="h-3 w-3 mr-2" />
-              {t('workspace.calendar.actions.logTime')}
-            </Button>
-            <Button variant="outline" size="sm" className="justify-start h-auto py-2 px-3 text-xs">
-              <MapPin className="h-3 w-3 mr-2" />
-              {t('workspace.calendar.actions.setLocation')}
-            </Button>
-          </CardContent>
-        </Card>
+                )
+              })}
+            </div>
+          </div>
+        </ScrollArea>
       </div>
     </div>
   )
