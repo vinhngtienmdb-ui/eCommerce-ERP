@@ -12,6 +12,26 @@ service cloud.firestore {
          request.auth.token.email == "vinh.ngtienmdb@gmail.com");
     }
 
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function isValidProduct(data) {
+      return hasRequiredFields(['productName', 'category', 'userId']) &&
+             data.productName is string && data.productName.size() > 0 && data.productName.size() < 200 &&
+             data.category is list && data.category.size() > 0 &&
+             data.userId == request.auth.uid;
+    }
+
+    function isValidUser(data) {
+      return (data.displayName is string && data.displayName.size() < 100) ||
+             (data.email is string && data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"));
+    }
+
     // Settings rules
     match /settings/{settingId} {
       allow read: if isAuthenticated();
@@ -28,6 +48,39 @@ service cloud.firestore {
     // User roles rules
     match /user_roles/{uid} {
       allow read: if isAuthenticated() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Products rules
+    match /products/{productId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidProduct(request.resource.data);
+      allow update: if isAuthenticated() && isValidProduct(request.resource.data) && 
+                      (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // Users rules
+    match /users/{uid} {
+      allow read: if isAuthenticated() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAuthenticated() && request.auth.uid == uid && isValidUser(request.resource.data);
+    }
+
+    // Document Management rules
+    match /documents/{docId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    match /document_templates/{templateId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    match /settings/documents {
+      allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
   }

@@ -301,7 +301,7 @@ export function CustomerService() {
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
                         <Ticket className="h-4 w-4 mr-2" />
-                        Create Ticket
+                        {t("customerService.tickets.create")}
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
                         <MoreHorizontal className="h-4 w-4" />
@@ -352,7 +352,7 @@ export function CustomerService() {
                     )}
                     <div className="flex gap-2">
                       <Input 
-                        placeholder="Type a message..." 
+                        placeholder={t("customerService.chat.typePlaceholder")} 
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                       />
@@ -454,7 +454,7 @@ export function CustomerService() {
                           <Phone className="h-4 w-4 text-muted-foreground" />
                           <span>0901234567</span>
                         </div>
-                        <Badge variant="outline" className="mt-2">VIP Customer</Badge>
+                        <Badge variant="outline" className="mt-2">{t("customers.segments.vip")}</Badge>
                       </div>
 
                       <Separator />
@@ -468,7 +468,7 @@ export function CustomerService() {
                           <div className="border rounded-md p-3 text-sm">
                             <div className="flex justify-between mb-1">
                               <span className="font-medium">ORD-7352</span>
-                              <Badge variant="secondary" className="text-[10px]">Shipping</Badge>
+                              <Badge variant="secondary" className="text-[10px]">{t("orders.status.shipping")}</Badge>
                             </div>
                             <p className="text-muted-foreground text-xs">iPhone 15 Pro Max</p>
                             <p className="text-xs mt-1">Total: 34,990,000đ</p>
@@ -476,7 +476,7 @@ export function CustomerService() {
                           <div className="border rounded-md p-3 text-sm">
                             <div className="flex justify-between mb-1">
                               <span className="font-medium">ORD-7200</span>
-                              <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">Delivered</Badge>
+                              <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">{t("orders.status.delivered")}</Badge>
                             </div>
                             <p className="text-muted-foreground text-xs">AirPods Pro 2</p>
                             <p className="text-xs mt-1">Total: 5,990,000đ</p>
@@ -493,31 +493,31 @@ export function CustomerService() {
               <Card>
                 <CardHeader>
                   <CardTitle>{t("customerService.hotline.callHistory")}</CardTitle>
-                  <CardDescription>Manage incoming and outgoing calls.</CardDescription>
+                  <CardDescription>{t("customerService.hotline.callHistoryDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Caller</TableHead>
-                        <TableHead>Duration</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Time</TableHead>
-                        <TableHead>Agent</TableHead>
+                        <TableHead>{t("customerService.hotline.caller")}</TableHead>
+                        <TableHead>{t("customerService.hotline.duration")}</TableHead>
+                        <TableHead>{t("common.status")}</TableHead>
+                        <TableHead>{t("common.time")}</TableHead>
+                        <TableHead>{t("customerService.tickets.assignee")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       <TableRow>
                         <TableCell className="font-medium">0901234567 (Nguyễn Văn A)</TableCell>
                         <TableCell>05:23</TableCell>
-                        <TableCell><Badge variant="outline" className="bg-green-50 text-green-700">Completed</Badge></TableCell>
+                        <TableCell><Badge variant="outline" className="bg-green-50 text-green-700">{t("customerService.hotline.completed")}</Badge></TableCell>
                         <TableCell>10:30 AM</TableCell>
                         <TableCell>Staff 1</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell className="font-medium">0912345678 (Trần Thị B)</TableCell>
                         <TableCell>00:00</TableCell>
-                        <TableCell><Badge variant="destructive">Missed</Badge></TableCell>
+                        <TableCell><Badge variant="destructive">{t("customerService.hotline.missed")}</Badge></TableCell>
                         <TableCell>09:15 AM</TableCell>
                         <TableCell>-</TableCell>
                       </TableRow>
@@ -532,7 +532,7 @@ export function CustomerService() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div>
                     <CardTitle>{t("customerService.tabs.tickets")}</CardTitle>
-                    <CardDescription>Manage support tickets and complaints.</CardDescription>
+                    <CardDescription>{t("customerService.tickets.description")}</CardDescription>
                   </div>
                   <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
                     <Ticket className="mr-2 h-4 w-4" />
@@ -543,12 +543,12 @@ export function CustomerService() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead>Customer</TableHead>
-                        <TableHead>Priority</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Assignee</TableHead>
+                        <TableHead>{t("common.id")}</TableHead>
+                        <TableHead>{t("customerService.tickets.subject")}</TableHead>
+                        <TableHead>{t("customerService.tickets.customer")}</TableHead>
+                        <TableHead>{t("customerService.tickets.priority")}</TableHead>
+                        <TableHead>{t("customerService.tickets.status")}</TableHead>
+                        <TableHead>{t("customerService.tickets.assignee")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -556,16 +556,16 @@ export function CustomerService() {
                         <TableCell className="font-medium">TKT-1001</TableCell>
                         <TableCell>Wrong item delivered</TableCell>
                         <TableCell>Nguyễn Văn A</TableCell>
-                        <TableCell><Badge variant="destructive">High</Badge></TableCell>
-                        <TableCell><Badge variant="secondary">In Progress</Badge></TableCell>
+                        <TableCell><Badge variant="destructive">{t("customerService.tickets.high")}</Badge></TableCell>
+                        <TableCell><Badge variant="secondary">{t("customerService.tickets.inProgress")}</Badge></TableCell>
                         <TableCell>Staff 1</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell className="font-medium">TKT-1002</TableCell>
                         <TableCell>Refund request</TableCell>
                         <TableCell>Trần Thị B</TableCell>
-                        <TableCell><Badge variant="outline">Medium</Badge></TableCell>
-                        <TableCell><Badge variant="outline">Open</Badge></TableCell>
+                        <TableCell><Badge variant="outline">{t("customerService.tickets.medium")}</Badge></TableCell>
+                        <TableCell><Badge variant="outline">{t("customerService.tickets.open")}</Badge></TableCell>
                         <TableCell>-</TableCell>
                       </TableRow>
                     </TableBody>
@@ -578,7 +578,7 @@ export function CustomerService() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div>
                     <CardTitle>{t("customerService.teams.createGroup")}</CardTitle>
-                    <CardDescription>Manage support teams and routing rules.</CardDescription>
+                    <CardDescription>{t("customerService.teams.description")}</CardDescription>
                   </div>
                   <Button onClick={() => setIsCreateTeamOpen(true)}>
                     <Plus className="mr-2 h-4 w-4" />
@@ -635,7 +635,7 @@ export function CustomerService() {
           <DialogHeader>
             <DialogTitle>{t("customerService.teams.createGroup")}</DialogTitle>
             <DialogDescription>
-              Create a new customer service team and define routing rules.
+              {t("customerService.teams.createGroupDesc")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -652,7 +652,7 @@ export function CustomerService() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="desc" className="text-right">
-                Description
+                {t("customerService.teams.description")}
               </Label>
               <Input 
                 id="desc" 
@@ -667,7 +667,7 @@ export function CustomerService() {
               </Label>
               <Select value={newTeamRouting} onValueChange={setNewTeamRouting}>
                 <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select routing rule" />
+                  <SelectValue placeholder={t("customerService.teams.routingPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{t("customerService.teams.routingRules.all")}</SelectItem>
@@ -680,9 +680,9 @@ export function CustomerService() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsCreateTeamOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
-            <Button onClick={handleCreateTeam}>Create Team</Button>
+            <Button onClick={handleCreateTeam}>{t("customerService.teams.createGroup")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -143,7 +143,7 @@ export function FulfillmentTab() {
                     <TableCell>
                       <Badge variant="outline" className="flex w-fit items-center gap-1">
                         <Truck className="h-3 w-3" />
-                        {item.status}
+                        {t(`orders.fulfillment.statuses.${item.status.toLowerCase().replace(' ', '_')}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -186,10 +186,10 @@ export function FulfillmentTab() {
                   </div>
                   <div>
                     <h4 className="font-bold">{carrier}</h4>
-                    <p className="text-xs text-muted-foreground">API Connected</p>
+                    <p className="text-xs text-muted-foreground">{t("orders.apiConnected")}</p>
                   </div>
                 </div>
-                <Badge variant="default">Online</Badge>
+                <Badge variant="default">{t("orders.online")}</Badge>
               </div>
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="bg-muted/30 p-3 rounded-lg text-center">

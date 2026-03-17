@@ -1,4 +1,8 @@
 {
+  "auth": {
+    "loginToContinue": "请登录以继续",
+    "loginWithGoogle": "使用 Google 登录"
+  },
   "common": {
     "search": "搜索...",
     "filter": "筛选",
@@ -265,6 +269,14 @@
     "addProduct": "添加 1 个新产品",
     "searchPlaceholder": "搜索产品名称，SKU...",
     "id": "产品 ID",
+    "table": {
+      "price": "价格",
+      "stock": "库存",
+      "category": "类别",
+      "status": "状态",
+      "loading": "正在加载数据...",
+      "active": "在售"
+    },
     "forecasting": {
       "title": "AI 库存预测",
       "description": "基于销售速度和趋势的预测性库存分析。",
@@ -315,8 +327,52 @@
         "basic": "基本信息",
         "description": "描述",
         "sales": "销售信息",
+        "warehouse": "仓库与库存",
         "shipping": "运输",
         "other": "其他信息"
+      },
+      "sales": {
+        "variantClassification": "变体分类",
+        "variantGroup": "变体组",
+        "addVariantGroup": "添加变体组",
+        "groupName": "组名",
+        "groupNamePlaceholder": "例如：颜色，尺寸...",
+        "variant": "变体",
+        "variantPlaceholder": "例如：红，蓝，S，M...",
+        "addVariant": "添加变体",
+        "bulkApply": "批量应用",
+        "price": "价格",
+        "stock": "库存",
+        "sku": "SKU",
+        "apply": "应用",
+        "productPrice": "产品价格",
+        "productStock": "库存数量"
+      },
+      "warehouse": {
+        "type": "仓库类型",
+        "selectType": "选择类型",
+        "normal": "普通仓库",
+        "fulfillment": "履约仓库",
+        "selectWarehouse": "选择仓库",
+        "syncWms": "同步 WMS",
+        "syncWmsDesc": "与第三方 WMS（KiotViet、Sapo、Nhanh.vn...）同步 API"
+      },
+      "shipping": {
+        "weight": "重量（包装后）",
+        "dimensions": "包装尺寸",
+        "length": "长",
+        "width": "宽",
+        "height": "高"
+      },
+      "other": {
+        "condition": "状况",
+        "selectCondition": "选择状况",
+        "new": "全新",
+        "used": "二手",
+        "preOrder": "预购",
+        "preOrderDesc": "我需要更多时间准备货物",
+        "prepTime": "准备时间",
+        "days": "天"
       },
       "basicInfo": "基本信息",
       "productImages": "产品图片",
@@ -381,6 +437,8 @@
   "orders": {
     "title": "订单",
     "description": "管理客户订单、履行和退货。",
+    "syncWms": "同步 WMS/承运商",
+    "syncSuccess": "已成功将订单同步到 WMS 和承运商！",
     "searchPlaceholder": "搜索订单...",
     "id": "订单 ID",
     "customer": "客户",
@@ -601,6 +659,8 @@
       "title": "社交媒体",
       "description": "发布日程、多渠道、发布历史。",
       "createPost": "发布帖子",
+      "createPostDesc": "创建并安排社交媒体帖子。",
+      "promptPlaceholder": "你在想什么？",
       "platform": "平台",
       "content": "内容",
       "schedule": "日程",
@@ -733,6 +793,23 @@
       "seoDesc": "搜索引擎优化的默认设置。",
       "metaSuffix": "默认 Meta 标题后缀",
       "indexContent": "默认索引内容"
+    },
+    "automations": {
+      "title": "营销自动化",
+      "description": "自动化客户关怀和销售流程。",
+      "create": "创建自动化",
+      "stats": {
+        "totalRuns": "总运行次数",
+        "activeWorkflows": "活跃工作流",
+        "conversionRate": "转化率",
+        "paused": "{count} 已暂停",
+        "viaAutomatedFlows": "通过自动化流程"
+      },
+      "activeWorkflows": "活跃工作流",
+      "activeWorkflowsDesc": "管理活跃的自动化场景。",
+      "runs": "运行次数",
+      "trigger": "触发器",
+      "action": "操作"
     }
   },
   "affiliate": {
@@ -1421,6 +1498,70 @@
       "endpointUrl": "Endpoint URL",
       "events": "事件",
       "secret": "Secret Key"
+    }
+  },
+  "logistics": {
+    "title": "物流控制塔",
+    "description": "管理仓库、库存并同步运输承运商。",
+    "syncNow": "立即同步",
+    "carrierPerformance": "承运商绩效",
+    "tabs": {
+      "dashboard": "仪表板",
+      "warehouses": "仓库管理",
+      "inventory": "库存",
+      "integrations": "WMS 集成"
+    },
+    "dashboard": {
+      "activeShipments": "运输中的订单",
+      "onTimeRate": "准时率",
+      "avgDeliveryTime": "平均交货时间",
+      "delayedOrders": "延误订单",
+      "liveTrackingMap": "实时跟踪地图",
+      "moving": "移动中",
+      "idle": "空闲",
+      "interactiveMapLoading": "交互式地图加载中...",
+      "activeRoute": "活跃路线",
+      "fastest": "最快",
+      "shipmentStatusOverview": "货运状态概览",
+      "shipmentId": "货运 ID",
+      "customer": "客户",
+      "carrier": "承运商",
+      "status": "状态",
+      "eta": "预计到达时间",
+      "action": "操作",
+      "aiOptimizationInsight": "AI 优化见解",
+      "costSavingOpportunity": "节省成本的机会",
+      "costSavingDesc": "根据目前的货运量，将 40% 的河内-胡志明市路线转移到 GHN 每月可节省 1,200 美元。",
+      "applyOptimization": "应用优化",
+      "weatherAlert": "天气警报",
+      "weatherAlertDesc": "岘港的大雨可能会使 15 批货物延误 4-6 小时。已自动向客户发送通知。"
+    },
+    "warehouses": {
+      "title": "仓库列表",
+      "add": "添加仓库",
+      "name": "仓库名称",
+      "type": "类型",
+      "location": "位置",
+      "capacity": "容量",
+      "status": "状态"
+    },
+    "inventory": {
+      "title": "库存管理",
+      "product": "产品",
+      "warehouse": "仓库",
+      "stock": "库存",
+      "reserved": "已预留",
+      "available": "可售"
+    },
+    "integrations": {
+      "title": "WMS 集成",
+      "syncInventoryOrders": "同步库存和订单",
+      "kiotVietDesc": "有新订单时自动扣减 KiotViet 上的库存。每 5 分钟从 KiotViet 更新一次库存。",
+      "sapoDesc": "有新订单时自动扣减 Sapo 上的库存。每 5 分钟从 Sapo 更新一次库存。",
+      "nhanhVnDesc": "有新订单时自动扣减 Nhanh.vn 上的库存。每 5 分钟从 Nhanh.vn 更新一次库存。",
+      "configure": "配置",
+      "syncNow": "立即同步",
+      "connect": "连接"
     }
   },
   "socialCommerce": {

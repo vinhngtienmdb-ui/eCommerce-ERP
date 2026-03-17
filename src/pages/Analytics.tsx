@@ -16,7 +16,7 @@ export function Analytics() {
           <p className="text-muted-foreground">{t("analytics.description")}</p>
         </div>
         <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
-          Export Report
+          {t("common.exportReport")}
         </Button>
       </div>
 
@@ -33,7 +33,7 @@ export function Analytics() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("analytics.stats.totalRevenue")}</CardTitle>
                 <div className="p-2 bg-blue-100 rounded-full">
                   <DollarSign className="h-4 w-4 text-blue-600" />
                 </div>
@@ -44,7 +44,7 @@ export function Analytics() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("analytics.stats.activeUsers")}</CardTitle>
                 <div className="p-2 bg-green-100 rounded-full">
                   <Users className="h-4 w-4 text-green-600" />
                 </div>
@@ -55,7 +55,7 @@ export function Analytics() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("analytics.stats.conversionRate")}</CardTitle>
                 <div className="p-2 bg-yellow-100 rounded-full">
                   <Zap className="h-4 w-4 text-yellow-600" />
                 </div>
@@ -66,7 +66,7 @@ export function Analytics() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Avg. Order Value</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("analytics.stats.avgOrderValue")}</CardTitle>
                 <div className="p-2 bg-purple-100 rounded-full">
                   <BarChart className="h-4 w-4 text-purple-600" />
                 </div>
@@ -82,11 +82,11 @@ export function Analytics() {
           <Card>
             <CardHeader>
               <CardTitle>{t("analytics.rfm.title")}</CardTitle>
-              <CardDescription>RFM Cohort Analysis</CardDescription>
+              <CardDescription>{t("analytics.rfm.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] flex items-center justify-center border rounded-lg bg-muted/20">
-                RFM Visualization Placeholder
+                {t("analytics.rfm.placeholder")}
               </div>
             </CardContent>
           </Card>
@@ -126,11 +126,11 @@ export function Analytics() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 border rounded-lg bg-red-50">
                   <span>{t("analytics.fraud.buffOrders")}</span>
-                  <span className="text-red-500 font-bold">12 detected</span>
+                  <span className="text-red-500 font-bold">{t("analytics.fraud.detected", { count: 12 })}</span>
                 </div>
                 <div className="flex items-center justify-between p-4 border rounded-lg bg-red-50">
                   <span>{t("analytics.fraud.spamVoucher")}</span>
-                  <span className="text-red-500 font-bold">5 detected</span>
+                  <span className="text-red-500 font-bold">{t("analytics.fraud.detected", { count: 5 })}</span>
                 </div>
               </div>
             </CardContent>

@@ -1,10 +1,15 @@
 {
+  "auth": {
+    "loginToContinue": "Vui lòng đăng nhập để tiếp tục",
+    "loginWithGoogle": "Đăng nhập với Google"
+  },
   "common": {
     "search": "Tìm kiếm...",
     "filter": "Bộ lọc",
     "filters": "Bộ lọc",
     "create": "Tạo mới",
     "export": "Xuất",
+    "exportReport": "Xuất báo cáo",
     "actions": "Hành động",
     "viewDetails": "Xem chi tiết",
     "edit": "Chỉnh sửa",
@@ -18,7 +23,30 @@
     "selectFile": "Chọn tệp tin",
     "status": "Trạng thái",
     "moduleUnderConstruction": "Mô-đun đang được xây dựng",
-    "languageCode": "Vietnamese"
+    "languageCode": "Vietnamese",
+    "months": {
+      "jan": "Tháng 1",
+      "feb": "Tháng 2",
+      "mar": "Tháng 3",
+      "apr": "Tháng 4",
+      "may": "Tháng 5",
+      "jun": "Tháng 6",
+      "jul": "Tháng 7",
+      "aug": "Tháng 8",
+      "sep": "Tháng 9",
+      "oct": "Tháng 10",
+      "nov": "Tháng 11",
+      "dec": "Tháng 12"
+    },
+    "weekdays": {
+      "mon": "Thứ 2",
+      "tue": "Thứ 3",
+      "wed": "Thứ 4",
+      "thu": "Thứ 5",
+      "fri": "Thứ 6",
+      "sat": "Thứ 7",
+      "sun": "Chủ Nhật"
+    }
   },
   "nav": {
     "groups": {
@@ -68,6 +96,31 @@
     "booking": "Đặt phòng & Tài nguyên",
     "requests": "Yêu cầu Hành chính",
     "documents": "Quản lý văn bản",
+    "documentSettings": "Cài đặt văn bản",
+    "documents.fields.title": "Trích yếu nội dung",
+    "documents.fields.content": "Nội dung văn bản",
+    "documents.fields.receiver": "Nơi nhận",
+    "documents.fields.sender": "Nơi gửi",
+    "documents.fields.date": "Ngày ban hành",
+    "documents.fields.signer": "Người ký",
+    "documents.fields.basis": "Căn cứ ban hành",
+    "documents.fields.terms": "Điều khoản",
+    "documents.fields.employeeName": "Họ tên nhân viên",
+    "documents.fields.destination": "Nơi đến",
+    "documents.fields.purpose": "Lý do/Mục đích",
+    "documents.fields.startDate": "Ngày bắt đầu",
+    "documents.fields.endDate": "Ngày kết thúc",
+    "documents.fields.vehicle": "Phương tiện",
+    "documents.fields.invitee": "Kính mời ông/bà",
+    "documents.fields.time": "Thời gian",
+    "documents.fields.location": "Địa điểm",
+    "documents.fields.execution": "Tổ chức thực hiện",
+    "documents.fields.position": "Chức danh chuyên môn",
+    "documents.fields.salary": "Mức lương chính",
+    "documents.fields.driverName": "Họ tên lái xe",
+    "documents.fields.vehiclePlate": "Biển kiểm soát",
+    "documents.fields.departureTime": "Giờ đi",
+    "documents.fields.returnTime": "Giờ về",
     "planning": "Chiến lược & Kế hoạch",
     "analytics": "Phân tích",
     "sales": "Bán hàng",
@@ -96,25 +149,95 @@
     "eContract": "Hợp đồng & Ký số",
     "settings": "Cài đặt"
   },
+  "logistics": {
+    "title": "Tháp Điều khiển Logistics",
+    "description": "Quản lý kho vận, tồn kho và đồng bộ đơn vị vận chuyển.",
+    "syncNow": "Đồng bộ ngay",
+    "carrierPerformance": "Hiệu suất ĐVVC",
+    "tabs": {
+      "dashboard": "Tổng quan",
+      "warehouses": "Quản lý Kho",
+      "inventory": "Tồn kho",
+      "integrations": "Kết nối WMS"
+    },
+    "dashboard": {
+      "activeShipments": "Đơn hàng đang giao",
+      "onTimeRate": "Tỷ lệ giao đúng hạn",
+      "avgDeliveryTime": "Thời gian giao TB",
+      "delayedOrders": "Đơn hàng chậm trễ",
+      "liveTrackingMap": "Bản đồ theo dõi trực tiếp",
+      "moving": "Đang di chuyển",
+      "idle": "Đang chờ",
+      "interactiveMapLoading": "Đang tải bản đồ tương tác...",
+      "activeRoute": "Tuyến đường hoạt động",
+      "fastest": "Nhanh nhất",
+      "shipmentStatusOverview": "Tổng quan trạng thái đơn hàng",
+      "shipmentId": "Mã đơn",
+      "customer": "Khách hàng",
+      "carrier": "ĐVVC",
+      "status": "Trạng thái",
+      "eta": "Dự kiến giao",
+      "action": "Thao tác",
+      "aiOptimizationInsight": "Gợi ý tối ưu từ AI",
+      "costSavingOpportunity": "Cơ hội tiết kiệm chi phí",
+      "costSavingDesc": "Chuyển 40% tuyến HN-HCM sang GHN có thể tiết kiệm 1,200$/tháng dựa trên khối lượng hiện tại.",
+      "applyOptimization": "Áp dụng tối ưu",
+      "weatherAlert": "Cảnh báo thời tiết",
+      "weatherAlertDesc": "Mưa lớn tại Đà Nẵng có thể làm chậm 15 đơn hàng từ 4-6 giờ. Đã tự động gửi thông báo cho khách hàng."
+    },
+    "warehouses": {
+      "title": "Danh sách Kho hàng",
+      "add": "Thêm Kho mới",
+      "name": "Tên Kho",
+      "type": "Loại Kho",
+      "location": "Vị trí",
+      "capacity": "Sức chứa",
+      "status": "Trạng thái"
+    },
+    "inventory": {
+      "title": "Quản lý Tồn kho",
+      "product": "Sản phẩm",
+      "warehouse": "Kho hàng",
+      "stock": "Tồn kho",
+      "reserved": "Đang giao dịch",
+      "available": "Có thể bán"
+    },
+    "integrations": {
+      "title": "Kết nối Phần mềm Quản lý Kho (WMS)",
+      "syncInventoryOrders": "Đồng bộ tồn kho & đơn hàng",
+      "kiotVietDesc": "Tự động trừ tồn kho trên KiotViet khi có đơn hàng mới. Cập nhật tồn kho từ KiotViet về hệ thống mỗi 5 phút.",
+      "sapoDesc": "Tự động trừ tồn kho trên Sapo khi có đơn hàng mới. Cập nhật tồn kho từ Sapo về hệ thống mỗi 5 phút.",
+      "nhanhVnDesc": "Tự động trừ tồn kho trên Nhanh.vn khi có đơn hàng mới. Cập nhật tồn kho từ Nhanh.vn về hệ thống mỗi 5 phút.",
+      "configure": "Cấu hình",
+      "syncNow": "Đồng bộ ngay",
+      "connect": "Kết nối"
+    }
+  },
   "socialCommerce": {
     "title": "Cộng đồng & Mạng xã hội TMĐT",
     "description": "Không gian chia sẻ nội dung UGC, đánh giá sản phẩm và kết nối cộng đồng mua sắm.",
     "tabs": {
-      "feed": "Social Feed",
+      "feed": "Bảng tin",
       "groups": "Cộng đồng & Nhóm",
       "creators": "Nhà sáng tạo (Creators)"
     },
     "feed": {
-      "createPost": "Tạo bài viết",
+      "createPost": "Đăng bài",
       "trending": "Xu hướng",
       "following": "Đang theo dõi",
       "forYou": "Dành cho bạn",
       "likes": "Lượt thích",
       "comments": "Bình luận",
       "shares": "Chia sẻ",
-      "buyNow": "Mua ngay"
+      "buyNow": "Mua ngay",
+      "placeholder": "Chia sẻ trải nghiệm mua sắm của bạn...",
+      "photo": "Ảnh",
+      "video": "Video",
+      "attachProduct": "Gắn SP",
+      "timeAgo": "2 giờ trước"
     },
     "groups": {
+      "title": "Khám phá cộng đồng",
       "createGroup": "Tạo nhóm",
       "members": "Thành viên",
       "posts": "Bài viết/ngày",
@@ -125,9 +248,121 @@
     "creators": {
       "followers": "Người theo dõi",
       "engagementRate": "Tỷ lệ tương tác",
-      "totalSales": "Doanh số tạo ra",
+      "totalSales": "Doanh số",
       "follow": "Theo dõi",
-      "unfollow": "Bỏ theo dõi"
+      "unfollow": "Bỏ theo dõi",
+      "following": "Đang theo dõi"
+    }
+  },
+  "kolManagement": {
+    "title": "Quản lý KOL/KOC",
+    "description": "Quản lý mạng lưới KOL/KOC, phê duyệt đối tác và theo dõi hiệu quả kinh doanh.",
+    "invite": "Mời KOL mới",
+    "stats": {
+      "total": "Tổng KOL/KOC",
+      "newThisMonth": "+{count} trong tháng này",
+      "pending": "Đang chờ duyệt",
+      "needsAction": "Cần xử lý ngay",
+      "revenue": "Doanh thu KOL (Tháng)",
+      "commissions": "Hoa hồng chi trả"
+    },
+    "tabs": {
+      "list": "Danh sách KOL",
+      "approval": "Phê duyệt đối tác",
+      "stats": "Thống kê hiệu quả"
+    },
+    "list": {
+      "searchPlaceholder": "Tìm kiếm KOL...",
+      "table": {
+        "kol": "KOL/KOC",
+        "platform": "Nền tảng",
+        "followers": "Followers",
+        "status": "Trạng thái",
+        "revenue": "Doanh thu mang lại",
+        "commissions": "Hoa hồng",
+        "rating": "Đánh giá",
+        "actions": "Hành động"
+      },
+      "statuses": {
+        "active": "Đang hoạt động",
+        "inactive": "Tạm ngưng"
+      },
+      "menu": {
+        "viewProfile": "Xem hồ sơ",
+        "campaignHistory": "Lịch sử chiến dịch",
+        "terminate": "Ngưng hợp tác"
+      }
+    },
+    "approval": {
+      "title": "Yêu cầu phê duyệt",
+      "description": "Xem xét các yêu cầu tham gia mạng lưới KOL/KOC từ các nhà sáng tạo nội dung.",
+      "table": {
+        "candidate": "Ứng viên",
+        "platform": "Nền tảng chính",
+        "followers": "Followers",
+        "date": "Ngày gửi",
+        "actions": "Hành động"
+      },
+      "reject": "Từ chối",
+      "approve": "Phê duyệt"
+    },
+    "stats": {
+      "revenueByPlatform": "Doanh thu theo nền tảng",
+      "revenueByPlatformDesc": "Biểu đồ doanh thu theo nền tảng (TikTok, YouTube, v.v.)",
+      "topKols": "Top KOL Hiệu quả nhất"
+    }
+  },
+  "loyalty": {
+    "title": "Chương trình Khách hàng thân thiết",
+    "description": "Tăng tỷ lệ giữ chân khách hàng bằng các nhiệm vụ trò chơi hóa và phần thưởng hạng thành viên độc quyền.",
+    "manageRewards": "Quản lý phần thưởng",
+    "viewAnalytics": "Xem phân tích",
+    "tiers": {
+      "title": "Hạng thành viên",
+      "editStructure": "Chỉnh sửa cấu trúc",
+      "minSpend": "Chi tiêu tối thiểu: ${amount}",
+      "names": {
+        "Bronze": "Đồng",
+        "Silver": "Bạc",
+        "Gold": "Vàng",
+        "Diamond": "Kim cương"
+      }
+    },
+    "missions": {
+      "title": "Nhiệm vụ đang hoạt động",
+      "progress": "Tiến độ",
+      "items": {
+        "Early Bird": {
+          "title": "Chim sớm",
+          "description": "Thực hiện 3 giao dịch mua hàng trước 10 giờ sáng"
+        },
+        "Review Master": {
+          "title": "Bậc thầy đánh giá",
+          "description": "Viết 5 đánh giá kèm hình ảnh"
+        },
+        "Big Spender": {
+          "title": "Người chi tiêu lớn",
+          "description": "Chi tiêu trên $1000 trong tháng này"
+        }
+      }
+    },
+    "health": {
+      "title": "Sức khỏe chương trình",
+      "description": "Hiệu quả trong 30 ngày qua",
+      "activeMembers": "Thành viên hoạt động",
+      "redemptionRate": "Tỷ lệ đổi thưởng",
+      "pointsIssued": "Điểm đã cấp"
+    },
+    "games": {
+      "title": "Trung tâm Mini-Games",
+      "description": "Thu hút khách hàng bằng niềm vui",
+      "luckyWheel": "Vòng quay may mắn",
+      "dailyCheckin": "Điểm danh hàng ngày",
+      "priceGuessing": "Đoán giá",
+      "status": {
+        "active": "Đang hoạt động",
+        "paused": "Tạm dừng"
+      }
     }
   },
   "legal": {
@@ -146,29 +381,47 @@
       "status": "Trạng thái",
       "documents": "Tài liệu chứng minh",
       "ipProtection": "Bảo vệ SHTT",
-      "authorizedDistributors": "Nhà phân phối ủy quyền"
+      "authorizedDistributors": "Đại lý ủy quyền",
+      "dashboardComingSoon": "Bảng điều khiển bảo vệ SHTT sẽ sớm ra mắt.",
+      "distributorName": "Tên đại lý",
+      "region": "Khu vực",
+      "contractEnd": "Kết thúc hợp đồng",
+      "type": "Loại",
+      "expiry": "Hết hạn"
     },
     "dispute": {
       "caseId": "Mã vụ việc",
-      "type": "Loại vi phạm",
-      "reporter": "Người báo cáo",
-      "accused": "Bị cáo buộc",
+      "type": "Loại tranh chấp",
+      "reporter": "Bên khiếu nại",
+      "accused": "Bên bị khiếu nại",
       "status": "Trạng thái",
-      "action": "Hành động",
-      "counterfeit": "Hàng giả",
+      "action": "Thao tác",
+      "counterfeit": "Hàng giả/Hàng nhái",
       "ipViolation": "Vi phạm SHTT",
-      "mediation": "Hòa giải",
-      "evidence": "Bằng chứng"
+      "mediation": "Trung tâm hòa giải",
+      "evidence": "Kho bằng chứng",
+      "mediationComingSoon": "Trung tâm hòa giải sẽ sớm ra mắt.",
+      "evidenceComingSoon": "Kho lưu trữ bằng chứng sẽ sớm ra mắt."
     },
     "compliance": {
-      "policy": "Chính sách",
+      "policy": "Chính sách tuân thủ",
       "violationRate": "Tỷ lệ vi phạm",
-      "lastAudit": "Lần kiểm tra cuối",
+      "lastAudit": "Kiểm toán gần nhất",
       "status": "Trạng thái",
       "dataPrivacy": "Bảo mật dữ liệu",
       "ecommerceLaw": "Luật TMĐT",
-      "auditLogs": "Nhật ký kiểm tra",
-      "riskAssessment": "Đánh giá rủi ro"
+      "auditLogs": "Nhật ký kiểm toán",
+      "riskAssessment": "Đánh giá rủi ro",
+      "systemScore": "Điểm tuân thủ hệ thống",
+      "activeViolations": "Vi phạm đang hoạt động",
+      "recentAudits": "Kiểm toán gần đây",
+      "excellentStanding": "Trạng thái xuất sắc",
+      "requiresAttention": "Cần chú ý",
+      "thisMonth": "Trong tháng này",
+      "auditLogsComingSoon": "Lịch sử nhật ký kiểm toán sẽ sớm ra mắt.",
+      "category": "Danh mục",
+      "description": "Mô tả",
+      "severity": "Mức độ nghiêm trọng"
     },
     "contracts": {
       "contractId": "Mã hợp đồng",
@@ -551,8 +804,16 @@
       "sellers": "Năng lực Seller",
       "fraud": "Cảnh báo gian lận"
     },
+    "stats": {
+      "totalRevenue": "Tổng doanh thu",
+      "activeUsers": "Người dùng đang hoạt động",
+      "conversionRate": "Tỷ lệ chuyển đổi",
+      "avgOrderValue": "Giá trị đơn hàng TB"
+    },
     "rfm": {
       "title": "Phân tích Khách hàng (RFM)",
+      "description": "Phân tích nhóm RFM",
+      "placeholder": "Bản xem trước trực quan RFM",
       "recency": "Gần đây",
       "frequency": "Tần suất",
       "monetary": "Giá trị"
@@ -569,7 +830,8 @@
     "fraud": {
       "title": "Cảnh báo gian lận",
       "buffOrders": "Buff đơn",
-      "spamVoucher": "Spam Voucher"
+      "spamVoucher": "Spam Voucher",
+      "detected": "Phát hiện {{count}} trường hợp"
     }
   },
   "sales": {
@@ -615,24 +877,45 @@
     }
   },
   "customers": {
-    "title": "Khách hàng 360",
-    "description": "Quản lý hồ sơ khách hàng toàn diện, phân khúc và lịch sử tương tác.",
-    "crm": {
-      "title": "Danh sách Khách hàng",
-      "buyerName": "Tên khách hàng",
-      "purchaseHistory": "Lịch sử mua hàng",
-      "totalOrders": "Tổng đơn",
-      "totalSpent": "Tổng chi tiêu",
-      "lastOrder": "Gần nhất",
-      "details": "Hồ sơ 360 độ",
-      "segment": "Phân khúc",
-      "walletBalance": "Số dư ví",
-      "tags": "Thẻ phân loại",
-      "churnRisk": "Rủi ro rời bỏ"
+    "title": "Khách hàng",
+    "description": "Quản lý dữ liệu khách hàng, hành vi mua sắm và phân khúc khách hàng.",
+    "stats": {
+      "totalCustomers": "Tổng khách hàng",
+      "registeredUsers": "Người dùng đã đăng ký",
+      "newToday": "Mới hôm nay",
+      "fromYesterday": "+5% so với hôm qua",
+      "activeNow": "Đang hoạt động",
+      "onlineUsers": "Người dùng trực tuyến",
+      "vipMembers": "Thành viên VIP",
+      "highValue": "Giá trị cao"
     },
     "ai": {
-      "insightsError": "Không thể phân tích dữ liệu khách hàng lúc này.",
-      "predictChurn": "Dự đoán rời bỏ"
+      "insightsTitle": "Phân tích & Phân khúc Khách hàng AI",
+      "insightsDesc": "Phân tích hành vi mua sắm để tự động phân loại và gợi ý chiến dịch chăm sóc.",
+      "analyzing": "Đang phân tích hành vi khách hàng...",
+      "analyzeButton": "Phân tích Phân khúc Khách hàng",
+      "predictChurn": "Dự đoán rời bỏ",
+      "insightsError": "Không thể tải phân tích khách hàng lúc này."
+    },
+    "crm": {
+      "title": "Quản lý Khách hàng (CRM)",
+      "searchPlaceholder": "Tìm kiếm khách hàng...",
+      "buyerName": "Tên người mua",
+      "contact": "Liên hệ",
+      "totalOrders": "Tổng đơn hàng",
+      "totalSpent": "Tổng chi tiêu",
+      "walletBalance": "Số dư ví",
+      "lastOrder": "Đơn cuối",
+      "segment": "Phân khúc",
+      "churnRisk": "Rủi ro rời bỏ",
+      "purchaseHistory": "Lịch sử mua hàng",
+      "details": "Chi tiết khách hàng"
+    },
+    "segments": {
+      "vip": "VIP",
+      "active": "Hoạt động",
+      "inactive": "Ngừng hoạt động",
+      "new": "Mới"
     }
   },
   "customerService": {
@@ -649,6 +932,8 @@
       "customerInfo": "Thông tin khách hàng",
       "recentOrders": "Đơn hàng gần đây",
       "lookupPlaceholder": "Tìm SĐT/Mã đơn...",
+      "typePlaceholder": "Nhập tin nhắn...",
+      "messageSent": "Đã gửi tin nhắn",
       "zaloOA": "Zalo OA",
       "zaloPersonal": "Zalo Cá nhân",
       "messenger": "Messenger",
@@ -660,35 +945,56 @@
       "accept": "Nghe máy",
       "reject": "Từ chối",
       "callHistory": "Lịch sử cuộc gọi",
+      "callHistoryDesc": "Quản lý các cuộc gọi đến và đi.",
       "simulateCall": "Giả lập cuộc gọi đến",
       "activeCall": "Đang gọi",
-      "customerContext": "Bối cảnh khách hàng"
+      "customerContext": "Bối cảnh khách hàng",
+      "caller": "Người gọi",
+      "duration": "Thời lượng",
+      "completed": "Hoàn thành",
+      "missed": "Cuộc gọi nhỡ",
+      "callAccepted": "Đã chấp nhận cuộc gọi"
     },
     "tickets": {
       "create": "Tạo Ticket",
+      "description": "Quản lý các yêu cầu hỗ trợ và khiếu nại.",
       "subject": "Chủ đề",
       "priority": "Độ ưu tiên",
       "status": "Trạng thái",
       "assignee": "Người xử lý",
+      "customer": "Khách hàng",
       "high": "Cao",
       "medium": "Trung bình",
       "low": "Thấp",
       "open": "Mới",
-      "in_progress": "Đang xử lý",
-      "resolved": "Đã xong"
+      "inProgress": "Đang xử lý",
+      "resolved": "Đã giải quyết",
+      "closed": "Đã đóng"
     },
     "teams": {
-      "createGroup": "Tạo nhóm CSKH",
+      "createGroup": "Tạo Nhóm hỗ trợ",
+      "createGroupDesc": "Tạo nhóm hỗ trợ mới và định nghĩa quy tắc điều hướng.",
       "groupName": "Tên nhóm",
       "description": "Mô tả",
       "members": "Thành viên",
-      "routing": "Phân luồng",
+      "routing": "Điều hướng",
+      "routingPlaceholder": "Chọn quy tắc điều hướng",
+      "createdSuccess": "Đã tạo nhóm thành công",
       "routingRules": {
-        "all": "Tất cả cuộc gọi đến",
-        "vip": "Chỉ khách hàng VIP",
-        "tech": "Vấn đề kỹ thuật",
+        "all": "Tất cả",
+        "vip": "Khách hàng VIP",
+        "tech": "Kỹ thuật",
         "complaint": "Khiếu nại"
       }
+    },
+    "ai": {
+      "sentimentTitle": "Phân tích Cảm xúc AI",
+      "sentimentDesc": "Phân tích cảm xúc khách hàng dựa trên tin nhắn gần đây.",
+      "analyzing": "Đang phân tích...",
+      "runAnalysis": "Chạy phân tích",
+      "sentimentError": "Lỗi phân tích cảm xúc",
+      "refreshReplies": "Làm mới gợi ý",
+      "repliesError": "Lỗi tạo gợi ý trả lời"
     }
   },
   "executive": {
@@ -743,15 +1049,55 @@
       "loading": "Đang phân tích dữ liệu...",
       "placeholder": "Bản tin hàng ngày của bạn sẽ xuất hiện ở đây.",
       "tip1": "Doanh thu tăng, hãy cân nhắc mở rộng quảng cáo.",
-      "tip2": "Số lượng sản phẩm giảm, hãy kiểm tra kho hàng."
-    }
+      "tip2": "Số lượng sản phẩm giảm, hãy kiểm tra kho hàng.",
+      "error": "Không thể tải bản tin AI lúc này."
+    },
+    "quickAccess": "Truy cập nhanh",
+    "modules": {
+      "products": "Quản lý danh mục sản phẩm của bạn",
+      "orders": "Theo dõi và xử lý đơn hàng",
+      "sellers": "Quản lý tài khoản người bán",
+      "customers": "Xem dữ liệu khách hàng",
+      "marketing": "Chiến dịch và khuyến mãi",
+      "finance": "Tổng quan tài chính",
+      "hr": "Nguồn nhân lực",
+      "analytics": "Phân tích dữ liệu"
+    },
+    "activeProductsDesc": "Sản phẩm đang bán",
+    "addedToFavorites": "Đã thêm vào mục yêu thích",
+    "helpClicked": "Đã nhấn trợ giúp"
   },
   "products": {
     "title": "Sản phẩm",
     "description": "Quản lý danh mục sản phẩm, giá cả và hàng tồn kho.",
-    "addProduct": "Thêm 1 sản phẩm mới",
+    "addProduct": "Thêm sản phẩm",
+    "productSettings": "Cài đặt sản phẩm",
+    "batchTools": "Công cụ hàng loạt",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa sản phẩm này không?",
+    "deleteSuccess": "Xóa sản phẩm thành công",
+    "inStock": "trong kho",
+    "unitsPerDay": "đơn vị/ngày",
+    "daysLeft": "ngày còn lại",
     "searchPlaceholder": "Tìm Tên sản phẩm, SKU sản phẩm...",
     "id": "Mã sản phẩm",
+    "table": {
+      "price": "Giá bán",
+      "stock": "Kho hàng",
+      "category": "Ngành hàng",
+      "status": "Trạng thái",
+      "loading": "Đang tải dữ liệu...",
+      "active": "Đang bán"
+    },
+    "stats": {
+      "totalProducts": "Tổng sản phẩm",
+      "activeItems": "Sản phẩm đang hoạt động",
+      "lowStock": "Sắp hết hàng",
+      "needsRestock": "Cần bổ sung hàng",
+      "topRated": "Đánh giá cao",
+      "ratingDesc": "Sản phẩm trên 4.5 sao",
+      "inactive": "Ngừng hoạt động",
+      "unpublished": "Chưa đăng bán"
+    },
     "forecasting": {
       "title": "Dự báo kho hàng AI",
       "description": "Phân tích tồn kho dự đoán dựa trên tốc độ bán hàng và xu hướng.",
@@ -759,7 +1105,8 @@
       "analyzeAll": "Phân tích bằng AI",
       "analysisResult": "Kết quả phân tích kho hàng AI",
       "analysisSubtitle": "Phân tích thông minh dựa trên dữ liệu tồn kho hiện tại.",
-      "analysisError": "Lỗi khi phân tích kho hàng bằng AI."
+      "analysisError": "Lỗi khi phân tích kho hàng bằng AI.",
+      "aiPrompt": "Phân tích dữ liệu tồn kho này và đưa ra các khuyến nghị chiến lược về việc nhập hàng, khuyến mãi hoặc thanh lý các mặt hàng bán chậm."
     },
     "name": "Tên sản phẩm",
     "category": "Ngành hàng",
@@ -796,19 +1143,83 @@
       "expand": "Mở rộng"
     },
     "add": {
-      "title": "Thêm 1 sản phẩm mới",
+      "title": "Thêm sản phẩm mới",
       "suggestions": "Gợi ý điền Thông tin",
       "sug1": "Thêm ít nhất 3 hình ảnh",
       "sug2": "Thêm video sản phẩm",
       "sug3": "Tên sản phẩm có ít nhất 25~100 kí tự",
       "sug4": "Thêm ít nhất 100 kí tự hoặc 1 hình ảnh trong mô tả sản phẩm",
       "sug5": "Thêm thương hiệu",
+      "bulkApplySuccess": "Đã áp dụng hàng loạt",
+      "uploadImageForAi": "Vui lòng tải lên ít nhất 1 hình ảnh để AI phân tích.",
+      "aiCategorySuccess": "AI đã đề xuất danh mục: {{category}}",
+      "aiCategoryNotFound": "AI không thể tìm thấy danh mục phù hợp.",
+      "aiCategoryImageError": "Lỗi khi phân tích hình ảnh.",
+      "aiSuggest": "Gợi ý bằng AI",
+      "saveSuccessPublished": "Đã lưu và hiển thị sản phẩm!",
+      "saveSuccessHidden": "Đã lưu sản phẩm (ẩn)!",
+      "errors": {
+        "nameRequired": "Tên sản phẩm là bắt buộc",
+        "categoryRequired": "Ngành hàng là bắt buộc",
+        "imageRequired": "Cần ít nhất 1 hình ảnh",
+        "combinationPriceRequired": "Vui lòng nhập giá cho tất cả phân loại",
+        "combinationStockRequired": "Vui lòng nhập số lượng tồn cho tất cả phân loại",
+        "priceRequired": "Giá sản phẩm là bắt buộc",
+        "stockRequired": "Số lượng tồn là bắt buộc",
+        "warehouseRequired": "Vui lòng chọn kho hàng",
+        "weightRequired": "Cân nặng phải lớn hơn 0",
+        "checkForm": "Vui lòng kiểm tra lại các trường bị lỗi"
+      },
       "tabs": {
         "basic": "Thông tin cơ bản",
         "description": "Mô tả",
         "sales": "Thông tin bán hàng",
+        "warehouse": "Kho vận & Tồn kho",
         "shipping": "Vận chuyển",
         "other": "Thông tin khác"
+      },
+      "sales": {
+        "variantClassification": "Phân loại hàng",
+        "variantGroup": "Nhóm phân loại",
+        "addVariantGroup": "Thêm nhóm phân loại",
+        "groupName": "Tên nhóm",
+        "groupNamePlaceholder": "VD: Màu sắc, Kích thước...",
+        "variant": "Phân loại",
+        "variantPlaceholder": "VD: Đỏ, Xanh, S, M...",
+        "addVariant": "Thêm phân loại",
+        "bulkApply": "Áp dụng hàng loạt",
+        "price": "Giá",
+        "stock": "Kho hàng",
+        "sku": "SKU",
+        "apply": "Áp dụng",
+        "productPrice": "Giá sản phẩm",
+        "productStock": "Số lượng tồn"
+      },
+      "warehouse": {
+        "type": "Loại kho hàng",
+        "selectType": "Chọn loại kho",
+        "normal": "Kho thông thường",
+        "fulfillment": "Kho Fulfillment (Ký gửi)",
+        "selectWarehouse": "Chọn kho xuất hàng",
+        "syncWms": "Đồng bộ WMS",
+        "syncWmsDesc": "Đồng bộ API với phần mềm quản lý kho bên thứ 3 (KiotViet, Sapo, Nhanh.vn...)"
+      },
+      "shipping": {
+        "weight": "Cân nặng (Sau khi đóng gói)",
+        "dimensions": "Kích thước đóng gói",
+        "length": "D",
+        "width": "R",
+        "height": "C"
+      },
+      "other": {
+        "condition": "Tình trạng",
+        "selectCondition": "Chọn tình trạng",
+        "new": "Mới",
+        "used": "Đã sử dụng",
+        "preOrder": "Hàng đặt trước",
+        "preOrderDesc": "Tôi sẽ cần thêm thời gian để chuẩn bị hàng",
+        "prepTime": "Thời gian chuẩn bị hàng",
+        "days": "ngày"
       },
       "basicInfo": "Thông tin cơ bản",
       "productImages": "Hình ảnh sản phẩm",
@@ -887,6 +1298,12 @@
   "orders": {
     "title": "Đơn hàng",
     "description": "Quản lý đơn hàng của khách hàng, việc thực hiện và trả hàng.",
+    "syncWms": "Đồng bộ WMS/ĐVVC",
+    "syncSuccess": "Đã đồng bộ đơn hàng sang WMS và ĐVVC thành công!",
+    "apiConnected": "Đã kết nối API",
+    "online": "Trực tuyến",
+    "connected": "Đã kết nối",
+    "disconnected": "Chưa kết nối",
     "searchPlaceholder": "Tìm kiếm mã đơn, khách hàng, sản phẩm...",
     "id": "Mã đơn hàng",
     "customer": "Khách hàng",
@@ -968,6 +1385,7 @@
       "fee": "Cước phí",
       "dispatch": "Điều phối",
       "updateStatus": "Cập nhật trạng thái ĐVVC",
+      "apiIntegrationDesc": "Tích hợp API để tự động tạo nhãn và theo dõi vận đơn.",
       "statuses": {
         "pending": "Chờ lấy hàng",
         "picked_up": "Đã lấy hàng",
@@ -987,6 +1405,7 @@
     "rma": {
       "title": "Xử lý Đổi trả/Hoàn tiền (RMA)",
       "description": "Quản lý quy trình đổi trả hàng, kiểm định và hoàn tiền cho khách hàng.",
+      "id": "Mã RMA",
       "orderId": "Mã đơn hàng",
       "reason": "Lý do",
       "amount": "Số tiền hoàn",
@@ -1001,6 +1420,15 @@
         "refunded": "Đã hoàn tiền",
         "processing": "Đang kiểm định"
       }
+    },
+    "settings": {
+      "title": "Cấu hình Vận chuyển",
+      "description": "Kết nối với các đơn vị vận chuyển và cấu hình phí giao hàng.",
+      "gateways": "Cổng vận chuyển",
+      "addCarrier": "Thêm nhà vận chuyển",
+      "configure": "Cấu hình",
+      "testConnection": "Kiểm tra kết nối",
+      "testConnectionDesc": "Xác minh thông tin đăng nhập API và kết nối với môi trường thử nghiệm hoặc thực tế của nhà vận chuyển."
     }
   },
   "paymentWallet": {
@@ -1311,13 +1739,32 @@
       "social": "Mạng xã hội",
       "messages": "Tin nhắn & Zalo",
       "promotions": "Khuyến mãi & Flash Sale",
-      "landingPages": "Landing Pages"
+      "landingPages": "Landing Pages",
+      "automations": "Tự động hóa"
     },
     "dashboard": {
       "campaigns": "Chiến dịch Marketing",
       "content": "Nội dung & Truyền thông"
     },
     "backToDashboard": "Quay lại Dashboard",
+    "ai": {
+      "insightsTitle": "Phân tích Marketing AI",
+      "insightsDesc": "Tối ưu hóa chiến dịch và nội dung bằng trí tuệ nhân tạo.",
+      "generateContent": "Tạo nội dung AI",
+      "contentIdeas": "Ý tưởng nội dung",
+      "promptPlaceholder": "Nhập chủ đề hoặc từ khóa để AI tạo nội dung...",
+      "analyzing": "AI đang phân tích hiệu quả chiến dịch...",
+      "generating": "AI đang tạo nội dung sáng tạo...",
+      "error": "Không thể kết nối với AI Marketing lúc này."
+    },
+    "automation": {
+      "title": "Tự động hóa",
+      "description": "Tự động hóa quy trình marketing và bán hàng.",
+      "activeFlows": "Luồng đang chạy",
+      "totalRuns": "Tổng lượt chạy",
+      "successRate": "Tỷ lệ thành công",
+      "runs": "lượt chạy"
+    },
     "stats": {
       "totalBudget": "Tổng ngân sách",
       "totalRevenue": "Tổng doanh thu",
@@ -1364,15 +1811,41 @@
       "discount": "Giảm giá",
       "duration": "Thời gian",
       "status": "Trạng thái",
-      "actions": "Hành động"
+      "actions": "Hành động",
+      "types": {
+        "flash_sale": "Flash Sale",
+        "voucher": "Voucher",
+        "group_buy": "Mua chung",
+        "combo": "Combo",
+        "free_gift": "Quà tặng"
+      },
+      "statuses": {
+        "active": "Đang chạy",
+        "expired": "Hết hạn",
+        "scheduled": "Sắp diễn ra"
+      }
     },
     "social": {
       "title": "Mạng xã hội",
       "description": "Lịch đăng bài, đa kênh, lịch sử đăng.",
       "createPost": "Đăng bài",
+      "createPostDesc": "Tạo và lên lịch bài viết trên mạng xã hội.",
+      "promptPlaceholder": "Bạn đang nghĩ gì?",
       "platform": "Nền tảng",
       "content": "Nội dung",
       "schedule": "Lịch đăng",
+      "platforms": {
+        "facebook": "Facebook",
+        "tiktok": "TikTok",
+        "instagram": "Instagram",
+        "youtube": "YouTube",
+        "zalo": "Zalo"
+      },
+      "statuses": {
+        "published": "Đã đăng",
+        "scheduled": "Đã lên lịch",
+        "draft": "Bản nháp"
+      },
       "recentPosts": "Bài đăng gần đây",
       "recentPostsDesc": "Hiệu quả các bài đăng mạng xã hội gần đây.",
       "engagement": "Tương tác",
@@ -1419,7 +1892,12 @@
       "sent": "Đã gửi",
       "openRate": "Tỷ lệ mở",
       "clickRate": "Tỷ lệ click",
-      "date": "Ngày"
+      "date": "Ngày",
+      "statuses": {
+        "sent": "Đã gửi",
+        "draft": "Bản nháp",
+        "scheduled": "Đã lên lịch"
+      }
     },
     "reports": {
       "title": "Báo cáo chiến dịch",
@@ -1450,7 +1928,12 @@
       "articleTitle": "Tiêu đề",
       "author": "Tác giả",
       "status": "Trạng thái",
-      "lastModified": "Sửa đổi lần cuối"
+      "lastModified": "Sửa đổi lần cuối",
+      "statuses": {
+        "published": "Đã đăng",
+        "draft": "Bản nháp",
+        "review": "Chờ duyệt"
+      }
     },
     "assets": {
       "title": "Thư viện tài sản",
@@ -1458,50 +1941,70 @@
       "upload": "Tải lên tài sản"
     },
     "leads": {
-      "title": "Form thu thập lead",
-      "description": "Form nhúng, popup, tích hợp.",
+      "title": "Quản lý Lead",
+      "description": "Form đăng ký, thu thập thông tin khách hàng tiềm năng.",
       "create": "Tạo Form",
-      "createDesc": "Điền thông tin chi tiết để tạo form thu thập lead mới.",
       "activeForms": "Form đang hoạt động",
-      "activeFormsDesc": "Quản lý form thu thập khách hàng tiềm năng và popup.",
+      "activeFormsDesc": "Danh sách các form thu thập lead đang chạy.",
       "formName": "Tên Form",
       "type": "Loại",
       "views": "Lượt xem",
-      "submissions": "Lượt gửi",
+      "submissions": "Lượt đăng ký",
       "conversionRate": "Tỷ lệ chuyển đổi",
       "status": "Trạng thái",
       "types": {
-        "embedded": "Nhúng",
         "popup": "Popup",
-        "landingPage": "Landing Page"
+        "inline": "Nhúng",
+        "landing_page": "Landing Page"
       },
       "statuses": {
-        "active": "Hoạt động",
-        "paused": "Tạm dừng"
+        "active": "Đang chạy",
+        "draft": "Bản nháp"
       }
     },
     "ai": {
-      "title": "Trợ lý Nội dung AI",
-      "description": "Tạo nội dung marketing sáng tạo bằng Gemini AI.",
+      "insightsTitle": "Phân tích Marketing AI",
+      "insightsDesc": "Tối ưu hóa chiến dịch và nội dung bằng trí tuệ nhân tạo.",
       "generate": "AI Tạo nội dung",
       "generating": "Đang tạo...",
       "promptLabel": "Bạn muốn viết về chủ đề gì?",
-      "promptPlaceholder": "VD: Xu hướng thời trang hè 2024",
+      "promptPlaceholder": "Nhập chủ đề hoặc từ khóa để AI tạo nội dung...",
       "promptRequired": "Vui lòng nhập chủ đề",
       "success": "Đã tạo nội dung thành công!",
-      "error": "Không thể tạo nội dung. Vui lòng thử lại."
+      "error": "Không thể tạo nội dung. Vui lòng thử lại.",
+      "generateContent": "Tạo nội dung AI",
+      "contentIdeas": "Ý tưởng nội dung",
+      "analyzing": "AI đang phân tích hiệu quả chiến dịch...",
+      "generatingContent": "AI đang tạo nội dung sáng tạo..."
     },
     "contentSettings": {
-      "title": "Thiết lập nội dung",
-      "description": "Mẫu, thư viện thương hiệu.",
-      "brand": "Hướng dẫn thương hiệu",
-      "brandDesc": "Thiết lập màu sắc và phông chữ mặc định.",
+      "title": "Cài đặt nội dung",
+      "description": "Thương hiệu, phong cách, quy trình duyệt.",
+      "brand": "Thương hiệu",
+      "brandDesc": "Quản lý nhận diện thương hiệu.",
       "primaryColor": "Màu chính",
       "secondaryColor": "Màu phụ",
       "seo": "Mặc định SEO",
       "seoDesc": "Cài đặt mặc định cho tối ưu hóa công cụ tìm kiếm.",
       "metaSuffix": "Hậu tố tiêu đề Meta mặc định",
       "indexContent": "Cho phép index nội dung theo mặc định"
+    },
+    "automations": {
+      "title": "Tự động hóa Marketing",
+      "description": "Tự động hóa các quy trình chăm sóc khách hàng và bán hàng.",
+      "create": "Tạo Tự động hóa",
+      "stats": {
+        "totalRuns": "Tổng lượt chạy",
+        "activeWorkflows": "Luồng đang hoạt động",
+        "conversionRate": "Tỷ lệ chuyển đổi",
+        "paused": "{count} đang tạm dừng",
+        "viaAutomatedFlows": "qua luồng tự động"
+      },
+      "activeWorkflows": "Luồng đang hoạt động",
+      "activeWorkflowsDesc": "Quản lý các kịch bản tự động hóa đang chạy.",
+      "runs": "Lượt chạy",
+      "trigger": "Kích hoạt",
+      "action": "Hành động"
     }
   },
   "affiliate": {
@@ -1514,24 +2017,33 @@
       "tracking": "Tracking Link"
     },
     "overview": {
-      "totalRevenue": "Doanh thu Affiliate",
-      "activePublishers": "Publisher hoạt động",
-      "totalCommissions": "Tổng hoa hồng đã trả",
-      "clicks": "Lượt click"
+      "totalRevenue": "Tổng doanh thu Affiliate",
+      "activePublishers": "Đối tác đang hoạt động",
+      "totalCommissions": "Tổng hoa hồng phát sinh",
+      "clicks": "Tổng lượt click",
+      "fromLastMonth": "{percentage} so với tháng trước",
+      "newThisMonth": "{count} đối tác mới tháng này",
+      "ofRevenue": "{percentage} của doanh thu"
     },
     "publishers": {
-      "name": "Tên Publisher",
-      "type": "Loại hình",
+      "title": "Quản lý Đối tác",
+      "description": "Quản lý mạng lưới đối tác, KOLs và người sáng tạo nội dung.",
+      "invite": "Mời đối tác",
+      "name": "Tên đối tác",
+      "type": "Loại",
       "followers": "Người theo dõi",
       "commissionRate": "Tỷ lệ hoa hồng",
       "status": "Trạng thái",
       "actions": "Hành động",
-      "invite": "Mời Publisher",
       "types": {
         "kol": "KOL/Influencer",
-        "content_creator": "Content Creator",
-        "coupon_site": "Coupon Site",
-        "cashback": "Cashback"
+        "content_creator": "Người sáng tạo nội dung",
+        "coupon_site": "Trang mã giảm giá",
+        "cashback": "Hoàn tiền (Cashback)"
+      },
+      "statuses": {
+        "active": "Đang hoạt động",
+        "inactive": "Ngừng hoạt động"
       }
     },
     "commissions": {
@@ -1544,7 +2056,11 @@
       "addProduct": "Thêm sản phẩm",
       "category": "Ngành hàng",
       "rate": "Tỷ lệ (%)",
-      "save": "Lưu cấu hình"
+      "save": "Lưu cấu hình",
+      "categories": {
+        "Electronics": "Điện tử",
+        "Fashion": "Thời trang"
+      }
     },
     "tracking": {
       "title": "Tạo Tracking Link",
@@ -1555,7 +2071,9 @@
       "campaignMedium": "Cách thức (utm_medium)",
       "campaignName": "Tên chiến dịch (utm_campaign)",
       "generatedUrl": "Link theo dõi",
-      "copy": "Sao chép"
+      "copy": "Sao chép",
+      "generatedSuccess": "Đã tạo link tracking thành công!",
+      "invalidUrl": "URL không hợp lệ"
     }
   },
   "purchasing": {
@@ -1743,6 +2261,64 @@
     }
   },
   "settings": {
+    "users": {
+      "title": "Quản lý người dùng",
+      "description": "Quản lý danh sách người dùng, phân quyền và theo dõi hoạt động trên hệ thống ERP.",
+      "list": "Danh sách người dùng",
+      "totalUsers": "Tổng cộng {{count}} người dùng",
+      "addUser": "Thêm người dùng",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc email...",
+      "role": "Vai trò",
+      "allRoles": "Tất cả vai trò",
+      "status": "Trạng thái",
+      "allStatus": "Tất cả trạng thái",
+      "active": "Đang hoạt động",
+      "inactive": "Đã khóa",
+      "table": {
+        "user": "Người dùng",
+        "department": "Phòng ban",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "lastActive": "Hoạt động cuối",
+        "actions": "Thao tác"
+      },
+      "noUsers": "Không tìm thấy người dùng nào phù hợp.",
+      "notLoggedIn": "Chưa đăng nhập",
+      "deleteSuccess": "Đã xóa người dùng thành công",
+      "saveSuccess": "Đã thêm người dùng mới",
+      "updateSuccess": "Đã cập nhật thông tin người dùng",
+      "validationError": "Vui lòng nhập đầy đủ tên và email",
+      "dialog": {
+        "editTitle": "Chỉnh sửa người dùng",
+        "addTitle": "Thêm người dùng mới",
+        "editDesc": "Cập nhật thông tin và phân quyền cho người dùng.",
+        "addDesc": "Điền thông tin để tạo tài khoản người dùng mới trong hệ thống.",
+        "name": "Họ và tên",
+        "namePlaceholder": "VD: Nguyễn Văn A",
+        "email": "Email",
+        "emailPlaceholder": "VD: vana@example.com",
+        "department": "Phòng ban",
+        "selectDepartment": "Chọn phòng ban",
+        "role": "Vai trò",
+        "selectRole": "Chọn vai trò",
+        "status": "Trạng thái",
+        "selectStatus": "Chọn trạng thái",
+        "departments": {
+          "board": "Ban Giám Đốc",
+          "sales": "Phòng Kinh Doanh",
+          "hr": "Phòng Nhân Sự",
+          "marketing": "Phòng Marketing",
+          "tech": "Phòng Kỹ Thuật"
+        },
+        "roles": {
+          "admin": "Admin",
+          "sales": "Sales",
+          "hr": "HR",
+          "marketing": "Marketing",
+          "developer": "Developer"
+        }
+      }
+    },
     "title": "Cài đặt hệ thống",
     "description": "Quản lý toàn bộ cấu hình hệ thống, tài khoản và các thiết lập vận hành.",
     "tabs": {
@@ -1775,7 +2351,9 @@
       "systemUrl": "URL hệ thống",
       "systemUrlDesc": "Địa chỉ website chính thức của hệ thống.",
       "logo": "Logo thương hiệu",
+      "logoDesc": "PNG, JPG tối đa 2MB",
       "navicon": "Favicon (Biểu tượng trình duyệt)",
+      "naviconDesc": "ICO, PNG 32x32",
       "contactInfo": "Thông tin liên hệ",
       "contactInfoDesc": "Thông tin dùng để khách hàng liên hệ và nhận hỗ trợ.",
       "contactEmail": "Email hỗ trợ",
@@ -1787,7 +2365,9 @@
       "localization": "Định dạng & Ngôn ngữ",
       "timezone": "Múi giờ hệ thống",
       "currency": "Đơn vị tiền tệ mặc định",
-      "save": "Lưu cấu hình"
+      "save": "Lưu cấu hình",
+      "unsavedChanges": "Bạn có thay đổi chưa lưu!",
+      "saveNow": "Lưu ngay"
     },
     "account": {
       "profile": "Hồ sơ người dùng",
@@ -1801,7 +2381,11 @@
       "position": "Chức vụ hiện tại",
       "role": "Vai trò hệ thống",
       "roleDesc": "Vai trò được quản trị viên cấp quyền, không thể tự thay đổi.",
-      "updateProfile": "Cập nhật thông tin"
+      "updateProfile": "Cập nhật thông tin",
+      "saveSuccess": "Đã cập nhật thông tin tài khoản thành công!",
+      "saveError": "Lỗi khi cập nhật thông tin tài khoản.",
+      "avatarSuccess": "Đã cập nhật ảnh đại diện thành công!",
+      "avatarError": "Lỗi khi tải ảnh đại diện lên."
     },
     "notifications": {
       "channels": "Kênh nhận thông báo",
@@ -1821,10 +2405,15 @@
       "inventoryAlerts": "Cảnh báo tồn kho",
       "inventoryAlertsDesc": "Thông báo khi sản phẩm sắp hết hàng hoặc dưới mức tối thiểu.",
       "newCustomers": "Khách hàng mới",
-      "newCustomersDesc": "Thông báo khi có người dùng mới đăng ký tài khoản."
+      "newCustomersDesc": "Thông báo khi có người dùng mới đăng ký tài khoản.",
+      "saveSuccess": "Đã lưu cài đặt thông báo thành công!",
+      "saveError": "Lỗi khi lưu cài đặt thông báo."
     },
     "appearance": {
+      "language": "Ngôn ngữ hệ thống",
+      "languageDesc": "Chọn ngôn ngữ hiển thị mặc định cho toàn bộ giao diện người dùng.",
       "theme": "Chế độ hiển thị",
+      "themeDesc": "Thay đổi giao diện sáng hoặc tối phù hợp với môi trường làm việc.",
       "light": "Giao diện Sáng",
       "dark": "Giao diện Tối",
       "system": "Theo hệ điều hành",
@@ -1836,18 +2425,34 @@
     },
     "security": {
       "changePassword": "Đổi mật khẩu truy cập",
+      "changePasswordDesc": "Thay đổi mật khẩu định kỳ để bảo vệ tài khoản của bạn.",
       "currentPassword": "Mật khẩu hiện tại",
       "newPassword": "Mật khẩu mới",
       "confirmPassword": "Xác nhận mật khẩu mới",
+      "updatePassword": "Cập nhật mật khẩu",
       "twoFactorAuth": "Xác thực 2 lớp (2FA)",
       "twoFactorAuthDesc": "Tăng cường bảo mật bằng mã xác thực từ ứng dụng di động.",
+      "authenticatorApp": "Ứng dụng xác thực",
+      "authenticatorAppDesc": "Sử dụng ứng dụng như Google Authenticator để nhận mã.",
+      "smsAuth": "Xác thực qua SMS",
+      "smsAuthDesc": "Nhận mã xác thực qua tin nhắn điện thoại.",
+      "backupCodes": "Mã dự phòng",
       "loginHistory": "Lịch sử đăng nhập",
       "activeSessions": "Các phiên đang hoạt động",
+      "activeSessionsDesc": "Danh sách các thiết bị hiện đang đăng nhập vào tài khoản của bạn.",
+      "currentSession": "Phiên hiện tại",
       "device": "Thiết bị / Trình duyệt",
       "location": "Vị trí ước tính",
       "ipAddress": "Địa chỉ IP",
       "time": "Thời gian",
-      "revokeSession": "Đăng xuất thiết bị này"
+      "revokeSession": "Đăng xuất thiết bị này",
+      "logoutAll": "Đăng xuất khỏi tất cả các thiết bị",
+      "passwordUpdateSuccess": "Đổi mật khẩu thành công!",
+      "passwordUpdateError": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+      "wrongPassword": "Mật khẩu hiện tại không chính xác.",
+      "requiresRecentLogin": "Vui lòng đăng nhập lại để thực hiện thao tác này.",
+      "fillAllFields": "Vui lòng điền đầy đủ thông tin",
+      "passwordMismatch": "Mật khẩu xác nhận không khớp"
     },
     "paymentShipping": {
       "title": "Thanh toán & Vận chuyển",
@@ -1881,6 +2486,29 @@
       "voucherFee": "Phí hỗ trợ Voucher",
       "adsFee": "Phí quảng cáo nội sàn",
       "affiliateFee": "Phí tiếp thị liên kết (Affiliate)",
+      "shippingFees": "Cấu hình Phí Vận chuyển",
+      "shippingFeesDesc": "Thiết lập phí cơ bản, phí theo trọng lượng và phí COD cho từng đơn vị vận chuyển.",
+      "baseFee": "Phí cơ bản (0-2kg)",
+      "weightFee": "Phí mỗi kg tiếp theo",
+      "codFee": "Phí thu hộ (COD)",
+      "categoryManagement": "Quản lý Ngành hàng & Phí sàn",
+      "categoryManagementDesc": "Thiết lập tỷ lệ phí sàn cho từng cấp độ ngành hàng (Mall vs Regular).",
+      "searchCategory": "Tìm kiếm ngành hàng...",
+      "addCategory": "Thêm ngành hàng",
+      "deleteCategory": "Xóa ngành hàng",
+      "confirmDeleteDesc": "Bạn có chắc chắn muốn xóa ngành hàng này không?",
+      "categoryLevel1": "Ngành hàng cấp 1",
+      "categoryLevel2": "Ngành hàng cấp 2",
+      "categoryLevel3": "Ngành hàng cấp 3",
+      "categoryLevel1Placeholder": "VD: Điện tử",
+      "categoryLevel2Placeholder": "VD: Điện thoại",
+      "categoryLevel3Placeholder": "VD: Smartphone",
+      "feeRateMall": "Phí Mall (%)",
+      "feeRateRegular": "Phí Thường (%)",
+      "saveChanges": "Lưu thay đổi",
+      "noCategories": "Không tìm thấy ngành hàng nào.",
+      "saveSuccess": "Đã lưu cấu hình phí thành công!",
+      "saveError": "Lỗi khi lưu cấu hình phí.",
       "vatTax": "Thuế GTGT (VAT)",
       "vatTaxDesc": "Thuế giá trị gia tăng áp dụng chung.",
       "pitTax": "Thuế TNCN (PIT)",
@@ -1927,6 +2555,12 @@
         "marketing": "Kênh Marketing",
         "finance": "Quản lý Tài chính",
         "settings": "Cài đặt hệ thống"
+      },
+      "names": {
+        "admin": "Quản trị viên cấp cao",
+        "manager": "Quản lý cửa hàng",
+        "support": "Hỗ trợ khách hàng",
+        "marketing": "Chuyên viên Marketing"
       }
     },
     "integrations": {
@@ -1934,6 +2568,7 @@
       "description": "Quản lý các khóa truy cập API và cấu hình Webhook để tích hợp với hệ thống bên ngoài.",
       "apiKeys": "Danh sách API Keys",
       "webhooks": "Cấu hình Webhooks",
+      "webhooksDesc": "Đẩy cập nhật thời gian thực đến các hệ thống bên ngoài của bạn.",
       "createApiKey": "Cấp API Key mới",
       "keyName": "Tên gợi nhớ cho Key",
       "keyString": "Mã API Key",
@@ -1955,7 +2590,9 @@
       "module": "Module tác động",
       "time": "Thời gian thực hiện",
       "ip": "Địa chỉ IP",
-      "status": "Trạng thái"
+      "status": "Trạng thái",
+      "noLogs": "Không tìm thấy nhật ký hoạt động nào.",
+      "showingEntries": "Đang hiển thị {{count}} bản ghi"
     },
     "backup": {
       "title": "Sao lưu & Phục hồi",
@@ -1973,7 +2610,11 @@
       "autoDesc": "Cấu hình hệ thống tự động thực hiện sao lưu theo định kỳ.",
       "dailyBackup": "Sao lưu hàng ngày",
       "dailyBackupDesc": "Tự động sao lưu vào lúc 00:00 mỗi ngày.",
-      "nextScheduled": "Lịch sao lưu tiếp theo"
+      "nextScheduled": "Lịch sao lưu tiếp theo",
+      "exportSuccess": "Đã xuất dữ liệu cấu hình thành công!",
+      "exportError": "Lỗi khi xuất dữ liệu cấu hình.",
+      "importSuccess": "Đã khôi phục dữ liệu cấu hình thành công!",
+      "importError": "Lỗi khi khôi phục dữ liệu cấu hình."
     }
   },
   "financeDashboard": {

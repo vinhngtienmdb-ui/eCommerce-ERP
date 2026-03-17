@@ -35,7 +35,7 @@ export function RMATab() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>RMA ID</TableHead>
+              <TableHead>{t("orders.rma.id")}</TableHead>
               <TableHead>{t("orders.rma.orderId")}</TableHead>
               <TableHead>{t("orders.rma.reason")}</TableHead>
               <TableHead className="text-right">{t("orders.rma.amount")}</TableHead>
@@ -63,7 +63,7 @@ export function RMATab() {
                     {rma.status === "Rejected" && <XCircle className="h-3 w-3" />}
                     {rma.status === "Pending" && <AlertCircle className="h-3 w-3" />}
                     {rma.status === "Refunded" && <RotateCcw className="h-3 w-3" />}
-                    {rma.status}
+                    {t(`orders.rma.statuses.${rma.status.toLowerCase()}`)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">

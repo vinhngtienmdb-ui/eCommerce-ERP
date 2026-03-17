@@ -96,7 +96,7 @@ export function IntegrationConfig() {
             <LinkIcon className="h-5 w-5 text-primary" />
             <div>
               <h3 className="text-lg font-semibold">{t("settings.integrations.webhooks")}</h3>
-              <p className="text-sm text-muted-foreground">Push real-time updates to your external systems.</p>
+              <p className="text-sm text-muted-foreground">{t("settings.integrations.webhooksDesc")}</p>
             </div>
           </div>
           <Button className="gap-2" variant="outline">

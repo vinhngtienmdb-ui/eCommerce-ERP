@@ -63,7 +63,7 @@ export function UserManagement() {
 
   const handleDelete = (id: string) => {
     deleteUser(id)
-    toast.success("Đã xóa người dùng thành công")
+    toast.success(t("settings.users.deleteSuccess"))
   }
 
   const handleOpenModal = (user?: User) => {
@@ -79,21 +79,21 @@ export function UserManagement() {
 
   const handleSaveUser = () => {
     if (!formData.name || !formData.email) {
-      toast.error("Vui lòng nhập đầy đủ tên và email")
+      toast.error(t("settings.users.validationError"))
       return
     }
 
     if (editingUser) {
       updateUser(editingUser.id, formData)
-      toast.success("Đã cập nhật thông tin người dùng")
+      toast.success(t("settings.users.updateSuccess"))
     } else {
       const newUser: User = {
         ...formData,
         id: Math.random().toString(36).substr(2, 9),
-        lastActive: "Chưa đăng nhập",
+        lastActive: t("settings.users.notLoggedIn"),
       } as User
       addUser(newUser)
-      toast.success("Đã thêm người dùng mới")
+      toast.success(t("settings.users.saveSuccess"))
     }
     setIsModalOpen(false)
   }
@@ -105,21 +105,21 @@ export function UserManagement() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Quản lý người dùng</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{t("settings.users.title")}</h2>
         <p className="text-muted-foreground">
-          Quản lý danh sách người dùng, phân quyền và theo dõi hoạt động trên hệ thống ERP.
+          {t("settings.users.description")}
         </p>
       </div>
 
       <Card>
         <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <CardTitle>Danh sách người dùng</CardTitle>
-            <CardDescription>Tổng cộng {filteredUsers.length} người dùng</CardDescription>
+            <CardTitle>{t("settings.users.list")}</CardTitle>
+            <CardDescription>{t("settings.users.totalUsers", { count: filteredUsers.length })}</CardDescription>
           </div>
           <Button onClick={() => handleOpenModal()}>
             <UserPlus className="mr-2 h-4 w-4" />
-            Thêm người dùng
+            {t("settings.users.addUser")}
           </Button>
         </CardHeader>
         <CardContent>
@@ -127,7 +127,7 @@ export function UserManagement() {
             <div className="relative flex-1 w-full">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Tìm kiếm theo tên hoặc email..." 
+                placeholder={t("settings.users.searchPlaceholder")} 
                 className="pl-9" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -136,24 +136,24 @@ export function UserManagement() {
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <Select value={roleFilter} onValueChange={setRoleFilter}>
                 <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Vai trò" />
+                  <SelectValue placeholder={t("settings.users.role")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tất cả vai trò</SelectItem>
-                  <SelectItem value="Admin">Admin</SelectItem>
-                  <SelectItem value="Sales">Sales</SelectItem>
-                  <SelectItem value="HR">HR</SelectItem>
-                  <SelectItem value="Marketing">Marketing</SelectItem>
+                  <SelectItem value="all">{t("settings.users.allRoles")}</SelectItem>
+                  <SelectItem value="Admin">{t("settings.users.dialog.roles.admin")}</SelectItem>
+                  <SelectItem value="Sales">{t("settings.users.dialog.roles.sales")}</SelectItem>
+                  <SelectItem value="HR">{t("settings.users.dialog.roles.hr")}</SelectItem>
+                  <SelectItem value="Marketing">{t("settings.users.dialog.roles.marketing")}</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Trạng thái" />
+                  <SelectValue placeholder={t("settings.users.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tất cả trạng thái</SelectItem>
-                  <SelectItem value="active">Đang hoạt động</SelectItem>
-                  <SelectItem value="inactive">Đã khóa</SelectItem>
+                  <SelectItem value="all">{t("settings.users.allStatus")}</SelectItem>
+                  <SelectItem value="active">{t("settings.users.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("settings.users.inactive")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -163,19 +163,19 @@ export function UserManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Người dùng</TableHead>
-                  <TableHead>Phòng ban</TableHead>
-                  <TableHead>Vai trò</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead>Hoạt động cuối</TableHead>
-                  <TableHead className="text-right">Thao tác</TableHead>
+                  <TableHead>{t("settings.users.table.user")}</TableHead>
+                  <TableHead>{t("settings.users.table.department")}</TableHead>
+                  <TableHead>{t("settings.users.table.role")}</TableHead>
+                  <TableHead>{t("settings.users.table.status")}</TableHead>
+                  <TableHead>{t("settings.users.table.lastActive")}</TableHead>
+                  <TableHead className="text-right">{t("settings.users.table.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      Không tìm thấy người dùng nào phù hợp.
+                      {t("settings.users.noUsers")}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -208,11 +208,11 @@ export function UserManagement() {
                       <TableCell>
                         {user.status === "active" ? (
                           <Badge variant="default" className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">
-                            Đang hoạt động
+                            {t("settings.users.active")}
                           </Badge>
                         ) : (
                           <Badge variant="secondary" className="bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400">
-                            Đã khóa
+                            {t("settings.users.inactive")}
                           </Badge>
                         )}
                       </TableCell>
@@ -241,79 +241,79 @@ export function UserManagement() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>{editingUser ? "Chỉnh sửa người dùng" : "Thêm người dùng mới"}</DialogTitle>
+            <DialogTitle>{editingUser ? t("settings.users.dialog.editTitle") : t("settings.users.dialog.addTitle")}</DialogTitle>
             <DialogDescription>
-              {editingUser ? "Cập nhật thông tin và phân quyền cho người dùng." : "Điền thông tin để tạo tài khoản người dùng mới trong hệ thống."}
+              {editingUser ? t("settings.users.dialog.editDesc") : t("settings.users.dialog.addDesc")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">Họ và tên</Label>
+              <Label htmlFor="name" className="text-right">{t("settings.users.dialog.name")}</Label>
               <Input 
                 id="name" 
                 value={formData.name || ""} 
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 className="col-span-3" 
-                placeholder="VD: Nguyễn Văn A"
+                placeholder={t("settings.users.dialog.namePlaceholder")}
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">Email</Label>
+              <Label htmlFor="email" className="text-right">{t("settings.users.dialog.email")}</Label>
               <Input 
                 id="email" 
                 type="email"
                 value={formData.email || ""} 
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 className="col-span-3" 
-                placeholder="VD: vana@example.com"
+                placeholder={t("settings.users.dialog.emailPlaceholder")}
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="department" className="text-right">Phòng ban</Label>
+              <Label htmlFor="department" className="text-right">{t("settings.users.dialog.department")}</Label>
               <Select value={formData.department} onValueChange={(val) => setFormData({...formData, department: val})}>
                 <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Chọn phòng ban" />
+                  <SelectValue placeholder={t("settings.users.dialog.selectDepartment")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Ban Giám Đốc">Ban Giám Đốc</SelectItem>
-                  <SelectItem value="Phòng Kinh Doanh">Phòng Kinh Doanh</SelectItem>
-                  <SelectItem value="Phòng Nhân Sự">Phòng Nhân Sự</SelectItem>
-                  <SelectItem value="Phòng Marketing">Phòng Marketing</SelectItem>
-                  <SelectItem value="Phòng Kỹ Thuật">Phòng Kỹ Thuật</SelectItem>
+                  <SelectItem value="Ban Giám Đốc">{t("settings.users.dialog.departments.board")}</SelectItem>
+                  <SelectItem value="Phòng Kinh Doanh">{t("settings.users.dialog.departments.sales")}</SelectItem>
+                  <SelectItem value="Phòng Nhân Sự">{t("settings.users.dialog.departments.hr")}</SelectItem>
+                  <SelectItem value="Phòng Marketing">{t("settings.users.dialog.departments.marketing")}</SelectItem>
+                  <SelectItem value="Phòng Kỹ Thuật">{t("settings.users.dialog.departments.tech")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">Vai trò</Label>
+              <Label htmlFor="role" className="text-right">{t("settings.users.dialog.role")}</Label>
               <Select value={formData.role} onValueChange={(val) => setFormData({...formData, role: val})}>
                 <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Chọn vai trò" />
+                  <SelectValue placeholder={t("settings.users.dialog.selectRole")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Admin">Admin</SelectItem>
-                  <SelectItem value="Sales">Sales</SelectItem>
-                  <SelectItem value="HR">HR</SelectItem>
-                  <SelectItem value="Marketing">Marketing</SelectItem>
-                  <SelectItem value="Developer">Developer</SelectItem>
+                  <SelectItem value="Admin">{t("settings.users.dialog.roles.admin")}</SelectItem>
+                  <SelectItem value="Sales">{t("settings.users.dialog.roles.sales")}</SelectItem>
+                  <SelectItem value="HR">{t("settings.users.dialog.roles.hr")}</SelectItem>
+                  <SelectItem value="Marketing">{t("settings.users.dialog.roles.marketing")}</SelectItem>
+                  <SelectItem value="Developer">{t("settings.users.dialog.roles.developer")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">Trạng thái</Label>
+              <Label htmlFor="status" className="text-right">{t("settings.users.dialog.status")}</Label>
               <Select value={formData.status} onValueChange={(val: "active" | "inactive") => setFormData({...formData, status: val})}>
                 <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Chọn trạng thái" />
+                  <SelectValue placeholder={t("settings.users.dialog.selectStatus")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Đang hoạt động</SelectItem>
-                  <SelectItem value="inactive">Đã khóa</SelectItem>
+                  <SelectItem value="active">{t("settings.users.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("settings.users.inactive")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-            <Button onClick={handleSaveUser}>Lưu thay đổi</Button>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleSaveUser}>{t("common.save")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

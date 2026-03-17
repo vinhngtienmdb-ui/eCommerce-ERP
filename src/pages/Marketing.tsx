@@ -307,7 +307,7 @@ export function Marketing() {
     { id: "messages", title: t("marketing.messages.title"), description: t("marketing.messages.description"), icon: MessageSquare, color: "text-green-500", bg: "bg-green-100" },
     { id: "social", title: t("marketing.social.title"), description: t("marketing.social.description"), icon: Share2, color: "text-purple-500", bg: "bg-purple-100" },
     { id: "reports", title: t("marketing.reports.title"), description: t("marketing.reports.description"), icon: BarChart3, color: "text-cyan-500", bg: "bg-cyan-100" },
-    { id: "automations", title: "Automations", description: "Tự động hóa quy trình marketing và bán hàng.", icon: Zap, color: "text-amber-500", bg: "bg-amber-100" },
+    { id: "automations", title: t("marketing.tabs.automations"), description: t("marketing.automation.description"), icon: Zap, color: "text-amber-500", bg: "bg-amber-100" },
     { id: "settings", title: t("marketing.settings.title"), description: t("marketing.settings.description"), icon: Settings, color: "text-gray-500", bg: "bg-gray-100" },
   ]
 
@@ -400,49 +400,49 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-3xl font-bold tracking-tight">Marketing Automations</h2>
-                <p className="text-muted-foreground">Tự động hóa các quy trình chăm sóc khách hàng và bán hàng.</p>
+                <h2 className="text-3xl font-bold tracking-tight">{t("marketing.automations.title")}</h2>
+                <p className="text-muted-foreground">{t("marketing.automations.description")}</p>
               </div>
               <Button className="bg-emerald-600 hover:bg-emerald-700">
                 <Plus className="mr-2 h-4 w-4" />
-                Create Automation
+                {t("marketing.automations.create")}
               </Button>
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
               <Card className="bg-emerald-50/50 border-emerald-100">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-emerald-700">Total Runs</CardTitle>
+                  <CardTitle className="text-sm font-medium text-emerald-700">{t("marketing.automations.stats.totalRuns")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-emerald-700">2,141</div>
-                  <p className="text-xs text-emerald-600">+12% from last month</p>
+                  <p className="text-xs text-emerald-600">{t("marketing.automation.runs")}</p>
                 </CardContent>
               </Card>
               <Card className="bg-blue-50/50 border-blue-100">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-blue-700">Active Workflows</CardTitle>
+                  <CardTitle className="text-sm font-medium text-blue-700">{t("marketing.automations.stats.activeWorkflows")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-blue-700">8</div>
-                  <p className="text-xs text-blue-600">2 paused</p>
+                  <p className="text-xs text-blue-600">{t("marketing.automation.activeFlows")}</p>
                 </CardContent>
               </Card>
               <Card className="bg-purple-50/50 border-purple-100">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-purple-700">Conversion Rate</CardTitle>
+                  <CardTitle className="text-sm font-medium text-purple-700">{t("marketing.automations.stats.conversionRate")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-purple-700">4.2%</div>
-                  <p className="text-xs text-purple-600">via automated flows</p>
+                  <p className="text-xs text-purple-600">{t("marketing.automation.successRate")}</p>
                 </CardContent>
               </Card>
             </div>
 
             <Card>
               <CardHeader>
-                <CardTitle>Active Workflows</CardTitle>
-                <CardDescription>Quản lý các kịch bản tự động hóa đang chạy.</CardDescription>
+                <CardTitle>{t("marketing.automations.activeWorkflows")}</CardTitle>
+                <CardDescription>{t("marketing.automations.activeWorkflowsDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -464,7 +464,7 @@ export function Marketing() {
                       <div className="flex items-center gap-4">
                         <div className="text-right mr-4">
                           <p className="text-sm font-medium">{flow.runs.toLocaleString()}</p>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Runs</p>
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("marketing.automations.runs")}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -641,16 +641,18 @@ export function Marketing() {
                           <TableCell className="font-medium">{promo.name}</TableCell>
                           <TableCell>
                             <Badge variant="outline" className="capitalize">
-                              {promo.type.replace('_', ' ')}
+                              {t(`marketing.promotions.types.${promo.type}`)}
                             </Badge>
                           </TableCell>
                           <TableCell>{promo.discount}</TableCell>
                           <TableCell>{promo.start} - {promo.end}</TableCell>
-                          <TableCell>
-                            <Badge>{promo.status}</Badge>
-                          </TableCell>
+                      <TableCell>
+                        <Badge variant={promo.status === "active" ? "default" : "secondary"}>
+                          {t(`marketing.promotions.statuses.${promo.status}`)}
+                        </Badge>
+                      </TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>Edit</Button>
+                            <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("common.edit")}</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -667,7 +669,7 @@ export function Marketing() {
             <Card>
               <CardHeader>
                 <CardTitle>{t("marketing.social.createPost")}</CardTitle>
-                <CardDescription>Create and schedule posts for Facebook & TikTok.</CardDescription>
+                <CardDescription>{t("marketing.social.createPostDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-2">
@@ -692,7 +694,7 @@ export function Marketing() {
                 <div className="grid gap-2">
                   <label className="text-sm font-medium">{t("marketing.social.content")}</label>
                   <Input 
-                    placeholder="What's on your mind?" 
+                    placeholder={t("marketing.social.promptPlaceholder", "Bạn đang nghĩ gì?")} 
                     value={newPostContent}
                     onChange={(e) => setNewPostContent(e.target.value)}
                   />
@@ -714,15 +716,15 @@ export function Marketing() {
                 <div className="space-y-4">
                   {posts.map((post) => (
                     <div key={post.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                      <div className="flex items-center gap-4">
-                        <div className={`p-2 rounded-full ${post.platform === 'facebook' ? 'bg-blue-100 text-blue-600' : 'bg-black text-white'}`}>
-                          {post.platform === 'facebook' ? <Facebook className="h-4 w-4" /> : <Video className="h-4 w-4" />}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{post.content}</p>
-                          <p className="text-xs text-muted-foreground">{post.date} • {post.status}</p>
-                        </div>
+                    <div className="flex items-center gap-4">
+                      <div className={`p-2 rounded-full ${post.platform === 'facebook' ? 'bg-blue-100 text-blue-600' : 'bg-black text-white'}`}>
+                        {post.platform === 'facebook' ? <Facebook className="h-4 w-4" /> : <Video className="h-4 w-4" />}
                       </div>
+                      <div>
+                        <p className="font-medium text-sm">{post.content}</p>
+                        <p className="text-xs text-muted-foreground">{post.date} • {t(`marketing.social.statuses.${post.status.toLowerCase()}`)}</p>
+                      </div>
+                    </div>
                       <div className="text-right">
                         <p className="font-bold">{post.engagement}</p>
                         <p className="text-xs text-muted-foreground">{t("marketing.social.engagements")}</p>
@@ -897,7 +899,7 @@ export function Marketing() {
                     {emailCampaigns.map((campaign) => (
                       <TableRow key={campaign.id}>
                         <TableCell className="font-medium">{campaign.name}</TableCell>
-                        <TableCell><Badge variant={campaign.status === "Sent" ? "default" : "secondary"}>{campaign.status}</Badge></TableCell>
+                        <TableCell><Badge variant={campaign.status === "Sent" ? "default" : "secondary"}>{t(`marketing.email.statuses.${campaign.status.toLowerCase()}`)}</Badge></TableCell>
                         <TableCell>{campaign.sent}</TableCell>
                         <TableCell>{campaign.openRate}</TableCell>
                         <TableCell>{campaign.clickRate}</TableCell>
@@ -1010,7 +1012,7 @@ export function Marketing() {
                           </div>
                         </TableCell>
                         <TableCell>{article.author}</TableCell>
-                        <TableCell><Badge variant={article.status === "Published" ? "default" : "outline"}>{article.status}</Badge></TableCell>
+                        <TableCell><Badge variant={article.status === "Published" ? "default" : "outline"}>{t(`marketing.content.statuses.${article.status.toLowerCase()}`)}</Badge></TableCell>
                         <TableCell className="text-right">{article.lastModified}</TableCell>
                       </TableRow>
                     ))}

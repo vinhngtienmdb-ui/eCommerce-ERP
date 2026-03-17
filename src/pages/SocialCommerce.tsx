@@ -126,33 +126,33 @@ export function SocialCommerce() {
                     <Avatar>
                       <AvatarFallback>ME</AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 space-y-4">
-                      <Input 
-                        placeholder="Chia sẻ trải nghiệm mua sắm của bạn..." 
-                        className="bg-muted/50 border-none" 
-                        value={newPostContent}
-                        onChange={(e) => setNewPostContent(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleCreatePost();
-                          }
-                        }}
-                      />
-                      <div className="flex justify-between items-center">
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" className="text-muted-foreground">
-                            <ImageIcon className="mr-2 h-4 w-4" /> Ảnh
-                          </Button>
-                          <Button variant="ghost" size="sm" className="text-muted-foreground">
-                            <Video className="mr-2 h-4 w-4" /> Video
-                          </Button>
-                          <Button variant="ghost" size="sm" className="text-muted-foreground">
-                            <ShoppingCart className="mr-2 h-4 w-4" /> Gắn SP
-                          </Button>
+                      <div className="flex-1 space-y-4">
+                        <Input 
+                          placeholder={t("socialCommerce.feed.placeholder")} 
+                          className="bg-muted/50 border-none" 
+                          value={newPostContent}
+                          onChange={(e) => setNewPostContent(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              handleCreatePost();
+                            }
+                          }}
+                        />
+                        <div className="flex justify-between items-center">
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="sm" className="text-muted-foreground">
+                              <ImageIcon className="mr-2 h-4 w-4" /> {t("socialCommerce.feed.photo")}
+                            </Button>
+                            <Button variant="ghost" size="sm" className="text-muted-foreground">
+                              <Video className="mr-2 h-4 w-4" /> {t("socialCommerce.feed.video")}
+                            </Button>
+                            <Button variant="ghost" size="sm" className="text-muted-foreground">
+                              <ShoppingCart className="mr-2 h-4 w-4" /> {t("socialCommerce.feed.attachProduct")}
+                            </Button>
+                          </div>
+                          <Button size="sm" onClick={handleCreatePost}>{t("socialCommerce.feed.createPost")}</Button>
                         </div>
-                        <Button size="sm" onClick={handleCreatePost}>{t("socialCommerce.feed.createPost")}</Button>
                       </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -171,7 +171,7 @@ export function SocialCommerce() {
                           <Badge variant="secondary" className="text-[10px] px-1 py-0">Creator</Badge>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground">2 giờ trước</p>
+                        <p className="text-xs text-muted-foreground">{t("socialCommerce.feed.timeAgo")}</p>
                     </div>
                     <Button 
                       variant={followedUsers.includes(post.user.id) ? "secondary" : "outline"} 
@@ -252,7 +252,7 @@ export function SocialCommerce() {
 
         <TabsContent value="groups" className="space-y-4">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Khám phá cộng đồng</h2>
+            <h2 className="text-xl font-semibold">{t("socialCommerce.groups.title")}</h2>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               {t("socialCommerce.groups.createGroup")}
@@ -303,11 +303,11 @@ export function SocialCommerce() {
                       <p className="font-bold">{creator.followers}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Engagement</p>
+                      <p className="text-xs text-muted-foreground">{t("socialCommerce.creators.engagementRate")}</p>
                       <p className="font-bold text-emerald-600">{creator.engagement}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Sales</p>
+                      <p className="text-xs text-muted-foreground">{t("socialCommerce.creators.totalSales")}</p>
                       <p className="font-bold text-blue-600">{creator.sales}</p>
                     </div>
                   </div>

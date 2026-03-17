@@ -1,4 +1,4 @@
-import { Bell, Menu, Search, Sun, Moon, Globe, X } from "lucide-react"
+import { Bell, Menu, Search, Sun, Moon, Globe, X, LogOut, User as UserIcon, Settings as SettingsIcon } from "lucide-react"
 import { useAppStore } from "@/src/store/useAppStore"
 import { useDevice } from "@/src/hooks/useDevice"
 import { Button } from "@/src/components/ui/button"
@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useAuth } from "@/src/lib/AuthContext"
 
 export function Header() {
   const { toggleSidebar, isSidebarOpen } = useAppStore()
@@ -21,6 +22,7 @@ export function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("light")
   const { t, i18n } = useTranslation()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -154,29 +156,38 @@ export function Header() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="https://picsum.photos/seed/avatar/100/100" alt="@admin" />
-                <AvatarFallback>AD</AvatarFallback>
+                <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/avatar/100/100"} alt={user?.displayName || "User"} />
+                <AvatarFallback>{user?.displayName?.charAt(0) || "U"}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Admin User</p>
+                <p className="text-sm font-medium leading-none">{user?.displayName || "User"}</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  admin@ecommerce.erp
+                  {user?.email}
                 </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>{t("header.profile")}</DropdownMenuItem>
+            <DropdownMenuItem>
+              <UserIcon className="mr-2 h-4 w-4" />
+              {t("header.profile")}
+            </DropdownMenuItem>
             <DropdownMenuItem className="sm:hidden">{t("header.notifications")}</DropdownMenuItem>
             <DropdownMenuItem className="sm:hidden">
               {theme === "light" ? t("header.darkMode") : t("header.lightMode")}
             </DropdownMenuItem>
-            <DropdownMenuItem>{t("header.settings")}</DropdownMenuItem>
+            <DropdownMenuItem>
+              <SettingsIcon className="mr-2 h-4 w-4" />
+              {t("header.settings")}
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>{t("header.logout")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              {t("header.logout")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -73,8 +73,8 @@ export function Legal() {
   ]
 
   const risks = [
-    { id: "RISK-001", category: "Data Privacy", description: "Potential GDPR violation in user data export", severity: "High", status: "Open" },
-    { id: "RISK-002", category: "Intellectual Property", description: "Unlicensed use of image assets", severity: "Medium", status: "Mitigated" },
+    { id: "RISK-001", category: t("legal.compliance.dataPrivacy"), description: "Potential GDPR violation in user data export", severity: "High", status: "Open" },
+    { id: "RISK-002", category: t("legal.compliance.ipViolation"), description: "Unlicensed use of image assets", severity: "Medium", status: "Mitigated" },
   ]
 
   return (
@@ -118,10 +118,10 @@ export function Legal() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>ID</TableHead>
-                        <TableHead>Brand Name</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Expiry</TableHead>
+                        <TableHead>{t("legal.brandPortal.brandName")}</TableHead>
+                        <TableHead>{t("legal.brandPortal.type")}</TableHead>
+                        <TableHead>{t("legal.brandPortal.status")}</TableHead>
+                        <TableHead>{t("legal.brandPortal.expiry")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -152,7 +152,7 @@ export function Legal() {
                 <CardContent>
                   <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
                     <ShieldCheck className="h-12 w-12 mb-4 opacity-20" />
-                    <p>IP Protection monitoring dashboard coming soon.</p>
+                    <p>{t("legal.brandPortal.dashboardComingSoon")}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -168,10 +168,10 @@ export function Legal() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>ID</TableHead>
-                        <TableHead>Distributor Name</TableHead>
-                        <TableHead>Region</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Contract End</TableHead>
+                        <TableHead>{t("legal.brandPortal.distributorName")}</TableHead>
+                        <TableHead>{t("legal.brandPortal.region")}</TableHead>
+                        <TableHead>{t("legal.brandPortal.status")}</TableHead>
+                        <TableHead>{t("legal.brandPortal.contractEnd")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -250,9 +250,9 @@ export function Legal() {
                   <CardTitle>{t("legal.dispute.mediation")}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                   <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
+                  <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
                     <Scale className="h-12 w-12 mb-4 opacity-20" />
-                    <p>Mediation center coming soon.</p>
+                    <p>{t("legal.dispute.mediationComingSoon")}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -264,9 +264,9 @@ export function Legal() {
                   <CardTitle>{t("legal.dispute.evidence")}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                   <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
+                  <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
                     <FileText className="h-12 w-12 mb-4 opacity-20" />
-                    <p>Evidence locker coming soon.</p>
+                    <p>{t("legal.dispute.evidenceComingSoon")}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -286,32 +286,32 @@ export function Legal() {
               <div className="grid gap-4 md:grid-cols-3 mb-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">System Compliance Score</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t("legal.compliance.systemScore")}</CardTitle>
                     <ShieldCheck className="h-4 w-4 text-emerald-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-emerald-600">98.5%</div>
-                    <p className="text-xs text-muted-foreground">Excellent standing</p>
+                    <p className="text-xs text-muted-foreground">{t("legal.compliance.excellentStanding")}</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Active Violations</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t("legal.compliance.activeViolations")}</CardTitle>
                     <AlertTriangle className="h-4 w-4 text-amber-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-amber-600">12</div>
-                    <p className="text-xs text-muted-foreground">Requires attention</p>
+                    <p className="text-xs text-muted-foreground">{t("legal.compliance.requiresAttention")}</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Recent Audits</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t("legal.compliance.recentAudits")}</CardTitle>
                     <FileCheck className="h-4 w-4 text-blue-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-blue-600">4</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
+                    <p className="text-xs text-muted-foreground">{t("legal.compliance.thisMonth")}</p>
                   </CardContent>
                 </Card>
               </div>
@@ -362,9 +362,9 @@ export function Legal() {
                   <CardTitle>{t("legal.compliance.auditLogs")}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                   <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
+                  <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
                     <History className="h-12 w-12 mb-4 opacity-20" />
-                    <p>Audit logs history coming soon.</p>
+                    <p>{t("legal.compliance.auditLogsComingSoon")}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -379,10 +379,10 @@ export function Legal() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Severity</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead>{t("legal.compliance.category")}</TableHead>
+                        <TableHead>{t("legal.compliance.description")}</TableHead>
+                        <TableHead>{t("legal.compliance.severity")}</TableHead>
+                        <TableHead>{t("legal.compliance.status")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

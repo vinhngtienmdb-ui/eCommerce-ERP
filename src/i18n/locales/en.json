@@ -1,4 +1,8 @@
 {
+  "auth": {
+    "loginToContinue": "Please login to continue",
+    "loginWithGoogle": "Login with Google"
+  },
   "common": {
     "search": "Search...",
     "filter": "Filter",
@@ -89,6 +93,70 @@
     "logistics": "Logistics Tower",
     "eContract": "E-Contract & Signature",
     "settings": "Settings"
+  },
+  "logistics": {
+    "title": "Logistics Control Tower",
+    "description": "Manage warehouses, inventory, and sync shipping carriers.",
+    "syncNow": "Sync Now",
+    "carrierPerformance": "Carrier Performance",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "warehouses": "Warehouses",
+      "inventory": "Inventory",
+      "integrations": "WMS Integrations"
+    },
+    "dashboard": {
+      "activeShipments": "Active Shipments",
+      "onTimeRate": "On-Time Rate",
+      "avgDeliveryTime": "Avg. Delivery Time",
+      "delayedOrders": "Delayed Orders",
+      "liveTrackingMap": "Live Tracking Map",
+      "moving": "Moving",
+      "idle": "Idle",
+      "interactiveMapLoading": "Interactive Map View Loading...",
+      "activeRoute": "Active Route",
+      "fastest": "Fastest",
+      "shipmentStatusOverview": "Shipment Status Overview",
+      "shipmentId": "Shipment ID",
+      "customer": "Customer",
+      "carrier": "Carrier",
+      "status": "Status",
+      "eta": "ETA",
+      "action": "Action",
+      "aiOptimizationInsight": "AI Optimization Insight",
+      "costSavingOpportunity": "Cost Saving Opportunity",
+      "costSavingDesc": "Switching 40% of Hanoi-HCMC routes to GHN could save $1,200/month based on current volume.",
+      "applyOptimization": "Apply Optimization",
+      "weatherAlert": "Weather Alert",
+      "weatherAlertDesc": "Heavy rain in Da Nang may delay 15 shipments by 4-6 hours. Automatic customer notifications sent."
+    },
+    "warehouses": {
+      "title": "Warehouse List",
+      "add": "Add Warehouse",
+      "name": "Warehouse Name",
+      "type": "Type",
+      "location": "Location",
+      "capacity": "Capacity",
+      "status": "Status"
+    },
+    "inventory": {
+      "title": "Inventory Management",
+      "product": "Product",
+      "warehouse": "Warehouse",
+      "stock": "Stock",
+      "reserved": "Reserved",
+      "available": "Available"
+    },
+    "integrations": {
+      "title": "WMS Integrations",
+      "syncInventoryOrders": "Sync inventory & orders",
+      "kiotVietDesc": "Automatically deduct inventory on KiotViet for new orders. Update inventory from KiotViet every 5 minutes.",
+      "sapoDesc": "Automatically deduct inventory on Sapo for new orders. Update inventory from Sapo every 5 minutes.",
+      "nhanhVnDesc": "Automatically deduct inventory on Nhanh.vn for new orders. Update inventory from Nhanh.vn every 5 minutes.",
+      "configure": "Configure",
+      "syncNow": "Sync Now",
+      "connect": "Connect"
+    }
   },
   "socialCommerce": {
     "title": "Social Commerce & Community",
@@ -677,6 +745,14 @@
     "addProduct": "Add 1 new product",
     "searchPlaceholder": "Search Product Name, SKU...",
     "id": "Product ID",
+    "table": {
+      "price": "Price",
+      "stock": "Stock",
+      "category": "Category",
+      "status": "Status",
+      "loading": "Loading data...",
+      "active": "Active"
+    },
     "forecasting": {
       "title": "AI Inventory Forecasting",
       "description": "Predictive stock analysis based on sales velocity and trends.",
@@ -732,8 +808,52 @@
         "basic": "Basic Info",
         "description": "Description",
         "sales": "Sales Info",
+        "warehouse": "Warehouse & Stock",
         "shipping": "Shipping",
         "other": "Other Info"
+      },
+      "sales": {
+        "variantClassification": "Variant Classification",
+        "variantGroup": "Variant Group",
+        "addVariantGroup": "Add Variant Group",
+        "groupName": "Group Name",
+        "groupNamePlaceholder": "Ex: Color, Size...",
+        "variant": "Variant",
+        "variantPlaceholder": "Ex: Red, Blue, S, M...",
+        "addVariant": "Add Variant",
+        "bulkApply": "Bulk Apply",
+        "price": "Price",
+        "stock": "Stock",
+        "sku": "SKU",
+        "apply": "Apply",
+        "productPrice": "Product Price",
+        "productStock": "Stock Quantity"
+      },
+      "warehouse": {
+        "type": "Warehouse Type",
+        "selectType": "Select Type",
+        "normal": "Normal Warehouse",
+        "fulfillment": "Fulfillment Warehouse",
+        "selectWarehouse": "Select Warehouse",
+        "syncWms": "Sync with WMS",
+        "syncWmsDesc": "Sync API with 3rd party WMS (KiotViet, Sapo, Nhanh.vn...)"
+      },
+      "shipping": {
+        "weight": "Weight (After packing)",
+        "dimensions": "Package Dimensions",
+        "length": "L",
+        "width": "W",
+        "height": "H"
+      },
+      "other": {
+        "condition": "Condition",
+        "selectCondition": "Select condition",
+        "new": "New",
+        "used": "Used",
+        "preOrder": "Pre-order",
+        "preOrderDesc": "I will need more time to prepare the goods",
+        "prepTime": "Preparation Time",
+        "days": "days"
       },
       "basicInfo": "Basic Info",
       "productImages": "Product Images",
@@ -812,6 +932,8 @@
   "orders": {
     "title": "Orders",
     "description": "Manage customer orders, fulfillment, and returns.",
+    "syncWms": "Sync WMS/Carrier",
+    "syncSuccess": "Successfully synced orders to WMS and Carrier!",
     "searchPlaceholder": "Search orders...",
     "id": "Order ID",
     "customer": "Customer",
@@ -1181,6 +1303,8 @@
       "title": "Social Media",
       "description": "Post schedule, multi-channel, post history.",
       "createPost": "Create Post",
+      "createPostDesc": "Create and schedule social media posts.",
+      "promptPlaceholder": "What's on your mind?",
       "platform": "Platform",
       "content": "Content",
       "schedule": "Schedule",
@@ -1313,6 +1437,23 @@
       "seoDesc": "Default settings for search engine optimization.",
       "metaSuffix": "Default Meta Title Suffix",
       "indexContent": "Index content by default"
+    },
+    "automations": {
+      "title": "Marketing Automations",
+      "description": "Automate customer care and sales processes.",
+      "create": "Create Automation",
+      "stats": {
+        "totalRuns": "Total Runs",
+        "activeWorkflows": "Active Workflows",
+        "conversionRate": "Conversion Rate",
+        "paused": "{count} paused",
+        "viaAutomatedFlows": "via automated flows"
+      },
+      "activeWorkflows": "Active Workflows",
+      "activeWorkflowsDesc": "Manage active automation scenarios.",
+      "runs": "Runs",
+      "trigger": "Trigger",
+      "action": "Action"
     }
   },
   "affiliate": {

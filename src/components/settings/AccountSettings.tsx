@@ -116,10 +116,10 @@ export function AccountSettings() {
         photoURL: downloadURL
       }, { merge: true })
 
-      toast.success("Đã cập nhật ảnh đại diện")
+      toast.success(t("settings.account.avatarSuccess") || "Đã cập nhật ảnh đại diện")
     } catch (error) {
       console.error("Error uploading avatar:", error)
-      toast.error("Lỗi khi tải ảnh lên")
+      toast.error(t("settings.account.avatarError") || "Lỗi khi tải ảnh lên")
     } finally {
       setUploading(false)
     }
@@ -164,7 +164,7 @@ export function AccountSettings() {
               </p>
               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                 <Button variant="outline" size="sm" onClick={handleAvatarClick} disabled={uploading}>
-                  {uploading ? "Đang tải..." : t("settings.account.updateAvatar")}
+                  {uploading ? t("common.uploading") : t("settings.account.updateAvatar")}
                 </Button>
               </div>
             </div>

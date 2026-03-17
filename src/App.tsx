@@ -31,6 +31,7 @@ import { StationeryPage } from "./pages/admin-workspace/StationeryPage"
 import { BookingPage } from "./pages/admin-workspace/BookingPage"
 import { RequestsPage } from "./pages/admin-workspace/RequestsPage"
 import { DocumentsPage } from "./pages/admin-workspace/DocumentsPage"
+import { DocumentSettingsPage } from "./pages/admin-workspace/DocumentSettingsPage"
 import { Analytics } from "./pages/Analytics"
 import { Sales } from "./pages/Sales"
 import { Settings } from "./pages/Settings"
@@ -49,27 +50,61 @@ import ContentStudio from "./pages/ContentStudio"
 import Loyalty from "./pages/Loyalty"
 import Logistics from "./pages/Logistics"
 import EContract from "./pages/EContract"
+import { AuthProvider, useAuth } from "./lib/AuthContext"
 import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
 import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
 import { HRDashboard } from "./pages/hr/HRDashboard"
 import { AdminDashboard } from "./pages/admin-workspace/AdminDashboard"
 import { AiAssistant } from "./components/AiAssistant"
+import { Button } from "./components/ui/button"
 
 function FallbackRoute() {
   const { t } = useTranslation()
   return <div className="p-6 text-center text-muted-foreground">{t("common.moduleUnderConstruction")}</div>
 }
 
+function ProtectedLayout() {
+  const { user, loading, login } = useAuth()
+  const { t } = useTranslation()
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center bg-muted/20 p-4">
+        <div className="w-full max-w-md space-y-8 rounded-xl bg-card p-8 shadow-lg border">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold">Lucky ERP</h1>
+            <p className="mt-2 text-muted-foreground">{t("auth.loginToContinue")}</p>
+          </div>
+          <Button onClick={login} className="w-full py-6 text-lg" size="lg">
+            {t("auth.loginWithGoogle")}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return <Layout />
+}
+
 // App component
 export default function App() {
   return (
-    <BrowserRouter>
-      <Toaster position="top-right" richColors />
-      <AiAssistant />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Toaster position="top-right" richColors />
+        <AiAssistant />
+        <Routes>
+          <Route path="/" element={<ProtectedLayout />}>
+            <Route index element={<Dashboard />} />
           <Route path="products">
             <Route index element={<Navigate to="all" replace />} />
             <Route path="all" element={<Products />} />
@@ -133,6 +168,7 @@ export default function App() {
             <Route path="booking" element={<BookingPage />} />
             <Route path="requests" element={<RequestsPage />} />
             <Route path="documents" element={<DocumentsPage />} />
+            <Route path="document-settings" element={<DocumentSettingsPage />} />
           </Route>
           <Route path="analytics" element={<Analytics />} />
           <Route path="sales" element={<Sales />} />
@@ -147,7 +183,8 @@ export default function App() {
           <Route path="*" element={<FallbackRoute />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

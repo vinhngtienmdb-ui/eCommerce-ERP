@@ -51,13 +51,13 @@ export function ShippingSettingsTab() {
                     <CardTitle className="text-sm font-bold">{gateway.name}</CardTitle>
                   </div>
                   <Badge variant={gateway.status === "connected" ? "default" : "outline"} className="text-[10px] h-5">
-                    {gateway.status === "connected" ? "Connected" : "Disconnected"}
+                    {gateway.status === "connected" ? t("orders.connected") : t("orders.disconnected")}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent className="p-4 pt-0">
                 <p className="text-[10px] text-muted-foreground mb-4">
-                  API Integration for automatic labels and tracking.
+                  {t("orders.fulfillment.apiIntegrationDesc")}
                 </p>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" className="flex-1 h-8 text-xs">
@@ -81,7 +81,7 @@ export function ShippingSettingsTab() {
           <h4 className="font-bold">{t("orders.settings.testConnection")}</h4>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
-          Verify your API credentials and connection to the shipping provider's sandbox or production environment.
+          {t("orders.settings.testConnectionDesc")}
         </p>
         <Button variant="outline">{t("orders.settings.testConnection")}</Button>
       </div>

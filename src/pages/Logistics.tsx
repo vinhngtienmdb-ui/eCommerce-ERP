@@ -1,6 +1,9 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { motion } from "motion/react"
+import { collection, getDocs } from "firebase/firestore"
+import { db } from "../lib/firebase"
+import { toast } from "sonner"
 import { 
   Truck, 
   MapPin, 
@@ -13,22 +16,60 @@ import {
   BarChart3,
   ArrowUpRight,
   Filter,
-  MoreHorizontal
+  MoreHorizontal,
+  Warehouse,
+  Settings,
+  RefreshCw,
+  Plus
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Badge } from "@/src/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+import { Switch } from "@/src/components/ui/switch"
 
 const Logistics = () => {
   const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState("dashboard")
+  const [inventory, setInventory] = useState<any[]>([])
+  const [loadingInventory, setLoadingInventory] = useState(false)
+
+  useEffect(() => {
+    const fetchInventory = async () => {
+      setLoadingInventory(true)
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"))
+        const productsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setInventory(productsData)
+      } catch (error) {
+        console.error("Error fetching inventory:", error)
+      } finally {
+        setLoadingInventory(false)
+      }
+    }
+
+    if (activeTab === "inventory") {
+      fetchInventory()
+    }
+  }, [activeTab])
 
   const shipments = [
     { id: "SHP-001", customer: "Nguyen Van A", carrier: "GHTK", status: "In Transit", eta: "Today, 4 PM", location: "Hanoi Hub" },
     { id: "SHP-002", customer: "Tran Thi B", carrier: "GHN", status: "Delivered", eta: "Completed", location: "District 1, HCMC" },
     { id: "SHP-003", customer: "Le Van C", carrier: "Shopee Express", status: "Pending", eta: "Tomorrow", location: "Warehouse" },
     { id: "SHP-004", customer: "Pham Thi D", carrier: "J&T", status: "Delayed", eta: "Mar 18", location: "Da Nang Sorting" },
+  ]
+
+  const warehouses = [
+    { id: "wh_hn_01", name: "Kho Tổng Hà Nội", type: "normal", location: "Hà Nội", capacity: "85%", status: "active" },
+    { id: "wh_hcm_01", name: "Kho Tổng TP.HCM", type: "normal", location: "TP.HCM", capacity: "60%", status: "active" },
+    { id: "wh_dn_01", name: "Kho Đà Nẵng", type: "normal", location: "Đà Nẵng", capacity: "45%", status: "active" },
+    { id: "ff_shopee_01", name: "Shopee Fulfillment", type: "fulfillment", location: "Toàn quốc", capacity: "N/A", status: "active" },
   ]
 
   return (
@@ -41,25 +82,35 @@ const Logistics = () => {
               <Navigation className="h-6 w-6" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Logistics Control Tower</h1>
-              <p className="text-slate-500 text-sm">Real-time supply chain visibility & optimization.</p>
+              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{t("logistics.title", "Logistics Control Tower")}</h1>
+              <p className="text-slate-500 text-sm">{t("logistics.description", "Quản lý kho vận, tồn kho và đồng bộ đơn vị vận chuyển.")}</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="bg-white"><Filter className="mr-2 h-4 w-4" /> Filter</Button>
-            <Button className="bg-indigo-600 hover:bg-indigo-700">Optimize Routes</Button>
+            <Button className="bg-indigo-600 hover:bg-indigo-700">
+              <RefreshCw className="mr-2 h-4 w-4" /> {t("logistics.syncNow", "Đồng bộ ngay")}
+            </Button>
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="bg-white border shadow-sm">
+            <TabsTrigger value="dashboard">{t("logistics.tabs.dashboard", "Tổng quan")}</TabsTrigger>
+            <TabsTrigger value="warehouses">{t("logistics.tabs.warehouses", "Quản lý Kho")}</TabsTrigger>
+            <TabsTrigger value="inventory">{t("logistics.tabs.inventory", "Tồn kho")}</TabsTrigger>
+            <TabsTrigger value="integrations">{t("logistics.tabs.integrations", "Kết nối WMS")}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="dashboard" className="space-y-8 animate-in fade-in duration-300">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="border-none shadow-sm">
             <CardContent className="p-6 flex items-center gap-4">
               <div className="h-12 w-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
                 <Package className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase">Active Shipments</p>
+                <p className="text-xs font-medium text-slate-500 uppercase">{t("logistics.dashboard.activeShipments")}</p>
                 <p className="text-2xl font-bold text-slate-900">1,248</p>
               </div>
             </CardContent>
@@ -70,7 +121,7 @@ const Logistics = () => {
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase">On-Time Rate</p>
+                <p className="text-xs font-medium text-slate-500 uppercase">{t("logistics.dashboard.onTimeRate")}</p>
                 <p className="text-2xl font-bold text-slate-900">96.4%</p>
               </div>
             </CardContent>
@@ -81,7 +132,7 @@ const Logistics = () => {
                 <Clock className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase">Avg. Delivery Time</p>
+                <p className="text-xs font-medium text-slate-500 uppercase">{t("logistics.dashboard.avgDeliveryTime")}</p>
                 <p className="text-2xl font-bold text-slate-900">1.8 Days</p>
               </div>
             </CardContent>
@@ -92,7 +143,7 @@ const Logistics = () => {
                 <AlertCircle className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase">Delayed Orders</p>
+                <p className="text-xs font-medium text-slate-500 uppercase">{t("logistics.dashboard.delayedOrders")}</p>
                 <p className="text-2xl font-bold text-slate-900">14</p>
               </div>
             </CardContent>
@@ -105,10 +156,10 @@ const Logistics = () => {
             <Card className="border-none shadow-sm overflow-hidden">
               <CardHeader className="bg-white border-b">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Live Tracking Map</CardTitle>
+                  <CardTitle className="text-lg">{t("logistics.dashboard.liveTrackingMap")}</CardTitle>
                   <div className="flex gap-2">
-                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-100">842 Moving</Badge>
-                    <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-100">406 Idle</Badge>
+                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-100">842 {t("logistics.dashboard.moving")}</Badge>
+                    <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-100">406 {t("logistics.dashboard.idle")}</Badge>
                   </div>
                 </div>
               </CardHeader>
@@ -122,14 +173,14 @@ const Logistics = () => {
                         <Navigation className="h-8 w-8" />
                       </div>
                     </div>
-                    <p className="text-slate-500 font-medium">Interactive Map View Loading...</p>
+                    <p className="text-slate-500 font-medium">{t("logistics.dashboard.interactiveMapLoading")}</p>
                   </div>
                   
                   {/* Floating Tracking Card */}
                   <div className="absolute bottom-4 left-4 right-4 md:right-auto md:w-80 bg-white p-4 rounded-xl shadow-xl border">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Active Route</span>
-                      <Badge className="bg-blue-100 text-blue-700 border-none">Fastest</Badge>
+                      <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">{t("logistics.dashboard.activeRoute")}</span>
+                      <Badge className="bg-blue-100 text-blue-700 border-none">{t("logistics.dashboard.fastest")}</Badge>
                     </div>
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
@@ -149,18 +200,18 @@ const Logistics = () => {
 
             <Card className="border-none shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg">Shipment Status Overview</CardTitle>
+                <CardTitle className="text-lg">{t("logistics.dashboard.shipmentStatusOverview")}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-slate-50/50">
-                      <TableHead>Shipment ID</TableHead>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Carrier</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>ETA</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
+                      <TableHead>{t("logistics.dashboard.shipmentId")}</TableHead>
+                      <TableHead>{t("logistics.dashboard.customer")}</TableHead>
+                      <TableHead>{t("logistics.dashboard.carrier")}</TableHead>
+                      <TableHead>{t("logistics.dashboard.status")}</TableHead>
+                      <TableHead>{t("logistics.dashboard.eta")}</TableHead>
+                      <TableHead className="text-right">{t("logistics.dashboard.action")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -197,26 +248,26 @@ const Logistics = () => {
           <div className="space-y-6">
             <Card className="border-none shadow-sm bg-slate-900 text-white">
               <CardHeader>
-                <CardTitle className="text-sm uppercase tracking-widest text-slate-400">AI Optimization Insight</CardTitle>
+                <CardTitle className="text-sm uppercase tracking-widest text-slate-400">{t("logistics.dashboard.aiOptimizationInsight")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="p-4 bg-white/5 rounded-xl border border-white/10 space-y-2">
                   <div className="flex items-center gap-2 text-emerald-400">
                     <BarChart3 className="h-4 w-4" />
-                    <span className="text-xs font-bold uppercase">Cost Saving Opportunity</span>
+                    <span className="text-xs font-bold uppercase">{t("logistics.dashboard.costSavingOpportunity")}</span>
                   </div>
                   <p className="text-sm text-slate-300">
-                    Switching 40% of Hanoi-HCMC routes to GHN could save <span className="text-white font-bold">$1,200/month</span> based on current volume.
+                    {t("logistics.dashboard.costSavingDesc")}
                   </p>
-                  <Button size="sm" variant="link" className="text-emerald-400 p-0 h-auto">Apply Optimization <ArrowUpRight className="ml-1 h-3 w-3" /></Button>
+                  <Button size="sm" variant="link" className="text-emerald-400 p-0 h-auto">{t("logistics.dashboard.applyOptimization")} <ArrowUpRight className="ml-1 h-3 w-3" /></Button>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl border border-white/10 space-y-2">
                   <div className="flex items-center gap-2 text-orange-400">
                     <AlertCircle className="h-4 w-4" />
-                    <span className="text-xs font-bold uppercase">Weather Alert</span>
+                    <span className="text-xs font-bold uppercase">{t("logistics.dashboard.weatherAlert")}</span>
                   </div>
                   <p className="text-sm text-slate-300">
-                    Heavy rain in Da Nang may delay 15 shipments by 4-6 hours. Automatic customer notifications sent.
+                    {t("logistics.dashboard.weatherAlertDesc")}
                   </p>
                 </div>
               </CardContent>
@@ -224,7 +275,7 @@ const Logistics = () => {
 
             <Card className="border-none shadow-sm">
               <CardHeader>
-                <CardTitle className="text-sm uppercase tracking-widest text-slate-500">Carrier Performance</CardTitle>
+                <CardTitle className="text-sm uppercase tracking-widest text-slate-500">{t("logistics.carrierPerformance", "Hiệu suất ĐVVC")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[
@@ -246,6 +297,179 @@ const Logistics = () => {
             </Card>
           </div>
         </div>
+        </TabsContent>
+
+        <TabsContent value="warehouses" className="space-y-6 animate-in fade-in duration-300">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">{t("logistics.warehouses.title", "Danh sách Kho hàng")}</h2>
+            <Button><Plus className="mr-2 h-4 w-4" /> {t("logistics.warehouses.add", "Thêm Kho mới")}</Button>
+          </div>
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50/50">
+                    <TableHead>{t("logistics.warehouses.name", "Tên Kho")}</TableHead>
+                    <TableHead>{t("logistics.warehouses.type", "Loại Kho")}</TableHead>
+                    <TableHead>{t("logistics.warehouses.location", "Vị trí")}</TableHead>
+                    <TableHead>{t("logistics.warehouses.capacity", "Sức chứa")}</TableHead>
+                    <TableHead>{t("logistics.warehouses.status", "Trạng thái")}</TableHead>
+                    <TableHead className="text-right">{t("common.actions", "Hành động")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {warehouses.map((wh) => (
+                    <TableRow key={wh.id}>
+                      <TableCell className="font-medium">{wh.name}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={wh.type === 'fulfillment' ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}>
+                          {wh.type === 'fulfillment' ? 'Fulfillment' : 'Thông thường'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{wh.location}</TableCell>
+                      <TableCell>{wh.capacity}</TableCell>
+                      <TableCell>
+                        <Badge className="bg-emerald-50 text-emerald-700 border-none">{t("common.active", "Hoạt động")}</Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("common.edit", "Chỉnh sửa")}</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="inventory" className="space-y-6 animate-in fade-in duration-300">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">{t("logistics.inventory.title", "Quản lý Tồn kho")}</h2>
+            <div className="flex gap-2">
+              <div className="relative w-64">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input placeholder={t("common.search", "Tìm kiếm...")} className="pl-8 bg-white" />
+              </div>
+              <Button variant="outline" className="bg-white"><Filter className="mr-2 h-4 w-4" /> {t("common.filter", "Bộ lọc")}</Button>
+            </div>
+          </div>
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50/50">
+                    <TableHead>{t("logistics.inventory.product", "Sản phẩm")}</TableHead>
+                    <TableHead>{t("common.sku", "SKU")}</TableHead>
+                    <TableHead>{t("logistics.inventory.warehouse", "Kho hàng")}</TableHead>
+                    <TableHead className="text-right">{t("logistics.inventory.stock", "Tồn kho")}</TableHead>
+                    <TableHead className="text-right">{t("logistics.inventory.reserved", "Đang giao dịch")}</TableHead>
+                    <TableHead className="text-right">{t("logistics.inventory.available", "Có thể bán")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {loadingInventory ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                        {t("common.loading", "Đang tải...")}
+                      </TableCell>
+                    </TableRow>
+                  ) : inventory.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                        {t("common.noData", "Không có dữ liệu")}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    inventory.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell className="text-muted-foreground">{item.sku || "N/A"}</TableCell>
+                        <TableCell>{item.warehouse || "N/A"}</TableCell>
+                        <TableCell className="text-right font-medium">{item.stock || 0}</TableCell>
+                        <TableCell className="text-right text-orange-600">{item.reserved || 0}</TableCell>
+                        <TableCell className="text-right text-emerald-600 font-bold">{(item.stock || 0) - (item.reserved || 0)}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="integrations" className="space-y-6 animate-in fade-in duration-300">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">{t("logistics.integrations.title", "Kết nối Phần mềm Quản lý Kho (WMS)")}</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="border-none shadow-sm">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 font-bold text-xl">K</div>
+                    <div>
+                      <CardTitle className="text-base">KiotViet</CardTitle>
+                      <CardDescription>{t("logistics.integrations.syncInventoryOrders", "Đồng bộ tồn kho & đơn hàng")}</CardDescription>
+                    </div>
+                  </div>
+                  <Switch checked={true} />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-sm text-slate-500">
+                  {t("logistics.integrations.kiotVietDesc", "Tự động trừ tồn kho trên KiotViet khi có đơn hàng mới. Cập nhật tồn kho từ KiotViet về hệ thống mỗi 5 phút.")}
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="w-full"><Settings className="mr-2 h-4 w-4" /> {t("logistics.integrations.configure", "Cấu hình")}</Button>
+                  <Button variant="outline" size="sm" className="w-full"><RefreshCw className="mr-2 h-4 w-4" /> {t("logistics.integrations.syncNow", "Đồng bộ ngay")}</Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center text-green-700 font-bold text-xl">S</div>
+                    <div>
+                      <CardTitle className="text-base">Sapo</CardTitle>
+                      <CardDescription>{t("logistics.integrations.syncInventoryOrders", "Đồng bộ tồn kho & đơn hàng")}</CardDescription>
+                    </div>
+                  </div>
+                  <Switch checked={false} />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-sm text-slate-500">
+                  {t("logistics.integrations.sapoDesc", "Tự động trừ tồn kho trên Sapo khi có đơn hàng mới. Cập nhật tồn kho từ Sapo về hệ thống mỗi 5 phút.")}
+                </div>
+                <Button variant="outline" size="sm" className="w-full">{t("logistics.integrations.connect", "Kết nối")}</Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-none shadow-sm">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-700 font-bold text-xl">N</div>
+                    <div>
+                      <CardTitle className="text-base">Nhanh.vn</CardTitle>
+                      <CardDescription>{t("logistics.integrations.syncInventoryOrders", "Đồng bộ tồn kho & đơn hàng")}</CardDescription>
+                    </div>
+                  </div>
+                  <Switch checked={false} />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-sm text-slate-500">
+                  {t("logistics.integrations.nhanhVnDesc", "Tự động trừ tồn kho trên Nhanh.vn khi có đơn hàng mới. Cập nhật tồn kho từ Nhanh.vn về hệ thống mỗi 5 phút.")}
+                </div>
+                <Button variant="outline" size="sm" className="w-full">{t("logistics.integrations.connect", "Kết nối")}</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
       </div>
     </div>
   )

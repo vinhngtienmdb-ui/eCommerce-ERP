@@ -42,8 +42,9 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog"
 import Markdown from "react-markdown"
-import { db } from "@/src/lib/firebase"
+import { db, auth } from "@/src/lib/firebase"
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore"
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -69,7 +70,9 @@ export function Products() {
   const { t } = useTranslation()
 
   useEffect(() => {
-    fetchProducts()
+    if (auth.currentUser) {
+      fetchProducts()
+    }
   }, [])
 
   const fetchProducts = async () => {
@@ -83,26 +86,24 @@ export function Products() {
       // Sort by createdAt descending
       productsData.sort((a: any, b: any) => {
         if (!a.createdAt || !b.createdAt) return 0;
-        return b.createdAt.toMillis() - a.createdAt.toMillis();
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       })
       setProducts(productsData)
     } catch (error) {
-      console.error("Error fetching products:", error)
-      toast.error("Failed to load products")
+      handleFirestoreError(error, OperationType.LIST, "products")
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
+    if (confirm(t("products.deleteConfirm"))) {
       try {
         await deleteDoc(doc(db, "products", id))
-        toast.success("Product deleted successfully")
+        toast.success(t("products.deleteSuccess"))
         setProducts(products.filter(p => p.id !== id))
       } catch (error) {
-        console.error("Error deleting product:", error)
-        toast.error("Failed to delete product")
+        handleFirestoreError(error, OperationType.DELETE, `products/${id}`)
       }
     }
   }
@@ -119,7 +120,7 @@ export function Products() {
 
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: `Analyze this inventory data and provide strategic recommendations for restocking, promotions, or liquidating slow-moving items.
+        contents: `${t("products.forecasting.aiPrompt")}
         Data: ${JSON.stringify(inventoryData)}
         Language: ${t("common.languageCode") || "Vietnamese"}
         Format: Markdown with clear sections.`,
@@ -262,17 +263,17 @@ export function Products() {
                   <p className="text-sm font-medium">{item.name}</p>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-[10px] h-4 bg-white">
-                      {item.stock} in stock
+                      {item.stock} {t("products.inStock")}
                     </Badge>
                     <span className="text-[10px] text-muted-foreground">
-                      {item.velocity} units/day
+                      {item.velocity} {t("products.unitsPerDay")}
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-semibold text-rose-600 flex items-center justify-end">
                     <TrendingDown className="h-3 w-3 mr-1" />
-                    {item.daysLeft} days left
+                    {item.daysLeft} {t("products.daysLeft")}
                   </p>
                   <Button variant="link" size="sm" className="h-auto p-0 text-[10px] text-blue-600">
                     {t("products.forecasting.restockNow")}
@@ -345,10 +346,10 @@ export function Products() {
             <TableRow>
               <TableHead className="w-[40px]"></TableHead>
               <TableHead>{t("products.name")}</TableHead>
-              <TableHead className="text-right">Giá bán</TableHead>
-              <TableHead className="text-right">Kho hàng</TableHead>
-              <TableHead className="text-right">Ngành hàng</TableHead>
-              <TableHead className="text-right">Trạng thái</TableHead>
+              <TableHead className="text-right">{t("products.table.price", "Giá bán")}</TableHead>
+              <TableHead className="text-right">{t("products.table.stock", "Kho hàng")}</TableHead>
+              <TableHead className="text-right">{t("products.table.category", "Ngành hàng")}</TableHead>
+              <TableHead className="text-right">{t("products.table.status", "Trạng thái")}</TableHead>
               <TableHead className="text-right">{t("common.actions")}</TableHead>
             </TableRow>
           </TableHeader>
@@ -358,7 +359,7 @@ export function Products() {
                 <TableCell colSpan={7} className="h-64 text-center">
                   <div className="flex flex-col items-center justify-center text-muted-foreground">
                     <Loader2 className="h-8 w-8 animate-spin mb-4" />
-                    <p>Đang tải dữ liệu...</p>
+                    <p>{t("products.table.loading", "Đang tải dữ liệu...")}</p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -417,7 +418,7 @@ export function Products() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Badge variant="default" className="bg-green-500 hover:bg-green-600">Đang bán</Badge>
+                      <Badge variant="default" className="bg-green-500 hover:bg-green-600">{t("products.table.active", "Đang bán")}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">

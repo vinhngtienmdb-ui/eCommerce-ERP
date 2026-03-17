@@ -73,15 +73,15 @@ export default function KolManagement() {
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">{t("nav.kolKoc")}</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{t("kolManagement.title")}</h2>
           <p className="text-muted-foreground">
-            Quản lý mạng lưới KOL/KOC, phê duyệt đối tác và theo dõi hiệu quả kinh doanh.
+            {t("kolManagement.description")}
           </p>
         </div>
         <div className="flex items-center space-x-2">
           <Button>
             <UserPlus className="mr-2 h-4 w-4" />
-            Mời KOL mới
+            {t("kolManagement.invite")}
           </Button>
         </div>
       </div>
@@ -89,31 +89,31 @@ export default function KolManagement() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tổng KOL/KOC</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("kolManagement.stats.total")}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1,284</div>
             <p className="text-xs text-muted-foreground">
-              +48 trong tháng này
+              {t("kolManagement.stats.newThisMonth", { count: 48 })}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Đang chờ duyệt</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("kolManagement.stats.pending")}</CardTitle>
             <Clock className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
             <p className="text-xs text-muted-foreground">
-              Cần xử lý ngay
+              {t("kolManagement.stats.needsAction")}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Doanh thu KOL (Tháng)</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("kolManagement.stats.revenue")}</CardTitle>
             <DollarSign className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -126,7 +126,7 @@ export default function KolManagement() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Hoa hồng chi trả</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("kolManagement.stats.commissions")}</CardTitle>
             <TrendingUp className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -141,9 +141,9 @@ export default function KolManagement() {
 
       <Tabs defaultValue="list" className="space-y-4" onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="list">Danh sách KOL</TabsTrigger>
-          <TabsTrigger value="approval">Phê duyệt đối tác</TabsTrigger>
-          <TabsTrigger value="stats">Thống kê hiệu quả</TabsTrigger>
+          <TabsTrigger value="list">{t("kolManagement.tabs.list")}</TabsTrigger>
+          <TabsTrigger value="approval">{t("kolManagement.tabs.approval")}</TabsTrigger>
+          <TabsTrigger value="stats">{t("kolManagement.tabs.stats")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
@@ -152,7 +152,7 @@ export default function KolManagement() {
               <div className="relative w-full max-w-sm">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Tìm kiếm KOL..."
+                  placeholder={t("kolManagement.list.searchPlaceholder")}
                   className="pl-8"
                 />
               </div>
@@ -167,13 +167,13 @@ export default function KolManagement() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>KOL/KOC</TableHead>
-                    <TableHead>Nền tảng</TableHead>
-                    <TableHead>Followers</TableHead>
-                    <TableHead>Trạng thái</TableHead>
-                    <TableHead className="text-right">Doanh thu mang lại</TableHead>
-                    <TableHead className="text-right">Hoa hồng</TableHead>
-                    <TableHead className="text-right">Đánh giá</TableHead>
+                    <TableHead>{t("kolManagement.list.table.kol")}</TableHead>
+                    <TableHead>{t("kolManagement.list.table.platform")}</TableHead>
+                    <TableHead>{t("kolManagement.list.table.followers")}</TableHead>
+                    <TableHead>{t("kolManagement.list.table.status")}</TableHead>
+                    <TableHead className="text-right">{t("kolManagement.list.table.revenue")}</TableHead>
+                    <TableHead className="text-right">{t("kolManagement.list.table.commissions")}</TableHead>
+                    <TableHead className="text-right">{t("kolManagement.list.table.rating")}</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -203,7 +203,7 @@ export default function KolManagement() {
                       <TableCell>{kol.followers}</TableCell>
                       <TableCell>
                         <Badge variant={kol.status === 'active' ? 'default' : 'secondary'}>
-                          {kol.status === 'active' ? 'Đang hoạt động' : 'Tạm ngưng'}
+                          {t(`kolManagement.list.statuses.${kol.status}`)}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right font-medium">
@@ -226,11 +226,11 @@ export default function KolManagement() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-                            <DropdownMenuItem>Xem hồ sơ</DropdownMenuItem>
-                            <DropdownMenuItem>Lịch sử chiến dịch</DropdownMenuItem>
+                            <DropdownMenuLabel>{t("kolManagement.list.table.actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("kolManagement.list.menu.viewProfile")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("kolManagement.list.menu.campaignHistory")}</DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">Ngưng hợp tác</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">{t("kolManagement.list.menu.terminate")}</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -245,20 +245,20 @@ export default function KolManagement() {
         <TabsContent value="approval" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Yêu cầu phê duyệt</CardTitle>
+              <CardTitle>{t("kolManagement.approval.title")}</CardTitle>
               <CardDescription>
-                Xem xét các yêu cầu tham gia mạng lưới KOL/KOC từ các nhà sáng tạo nội dung.
+                {t("kolManagement.approval.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Ứng viên</TableHead>
-                    <TableHead>Nền tảng chính</TableHead>
-                    <TableHead>Followers</TableHead>
-                    <TableHead>Ngày gửi</TableHead>
-                    <TableHead className="text-right">Hành động</TableHead>
+                    <TableHead>{t("kolManagement.approval.table.candidate")}</TableHead>
+                    <TableHead>{t("kolManagement.approval.table.platform")}</TableHead>
+                    <TableHead>{t("kolManagement.approval.table.followers")}</TableHead>
+                    <TableHead>{t("kolManagement.approval.table.date")}</TableHead>
+                    <TableHead className="text-right">{t("kolManagement.approval.table.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -282,8 +282,8 @@ export default function KolManagement() {
                       <TableCell>{req.followers}</TableCell>
                       <TableCell>{req.date}</TableCell>
                       <TableCell className="text-right space-x-2">
-                        <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">Từ chối</Button>
-                        <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">Phê duyệt</Button>
+                        <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">{t("kolManagement.approval.reject")}</Button>
+                        <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">{t("kolManagement.approval.approve")}</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -297,18 +297,18 @@ export default function KolManagement() {
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Doanh thu theo nền tảng</CardTitle>
+                <CardTitle>{t("kolManagement.stats.revenueByPlatform")}</CardTitle>
               </CardHeader>
               <CardContent className="h-[300px] flex items-center justify-center border-2 border-dashed rounded-lg">
                 <div className="text-center text-muted-foreground">
                   <TrendingUp className="mx-auto h-8 w-8 mb-2 opacity-20" />
-                  <p>Biểu đồ doanh thu theo nền tảng (TikTok, YouTube, v.v.)</p>
+                  <p>{t("kolManagement.stats.revenueByPlatformDesc")}</p>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Top KOL Hiệu quả nhất</CardTitle>
+                <CardTitle>{t("kolManagement.stats.topKols")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

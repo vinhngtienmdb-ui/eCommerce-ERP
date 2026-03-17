@@ -23,16 +23,16 @@ const Loyalty = () => {
   const { t } = useTranslation()
 
   const tiers = [
-    { name: "Bronze", minSpend: 0, color: "bg-orange-100 text-orange-700", icon: Award },
-    { name: "Silver", minSpend: 500, color: "bg-slate-100 text-slate-700", icon: Star },
-    { name: "Gold", minSpend: 2000, color: "bg-yellow-100 text-yellow-700", icon: Crown },
-    { name: "Diamond", minSpend: 5000, color: "bg-indigo-100 text-indigo-700", icon: Trophy },
+    { name: t("loyalty.tiers.names.Bronze"), minSpend: 0, color: "bg-orange-100 text-orange-700", icon: Award },
+    { name: t("loyalty.tiers.names.Silver"), minSpend: 500, color: "bg-slate-100 text-slate-700", icon: Star },
+    { name: t("loyalty.tiers.names.Gold"), minSpend: 2000, color: "bg-yellow-100 text-yellow-700", icon: Crown },
+    { name: t("loyalty.tiers.names.Diamond"), minSpend: 5000, color: "bg-indigo-100 text-indigo-700", icon: Trophy },
   ]
 
   const missions = [
-    { id: 1, title: "Early Bird", description: "Make 3 purchases before 10 AM", reward: "500 pts", progress: 66 },
-    { id: 2, title: "Review Master", description: "Write 5 reviews with photos", reward: "1000 pts", progress: 20 },
-    { id: 3, title: "Big Spender", description: "Spend over $1000 this month", reward: "Exclusive Badge", progress: 45 },
+    { id: 1, title: t("loyalty.missions.items.Early Bird.title"), description: t("loyalty.missions.items.Early Bird.description"), reward: "500 pts", progress: 66 },
+    { id: 2, title: t("loyalty.missions.items.Review Master.title"), description: t("loyalty.missions.items.Review Master.description"), reward: "1000 pts", progress: 20 },
+    { id: 3, title: t("loyalty.missions.items.Big Spender.title"), description: t("loyalty.missions.items.Big Spender.description"), reward: "Exclusive Badge", progress: 45 },
   ]
 
   return (
@@ -42,18 +42,18 @@ const Loyalty = () => {
         <section className="relative overflow-hidden rounded-3xl bg-indigo-900 p-8 md:p-12 text-white shadow-2xl">
           <div className="relative z-10 space-y-6 max-w-2xl">
             <Badge className="bg-indigo-500/30 text-indigo-100 border-none px-4 py-1">Loyalty Program v2.0</Badge>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-none">
-              REWARDING <br /> <span className="text-yellow-400">LOYALTY</span>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-none uppercase">
+              {t("loyalty.title")}
             </h1>
             <p className="text-indigo-100 text-lg opacity-80">
-              Boost customer retention by 40% with gamified missions and exclusive tier rewards.
+              {t("loyalty.description")}
             </p>
             <div className="flex gap-4">
               <Button className="bg-white text-indigo-900 hover:bg-indigo-50 font-bold px-8 py-6 rounded-xl">
-                Manage Rewards
+                {t("loyalty.manageRewards")}
               </Button>
               <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold px-8 py-6 rounded-xl">
-                View Analytics
+                {t("loyalty.viewAnalytics")}
               </Button>
             </div>
           </div>
@@ -67,9 +67,9 @@ const Loyalty = () => {
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <Crown className="text-yellow-500 h-6 w-6" /> Membership Tiers
+                <Crown className="text-yellow-500 h-6 w-6" /> {t("loyalty.tiers.title")}
               </h2>
-              <Button variant="ghost" className="text-indigo-600 font-semibold">Edit Structure <ChevronRight className="ml-1 h-4 w-4" /></Button>
+              <Button variant="ghost" className="text-indigo-600 font-semibold">{t("loyalty.tiers.editStructure")} <ChevronRight className="ml-1 h-4 w-4" /></Button>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {tiers.map((tier) => (
@@ -80,7 +80,7 @@ const Loyalty = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg text-slate-900">{tier.name}</h3>
-                      <p className="text-sm text-slate-500">Min Spend: ${tier.minSpend}</p>
+                      <p className="text-sm text-slate-500">{t("loyalty.tiers.minSpend", { amount: tier.minSpend })}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -89,7 +89,7 @@ const Loyalty = () => {
 
             <div className="space-y-6 pt-4">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <Target className="text-red-500 h-6 w-6" /> Active Missions
+                <Target className="text-red-500 h-6 w-6" /> {t("loyalty.missions.title")}
               </h2>
               <div className="space-y-4">
                 {missions.map((mission) => (
@@ -106,7 +106,7 @@ const Loyalty = () => {
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-xs font-medium text-slate-400">
-                          <span>Progress</span>
+                          <span>{t("loyalty.missions.progress")}</span>
                           <span>{mission.progress}%</span>
                         </div>
                         <Progress value={mission.progress} className="h-2 bg-slate-100" />
@@ -122,28 +122,28 @@ const Loyalty = () => {
           <div className="space-y-6">
             <Card className="bg-indigo-50 border-none">
               <CardHeader>
-                <CardTitle className="text-indigo-900">Program Health</CardTitle>
-                <CardDescription className="text-indigo-600/70">Last 30 days performance</CardDescription>
+                <CardTitle className="text-indigo-900">{t("loyalty.health.title")}</CardTitle>
+                <CardDescription className="text-indigo-600/70">{t("loyalty.health.description")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Users className="text-indigo-600 h-5 w-5" />
-                    <span className="text-sm font-medium text-slate-600">Active Members</span>
+                    <span className="text-sm font-medium text-slate-600">{t("loyalty.health.activeMembers")}</span>
                   </div>
                   <span className="font-bold text-indigo-900">12,482</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <TrendingUp className="text-emerald-600 h-5 w-5" />
-                    <span className="text-sm font-medium text-slate-600">Redemption Rate</span>
+                    <span className="text-sm font-medium text-slate-600">{t("loyalty.health.redemptionRate")}</span>
                   </div>
                   <span className="font-bold text-emerald-600">24.5%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Gift className="text-orange-600 h-5 w-5" />
-                    <span className="text-sm font-medium text-slate-600">Points Issued</span>
+                    <span className="text-sm font-medium text-slate-600">{t("loyalty.health.pointsIssued")}</span>
                   </div>
                   <span className="font-bold text-orange-600">1.2M</span>
                 </div>
@@ -153,22 +153,22 @@ const Loyalty = () => {
             <Card className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white border-none overflow-hidden relative">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Gamepad2 className="h-5 w-5" /> Mini-Games Hub
+                  <Gamepad2 className="h-5 w-5" /> {t("loyalty.games.title")}
                 </CardTitle>
-                <CardDescription className="text-purple-100">Engage customers with fun</CardDescription>
+                <CardDescription className="text-purple-100">{t("loyalty.games.description")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 relative z-10">
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 flex items-center justify-between">
-                  <span className="font-medium">Lucky Wheel</span>
-                  <Button size="sm" variant="secondary" className="text-xs h-7">Active</Button>
+                  <span className="font-medium">{t("loyalty.games.luckyWheel")}</span>
+                  <Button size="sm" variant="secondary" className="text-xs h-7">{t("loyalty.games.status.active")}</Button>
                 </div>
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 flex items-center justify-between">
-                  <span className="font-medium">Daily Check-in</span>
-                  <Button size="sm" variant="secondary" className="text-xs h-7">Active</Button>
+                  <span className="font-medium">{t("loyalty.games.dailyCheckin")}</span>
+                  <Button size="sm" variant="secondary" className="text-xs h-7">{t("loyalty.games.status.active")}</Button>
                 </div>
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 flex items-center justify-between opacity-50">
-                  <span className="font-medium">Price Guessing</span>
-                  <Button size="sm" variant="secondary" className="text-xs h-7">Paused</Button>
+                  <span className="font-medium">{t("loyalty.games.priceGuessing")}</span>
+                  <Button size="sm" variant="secondary" className="text-xs h-7">{t("loyalty.games.status.paused")}</Button>
                 </div>
               </CardContent>
               <div className="absolute -bottom-4 -right-4 opacity-10">

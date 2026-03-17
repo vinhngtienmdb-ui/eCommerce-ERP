@@ -36,6 +36,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { collection, addDoc } from 'firebase/firestore'
 import { db, storage, auth } from '@/src/lib/firebase'
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
 
 const SortableImage = ({ id, url, onRemove }: { id: string, url: string, onRemove: () => void }) => {
   const {
@@ -110,6 +111,10 @@ export function AddProduct() {
   const [specifications, setSpecifications] = useState("")
   const [productName, setProductName] = useState("")
   const [costPrice, setCostPrice] = useState("")
+  const [stock, setStock] = useState("")
+  const [warehouseType, setWarehouseType] = useState("normal")
+  const [warehouseId, setWarehouseId] = useState("")
+  const [syncWms, setSyncWms] = useState(false)
   const [suggestedPrice, setSuggestedPrice] = useState("")
   const [platformFee, setPlatformFee] = useState("")
   const [description, setDescription] = useState("")
@@ -190,7 +195,7 @@ export function AddProduct() {
       stock: bulkStock || comb.stock,
       sku: bulkSku || comb.sku
     })))
-    toast.success("Đã áp dụng hàng loạt")
+    toast.success(t("products.add.bulkApplySuccess"))
   }
 
   const sensors = useSensors(
@@ -235,6 +240,10 @@ export function AddProduct() {
           editor?.commands.setContent(parsed.description)
         }
         if (parsed.costPrice) setCostPrice(parsed.costPrice)
+        if (parsed.stock) setStock(parsed.stock)
+        if (parsed.warehouseType) setWarehouseType(parsed.warehouseType)
+        if (parsed.warehouseId) setWarehouseId(parsed.warehouseId)
+        if (parsed.syncWms !== undefined) setSyncWms(parsed.syncWms)
         if (parsed.suggestedPrice) setSuggestedPrice(parsed.suggestedPrice)
         if (parsed.platformFee) setPlatformFee(parsed.platformFee)
         if (parsed.selectedLevel1) setSelectedLevel1(parsed.selectedLevel1)
@@ -259,13 +268,13 @@ export function AddProduct() {
   useEffect(() => {
     const draft = {
       productName, brand, model, baseName, specifications,
-      description, costPrice, suggestedPrice, platformFee,
+      description, costPrice, stock, warehouseType, warehouseId, syncWms, suggestedPrice, platformFee,
       selectedLevel1, selectedLevel2, selectedLevel3,
       variants, combinations, weight, length, width, height,
       condition, isPreOrder, prepTime
     }
     localStorage.setItem('productDraft', JSON.stringify(draft))
-  }, [productName, brand, model, baseName, specifications, description, costPrice, suggestedPrice, platformFee, selectedLevel1, selectedLevel2, selectedLevel3, variants, combinations, weight, length, width, height, condition, isPreOrder, prepTime])
+  }, [productName, brand, model, baseName, specifications, description, costPrice, stock, warehouseType, warehouseId, syncWms, suggestedPrice, platformFee, selectedLevel1, selectedLevel2, selectedLevel3, variants, combinations, weight, length, width, height, condition, isPreOrder, prepTime])
 
   useEffect(() => {
     // Generate combinations
@@ -340,7 +349,7 @@ export function AddProduct() {
 
   const autoCategorize = async () => {
     if (images.length === 0 && !coverImage) {
-      toast.error("Vui lòng tải lên ít nhất 1 hình ảnh để AI phân tích.");
+      toast.error(t("products.add.uploadImageForAi"));
       return;
     }
 
@@ -392,14 +401,14 @@ export function AddProduct() {
           setSelectedLevel1(suggestedCategory);
           setSelectedLevel2("");
           setSelectedLevel3("");
-          toast.success(`AI đã đề xuất danh mục: ${suggestedCategory}`);
+          toast.success(t("products.add.aiCategorySuccess", { category: suggestedCategory }));
         } else {
-          toast.error("AI không thể tìm thấy danh mục phù hợp.");
+          toast.error(t("products.add.aiCategoryNotFound"));
         }
       }
     } catch (error) {
       console.error("AI Categorization Error:", error);
-      toast.error("Lỗi khi phân tích hình ảnh.");
+      toast.error(t("products.add.aiCategoryImageError"));
     } finally {
       setIsCategorizing(false);
     }
@@ -407,19 +416,22 @@ export function AddProduct() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
-    if (!productName) newErrors.productName = "Tên sản phẩm là bắt buộc"
-    if (!selectedLevel1) newErrors.category = "Ngành hàng là bắt buộc"
-    if (!coverImage && images.length === 0) newErrors.images = "Cần ít nhất 1 hình ảnh"
+    if (!productName) newErrors.productName = t("products.add.errors.nameRequired")
+    if (!selectedLevel1) newErrors.category = t("products.add.errors.categoryRequired")
+    if (!coverImage && images.length === 0) newErrors.images = t("products.add.errors.imageRequired")
     if (combinations.length > 0) {
-      if (combinations.some(c => !c.price)) newErrors.combinations = "Vui lòng nhập giá cho tất cả phân loại"
+      if (combinations.some(c => !c.price)) newErrors.combinations = t("products.add.errors.combinationPriceRequired")
+      if (combinations.some(c => !c.stock)) newErrors.combinationsStock = t("products.add.errors.combinationStockRequired")
     } else {
-      if (!costPrice) newErrors.price = "Giá sản phẩm là bắt buộc"
+      if (!costPrice) newErrors.price = t("products.add.errors.priceRequired")
+      if (!stock) newErrors.stock = t("products.add.errors.stockRequired")
     }
-    if (!weight || Number(weight) <= 0) newErrors.weight = "Cân nặng phải lớn hơn 0"
+    if (!warehouseId && warehouseType === 'normal') newErrors.warehouse = t("products.add.errors.warehouseRequired")
+    if (!weight || Number(weight) <= 0) newErrors.weight = t("products.add.errors.weightRequired")
 
     setErrors(newErrors)
     if (Object.keys(newErrors).length > 0) {
-      toast.error("Vui lòng kiểm tra lại các trường bị lỗi")
+      toast.error(t("products.add.errors.checkForm"))
     }
     return Object.keys(newErrors).length === 0
   }
@@ -455,6 +467,12 @@ export function AddProduct() {
         video: uploadedVideo,
         variants,
         combinations,
+        stock: combinations.length > 0 ? combinations.reduce((acc, curr) => acc + Number(curr.stock || 0), 0) : Number(stock),
+        warehouse: {
+          type: warehouseType,
+          id: warehouseId,
+          syncWms
+        },
         shipping: { weight: Number(weight), length: Number(length), width: Number(width), height: Number(height) },
         other: { condition, isPreOrder, prepTime: Number(prepTime) },
         status: publish ? 'published' : 'hidden',
@@ -465,12 +483,11 @@ export function AddProduct() {
       await addDoc(collection(db, 'products'), productData)
       
       localStorage.removeItem('productDraft')
-      toast.success(publish ? "Đã lưu và hiển thị sản phẩm!" : "Đã lưu sản phẩm (ẩn)!")
+      toast.success(publish ? t("products.add.saveSuccessPublished") : t("products.add.saveSuccessHidden"))
       
       // Reset form or redirect
     } catch (error) {
-      console.error("Error saving product:", error)
-      toast.error("Có lỗi xảy ra khi lưu sản phẩm")
+      handleFirestoreError(error, OperationType.CREATE, "products")
     } finally {
       setIsSaving(false)
     }
@@ -488,6 +505,7 @@ export function AddProduct() {
     { id: "basic", label: t("products.add.tabs.basic") },
     { id: "description", label: t("products.add.tabs.description") },
     { id: "sales", label: t("products.add.tabs.sales") },
+    { id: "warehouse", label: t("products.add.tabs.warehouse", "Kho vận") },
     { id: "shipping", label: t("products.add.tabs.shipping") },
     { id: "other", label: t("products.add.tabs.other") },
   ]
@@ -730,7 +748,7 @@ export function AddProduct() {
                         disabled={isCategorizing}
                       >
                         {isCategorizing ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                        Gợi ý bằng AI
+                        {t("products.add.aiSuggest")}
                       </Button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 z-50">
@@ -796,9 +814,9 @@ export function AddProduct() {
                   
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium">Phân loại hàng</h4>
+                      <h4 className="text-sm font-medium">{t("products.add.sales.variantClassification")}</h4>
                       <Button variant="outline" size="sm" onClick={() => setVariants([...variants, { name: '', options: [''] }])} disabled={variants.length >= 2}>
-                        <Plus className="h-4 w-4 mr-2" /> Thêm nhóm phân loại
+                        <Plus className="h-4 w-4 mr-2" /> {t("products.add.sales.addVariantGroup")}
                       </Button>
                     </div>
 
@@ -809,7 +827,7 @@ export function AddProduct() {
                         </button>
                         <div className="space-y-4">
                           <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                            <label className="text-sm">Tên nhóm</label>
+                            <label className="text-sm">{t("products.add.sales.groupName")}</label>
                             <Input 
                               value={variant.name} 
                               onChange={(e) => {
@@ -817,11 +835,11 @@ export function AddProduct() {
                                 newVariants[vIdx].name = e.target.value;
                                 setVariants(newVariants);
                               }} 
-                              placeholder="VD: Màu sắc, Kích thước..." 
+                              placeholder={t("products.add.sales.groupNamePlaceholder")} 
                             />
                           </div>
                           <div className="grid grid-cols-[120px_1fr] items-start gap-4">
-                            <label className="text-sm pt-2">Phân loại</label>
+                            <label className="text-sm pt-2">{t("products.add.sales.variant")}</label>
                             <div className="space-y-2">
                               {variant.options.map((opt, oIdx) => (
                                 <div key={oIdx} className="flex gap-2">
@@ -832,7 +850,7 @@ export function AddProduct() {
                                       newVariants[vIdx].options[oIdx] = e.target.value;
                                       setVariants(newVariants);
                                     }} 
-                                    placeholder="VD: Đỏ, Xanh, S, M..." 
+                                    placeholder={t("products.add.sales.variantPlaceholder")} 
                                   />
                                   <Button variant="ghost" size="icon" onClick={() => {
                                     const newVariants = [...variants];
@@ -848,7 +866,7 @@ export function AddProduct() {
                                 newVariants[vIdx].options.push('');
                                 setVariants(newVariants);
                               }}>
-                                <Plus className="h-4 w-4 mr-2" /> Thêm phân loại
+                                <Plus className="h-4 w-4 mr-2" /> {t("products.add.sales.addVariant")}
                               </Button>
                             </div>
                           </div>
@@ -861,11 +879,11 @@ export function AddProduct() {
                       <div className="space-y-4 mt-6">
                         {/* Bulk Apply */}
                         <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-md border">
-                          <span className="text-sm font-medium whitespace-nowrap">Áp dụng hàng loạt:</span>
-                          <Input type="number" placeholder="Giá" value={bulkPrice} onChange={e => setBulkPrice(e.target.value)} className="w-32 h-9 bg-background" />
-                          <Input type="number" placeholder="Kho hàng" value={bulkStock} onChange={e => setBulkStock(e.target.value)} className="w-32 h-9 bg-background" />
-                          <Input placeholder="SKU" value={bulkSku} onChange={e => setBulkSku(e.target.value)} className="w-32 h-9 bg-background" />
-                          <Button size="sm" onClick={handleBulkApply}>Áp dụng</Button>
+                          <span className="text-sm font-medium whitespace-nowrap">{t("products.add.sales.bulkApply")}:</span>
+                          <Input type="number" placeholder={t("products.add.sales.price")} value={bulkPrice} onChange={e => setBulkPrice(e.target.value)} className="w-32 h-9 bg-background" />
+                          <Input type="number" placeholder={t("products.add.sales.stock")} value={bulkStock} onChange={e => setBulkStock(e.target.value)} className="w-32 h-9 bg-background" />
+                          <Input placeholder={t("products.add.sales.sku")} value={bulkSku} onChange={e => setBulkSku(e.target.value)} className="w-32 h-9 bg-background" />
+                          <Button size="sm" onClick={handleBulkApply}>{t("products.add.sales.apply")}</Button>
                         </div>
 
                         <div className="border rounded-md overflow-hidden overflow-x-auto">
@@ -873,9 +891,9 @@ export function AddProduct() {
                             <thead className="bg-muted text-muted-foreground">
                               <tr>
                                 {variants.filter(v => v.name.trim() !== '').map((v, i) => <th key={i} className="px-4 py-2 font-medium">{v.name}</th>)}
-                                <th className="px-4 py-2 font-medium">Giá</th>
-                                <th className="px-4 py-2 font-medium">Kho hàng</th>
-                                <th className="px-4 py-2 font-medium">SKU</th>
+                                <th className="px-4 py-2 font-medium">{t("products.add.sales.price")}</th>
+                                <th className="px-4 py-2 font-medium">{t("products.add.sales.stock")}</th>
+                                <th className="px-4 py-2 font-medium">{t("products.add.sales.sku")}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y">
@@ -929,28 +947,94 @@ export function AddProduct() {
                         </div>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-[120px_1fr] items-center gap-4 mt-6">
-                        <label className="text-sm font-medium">
-                          <span className="text-destructive">*</span> Giá sản phẩm
-                        </label>
-                        <div>
-                          <Input 
-                            type="number" 
-                            placeholder="0" 
-                            value={costPrice} 
-                            onChange={(e) => setCostPrice(e.target.value)} 
-                            className={cn("w-48", errors.price && "border-destructive")} 
-                          />
-                          {errors.price && <p className="text-sm text-destructive mt-1">{errors.price}</p>}
+                      <div className="space-y-4 mt-6">
+                        <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                          <label className="text-sm font-medium">
+                            <span className="text-destructive">*</span> {t("products.add.sales.productPrice")}
+                          </label>
+                          <div>
+                            <Input 
+                              type="number" 
+                              placeholder="0" 
+                              value={costPrice} 
+                              onChange={(e) => setCostPrice(e.target.value)} 
+                              className={cn("w-48", errors.price && "border-destructive")} 
+                            />
+                            {errors.price && <p className="text-sm text-destructive mt-1">{errors.price}</p>}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                          <label className="text-sm font-medium">
+                            <span className="text-destructive">*</span> {t("products.add.sales.productStock")}
+                          </label>
+                          <div>
+                            <Input 
+                              type="number" 
+                              placeholder="0" 
+                              value={stock} 
+                              onChange={(e) => setStock(e.target.value)} 
+                              className={cn("w-48", errors.stock && "border-destructive")} 
+                            />
+                            {errors.stock && <p className="text-sm text-destructive mt-1">{errors.stock}</p>}
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
                 </TabsContent>
+
+                <TabsContent value="warehouse" className="mt-0 space-y-6 animate-in fade-in duration-300">
+                  <h3 className="text-lg font-medium">{t("products.add.tabs.warehouse")}</h3>
+                  
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.warehouse.type")}
+                    </div>
+                    <Select value={warehouseType} onValueChange={setWarehouseType}>
+                      <SelectTrigger className="w-64">
+                        <SelectValue placeholder={t("products.add.warehouse.selectType")} />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        <SelectItem value="normal">{t("products.add.warehouse.normal")}</SelectItem>
+                        <SelectItem value="fulfillment">{t("products.add.warehouse.fulfillment")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {warehouseType === 'normal' && (
+                    <div className="grid grid-cols-[200px_1fr] gap-4">
+                      <div className="text-sm font-medium pt-2">
+                        <span className="text-destructive">*</span> {t("products.add.warehouse.selectWarehouse")}
+                      </div>
+                      <div>
+                        <Select value={warehouseId} onValueChange={setWarehouseId}>
+                          <SelectTrigger className={cn("w-64", errors.warehouse && "border-destructive")}>
+                            <SelectValue placeholder={t("products.add.warehouse.selectWarehouse")} />
+                          </SelectTrigger>
+                          <SelectContent position="popper">
+                            <SelectItem value="wh_hn_01">Kho Tổng Hà Nội</SelectItem>
+                            <SelectItem value="wh_hcm_01">Kho Tổng TP.HCM</SelectItem>
+                            <SelectItem value="wh_dn_01">Kho Đà Nẵng</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {errors.warehouse && <p className="text-sm text-destructive mt-1">{errors.warehouse}</p>}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">{t("products.add.warehouse.syncWms")}</div>
+                    <div className="flex items-center gap-4 pt-2">
+                      <Switch checked={syncWms} onCheckedChange={setSyncWms} />
+                      <span className="text-sm text-muted-foreground">{t("products.add.warehouse.syncWmsDesc")}</span>
+                    </div>
+                  </div>
+                </TabsContent>
+
                 <TabsContent value="shipping" className="mt-0 space-y-6 animate-in fade-in duration-300">
                   <h3 className="text-lg font-medium">{t("products.add.tabs.shipping")}</h3>
                   <div className="grid grid-cols-[200px_1fr] gap-4">
-                    <div className="text-sm font-medium pt-2">Cân nặng (Sau khi đóng gói)</div>
+                    <div className="text-sm font-medium pt-2">{t("products.add.shipping.weight")}</div>
                     <div>
                       <div className="flex items-center gap-2">
                         <Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="0" className={cn("w-32", errors.weight && "border-destructive")} />
@@ -960,18 +1044,18 @@ export function AddProduct() {
                     </div>
                   </div>
                   <div className="grid grid-cols-[200px_1fr] gap-4">
-                    <div className="text-sm font-medium pt-2">Kích thước đóng gói</div>
+                    <div className="text-sm font-medium pt-2">{t("products.add.shipping.dimensions")}</div>
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-2">
-                        <Input type="number" value={length} onChange={e => setLength(e.target.value)} placeholder="D" className="w-20" />
+                        <Input type="number" value={length} onChange={e => setLength(e.target.value)} placeholder={t("products.add.shipping.length")} className="w-20" />
                         <span className="text-muted-foreground">cm</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Input type="number" value={width} onChange={e => setWidth(e.target.value)} placeholder="R" className="w-20" />
+                        <Input type="number" value={width} onChange={e => setWidth(e.target.value)} placeholder={t("products.add.shipping.width")} className="w-20" />
                         <span className="text-muted-foreground">cm</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Input type="number" value={height} onChange={e => setHeight(e.target.value)} placeholder="C" className="w-20" />
+                        <Input type="number" value={height} onChange={e => setHeight(e.target.value)} placeholder={t("products.add.shipping.height")} className="w-20" />
                         <span className="text-muted-foreground">cm</span>
                       </div>
                     </div>
@@ -980,30 +1064,30 @@ export function AddProduct() {
                 <TabsContent value="other" className="mt-0 space-y-6 animate-in fade-in duration-300">
                   <h3 className="text-lg font-medium">{t("products.add.tabs.other")}</h3>
                   <div className="grid grid-cols-[200px_1fr] gap-4">
-                    <div className="text-sm font-medium pt-2">Tình trạng</div>
+                    <div className="text-sm font-medium pt-2">{t("products.add.other.condition")}</div>
                     <Select value={condition} onValueChange={setCondition}>
                       <SelectTrigger className="w-64">
-                        <SelectValue placeholder="Chọn tình trạng" />
+                        <SelectValue placeholder={t("products.add.other.selectCondition")} />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        <SelectItem value="new">Mới</SelectItem>
-                        <SelectItem value="used">Đã sử dụng</SelectItem>
+                        <SelectItem value="new">{t("products.add.other.new")}</SelectItem>
+                        <SelectItem value="used">{t("products.add.other.used")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="grid grid-cols-[200px_1fr] gap-4">
-                    <div className="text-sm font-medium pt-2">Hàng đặt trước</div>
+                    <div className="text-sm font-medium pt-2">{t("products.add.other.preOrder")}</div>
                     <div className="flex items-center gap-4 pt-2">
                       <Switch checked={isPreOrder} onCheckedChange={setIsPreOrder} />
-                      <span className="text-sm text-muted-foreground">Tôi sẽ cần thêm thời gian để chuẩn bị hàng</span>
+                      <span className="text-sm text-muted-foreground">{t("products.add.other.preOrderDesc")}</span>
                     </div>
                   </div>
                   {isPreOrder && (
                     <div className="grid grid-cols-[200px_1fr] gap-4">
-                      <div className="text-sm font-medium pt-2">Thời gian chuẩn bị hàng</div>
+                      <div className="text-sm font-medium pt-2">{t("products.add.other.prepTime")}</div>
                       <div className="flex items-center gap-2">
                         <Input type="number" value={prepTime} onChange={e => setPrepTime(e.target.value)} className="w-32" />
-                        <span className="text-muted-foreground">ngày</span>
+                        <span className="text-muted-foreground">{t("products.add.other.days")}</span>
                       </div>
                     </div>
                   )}
@@ -1025,7 +1109,7 @@ export function AddProduct() {
                 {/* Image placeholder */}
                 <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
                   {coverImage || images[0] ? (
-                    <img src={coverImage || images[0]} alt="Preview" className="w-full h-full object-cover" />
+                    <img src={coverImage || images[0]?.url} alt="Preview" className="w-full h-full object-cover" />
                   ) : (
                     <ShoppingBag className="h-12 w-12 text-muted-foreground/30" />
                   )}

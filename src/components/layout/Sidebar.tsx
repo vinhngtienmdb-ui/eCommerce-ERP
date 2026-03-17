@@ -165,6 +165,7 @@ const navigationGroups = [
           { nameKey: "booking", href: "/admin-workspace/booking" },
           { nameKey: "requests", href: "/admin-workspace/requests" },
           { nameKey: "documents", href: "/admin-workspace/documents" },
+          { nameKey: "documentSettings", href: "/admin-workspace/document-settings" },
         ]
       },
       { nameKey: "legal", href: "/legal", icon: ShieldCheck },

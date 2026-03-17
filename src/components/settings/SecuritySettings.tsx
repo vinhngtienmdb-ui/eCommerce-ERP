@@ -40,12 +40,12 @@ export function SecuritySettings() {
 
   const handleUpdatePassword = async () => {
     if (!newPassword || !confirmPassword || !currentPassword) {
-      setMessage({ type: 'error', text: "Vui lòng điền đầy đủ thông tin" })
+      setMessage({ type: 'error', text: t("settings.security.fillAllFields") })
       return
     }
 
     if (newPassword !== confirmPassword) {
-      setMessage({ type: 'error', text: "Mật khẩu xác nhận không khớp" })
+      setMessage({ type: 'error', text: t("settings.security.passwordMismatch") })
       return
     }
 
@@ -63,17 +63,17 @@ export function SecuritySettings() {
       // Update password
       await updatePassword(user, newPassword)
       
-      setMessage({ type: 'success', text: "Đổi mật khẩu thành công!" })
+      setMessage({ type: 'success', text: t("settings.security.passwordUpdateSuccess") })
       setCurrentPassword("")
       setNewPassword("")
       setConfirmPassword("")
     } catch (error: any) {
       console.error("Password update error:", error)
-      let errorText = "Đã có lỗi xảy ra. Vui lòng thử lại."
+      let errorText = t("settings.security.passwordUpdateError")
       if (error.code === 'auth/wrong-password') {
-        errorText = "Mật khẩu hiện tại không chính xác."
+        errorText = t("settings.security.wrongPassword")
       } else if (error.code === 'auth/requires-recent-login') {
-        errorText = "Vui lòng đăng nhập lại để thực hiện thao tác này."
+        errorText = t("settings.security.requiresRecentLogin")
       }
       setMessage({ type: 'error', text: errorText })
     } finally {
@@ -135,7 +135,7 @@ export function SecuritySettings() {
               onClick={handleUpdatePassword}
               disabled={loading}
             >
-              {loading ? "Đang xử lý..." : t("settings.security.updatePassword")}
+              {loading ? t("common.processing") : t("settings.security.updatePassword")}
             </Button>
           </CardContent>
         </Card>

@@ -98,7 +98,7 @@ export function GeneralSettings() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <Button variant="outline" size="sm">{t("common.upload")}</Button>
-                  <p className="text-[10px] text-muted-foreground">PNG, JPG up to 2MB</p>
+                  <p className="text-[10px] text-muted-foreground">{t("settings.general.logoDesc")}</p>
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@ export function GeneralSettings() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <Button variant="outline" size="sm">{t("common.upload")}</Button>
-                  <p className="text-[10px] text-muted-foreground">ICO, PNG 32x32</p>
+                  <p className="text-[10px] text-muted-foreground">{t("settings.general.naviconDesc")}</p>
                 </div>
               </div>
             </div>

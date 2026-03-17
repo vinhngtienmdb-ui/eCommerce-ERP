@@ -159,50 +159,50 @@ export function Customers() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("customers.stats.totalCustomers")}</CardTitle>
             <div className="p-2 bg-blue-100 rounded-full">
               <Users className="h-4 w-4 text-blue-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{customersData.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Registered users</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("customers.stats.registeredUsers")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Today</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("customers.stats.newToday")}</CardTitle>
             <div className="p-2 bg-green-100 rounded-full">
               <UserPlus className="h-4 w-4 text-green-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground mt-1">+5% from yesterday</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("customers.stats.fromYesterday")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Now</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("customers.stats.activeNow")}</CardTitle>
             <div className="p-2 bg-yellow-100 rounded-full">
               <Zap className="h-4 w-4 text-yellow-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">45</div>
-            <p className="text-xs text-muted-foreground mt-1">Online users</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("customers.stats.onlineUsers")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">VIP Members</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("customers.stats.vipMembers")}</CardTitle>
             <div className="p-2 bg-purple-100 rounded-full">
               <Crown className="h-4 w-4 text-purple-600" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{customersData.filter(c => c.status === 'vip').length}</div>
-            <p className="text-xs text-muted-foreground mt-1">High value</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("customers.stats.highValue")}</p>
           </CardContent>
         </Card>
       </div>
@@ -212,7 +212,7 @@ export function Customers() {
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-semibold flex items-center gap-2 text-indigo-700">
               <Brain className="h-5 w-5" />
-              AI Customer Insights & Segmentation
+              {t("customers.ai.insightsTitle")}
             </CardTitle>
             <Button 
               variant="ghost" 
@@ -225,14 +225,14 @@ export function Customers() {
             </Button>
           </div>
           <CardDescription className="text-indigo-600/80">
-            Phân tích hành vi mua sắm để tự động phân loại và gợi ý chiến dịch chăm sóc.
+            {t("customers.ai.insightsDesc")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {isAiLoading ? (
             <div className="flex items-center gap-2 text-indigo-500/60 italic py-2">
               <Loader2 className="h-4 w-4 animate-spin" />
-              Đang phân tích hành vi khách hàng...
+              {t("customers.ai.analyzing")}
             </div>
           ) : aiInsights ? (
             <div className="space-y-4">
@@ -256,7 +256,7 @@ export function Customers() {
                 className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
-                Phân tích Phân khúc Khách hàng
+                {t("customers.ai.analyzeButton")}
               </Button>
             </div>
           )}
@@ -283,7 +283,7 @@ export function Customers() {
                   <div className="relative w-64">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Search customers..."
+                      placeholder={t("customers.crm.searchPlaceholder")}
                       className="pl-8"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
@@ -300,7 +300,7 @@ export function Customers() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t("customers.crm.buyerName")}</TableHead>
-                    <TableHead>Contact</TableHead>
+                    <TableHead>{t("customers.crm.contact")}</TableHead>
                     <TableHead className="text-center">{t("customers.crm.totalOrders")}</TableHead>
                     <TableHead className="text-right">{t("customers.crm.totalSpent")}</TableHead>
                     <TableHead className="text-right">{t("customers.crm.walletBalance")}</TableHead>
@@ -330,7 +330,7 @@ export function Customers() {
                       <TableCell>{customer.lastOrder}</TableCell>
                       <TableCell>
                         <Badge variant={customer.status === 'vip' ? 'default' : customer.status === 'active' ? 'secondary' : 'outline'}>
-                          {customer.status.toUpperCase()}
+                          {t(`customers.segments.${customer.status}`)}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -400,11 +400,11 @@ export function Customers() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Product</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t("orders.id")}</TableHead>
+                  <TableHead>{t("common.date")}</TableHead>
+                  <TableHead>{t("orders.product")}</TableHead>
+                  <TableHead className="text-right">{t("orders.total")}</TableHead>
+                  <TableHead>{t("common.status")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -416,7 +416,7 @@ export function Customers() {
                     <TableCell className="text-right">{formatVND(order.amount)}</TableCell>
                     <TableCell>
                       <Badge variant={order.status === 'delivered' ? 'default' : 'secondary'}>
-                        {order.status.toUpperCase()}
+                        {t(`orders.status.${order.status}`)}
                       </Badge>
                     </TableCell>
                   </TableRow>

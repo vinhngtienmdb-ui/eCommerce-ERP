@@ -44,34 +44,35 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { db } from "@/src/lib/firebase"
 import { collection, getDocs } from "firebase/firestore"
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
-const revenueData = [
-  { name: "Tháng 1", total: 125000000 },
-  { name: "Tháng 2", total: 145000000 },
-  { name: "Tháng 3", total: 185000000 },
-  { name: "Tháng 4", total: 165000000 },
-  { name: "Tháng 5", total: 210000000 },
-  { name: "Tháng 6", total: 195000000 },
-  { name: "Tháng 7", total: 245000000 },
-]
-
-const ordersData = [
-  { name: "Thứ 2", orders: 120 },
-  { name: "Thứ 3", orders: 150 },
-  { name: "Thứ 4", orders: 180 },
-  { name: "Thứ 5", orders: 140 },
-  { name: "Thứ 6", orders: 200 },
-  { name: "Thứ 7", orders: 250 },
-  { name: "Chủ Nhật", orders: 220 },
-]
-
 export function Dashboard() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const revenueData = [
+    { name: t("common.months.jan"), total: 125000000 },
+    { name: t("common.months.feb"), total: 145000000 },
+    { name: t("common.months.mar"), total: 185000000 },
+    { name: t("common.months.apr"), total: 165000000 },
+    { name: t("common.months.may"), total: 210000000 },
+    { name: t("common.months.jun"), total: 195000000 },
+    { name: t("common.months.jul"), total: 245000000 },
+  ]
+
+  const ordersData = [
+    { name: t("common.weekdays.mon"), orders: 120 },
+    { name: t("common.weekdays.tue"), orders: 150 },
+    { name: t("common.weekdays.wed"), orders: 180 },
+    { name: t("common.weekdays.thu"), orders: 140 },
+    { name: t("common.weekdays.fri"), orders: 200 },
+    { name: t("common.weekdays.sat"), orders: 250 },
+    { name: t("common.weekdays.sun"), orders: 220 },
+  ]
 
   const [aiBriefing, setAiBriefing] = useState<string | null>(null)
   const [isAiLoading, setIsAiLoading] = useState(false)
@@ -82,7 +83,7 @@ export function Dashboard() {
       const querySnapshot = await getDocs(collection(db, "products"))
       setProductCount(querySnapshot.size)
     } catch (error) {
-      console.error("Error fetching product count:", error)
+      handleFirestoreError(error, OperationType.LIST, "products")
     }
   }
 
@@ -97,7 +98,7 @@ export function Dashboard() {
       setAiBriefing(response.text || null)
     } catch (error) {
       console.error("AI Briefing Error:", error)
-      setAiBriefing("Unable to load AI briefing at this time.")
+      setAiBriefing(t("dashboard.aiBriefing.error"))
     } finally {
       setIsAiLoading(false)
     }
@@ -109,14 +110,14 @@ export function Dashboard() {
   }, [])
 
   const modules = [
-    { title: "nav.products", icon: Package, color: "text-blue-500", bg: "bg-blue-100", href: "/products", description: "Manage your product catalog" },
-    { title: "nav.orders", icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-100", href: "/orders", description: "Track and process orders" },
-    { title: "nav.sellers", icon: Users, color: "text-purple-500", bg: "bg-purple-100", href: "/sellers", description: "Manage seller accounts" },
-    { title: "nav.customers", icon: UsersRound, color: "text-green-500", bg: "bg-green-100", href: "/customers", description: "View customer data" },
-    { title: "nav.marketing", icon: Megaphone, color: "text-pink-500", bg: "bg-pink-100", href: "/marketing", description: "Campaigns and promotions" },
-    { title: "nav.finance", icon: Wallet, color: "text-emerald-500", bg: "bg-emerald-100", href: "/finance", description: "Financial overview" },
-    { title: "nav.hr", icon: UsersRound, color: "text-cyan-500", bg: "bg-cyan-100", href: "/hr", description: "Human resources" },
-    { title: "nav.analytics", icon: BarChart3, color: "text-indigo-500", bg: "bg-indigo-100", href: "/analytics", description: "Data analysis" },
+    { title: "nav.products", icon: Package, color: "text-blue-500", bg: "bg-blue-100", href: "/products", description: t("dashboard.modules.products") },
+    { title: "nav.orders", icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-100", href: "/orders", description: t("dashboard.modules.orders") },
+    { title: "nav.sellers", icon: Users, color: "text-purple-500", bg: "bg-purple-100", href: "/sellers", description: t("dashboard.modules.sellers") },
+    { title: "nav.customers", icon: UsersRound, color: "text-green-500", bg: "bg-green-100", href: "/customers", description: t("dashboard.modules.customers") },
+    { title: "nav.marketing", icon: Megaphone, color: "text-pink-500", bg: "bg-pink-100", href: "/marketing", description: t("dashboard.modules.marketing") },
+    { title: "nav.finance", icon: Wallet, color: "text-emerald-500", bg: "bg-emerald-100", href: "/finance", description: t("dashboard.modules.finance") },
+    { title: "nav.hr", icon: UsersRound, color: "text-cyan-500", bg: "bg-cyan-100", href: "/hr", description: t("dashboard.modules.hr") },
+    { title: "nav.analytics", icon: BarChart3, color: "text-indigo-500", bg: "bg-indigo-100", href: "/analytics", description: t("dashboard.modules.analytics") },
   ]
 
   return (
@@ -240,7 +241,7 @@ export function Dashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{productCount !== null ? productCount : "..."}</div>
             <p className="text-xs text-muted-foreground flex items-center mt-1">
-              Sản phẩm đang bán
+              {t("dashboard.activeProductsDesc")}
             </p>
           </CardContent>
         </Card>
@@ -249,7 +250,7 @@ export function Dashboard() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-          <h3 className="text-lg font-semibold text-blue-600">Quick Access</h3>
+          <h3 className="text-lg font-semibold text-blue-600">{t("dashboard.quickAccess")}</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {modules.map((item) => (
@@ -260,8 +261,8 @@ export function Dashboard() {
             >
               <CardContent className="p-6">
                 <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info("Added to favorites"); }} />
-                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-blue-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info("Help clicked"); }} />
+                  <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info(t("dashboard.addedToFavorites")); }} />
+                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-blue-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info(t("dashboard.helpClicked")); }} />
                 </div>
                 <div className="flex items-start gap-4">
                   <div className={`p-3 rounded-xl ${item.bg}`}>

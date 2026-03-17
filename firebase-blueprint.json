@@ -40,12 +40,97 @@
         "permissions": { "type": "object" }
       },
       "required": ["uid", "role"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Product information",
+      "type": "object",
+      "properties": {
+        "productName": { "type": "string" },
+        "brand": { "type": "string" },
+        "model": { "type": "string" },
+        "baseName": { "type": "string" },
+        "specifications": { "type": "string" },
+        "category": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "coverImage": { "type": "string" },
+        "video": { "type": "string" },
+        "variants": { "type": "array" },
+        "combinations": { "type": "array" },
+        "shipping": { "type": "object" },
+        "other": { "type": "object" },
+        "status": { "type": "string", "enum": ["published", "hidden"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["productName", "category", "userId"]
+    },
+    "User": {
+      "title": "User Profile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "address": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Document": {
+      "title": "Document",
+      "description": "Administrative document",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "number": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "object" },
+        "status": { "type": "string", "enum": ["draft", "pending_signature", "signed", "issued", "archived"] },
+        "creatorId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "direction": { "type": "string", "enum": ["incoming", "outgoing"] },
+        "sender": { "type": "string" },
+        "receiver": { "type": "string" },
+        "fileUrl": { "type": "string" },
+        "wordUrl": { "type": "string" },
+        "signatureSteps": { "type": "array" }
+      }
+    },
+    "DocumentTemplate": {
+      "title": "Document Template",
+      "description": "Template for administrative documents",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "content": { "type": "string" },
+        "fields": { "type": "array" }
+      }
+    },
+    "DocumentSettings": {
+      "title": "Document Settings",
+      "description": "Configuration for document management",
+      "type": "object",
+      "properties": {
+        "autoNumbering": { "type": "boolean" },
+        "prefix": { "type": "string" },
+        "currentNumber": { "type": "integer" },
+        "suffix": { "type": "string" }
+      }
     }
   },
   "firestore": {
     "/settings/global": {
       "schema": "Settings",
       "description": "Global system settings"
+    },
+    "/settings/documents": {
+      "schema": "DocumentSettings",
+      "description": "Document management settings"
     },
     "/audit_logs/{logId}": {
       "schema": "AuditLog",
@@ -54,6 +139,22 @@
     "/user_roles/{uid}": {
       "schema": "UserRole",
       "description": "User roles and permissions"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Product listings"
+    },
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/documents/{docId}": {
+      "schema": "Document",
+      "description": "Administrative documents"
+    },
+    "/document_templates/{templateId}": {
+      "schema": "DocumentTemplate",
+      "description": "Document templates"
     }
   }
 }

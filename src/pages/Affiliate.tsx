@@ -159,12 +159,12 @@ export function Affiliate() {
                     </CardTitle>
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₫245,000,000</div>
-                    <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
-                    </p>
-                  </CardContent>
+                    <CardContent>
+                      <div className="text-2xl font-bold">₫245,000,000</div>
+                      <p className="text-xs text-muted-foreground">
+                        {t("affiliate.overview.fromLastMonth", { percentage: "+20.1%" })}
+                      </p>
+                    </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -173,12 +173,12 @@ export function Affiliate() {
                     </CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+120</div>
-                    <p className="text-xs text-muted-foreground">
-                      +15 new this month
-                    </p>
-                  </CardContent>
+                    <CardContent>
+                      <div className="text-2xl font-bold">+120</div>
+                      <p className="text-xs text-muted-foreground">
+                        {t("affiliate.overview.newThisMonth", { count: 15 })}
+                      </p>
+                    </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -187,12 +187,12 @@ export function Affiliate() {
                     </CardTitle>
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₫35,000,000</div>
-                    <p className="text-xs text-muted-foreground">
-                      14.2% of revenue
-                    </p>
-                  </CardContent>
+                    <CardContent>
+                      <div className="text-2xl font-bold">₫35,000,000</div>
+                      <p className="text-xs text-muted-foreground">
+                        {t("affiliate.overview.ofRevenue", { percentage: "14.2%" })}
+                      </p>
+                    </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -201,24 +201,24 @@ export function Affiliate() {
                     </CardTitle>
                     <MousePointerClick className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">45,231</div>
-                    <p className="text-xs text-muted-foreground">
-                      +12% from last month
-                    </p>
-                  </CardContent>
+                    <CardContent>
+                      <div className="text-2xl font-bold">45,231</div>
+                      <p className="text-xs text-muted-foreground">
+                        {t("affiliate.overview.fromLastMonth", { percentage: "+12%" })}
+                      </p>
+                    </CardContent>
                 </Card>
               </div>
             )}
 
             {activeTab === "publishers" && (
               <Card>
-                <CardHeader>
-                  <CardTitle>{t("affiliate.tabs.publishers")}</CardTitle>
-                  <CardDescription>
-                    Manage your network of publishers and KOLs.
-                  </CardDescription>
-                </CardHeader>
+                  <CardHeader>
+                    <CardTitle>{t("affiliate.tabs.publishers")}</CardTitle>
+                    <CardDescription>
+                      {t("affiliate.publishers.description")}
+                    </CardDescription>
+                  </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
@@ -252,12 +252,12 @@ export function Affiliate() {
                                 pub.status === "active" ? "default" : "secondary"
                               }
                             >
-                              {pub.status}
+                              {t(`affiliate.publishers.statuses.${pub.status}`)}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
                             <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
-                              Edit
+                              {t("common.edit")}
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -304,7 +304,7 @@ export function Affiliate() {
                     </TableHeader>
                     <TableBody>
                       <TableRow>
-                        <TableCell>Electronics</TableCell>
+                        <TableCell>{t("affiliate.commissions.categories.Electronics")}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Input
@@ -322,7 +322,7 @@ export function Affiliate() {
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Fashion</TableCell>
+                        <TableCell>{t("affiliate.commissions.categories.Fashion")}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Input

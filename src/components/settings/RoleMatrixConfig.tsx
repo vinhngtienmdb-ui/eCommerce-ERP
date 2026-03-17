@@ -77,7 +77,7 @@ export function RoleMatrixConfig() {
                 onClick={() => setSelectedRole(role.id)}
                 className="rounded-full"
               >
-                {role.name}
+                {t(`settings.roles.names.${role.id}`)}
               </Button>
             ))}
           </div>

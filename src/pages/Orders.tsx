@@ -183,6 +183,12 @@ export function Orders() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => {
+            toast.success(t("orders.syncSuccess"))
+          }}>
+            <RefreshCw className="mr-2 h-4 w-4" />
+            {t("orders.syncWms")}
+          </Button>
           <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
