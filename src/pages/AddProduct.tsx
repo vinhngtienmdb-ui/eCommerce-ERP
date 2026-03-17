@@ -7,9 +7,11 @@ import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCar
 import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { toast } from "sonner"
 import { GoogleGenAI } from "@google/genai"
 import { useSettingsStore } from "@/src/store/useSettingsStore"
+import { initialPlatformFees } from "@/src/data/fees"
 
 export function AddProduct() {
   const { t } = useTranslation()
@@ -35,11 +37,11 @@ export function AddProduct() {
   const [selectedLevel2, setSelectedLevel2] = useState<string>("")
   const [selectedLevel3, setSelectedLevel3] = useState<string>("")
 
-  const categories = settings.categories || []
+  const categories = settings?.categories?.length > 0 ? settings.categories : initialPlatformFees
 
-  const level1Options = Array.from(new Set(categories.map((c: any) => c.level1)))
-  const level2Options = Array.from(new Set(categories.filter((c: any) => c.level1 === selectedLevel1).map((c: any) => c.level2)))
-  const level3Options = Array.from(new Set(categories.filter((c: any) => c.level1 === selectedLevel1 && c.level2 === selectedLevel2).map((c: any) => c.level3)))
+  const level1Options = Array.from(new Set(categories.map((c: any) => c.level1))).filter(Boolean)
+  const level2Options = Array.from(new Set(categories.filter((c: any) => c.level1 === selectedLevel1).map((c: any) => c.level2))).filter(Boolean)
+  const level3Options = Array.from(new Set(categories.filter((c: any) => c.level1 === selectedLevel1 && c.level2 === selectedLevel2).map((c: any) => c.level3))).filter(Boolean)
 
   // Auto-generate full product name
   const updateProductName = (b: string, m: string, bn: string, s: string) => {
@@ -126,277 +128,234 @@ export function AddProduct() {
 
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <div className="border-b">
-              <div className="flex px-2 overflow-x-auto">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={cn(
-                      "px-6 py-4 text-sm font-medium transition-colors relative whitespace-nowrap",
-                      activeTab === tab.id
-                        ? "text-primary border-b-2 border-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <Card>
+              <div className="border-b px-6 py-2">
+                <TabsList className="w-full justify-start bg-transparent h-auto p-0 space-x-6 overflow-x-auto overflow-y-hidden flex-nowrap">
+                  {tabs.map((tab) => (
+                    <TabsTrigger
+                      key={tab.id}
+                      value={tab.id}
+                      className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-0 py-3 text-sm font-medium text-muted-foreground hover:text-foreground data-[state=active]:text-primary transition-none"
+                    >
+                      {tab.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
               </div>
-            </div>
 
-            <CardContent className="p-6 space-y-8">
-              {/* Basic Info Section */}
-              <div id="basic" className="space-y-6">
-                <h3 className="text-lg font-medium">{t("products.add.basicInfo")}</h3>
-                
-                {/* Product Images */}
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.productImages")}
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4 text-sm">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="ratio" className="text-primary focus:ring-primary" defaultChecked />
-                        <span>{t("products.add.ratio11")}</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="ratio" className="text-primary focus:ring-primary" />
-                        <span>{t("products.add.ratio34")}</span>
-                      </label>
-                      <a href="#" className="text-primary hover:underline">{t("products.add.seeExample")}</a>
+              <CardContent className="p-6 space-y-8">
+                <TabsContent value="basic" className="mt-0 space-y-6 animate-in fade-in duration-300">
+                  <h3 className="text-lg font-medium">{t("products.add.basicInfo")}</h3>
+                  
+                  {/* Product Images */}
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.productImages")}
                     </div>
-                    
-                    <div className="flex gap-4">
-                      <div className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors">
-                        <ImagePlus className="h-6 w-6 mb-1" />
-                        <span className="text-[10px] text-center px-1">{t("products.add.addImage")}<br/>(0/9)</span>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4 text-sm">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="radio" name="ratio" className="text-primary focus:ring-primary" defaultChecked />
+                          <span>{t("products.add.ratio11")}</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="radio" name="ratio" className="text-primary focus:ring-primary" />
+                          <span>{t("products.add.ratio34")}</span>
+                        </label>
+                        <a href="#" className="text-primary hover:underline">{t("products.add.seeExample")}</a>
+                      </div>
+                      
+                      <div className="flex gap-4">
+                        <div className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors">
+                          <ImagePlus className="h-6 w-6 mb-1" />
+                          <span className="text-[10px] text-center px-1">{t("products.add.addImage")}<br/>(0/9)</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Cover Image */}
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.coverImage")}
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors shrink-0">
-                      <ImagePlus className="h-6 w-6 mb-1" />
-                      <span className="text-[10px]">(0/1)</span>
+                  {/* Cover Image */}
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.coverImage")}
                     </div>
-                    <div className="text-xs text-muted-foreground space-y-1 pt-1">
-                      <ul className="list-disc pl-4 space-y-1">
-                        <li>{t("products.add.coverImageHint1")}</li>
-                        <li>{t("products.add.coverImageHint2")}</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Product Video */}
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    {t("products.add.productVideo")}
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="w-24 h-24 border border-dashed rounded flex flex-col items-center justify-center text-muted-foreground cursor-pointer hover:bg-muted transition-colors shrink-0">
-                      <Video className="h-6 w-6 mb-1 text-primary" />
-                      <span className="text-[10px] text-primary">{t("products.add.addVideo")}</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground space-y-1 pt-1">
-                      <ul className="list-disc pl-4 space-y-1">
-                        <li>{t("products.add.videoHint1")}</li>
-                        <li>{t("products.add.videoHint2")}</li>
-                        <li>{t("products.add.videoHint3")}</li>
-                        <li>{t("products.add.videoHint4")}</li>
-                      </ul>
+                    <div className="flex gap-4">
+                      <div className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors shrink-0">
+                        <ImagePlus className="h-6 w-6 mb-1" />
+                        <span className="text-[10px]">(0/1)</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground space-y-1 pt-1">
+                        <ul className="list-disc pl-4 space-y-1">
+                          <li>{t("products.add.coverImageHint1")}</li>
+                          <li>{t("products.add.coverImageHint2")}</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Product Name Fields */}
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.brand")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.brandPlaceholder")} 
-                    value={brand}
-                    onChange={(e) => handleBrandChange(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.model")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.modelPlaceholder")} 
-                    value={model}
-                    onChange={(e) => handleModelChange(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.baseName")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.baseNamePlaceholder")} 
-                    value={baseName}
-                    onChange={(e) => handleBaseNameChange(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.specifications")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.specificationsPlaceholder")} 
-                    value={specifications}
-                    onChange={(e) => handleSpecsChange(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    {t("products.add.costPrice")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.costPricePlaceholder")} 
-                    value={costPrice}
-                    onChange={(e) => setCostPrice(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    {t("products.add.suggestedPrice")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.suggestedPricePlaceholder")} 
-                    value={suggestedPrice}
-                    onChange={(e) => setSuggestedPrice(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    {t("products.add.platformFee")}
-                  </div>
-                  <Input 
-                    placeholder={t("products.add.platformFeePlaceholder")} 
-                    value={platformFee}
-                    onChange={(e) => setPlatformFee(e.target.value)}
-                  />
-                </div>
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    {t("products.add.productName")}
-                  </div>
-                  <div>
-                    <div className="relative">
-                      <Input 
-                        placeholder={t("products.add.productNamePlaceholder")} 
-                        className="pr-16 bg-muted" 
-                        value={productName}
-                        readOnly
-                      />
-                      <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{productName.length}/120</span>
+                  {/* Product Video */}
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      {t("products.add.productVideo")}
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="w-24 h-24 border border-dashed rounded flex flex-col items-center justify-center text-muted-foreground cursor-pointer hover:bg-muted transition-colors shrink-0">
+                        <Video className="h-6 w-6 mb-1 text-primary" />
+                        <span className="text-[10px] text-primary">{t("products.add.addVideo")}</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground space-y-1 pt-1">
+                        <ul className="list-disc pl-4 space-y-1">
+                          <li>{t("products.add.videoHint1")}</li>
+                          <li>{t("products.add.videoHint2")}</li>
+                          <li>{t("products.add.videoHint3")}</li>
+                          <li>{t("products.add.videoHint4")}</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Category */}
-                <div className="grid grid-cols-[200px_1fr] gap-4 relative z-50">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.category")}
+                  {/* Product Name Fields */}
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.brand")}
+                    </div>
+                    <Input 
+                      placeholder={t("products.add.brandPlaceholder")} 
+                      value={brand}
+                      onChange={(e) => handleBrandChange(e.target.value)}
+                    />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 z-50">
-                    <Select value={selectedLevel1} onValueChange={(val) => { setSelectedLevel1(val); setSelectedLevel2(""); setSelectedLevel3(""); }}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("settings.fees.categoryLevel1Placeholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {level1Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={selectedLevel2} onValueChange={(val) => { setSelectedLevel2(val); setSelectedLevel3(""); }} disabled={!selectedLevel1}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("settings.fees.categoryLevel2Placeholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {level2Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={selectedLevel3} onValueChange={setSelectedLevel3} disabled={!selectedLevel2}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("settings.fees.categoryLevel3Placeholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {level3Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.model")}
+                    </div>
+                    <Input 
+                      placeholder={t("products.add.modelPlaceholder")} 
+                      value={model}
+                      onChange={(e) => handleModelChange(e.target.value)}
+                    />
                   </div>
-                </div>
-              </div>
-
-              {/* Description Section */}
-              <div id="description" className="space-y-6 pt-8 border-t">
-                <h3 className="text-lg font-medium">{t("products.add.description")}</h3>
-                
-                <div className="grid grid-cols-[200px_1fr] gap-4">
-                  <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.productDescription")}
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="mt-4 w-full gap-2 text-xs h-8 border-primary/50 text-primary hover:bg-primary/5"
-                      onClick={generateDescription}
-                      disabled={isGenerating}
-                    >
-                      {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                      {t("products.add.generateWithAi")}
-                    </Button>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.baseName")}
+                    </div>
+                    <Input 
+                      placeholder={t("products.add.baseNamePlaceholder")} 
+                      value={baseName}
+                      onChange={(e) => handleBaseNameChange(e.target.value)}
+                    />
                   </div>
-                  <div>
-                    <div className="relative">
-                      <Textarea 
-                        placeholder={t("products.add.descriptionPlaceholder")} 
-                        className="min-h-[200px] resize-y pb-8"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                      />
-                      <span className="absolute right-3 bottom-3 text-xs text-muted-foreground">{description.length}/3000</span>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.specifications")}
+                    </div>
+                    <Input 
+                      placeholder={t("products.add.specificationsPlaceholder")} 
+                      value={specifications}
+                      onChange={(e) => handleSpecsChange(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      {t("products.add.productName")}
+                    </div>
+                    <div>
+                      <div className="relative">
+                        <Input 
+                          placeholder={t("products.add.productNamePlaceholder")} 
+                          className="pr-16 bg-muted" 
+                          value={productName}
+                          readOnly
+                        />
+                        <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{productName.length}/120</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Disabled Sections */}
-              <div 
-                className="space-y-6 pt-8 border-t opacity-50 cursor-not-allowed"
-                onClick={() => toast.info(t("common.featureComingSoon"))}
-              >
-                <h3 className="text-lg font-medium">{t("products.add.salesInfo")}</h3>
-                <p className="text-sm text-muted-foreground">{t("products.add.salesInfoHint")}</p>
-              </div>
+                  {/* Category */}
+                  <div className="grid grid-cols-[200px_1fr] gap-4 relative z-50">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.category")}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 z-50">
+                      <Select value={selectedLevel1} onValueChange={(val) => { setSelectedLevel1(val); setSelectedLevel2(""); setSelectedLevel3(""); }}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={t("settings.fees.categoryLevel1Placeholder")} />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                          {level1Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                      <Select value={selectedLevel2} onValueChange={(val) => { setSelectedLevel2(val); setSelectedLevel3(""); }} disabled={!selectedLevel1 || level2Options.length === 0}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={t("settings.fees.categoryLevel2Placeholder")} />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                          {level2Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                      <Select value={selectedLevel3} onValueChange={setSelectedLevel3} disabled={!selectedLevel2 || level3Options.length === 0}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={t("settings.fees.categoryLevel3Placeholder")} />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                          {level3Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </TabsContent>
 
-              <div 
-                className="space-y-6 pt-8 border-t opacity-50 cursor-not-allowed"
-                onClick={() => toast.info(t("common.featureComingSoon"))}
-              >
-                <h3 className="text-lg font-medium">{t("products.add.shipping")}</h3>
-                <p className="text-sm text-muted-foreground">{t("products.add.shippingHint")}</p>
-              </div>
+                <TabsContent value="description" className="mt-0 space-y-6 animate-in fade-in duration-300">
+                  <h3 className="text-lg font-medium">{t("products.add.description")}</h3>
+                  
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">
+                      <span className="text-destructive">*</span> {t("products.add.productDescription")}
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-4 w-full gap-2 text-xs h-8 border-primary/50 text-primary hover:bg-primary/5"
+                        onClick={generateDescription}
+                        disabled={isGenerating}
+                      >
+                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        {t("products.add.generateWithAi")}
+                      </Button>
+                    </div>
+                    <div>
+                      <div className="relative">
+                        <Textarea 
+                          placeholder={t("products.add.descriptionPlaceholder")} 
+                          className="min-h-[200px] resize-y pb-8"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        />
+                        <span className="absolute right-3 bottom-3 text-xs text-muted-foreground">{description.length}/3000</span>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
 
-              <div 
-                className="space-y-6 pt-8 border-t opacity-50 cursor-not-allowed"
-                onClick={() => toast.info(t("common.featureComingSoon"))}
-              >
-                <h3 className="text-lg font-medium">{t("products.add.otherInfo")}</h3>
-              </div>
-            </CardContent>
-          </Card>
+                <TabsContent value="sales" className="mt-0">
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-in fade-in duration-300">
+                    <p>{t("common.featureComingSoon")}</p>
+                  </div>
+                </TabsContent>
+                <TabsContent value="shipping" className="mt-0">
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-in fade-in duration-300">
+                    <p>{t("common.featureComingSoon")}</p>
+                  </div>
+                </TabsContent>
+                <TabsContent value="other" className="mt-0">
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-in fade-in duration-300">
+                    <p>{t("common.featureComingSoon")}</p>
+                  </div>
+                </TabsContent>
+              </CardContent>
+            </Card>
+          </Tabs>
         </div>
 
         {/* Right Sidebar - Preview */}
