@@ -1,67 +1,77 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Layout } from "./components/layout/Layout"
-import { Dashboard } from "./pages/Dashboard"
-import { Products } from "./pages/Products"
-import { AddProduct } from "./pages/AddProduct"
-import { Orders } from "./pages/Orders"
-import { SellerList } from "./pages/sellers/SellerList"
-import { SellerApproval } from "./pages/sellers/SellerApproval"
-import { SellerRegistrationPage } from "./pages/sellers/SellerRegistrationPage"
-import { Customers } from "./pages/Customers"
-import { CustomerService } from "./pages/CustomerService"
-import { Marketing } from "./pages/Marketing"
-import { Affiliate } from "./pages/Affiliate"
-import { Purchasing } from "./pages/Purchasing"
-import { Accounting } from "./pages/finance/Accounting"
-import { Reconciliation } from "./pages/finance/Reconciliation"
-import { PnL } from "./pages/finance/PnL"
-import PaymentWallet from "./pages/PaymentWallet"
-import { Employees } from "./pages/hr/Employees"
-import { TimeAttendance } from "./pages/hr/TimeAttendance"
-import { Payroll } from "./pages/hr/Payroll"
-import { Performance } from "./pages/hr/Performance"
-import { SocialInsurance } from "./pages/hr/SocialInsurance"
-import { Recruitment } from "./pages/hr/Recruitment"
-import { PIT } from "./pages/hr/PIT"
-import { Goals } from "./pages/hr/Goals"
-import { HRInfo } from "./pages/hr/HRInfo"
-import { LeaveManagement } from "./pages/hr/LeaveManagement"
-import { AssetsPage } from "./pages/admin-workspace/AssetsPage"
-import { StationeryPage } from "./pages/admin-workspace/StationeryPage"
-import { BookingPage } from "./pages/admin-workspace/BookingPage"
-import { RequestsPage } from "./pages/admin-workspace/RequestsPage"
-import { DocumentsPage } from "./pages/admin-workspace/DocumentsPage"
-import { DocumentSettingsPage } from "./pages/admin-workspace/DocumentSettingsPage"
-import { Analytics } from "./pages/Analytics"
-import { Sales } from "./pages/Sales"
-import { Settings } from "./pages/Settings"
-import { LiveHub } from "./pages/LiveHub"
-import { Advertising } from "./pages/Advertising"
-import { Legal } from "./pages/Legal"
-import { SellerFinance } from "./pages/SellerFinance"
-import { SocialCommerce } from "./pages/SocialCommerce"
-import { BusinessPlanning } from "./pages/planning/BusinessPlanning"
-import KolManagement from "./pages/KolManagement"
-import Workspace from "./pages/workspace"
-import ExecutiveCenter from "./pages/executive/ExecutiveCenter"
-import Automation from "./pages/Automation"
-import MarketIntelligence from "./pages/MarketIntelligence"
-import ContentStudio from "./pages/ContentStudio"
-import Loyalty from "./pages/Loyalty"
-import Logistics from "./pages/Logistics"
-import EContract from "./pages/EContract"
+import { Suspense, lazy } from "react"
 import { AuthProvider, useAuth } from "./lib/AuthContext"
 import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
-import { FinanceDashboard } from "./pages/finance/FinanceDashboard"
-import { HRDashboard } from "./pages/hr/HRDashboard"
-import { AdminDashboard } from "./pages/admin-workspace/AdminDashboard"
 import { AiAssistant } from "./components/AiAssistant"
 import { Button } from "./components/ui/button"
+
+const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })))
+const Products = lazy(() => import("./pages/Products").then(m => ({ default: m.Products })))
+const AddProduct = lazy(() => import("./pages/AddProduct").then(m => ({ default: m.AddProduct })))
+const Orders = lazy(() => import("./pages/Orders").then(m => ({ default: m.Orders })))
+const SellerList = lazy(() => import("./pages/sellers/SellerList").then(m => ({ default: m.SellerList })))
+const SellerApproval = lazy(() => import("./pages/sellers/SellerApproval").then(m => ({ default: m.SellerApproval })))
+const SellerRegistrationPage = lazy(() => import("./pages/sellers/SellerRegistrationPage").then(m => ({ default: m.SellerRegistrationPage })))
+const Customers = lazy(() => import("./pages/Customers").then(m => ({ default: m.Customers })))
+const CustomerService = lazy(() => import("./pages/CustomerService").then(m => ({ default: m.CustomerService })))
+const Marketing = lazy(() => import("./pages/Marketing").then(m => ({ default: m.Marketing })))
+const Affiliate = lazy(() => import("./pages/Affiliate").then(m => ({ default: m.Affiliate })))
+const Purchasing = lazy(() => import("./pages/Purchasing").then(m => ({ default: m.Purchasing })))
+const Accounting = lazy(() => import("./pages/finance/Accounting").then(m => ({ default: m.Accounting })))
+const Reconciliation = lazy(() => import("./pages/finance/Reconciliation").then(m => ({ default: m.Reconciliation })))
+const PnL = lazy(() => import("./pages/finance/PnL").then(m => ({ default: m.PnL })))
+const PaymentWallet = lazy(() => import("./pages/PaymentWallet"))
+const Employees = lazy(() => import("./pages/hr/Employees").then(m => ({ default: m.Employees })))
+const TimeAttendance = lazy(() => import("./pages/hr/TimeAttendance").then(m => ({ default: m.TimeAttendance })))
+const Payroll = lazy(() => import("./pages/hr/Payroll").then(m => ({ default: m.Payroll })))
+const Performance = lazy(() => import("./pages/hr/Performance").then(m => ({ default: m.Performance })))
+const SocialInsurance = lazy(() => import("./pages/hr/SocialInsurance").then(m => ({ default: m.SocialInsurance })))
+const Recruitment = lazy(() => import("./pages/hr/Recruitment").then(m => ({ default: m.Recruitment })))
+const PIT = lazy(() => import("./pages/hr/PIT").then(m => ({ default: m.PIT })))
+const Goals = lazy(() => import("./pages/hr/Goals").then(m => ({ default: m.Goals })))
+const HRInfo = lazy(() => import("./pages/hr/HRInfo").then(m => ({ default: m.HRInfo })))
+const LeaveManagement = lazy(() => import("./pages/hr/LeaveManagement").then(m => ({ default: m.LeaveManagement })))
+const AssetsPage = lazy(() => import("./pages/admin-workspace/AssetsPage").then(m => ({ default: m.AssetsPage })))
+const StationeryPage = lazy(() => import("./pages/admin-workspace/StationeryPage").then(m => ({ default: m.StationeryPage })))
+const BookingPage = lazy(() => import("./pages/admin-workspace/BookingPage").then(m => ({ default: m.BookingPage })))
+const RequestsPage = lazy(() => import("./pages/admin-workspace/RequestsPage").then(m => ({ default: m.RequestsPage })))
+const DocumentsPage = lazy(() => import("./pages/admin-workspace/DocumentsPage").then(m => ({ default: m.DocumentsPage })))
+const DocumentSettingsPage = lazy(() => import("./pages/admin-workspace/DocumentSettingsPage").then(m => ({ default: m.DocumentSettingsPage })))
+const Analytics = lazy(() => import("./pages/Analytics").then(m => ({ default: m.Analytics })))
+const Sales = lazy(() => import("./pages/Sales").then(m => ({ default: m.Sales })))
+const Settings = lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })))
+const LiveHub = lazy(() => import("./pages/LiveHub").then(m => ({ default: m.LiveHub })))
+const Advertising = lazy(() => import("./pages/Advertising").then(m => ({ default: m.Advertising })))
+const Legal = lazy(() => import("./pages/Legal").then(m => ({ default: m.Legal })))
+const SellerFinance = lazy(() => import("./pages/SellerFinance").then(m => ({ default: m.SellerFinance })))
+const SocialCommerce = lazy(() => import("./pages/SocialCommerce").then(m => ({ default: m.SocialCommerce })))
+const BusinessPlanning = lazy(() => import("./pages/planning/BusinessPlanning").then(m => ({ default: m.BusinessPlanning })))
+const KolManagement = lazy(() => import("./pages/KolManagement"))
+const Workspace = lazy(() => import("./pages/workspace"))
+const ExecutiveCenter = lazy(() => import("./pages/executive/ExecutiveCenter"))
+const Automation = lazy(() => import("./pages/Automation"))
+const MarketIntelligence = lazy(() => import("./pages/MarketIntelligence"))
+const ContentStudio = lazy(() => import("./pages/ContentStudio"))
+const Loyalty = lazy(() => import("./pages/Loyalty"))
+const Logistics = lazy(() => import("./pages/Logistics"))
+const EContract = lazy(() => import("./pages/EContract"))
+const FinanceDashboard = lazy(() => import("./pages/finance/FinanceDashboard").then(m => ({ default: m.FinanceDashboard })))
+const HRDashboard = lazy(() => import("./pages/hr/HRDashboard").then(m => ({ default: m.HRDashboard })))
+const AdminDashboard = lazy(() => import("./pages/admin-workspace/AdminDashboard").then(m => ({ default: m.AdminDashboard })))
 
 function FallbackRoute() {
   const { t } = useTranslation()
   return <div className="p-6 text-center text-muted-foreground">{t("common.moduleUnderConstruction")}</div>
+}
+
+function LoadingFallback() {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+  )
 }
 
 function ProtectedLayout() {
@@ -69,11 +79,7 @@ function ProtectedLayout() {
   const { t } = useTranslation()
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    )
+    return <LoadingFallback />
   }
 
   if (!user) {
@@ -102,90 +108,93 @@ export default function App() {
       <BrowserRouter>
         <Toaster position="top-right" richColors />
         <AiAssistant />
-        <Routes>
-          <Route path="/" element={<ProtectedLayout />}>
-            <Route index element={<Dashboard />} />
-          <Route path="products">
-            <Route index element={<Navigate to="all" replace />} />
-            <Route path="all" element={<Products />} />
-            <Route path="add" element={<AddProduct />} />
-            <Route path="ai-tools" element={<FallbackRoute />} />
-          </Route>
-          <Route path="workspace">
-            <Route index element={<Workspace />} />
-            <Route path="tasks" element={<Workspace />} />
-            <Route path="chat" element={<Workspace />} />
-            <Route path="email" element={<Workspace />} />
-            <Route path="calendar" element={<Workspace />} />
-          </Route>
-          <Route path="orders" element={<Orders />} />
-          <Route path="sellers">
-            <Route index element={<Navigate to="list" replace />} />
-            <Route path="list" element={<SellerList />} />
-            <Route path="approval" element={<SellerApproval />} />
-            <Route path="registration" element={<SellerRegistrationPage />} />
-          </Route>
-          <Route path="customers" element={<Customers />} />
-          <Route path="kol-koc" element={<KolManagement />} />
-          <Route path="customer-service" element={<CustomerService />} />
-          <Route path="marketing" element={<Marketing />} />
-          <Route path="planning" element={<BusinessPlanning />} />
-          <Route path="social" element={<SocialCommerce />} />
-          <Route path="advertising" element={<Advertising />} />
-          <Route path="affiliate" element={<Affiliate />} />
-          <Route path="purchasing" element={<Purchasing />} />
-          <Route path="legal" element={<Legal />} />
-          <Route path="executive">
-            <Route index element={<ExecutiveCenter />} />
-            <Route path="direction" element={<ExecutiveCenter />} />
-            <Route path="strategy" element={<ExecutiveCenter />} />
-          </Route>
-          <Route path="finance">
-            <Route index element={<FinanceDashboard />} />
-            <Route path="accounting" element={<Accounting />} />
-            <Route path="reconciliation" element={<Reconciliation />} />
-            <Route path="pnl" element={<PnL />} />
-            <Route path="payment-wallet" element={<PaymentWallet />} />
-            <Route path="seller-finance" element={<SellerFinance />} />
-          </Route>
-          <Route path="hr">
-            <Route index element={<HRDashboard />} />
-            <Route path="payroll" element={<Payroll />} />
-            <Route path="social-insurance" element={<SocialInsurance />} />
-            <Route path="recruitment" element={<Recruitment />} />
-            <Route path="employees" element={<Employees />} />
-            <Route path="time-attendance" element={<TimeAttendance />} />
-            <Route path="leave" element={<LeaveManagement />} />
-            <Route path="performance" element={<Performance />} />
-            <Route path="pit" element={<PIT />} />
-            <Route path="goals" element={<Goals />} />
-            <Route path="info" element={<HRInfo />} />
-          </Route>
-          <Route path="admin-workspace">
-            <Route index element={<AdminDashboard />} />
-            <Route path="assets" element={<AssetsPage />} />
-            <Route path="stationery" element={<StationeryPage />} />
-            <Route path="booking" element={<BookingPage />} />
-            <Route path="requests" element={<RequestsPage />} />
-            <Route path="documents" element={<DocumentsPage />} />
-            <Route path="document-settings" element={<DocumentSettingsPage />} />
-          </Route>
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="sales" element={<Sales />} />
-          <Route path="live" element={<LiveHub />} />
-          <Route path="automation" element={<Automation />} />
-          <Route path="market-intelligence" element={<MarketIntelligence />} />
-          <Route path="content-studio" element={<ContentStudio />} />
-          <Route path="loyalty" element={<Loyalty />} />
-          <Route path="logistics" element={<Logistics />} />
-          <Route path="e-contract" element={<EContract />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="*" element={<FallbackRoute />} />
-        </Route>
-      </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<ProtectedLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="products">
+                <Route index element={<Navigate to="all" replace />} />
+                <Route path="all" element={<Products />} />
+                <Route path="add" element={<AddProduct />} />
+                <Route path="ai-tools" element={<FallbackRoute />} />
+              </Route>
+              <Route path="workspace">
+                <Route index element={<Workspace />} />
+                <Route path="tasks" element={<Workspace />} />
+                <Route path="chat" element={<Workspace />} />
+                <Route path="email" element={<Workspace />} />
+                <Route path="calendar" element={<Workspace />} />
+              </Route>
+              <Route path="orders" element={<Orders />} />
+              <Route path="sellers">
+                <Route index element={<Navigate to="list" replace />} />
+                <Route path="list" element={<SellerList />} />
+                <Route path="approval" element={<SellerApproval />} />
+                <Route path="registration" element={<SellerRegistrationPage />} />
+              </Route>
+              <Route path="customers" element={<Customers />} />
+              <Route path="kol-koc" element={<KolManagement />} />
+              <Route path="customer-service" element={<CustomerService />} />
+              <Route path="marketing" element={<Marketing />} />
+              <Route path="planning" element={<BusinessPlanning />} />
+              <Route path="social" element={<SocialCommerce />} />
+              <Route path="advertising" element={<Advertising />} />
+              <Route path="affiliate" element={<Affiliate />} />
+              <Route path="purchasing" element={<Purchasing />} />
+              <Route path="legal" element={<Legal />} />
+              <Route path="executive">
+                <Route index element={<ExecutiveCenter />} />
+                <Route path="direction" element={<ExecutiveCenter />} />
+                <Route path="strategy" element={<ExecutiveCenter />} />
+              </Route>
+              <Route path="finance">
+                <Route index element={<FinanceDashboard />} />
+                <Route path="accounting" element={<Accounting />} />
+                <Route path="reconciliation" element={<Reconciliation />} />
+                <Route path="pnl" element={<PnL />} />
+                <Route path="payment-wallet" element={<PaymentWallet />} />
+                <Route path="seller-finance" element={<SellerFinance />} />
+              </Route>
+              <Route path="hr">
+                <Route index element={<HRDashboard />} />
+                <Route path="payroll" element={<Payroll />} />
+                <Route path="social-insurance" element={<SocialInsurance />} />
+                <Route path="recruitment" element={<Recruitment />} />
+                <Route path="employees" element={<Employees />} />
+                <Route path="time-attendance" element={<TimeAttendance />} />
+                <Route path="leave" element={<LeaveManagement />} />
+                <Route path="performance" element={<Performance />} />
+                <Route path="pit" element={<PIT />} />
+                <Route path="goals" element={<Goals />} />
+                <Route path="info" element={<HRInfo />} />
+              </Route>
+              <Route path="admin-workspace">
+                <Route index element={<AdminDashboard />} />
+                <Route path="assets" element={<AssetsPage />} />
+                <Route path="stationery" element={<StationeryPage />} />
+                <Route path="booking" element={<BookingPage />} />
+                <Route path="requests" element={<RequestsPage />} />
+                <Route path="documents" element={<DocumentsPage />} />
+                <Route path="document-settings" element={<DocumentSettingsPage />} />
+              </Route>
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="sales" element={<Sales />} />
+              <Route path="live" element={<LiveHub />} />
+              <Route path="automation" element={<Automation />} />
+              <Route path="market-intelligence" element={<MarketIntelligence />} />
+              <Route path="content-studio" element={<ContentStudio />} />
+              <Route path="loyalty" element={<Loyalty />} />
+              <Route path="logistics" element={<Logistics />} />
+              <Route path="e-contract" element={<EContract />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="*" element={<FallbackRoute />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </AuthProvider>
   )
 }
+
 
 
