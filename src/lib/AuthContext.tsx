@@ -1,17 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut, 
-  User 
-} from 'firebase/auth';
-import { auth } from './firebase';
+
+interface User {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+}
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: () => Promise<void>;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
@@ -22,29 +21,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    // Check for existing session
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
   }, []);
 
-  const login = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed:", error);
+  const login = async (username: string, password: string): Promise<boolean> => {
+    if (username === 'admin' && password === 'admin') {
+      const adminUser = { uid: 'admin', email: 'admin@admin.com', displayName: 'Admin' };
+      setUser(adminUser);
+      localStorage.setItem('user', JSON.stringify(adminUser));
+      return true;
     }
+    return false;
   };
 
   const logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    setUser(null);
+    localStorage.removeItem('user');
   };
 
   return (

@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Layout } from "./components/layout/Layout"
-import { Suspense, lazy } from "react"
+import { Suspense, lazy, useState } from "react"
 import { AuthProvider, useAuth } from "./lib/AuthContext"
 import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
 import { AiAssistant } from "./components/AiAssistant"
 import { Button } from "./components/ui/button"
+import { Input } from "./components/ui/input"
 
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })))
 const Products = lazy(() => import("./pages/Products").then(m => ({ default: m.Products })))
@@ -77,6 +78,16 @@ function LoadingFallback() {
 function ProtectedLayout() {
   const { user, loading, login } = useAuth()
   const { t } = useTranslation()
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const handleLogin = async () => {
+    const success = await login(username, password)
+    if (!success) {
+      setError("Invalid username or password")
+    }
+  }
 
   if (loading) {
     return <LoadingFallback />
@@ -90,9 +101,14 @@ function ProtectedLayout() {
             <h1 className="text-3xl font-bold">Lucky ERP</h1>
             <p className="mt-2 text-muted-foreground">{t("auth.loginToContinue")}</p>
           </div>
-          <Button onClick={login} className="w-full py-6 text-lg" size="lg">
-            {t("auth.loginWithGoogle")}
-          </Button>
+          <div className="space-y-4">
+            <Input placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
+            <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+            {error && <p className="text-destructive text-sm text-center">{error}</p>}
+            <Button onClick={handleLogin} className="w-full py-6 text-lg" size="lg">
+              Login
+            </Button>
+          </div>
         </div>
       </div>
     )
