@@ -28,15 +28,24 @@ import { Input } from "@/src/components/ui/input"
 import { Badge } from "@/src/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
 import { toast } from "sonner"
 
 import { useDataStore } from "@/src/store/useDataStore"
 
 const EContract = () => {
   const { t } = useTranslation()
-  const { eContracts: contracts } = useDataStore()
+  const { eContracts: contracts, addEContract } = useDataStore()
   const [isSigning, setIsSigning] = useState(false)
   const [selectedContract, setSelectedContract] = useState<any>(null)
+  const [isAddContractOpen, setIsAddContractOpen] = useState(false)
+  const [newContract, setNewContract] = useState({
+    title: "",
+    type: "Legal",
+    party: "",
+    security: "Standard"
+  })
 
   const handleSign = () => {
     setIsSigning(true)
@@ -45,6 +54,25 @@ const EContract = () => {
       toast.success("Contract signed successfully with Digital Certificate #E-9921-X")
       setSelectedContract(null)
     }, 2000)
+  }
+
+  const handleAddContract = () => {
+    if (!newContract.title || !newContract.party) {
+      toast.error("Please fill in all required fields")
+      return
+    }
+    addEContract({
+      id: `CTR-2026-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+      title: newContract.title,
+      type: newContract.type,
+      party: newContract.party,
+      status: "pending_me",
+      date: new Date().toISOString().split('T')[0],
+      security: newContract.security
+    })
+    setIsAddContractOpen(false)
+    setNewContract({ title: "", type: "Legal", party: "", security: "Standard" })
+    toast.success("Contract added successfully")
   }
 
   return (
@@ -64,9 +92,32 @@ const EContract = () => {
             <Button variant="outline" className="bg-white border-slate-200 shadow-sm">
               <History className="mr-2 h-4 w-4" /> Audit Logs
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200">
-              <Plus className="mr-2 h-4 w-4" /> New Contract
-            </Button>
+            <Dialog open={isAddContractOpen} onOpenChange={setIsAddContractOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200">
+                  <Plus className="mr-2 h-4 w-4" /> New Contract
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>New Contract</DialogTitle>
+                  <DialogDescription>Add a new electronic agreement.</DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="title" className="text-right">Title</Label>
+                    <Input id="title" value={newContract.title} onChange={(e) => setNewContract({...newContract, title: e.target.value})} className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="party" className="text-right">Party</Label>
+                    <Input id="party" value={newContract.party} onChange={(e) => setNewContract({...newContract, party: e.target.value})} className="col-span-3" />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleAddContract}>Add</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
