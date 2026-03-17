@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Textarea } from "@/src/components/ui/textarea"
 import { useTranslation } from "react-i18next"
-import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCart, ChevronDown, Sparkles, Loader2 } from "lucide-react"
+import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCart, ChevronDown, Sparkles, Loader2, Bold, Italic, List } from "lucide-react"
 import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
@@ -14,6 +14,86 @@ import { GoogleGenAI } from "@google/genai"
 import { useSettingsStore } from "@/src/store/useSettingsStore"
 import { initialPlatformFees } from "@/src/data/fees"
 import { X, Plus } from "lucide-react"
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { collection, addDoc } from 'firebase/firestore'
+import { db, storage, auth } from '@/src/lib/firebase'
+
+const SortableImage = ({ id, url, onRemove }: { id: string, url: string, onRemove: () => void }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="relative aspect-square rounded-md border bg-muted flex items-center justify-center overflow-hidden group cursor-grab active:cursor-grabbing">
+      <img src={url} alt="Product" className="w-full h-full object-cover" />
+      <button 
+        onClick={(e) => { e.stopPropagation(); onRemove(); }} 
+        onPointerDown={(e) => e.stopPropagation()}
+        className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <X className="h-3 w-3" />
+      </button>
+    </div>
+  )
+}
+
+const MenuBar = ({ editor }: { editor: any }) => {
+  if (!editor) return null
+
+  return (
+    <div className="flex flex-wrap gap-1 p-1 border-b bg-muted/20">
+      <Button
+        variant="ghost" size="sm"
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={cn("h-8 w-8 p-0", editor.isActive('bold') && "bg-muted")}
+      >
+        <Bold className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost" size="sm"
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={cn("h-8 w-8 p-0", editor.isActive('italic') && "bg-muted")}
+      >
+        <Italic className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost" size="sm"
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={cn("h-8 w-8 p-0", editor.isActive('bulletList') && "bg-muted")}
+      >
+        <List className="h-4 w-4" />
+      </Button>
+    </div>
+  )
+}
 
 export function AddProduct() {
   const { t } = useTranslation()
@@ -39,13 +119,16 @@ export function AddProduct() {
   const [selectedLevel2, setSelectedLevel2] = useState<string>("")
   const [selectedLevel3, setSelectedLevel3] = useState<string>("")
 
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<{id: string, url: string}[]>([])
   const [coverImage, setCoverImage] = useState<string | null>(null)
   const [video, setVideo] = useState<string | null>(null)
   
   // Sales
   const [variants, setVariants] = useState<{name: string, options: string[]}[]>([])
   const [combinations, setCombinations] = useState<{id: string, options: Record<string, string>, price: string, stock: string, sku: string}[]>([])
+  const [bulkPrice, setBulkPrice] = useState("")
+  const [bulkStock, setBulkStock] = useState("")
+  const [bulkSku, setBulkSku] = useState("")
 
   // Shipping
   const [weight, setWeight] = useState("")
@@ -57,6 +140,9 @@ export function AddProduct() {
   const [condition, setCondition] = useState("new")
   const [isPreOrder, setIsPreOrder] = useState(false)
   const [prepTime, setPrepTime] = useState("2")
+
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSaving, setIsSaving] = useState(false)
 
   const categories = settings?.categories?.length > 0 ? settings.categories : initialPlatformFees
 
@@ -76,7 +162,10 @@ export function AddProduct() {
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newImages = Array.from(e.target.files).map(file => URL.createObjectURL(file))
+      const newImages = Array.from(e.target.files).map(file => ({
+        id: Math.random().toString(36).substr(2, 9),
+        url: URL.createObjectURL(file)
+      }))
       setImages(prev => [...prev, ...newImages].slice(0, 9))
     }
   }
@@ -92,6 +181,90 @@ export function AddProduct() {
       setVideo(URL.createObjectURL(e.target.files[0]))
     }
   }
+
+  const handleBulkApply = () => {
+    setCombinations(prev => prev.map(comb => ({
+      ...comb,
+      price: bulkPrice || comb.price,
+      stock: bulkStock || comb.stock,
+      sku: bulkSku || comb.sku
+    })))
+    toast.success("Đã áp dụng hàng loạt")
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      setImages((items) => {
+        const oldIndex = items.findIndex(item => item.id === active.id)
+        const newIndex = items.findIndex(item => item.id === over.id)
+        return arrayMove(items, oldIndex, newIndex)
+      })
+    }
+  }
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: description,
+    onUpdate: ({ editor }) => {
+      setDescription(editor.getHTML())
+    },
+  })
+
+  // Load draft
+  useEffect(() => {
+    const draft = localStorage.getItem('productDraft')
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft)
+        if (parsed.productName) setProductName(parsed.productName)
+        if (parsed.brand) setBrand(parsed.brand)
+        if (parsed.model) setModel(parsed.model)
+        if (parsed.baseName) setBaseName(parsed.baseName)
+        if (parsed.specifications) setSpecifications(parsed.specifications)
+        if (parsed.description) {
+          setDescription(parsed.description)
+          editor?.commands.setContent(parsed.description)
+        }
+        if (parsed.costPrice) setCostPrice(parsed.costPrice)
+        if (parsed.suggestedPrice) setSuggestedPrice(parsed.suggestedPrice)
+        if (parsed.platformFee) setPlatformFee(parsed.platformFee)
+        if (parsed.selectedLevel1) setSelectedLevel1(parsed.selectedLevel1)
+        if (parsed.selectedLevel2) setSelectedLevel2(parsed.selectedLevel2)
+        if (parsed.selectedLevel3) setSelectedLevel3(parsed.selectedLevel3)
+        if (parsed.variants) setVariants(parsed.variants)
+        if (parsed.combinations) setCombinations(parsed.combinations)
+        if (parsed.weight) setWeight(parsed.weight)
+        if (parsed.length) setLength(parsed.length)
+        if (parsed.width) setWidth(parsed.width)
+        if (parsed.height) setHeight(parsed.height)
+        if (parsed.condition) setCondition(parsed.condition)
+        if (parsed.isPreOrder !== undefined) setIsPreOrder(parsed.isPreOrder)
+        if (parsed.prepTime) setPrepTime(parsed.prepTime)
+      } catch (e) {
+        console.error("Failed to parse draft", e)
+      }
+    }
+  }, [editor])
+
+  // Save draft
+  useEffect(() => {
+    const draft = {
+      productName, brand, model, baseName, specifications,
+      description, costPrice, suggestedPrice, platformFee,
+      selectedLevel1, selectedLevel2, selectedLevel3,
+      variants, combinations, weight, length, width, height,
+      condition, isPreOrder, prepTime
+    }
+    localStorage.setItem('productDraft', JSON.stringify(draft))
+  }, [productName, brand, model, baseName, specifications, description, costPrice, suggestedPrice, platformFee, selectedLevel1, selectedLevel2, selectedLevel3, variants, combinations, weight, length, width, height, condition, isPreOrder, prepTime])
 
   useEffect(() => {
     // Generate combinations
@@ -164,32 +337,75 @@ export function AddProduct() {
     }
   }
 
-  const handleSave = (publish: boolean) => {
-    if (!productName || !selectedLevel1) {
-      toast.error("Vui lòng nhập tên sản phẩm và chọn ngành hàng.")
-      return
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    if (!productName) newErrors.productName = "Tên sản phẩm là bắt buộc"
+    if (!selectedLevel1) newErrors.category = "Ngành hàng là bắt buộc"
+    if (!coverImage && images.length === 0) newErrors.images = "Cần ít nhất 1 hình ảnh"
+    if (combinations.length > 0) {
+      if (combinations.some(c => !c.price)) newErrors.combinations = "Vui lòng nhập giá cho tất cả phân loại"
+    } else {
+      if (!costPrice) newErrors.price = "Giá sản phẩm là bắt buộc"
     }
+    if (!weight || Number(weight) <= 0) newErrors.weight = "Cân nặng phải lớn hơn 0"
 
-    // In a real app, this would save to Firestore
-    console.log("Saving product:", {
-      productName,
-      brand,
-      model,
-      baseName,
-      specifications,
-      category: [selectedLevel1, selectedLevel2, selectedLevel3].filter(Boolean),
-      description,
-      images,
-      coverImage,
-      video,
-      variants,
-      combinations,
-      shipping: { weight, length, width, height },
-      other: { condition, isPreOrder, prepTime },
-      status: publish ? 'published' : 'hidden'
-    })
+    setErrors(newErrors)
+    if (Object.keys(newErrors).length > 0) {
+      toast.error("Vui lòng kiểm tra lại các trường bị lỗi")
+    }
+    return Object.keys(newErrors).length === 0
+  }
 
-    toast.success(publish ? "Đã lưu và hiển thị sản phẩm!" : "Đã lưu sản phẩm (ẩn)!")
+  const uploadFile = async (fileUrl: string, path: string) => {
+    if (!fileUrl.startsWith('blob:')) return fileUrl
+    const response = await fetch(fileUrl)
+    const blob = await response.blob()
+    const storageRef = ref(storage, path)
+    await uploadBytes(storageRef, blob)
+    return await getDownloadURL(storageRef)
+  }
+
+  const handleSave = async (publish: boolean) => {
+    if (!validateForm()) return
+
+    setIsSaving(true)
+    try {
+      const uploadedImages = await Promise.all(images.map((img, i) => uploadFile(img.url, `products/${Date.now()}_img_${i}`)))
+      const uploadedCover = coverImage ? await uploadFile(coverImage, `products/${Date.now()}_cover`) : uploadedImages[0]
+      const uploadedVideo = video ? await uploadFile(video, `products/${Date.now()}_video`) : null
+
+      const productData = {
+        productName,
+        brand,
+        model,
+        baseName,
+        specifications,
+        category: [selectedLevel1, selectedLevel2, selectedLevel3].filter(Boolean),
+        description,
+        images: uploadedImages,
+        coverImage: uploadedCover,
+        video: uploadedVideo,
+        variants,
+        combinations,
+        shipping: { weight: Number(weight), length: Number(length), width: Number(width), height: Number(height) },
+        other: { condition, isPreOrder, prepTime: Number(prepTime) },
+        status: publish ? 'published' : 'hidden',
+        createdAt: new Date().toISOString(),
+        userId: auth.currentUser?.uid || 'anonymous'
+      }
+
+      await addDoc(collection(db, 'products'), productData)
+      
+      localStorage.removeItem('productDraft')
+      toast.success(publish ? "Đã lưu và hiển thị sản phẩm!" : "Đã lưu sản phẩm (ẩn)!")
+      
+      // Reset form or redirect
+    } catch (error) {
+      console.error("Error saving product:", error)
+      toast.error("Có lỗi xảy ra khi lưu sản phẩm")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const suggestions = [
@@ -277,25 +493,35 @@ export function AddProduct() {
                       </div>
                       
                       <div className="flex gap-4 flex-wrap">
-                        {images.map((img, idx) => (
-                          <div key={idx} className="relative w-24 h-24 border rounded overflow-hidden group">
-                            <img src={img} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                            <button 
-                              onClick={() => setImages(images.filter((_, i) => i !== idx))} 
-                              className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </div>
-                        ))}
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <SortableContext
+                            items={images.map(img => img.id)}
+                            strategy={rectSortingStrategy}
+                          >
+                            {images.map((img) => (
+                              <div key={img.id} className="w-24 h-24">
+                                <SortableImage 
+                                  id={img.id} 
+                                  url={img.url} 
+                                  onRemove={() => setImages(images.filter(i => i.id !== img.id))} 
+                                />
+                              </div>
+                            ))}
+                          </SortableContext>
+                        </DndContext>
                         {images.length < 9 && (
-                          <label className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors">
+                          <label className={cn("w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors", errors.images && "border-destructive text-destructive")}>
                             <input type="file" multiple accept="image/*" className="hidden" onChange={handleImageUpload} />
                             <ImagePlus className="h-6 w-6 mb-1" />
                             <span className="text-[10px] text-center px-1">{t("products.add.addImage")}<br/>({images.length}/9)</span>
                           </label>
                         )}
                       </div>
+                      {errors.images && <p className="text-sm text-destructive mt-1">{errors.images}</p>}
                     </div>
                   </div>
 
@@ -316,7 +542,7 @@ export function AddProduct() {
                           </button>
                         </div>
                       ) : (
-                        <label className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors shrink-0">
+                        <label className={cn("w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors shrink-0", errors.images && "border-destructive text-destructive")}>
                           <input type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
                           <ImagePlus className="h-6 w-6 mb-1" />
                           <span className="text-[10px]">(0/1)</span>
@@ -414,12 +640,13 @@ export function AddProduct() {
                       <div className="relative">
                         <Input 
                           placeholder={t("products.add.productNamePlaceholder")} 
-                          className="pr-16 bg-muted" 
+                          className={cn("pr-16 bg-muted", errors.productName && "border-destructive")} 
                           value={productName}
                           readOnly
                         />
                         <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{productName.length}/120</span>
                       </div>
+                      {errors.productName && <p className="text-sm text-destructive mt-1">{errors.productName}</p>}
                     </div>
                   </div>
 
@@ -430,7 +657,7 @@ export function AddProduct() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 z-50">
                       <Select value={selectedLevel1} onValueChange={(val) => { setSelectedLevel1(val); setSelectedLevel2(""); setSelectedLevel3(""); }}>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className={cn("w-full", errors.category && "border-destructive")}>
                           <SelectValue placeholder={t("settings.fees.categoryLevel1Placeholder")} />
                         </SelectTrigger>
                         <SelectContent position="popper">
@@ -475,14 +702,12 @@ export function AddProduct() {
                       </Button>
                     </div>
                     <div>
-                      <div className="relative">
-                        <Textarea 
-                          placeholder={t("products.add.descriptionPlaceholder")} 
-                          className="min-h-[200px] resize-y pb-8"
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                        />
-                        <span className="absolute right-3 bottom-3 text-xs text-muted-foreground">{description.length}/3000</span>
+                      <div className="border rounded-md overflow-hidden bg-background">
+                        <MenuBar editor={editor} />
+                        <EditorContent editor={editor} className="p-4 min-h-[200px] prose max-w-none focus:outline-none" />
+                      </div>
+                      <div className="text-xs text-muted-foreground text-right mt-2">
+                        {description.replace(/<[^>]*>?/gm, '').length}/3000
                       </div>
                     </div>
                   </div>
@@ -554,65 +779,92 @@ export function AddProduct() {
                     ))}
 
                     {/* Combinations Table */}
-                    {combinations.length > 0 && (
-                      <div className="mt-6 border rounded-md overflow-hidden overflow-x-auto">
-                        <table className="w-full text-sm text-left whitespace-nowrap">
-                          <thead className="bg-muted text-muted-foreground">
-                            <tr>
-                              {variants.filter(v => v.name.trim() !== '').map((v, i) => <th key={i} className="px-4 py-2 font-medium">{v.name}</th>)}
-                              <th className="px-4 py-2 font-medium">Giá</th>
-                              <th className="px-4 py-2 font-medium">Kho hàng</th>
-                              <th className="px-4 py-2 font-medium">SKU</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y">
-                            {combinations.map((comb, cIdx) => (
-                              <tr key={comb.id}>
-                                {Object.values(comb.options).map((opt, i) => (
-                                  <td key={i} className="px-4 py-2">{opt}</td>
-                                ))}
-                                <td className="px-4 py-2">
-                                  <Input 
-                                    type="number" 
-                                    value={comb.price} 
-                                    onChange={(e) => {
-                                      const newCombs = [...combinations];
-                                      newCombs[cIdx].price = e.target.value;
-                                      setCombinations(newCombs);
-                                    }} 
-                                    placeholder="0" 
-                                    className="w-24 h-8" 
-                                  />
-                                </td>
-                                <td className="px-4 py-2">
-                                  <Input 
-                                    type="number" 
-                                    value={comb.stock} 
-                                    onChange={(e) => {
-                                      const newCombs = [...combinations];
-                                      newCombs[cIdx].stock = e.target.value;
-                                      setCombinations(newCombs);
-                                    }} 
-                                    placeholder="0" 
-                                    className="w-24 h-8" 
-                                  />
-                                </td>
-                                <td className="px-4 py-2">
-                                  <Input 
-                                    value={comb.sku} 
-                                    onChange={(e) => {
-                                      const newCombs = [...combinations];
-                                      newCombs[cIdx].sku = e.target.value;
-                                      setCombinations(newCombs);
-                                    }} 
-                                    placeholder="SKU" 
-                                    className="w-32 h-8" 
-                                  />
-                                </td>
+                    {combinations.length > 0 ? (
+                      <div className="space-y-4 mt-6">
+                        {/* Bulk Apply */}
+                        <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-md border">
+                          <span className="text-sm font-medium whitespace-nowrap">Áp dụng hàng loạt:</span>
+                          <Input type="number" placeholder="Giá" value={bulkPrice} onChange={e => setBulkPrice(e.target.value)} className="w-32 h-9 bg-background" />
+                          <Input type="number" placeholder="Kho hàng" value={bulkStock} onChange={e => setBulkStock(e.target.value)} className="w-32 h-9 bg-background" />
+                          <Input placeholder="SKU" value={bulkSku} onChange={e => setBulkSku(e.target.value)} className="w-32 h-9 bg-background" />
+                          <Button size="sm" onClick={handleBulkApply}>Áp dụng</Button>
+                        </div>
+
+                        <div className="border rounded-md overflow-hidden overflow-x-auto">
+                          <table className="w-full text-sm text-left whitespace-nowrap">
+                            <thead className="bg-muted text-muted-foreground">
+                              <tr>
+                                {variants.filter(v => v.name.trim() !== '').map((v, i) => <th key={i} className="px-4 py-2 font-medium">{v.name}</th>)}
+                                <th className="px-4 py-2 font-medium">Giá</th>
+                                <th className="px-4 py-2 font-medium">Kho hàng</th>
+                                <th className="px-4 py-2 font-medium">SKU</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody className="divide-y">
+                              {combinations.map((comb, cIdx) => (
+                                <tr key={comb.id}>
+                                  {Object.values(comb.options).map((opt, i) => (
+                                    <td key={i} className="px-4 py-2">{opt}</td>
+                                  ))}
+                                  <td className="px-4 py-2">
+                                    <Input 
+                                      type="number" 
+                                      value={comb.price} 
+                                      onChange={(e) => {
+                                        const newCombs = [...combinations];
+                                        newCombs[cIdx].price = e.target.value;
+                                        setCombinations(newCombs);
+                                      }} 
+                                      placeholder="0" 
+                                      className={cn("w-24 h-8", errors.combinations && !comb.price && "border-destructive")} 
+                                    />
+                                  </td>
+                                  <td className="px-4 py-2">
+                                    <Input 
+                                      type="number" 
+                                      value={comb.stock} 
+                                      onChange={(e) => {
+                                        const newCombs = [...combinations];
+                                        newCombs[cIdx].stock = e.target.value;
+                                        setCombinations(newCombs);
+                                      }} 
+                                      placeholder="0" 
+                                      className="w-24 h-8" 
+                                    />
+                                  </td>
+                                  <td className="px-4 py-2">
+                                    <Input 
+                                      value={comb.sku} 
+                                      onChange={(e) => {
+                                        const newCombs = [...combinations];
+                                        newCombs[cIdx].sku = e.target.value;
+                                        setCombinations(newCombs);
+                                      }} 
+                                      placeholder="SKU" 
+                                      className="w-32 h-8" 
+                                    />
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-[120px_1fr] items-center gap-4 mt-6">
+                        <label className="text-sm font-medium">
+                          <span className="text-destructive">*</span> Giá sản phẩm
+                        </label>
+                        <div>
+                          <Input 
+                            type="number" 
+                            placeholder="0" 
+                            value={costPrice} 
+                            onChange={(e) => setCostPrice(e.target.value)} 
+                            className={cn("w-48", errors.price && "border-destructive")} 
+                          />
+                          {errors.price && <p className="text-sm text-destructive mt-1">{errors.price}</p>}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -621,9 +873,12 @@ export function AddProduct() {
                   <h3 className="text-lg font-medium">{t("products.add.tabs.shipping")}</h3>
                   <div className="grid grid-cols-[200px_1fr] gap-4">
                     <div className="text-sm font-medium pt-2">Cân nặng (Sau khi đóng gói)</div>
-                    <div className="flex items-center gap-2">
-                      <Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="0" className="w-32" />
-                      <span className="text-muted-foreground">gr</span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="0" className={cn("w-32", errors.weight && "border-destructive")} />
+                        <span className="text-muted-foreground">gr</span>
+                      </div>
+                      {errors.weight && <p className="text-sm text-destructive mt-1">{errors.weight}</p>}
                     </div>
                   </div>
                   <div className="grid grid-cols-[200px_1fr] gap-4">
