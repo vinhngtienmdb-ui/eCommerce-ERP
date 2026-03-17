@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Textarea } from "@/src/components/ui/textarea"
@@ -6,11 +6,19 @@ import { useTranslation } from "react-i18next"
 import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCart, ChevronDown, Sparkles, Loader2 } from "lucide-react"
 import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { toast } from "sonner"
 import { GoogleGenAI } from "@google/genai"
+import { useSettingsStore } from "@/src/store/useSettingsStore"
 
 export function AddProduct() {
   const { t } = useTranslation()
+  const { settings, fetchSettings } = useSettingsStore()
+  
+  useEffect(() => {
+    fetchSettings()
+  }, [fetchSettings])
+
   const [activeTab, setActiveTab] = useState("basic")
   const [brand, setBrand] = useState("")
   const [model, setModel] = useState("")
@@ -22,6 +30,16 @@ export function AddProduct() {
   const [platformFee, setPlatformFee] = useState("")
   const [description, setDescription] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
+  
+  const [selectedLevel1, setSelectedLevel1] = useState<string>("")
+  const [selectedLevel2, setSelectedLevel2] = useState<string>("")
+  const [selectedLevel3, setSelectedLevel3] = useState<string>("")
+
+  const categories = settings.categories || []
+
+  const level1Options = Array.from(new Set(categories.map((c: any) => c.level1)))
+  const level2Options = Array.from(new Set(categories.filter((c: any) => c.level1 === selectedLevel1).map((c: any) => c.level2)))
+  const level3Options = Array.from(new Set(categories.filter((c: any) => c.level1 === selectedLevel1 && c.level2 === selectedLevel2).map((c: any) => c.level3)))
 
   // Auto-generate full product name
   const updateProductName = (b: string, m: string, bn: string, s: string) => {
@@ -293,8 +311,31 @@ export function AddProduct() {
                   <div className="text-sm font-medium pt-2">
                     <span className="text-destructive">*</span> {t("products.add.category")}
                   </div>
-                  <div>
-                    <Input placeholder={t("products.add.selectCategory")} className="cursor-pointer" readOnly />
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <Select value={selectedLevel1} onValueChange={(val) => { setSelectedLevel1(val); setSelectedLevel2(""); setSelectedLevel3(""); }}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("settings.fees.categoryLevel1Placeholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {level1Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={selectedLevel2} onValueChange={(val) => { setSelectedLevel2(val); setSelectedLevel3(""); }} disabled={!selectedLevel1}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("settings.fees.categoryLevel2Placeholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {level2Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={selectedLevel3} onValueChange={setSelectedLevel3} disabled={!selectedLevel2}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("settings.fees.categoryLevel3Placeholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {level3Options.map((opt: any) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </div>
