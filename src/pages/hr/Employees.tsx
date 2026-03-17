@@ -11,31 +11,16 @@ import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Search, Filter, Plus, Users, CheckCircle, Briefcase, Edit, Trash2, Settings, FileText, TrendingUp, Network, FileSignature } from "lucide-react"
-import { useDataStore, Employee } from "@/src/store/useDataStore"
+import { useDataStore, Employee, Contract } from "@/src/store/useDataStore"
 import { toast } from "sonner"
-
-interface Contract {
-  id: string
-  empId: string
-  type: "Probation" | "Definite Term" | "Indefinite Term"
-  startDate: string
-  endDate: string
-  status: "Active" | "Expired"
-}
 
 export function Employees() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { employees, addEmployee, updateEmployee, deleteEmployee, syncEmployeeToUser } = useDataStore()
+  const { employees, addEmployee, updateEmployee, deleteEmployee, syncEmployeeToUser, contracts, addContract } = useDataStore()
 
   const [userRole, setUserRole] = useState<"Admin" | "HR Manager" | "Employee">("HR Manager")
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
-
-  const [contracts, setContracts] = useState<Contract[]>([
-    { id: "CT-001", empId: employees[0]?.id || "EMP-001", type: "Indefinite Term", startDate: "2022-03-15", endDate: "-", status: "Active" },
-    { id: "CT-002", empId: employees[1]?.id || "EMP-002", type: "Definite Term", startDate: "2021-06-01", endDate: "2023-06-01", status: "Active" },
-    { id: "CT-003", empId: employees[2]?.id || "EMP-003", type: "Probation", startDate: "2023-10-01", endDate: "2023-12-01", status: "Active" },
-  ])
 
   const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false)
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
@@ -68,7 +53,7 @@ export function Employees() {
   const handleAddEmployee = () => {
     if (newEmployee.name && newEmployee.dept && newEmployee.pos) {
       if (editingEmployee) {
-        updateEmployee(editingEmployee.id, newEmployee)
+        updateEmployee(editingEmployee.id, newEmployee as Employee)
         syncEmployeeToUser({ ...editingEmployee, ...newEmployee } as Employee)
         toast.success("Cập nhật nhân viên thành công")
       } else {
@@ -123,7 +108,7 @@ export function Employees() {
       status: "Active"
     }
 
-    setContracts([record, ...contracts])
+    addContract(record)
     setIsContractModalOpen(false)
     setNewContract({ empId: "", type: "Definite Term", startDate: "", endDate: "" })
     toast.success("Đã tạo hợp đồng mới")

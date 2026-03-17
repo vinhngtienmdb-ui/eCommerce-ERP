@@ -33,12 +33,24 @@ export interface User {
   avatar?: string
 }
 
+export interface Contract {
+  id: string
+  empId: string
+  type: "Probation" | "Definite Term" | "Indefinite Term"
+  startDate: string
+  endDate: string
+  status: "Active" | "Expired"
+}
+
 interface DataState {
   employees: Employee[]
   users: User[]
+  contracts: Contract[]
   addEmployee: (emp: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
   deleteEmployee: (id: string) => void
+  addContract: (contract: Contract) => void
+  deleteContract: (id: string) => void
   addUser: (user: User) => void
   updateUser: (id: string, data: Partial<User>) => void
   deleteUser: (id: string) => void
@@ -52,6 +64,12 @@ const initialEmployees: Employee[] = [
   { id: "EMP-004", name: "Phạm Thị D", dept: "Phòng Marketing", pos: "Nhân viên", status: "Maternity", email: "thid@example.com", phone: "0987654321", joinDate: "2020-11-20", idCard: "004098765432", taxCode: "8045678901", socialInsuranceNo: "7945678901" },
 ]
 
+const initialContracts: Contract[] = [
+  { id: "CT-001", empId: "EMP-001", type: "Indefinite Term", startDate: "2022-03-15", endDate: "-", status: "Active" },
+  { id: "CT-002", empId: "EMP-002", type: "Definite Term", startDate: "2021-06-01", endDate: "2023-06-01", status: "Active" },
+  { id: "CT-003", empId: "EMP-003", type: "Probation", startDate: "2023-10-01", endDate: "2023-12-01", status: "Active" },
+]
+
 const initialUsers: User[] = [
   { id: "1", employeeId: "EMP-001", name: "Nguyễn Văn A", email: "vana@example.com", role: "Admin", department: "Ban Giám Đốc", status: "active", lastActive: "Vừa xong" },
   { id: "2", employeeId: "EMP-002", name: "Trần Thị B", email: "thib@example.com", role: "Sales", department: "Phòng Kinh Doanh", status: "active", lastActive: "2 giờ trước" },
@@ -62,6 +80,7 @@ const initialUsers: User[] = [
 export const useDataStore = create<DataState>((set) => ({
   employees: initialEmployees,
   users: initialUsers,
+  contracts: initialContracts,
   addEmployee: (emp) => set((state) => ({ employees: [...state.employees, emp] })),
   updateEmployee: (id, data) => set((state) => ({
     employees: state.employees.map(e => e.id === id ? { ...e, ...data } : e)
@@ -69,6 +88,8 @@ export const useDataStore = create<DataState>((set) => ({
   deleteEmployee: (id) => set((state) => ({
     employees: state.employees.filter(e => e.id !== id)
   })),
+  addContract: (contract) => set((state) => ({ contracts: [...state.contracts, contract] })),
+  deleteContract: (id) => set((state) => ({ contracts: state.contracts.filter(c => c.id !== id) })),
   addUser: (user) => set((state) => ({ users: [...state.users, user] })),
   updateUser: (id, data) => set((state) => ({
     users: state.users.map(u => u.id === id ? { ...u, ...data } : u)
