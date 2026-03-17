@@ -8,10 +8,12 @@ import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+import { Switch } from "@/src/components/ui/switch"
 import { toast } from "sonner"
 import { GoogleGenAI } from "@google/genai"
 import { useSettingsStore } from "@/src/store/useSettingsStore"
 import { initialPlatformFees } from "@/src/data/fees"
+import { X, Plus } from "lucide-react"
 
 export function AddProduct() {
   const { t } = useTranslation()
@@ -37,6 +39,24 @@ export function AddProduct() {
   const [selectedLevel2, setSelectedLevel2] = useState<string>("")
   const [selectedLevel3, setSelectedLevel3] = useState<string>("")
 
+  const [images, setImages] = useState<string[]>([])
+  const [coverImage, setCoverImage] = useState<string | null>(null)
+  
+  // Sales
+  const [variants, setVariants] = useState<{name: string, options: string[]}[]>([])
+  const [combinations, setCombinations] = useState<{id: string, options: Record<string, string>, price: string, stock: string, sku: string}[]>([])
+
+  // Shipping
+  const [weight, setWeight] = useState("")
+  const [length, setLength] = useState("")
+  const [width, setWidth] = useState("")
+  const [height, setHeight] = useState("")
+
+  // Other
+  const [condition, setCondition] = useState("new")
+  const [isPreOrder, setIsPreOrder] = useState(false)
+  const [prepTime, setPrepTime] = useState("2")
+
   const categories = settings?.categories?.length > 0 ? settings.categories : initialPlatformFees
 
   const level1Options = Array.from(new Set(categories.map((c: any) => c.level1))).filter(Boolean)
@@ -52,6 +72,67 @@ export function AddProduct() {
   const handleModelChange = (val: string) => { setModel(val); updateProductName(brand, val, baseName, specifications); }
   const handleBaseNameChange = (val: string) => { setBaseName(val); updateProductName(brand, model, val, specifications); }
   const handleSpecsChange = (val: string) => { setSpecifications(val); updateProductName(brand, model, baseName, val); }
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newImages = Array.from(e.target.files).map(file => URL.createObjectURL(file))
+      setImages(prev => [...prev, ...newImages].slice(0, 9))
+    }
+  }
+
+  const handleCoverUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setCoverImage(URL.createObjectURL(e.target.files[0]))
+    }
+  }
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setVideo(URL.createObjectURL(e.target.files[0]))
+    }
+  }
+
+  useEffect(() => {
+    // Generate combinations
+    if (variants.length === 0) {
+      setCombinations([])
+      return
+    }
+
+    const validVariants = variants.filter(v => v.name.trim() !== '' && v.options.some(o => o.trim() !== ''))
+    if (validVariants.length === 0) {
+      setCombinations([])
+      return
+    }
+
+    let newCombs: any[] = [{ options: {} }]
+    
+    validVariants.forEach(variant => {
+      const validOptions = variant.options.filter(o => o.trim() !== '')
+      if (validOptions.length === 0) return
+
+      const temp: any[] = []
+      newCombs.forEach(comb => {
+        validOptions.forEach(opt => {
+          temp.push({
+            options: { ...comb.options, [variant.name]: opt },
+            price: '',
+            stock: '',
+            sku: ''
+          })
+        })
+      })
+      newCombs = temp
+    })
+
+    // Merge with existing combinations to preserve data
+    const merged = newCombs.map(nc => {
+      const existing = combinations.find(c => JSON.stringify(c.options) === JSON.stringify(nc.options))
+      return existing ? existing : { ...nc, id: Math.random().toString(36).substr(2, 9) }
+    })
+
+    setCombinations(merged)
+  }, [variants])
 
   const generateDescription = async () => {
     if (!productName) {
@@ -80,6 +161,34 @@ export function AddProduct() {
     } finally {
       setIsGenerating(false)
     }
+  }
+
+  const handleSave = (publish: boolean) => {
+    if (!productName || !selectedLevel1) {
+      toast.error("Vui lòng nhập tên sản phẩm và chọn ngành hàng.")
+      return
+    }
+
+    // In a real app, this would save to Firestore
+    console.log("Saving product:", {
+      productName,
+      brand,
+      model,
+      baseName,
+      specifications,
+      category: [selectedLevel1, selectedLevel2, selectedLevel3].filter(Boolean),
+      description,
+      images,
+      coverImage,
+      video,
+      variants,
+      combinations,
+      shipping: { weight, length, width, height },
+      other: { condition, isPreOrder, prepTime },
+      status: publish ? 'published' : 'hidden'
+    })
+
+    toast.success(publish ? "Đã lưu và hiển thị sản phẩm!" : "Đã lưu sản phẩm (ẩn)!")
   }
 
   const suggestions = [
@@ -166,11 +275,25 @@ export function AddProduct() {
                         <a href="#" className="text-primary hover:underline">{t("products.add.seeExample")}</a>
                       </div>
                       
-                      <div className="flex gap-4">
-                        <div className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors">
-                          <ImagePlus className="h-6 w-6 mb-1" />
-                          <span className="text-[10px] text-center px-1">{t("products.add.addImage")}<br/>(0/9)</span>
-                        </div>
+                      <div className="flex gap-4 flex-wrap">
+                        {images.map((img, idx) => (
+                          <div key={idx} className="relative w-24 h-24 border rounded overflow-hidden group">
+                            <img src={img} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                            <button 
+                              onClick={() => setImages(images.filter((_, i) => i !== idx))} 
+                              className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))}
+                        {images.length < 9 && (
+                          <label className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors">
+                            <input type="file" multiple accept="image/*" className="hidden" onChange={handleImageUpload} />
+                            <ImagePlus className="h-6 w-6 mb-1" />
+                            <span className="text-[10px] text-center px-1">{t("products.add.addImage")}<br/>({images.length}/9)</span>
+                          </label>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -181,10 +304,23 @@ export function AddProduct() {
                       <span className="text-destructive">*</span> {t("products.add.coverImage")}
                     </div>
                     <div className="flex gap-4">
-                      <div className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors shrink-0">
-                        <ImagePlus className="h-6 w-6 mb-1" />
-                        <span className="text-[10px]">(0/1)</span>
-                      </div>
+                      {coverImage ? (
+                        <div className="relative w-24 h-24 border rounded overflow-hidden group shrink-0">
+                          <img src={coverImage} alt="Cover" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                          <button 
+                            onClick={() => setCoverImage(null)} 
+                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <label className="w-24 h-24 border border-dashed border-primary rounded flex flex-col items-center justify-center text-primary cursor-pointer hover:bg-primary/10 transition-colors shrink-0">
+                          <input type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
+                          <ImagePlus className="h-6 w-6 mb-1" />
+                          <span className="text-[10px]">(0/1)</span>
+                        </label>
+                      )}
                       <div className="text-xs text-muted-foreground space-y-1 pt-1">
                         <ul className="list-disc pl-4 space-y-1">
                           <li>{t("products.add.coverImageHint1")}</li>
@@ -200,10 +336,23 @@ export function AddProduct() {
                       {t("products.add.productVideo")}
                     </div>
                     <div className="flex gap-4">
-                      <div className="w-24 h-24 border border-dashed rounded flex flex-col items-center justify-center text-muted-foreground cursor-pointer hover:bg-muted transition-colors shrink-0">
-                        <Video className="h-6 w-6 mb-1 text-primary" />
-                        <span className="text-[10px] text-primary">{t("products.add.addVideo")}</span>
-                      </div>
+                      {video ? (
+                        <div className="relative w-24 h-24 border rounded overflow-hidden group shrink-0 bg-black">
+                          <video src={video} className="w-full h-full object-cover" />
+                          <button 
+                            onClick={() => setVideo(null)} 
+                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <label className="w-24 h-24 border border-dashed rounded flex flex-col items-center justify-center text-muted-foreground cursor-pointer hover:bg-muted transition-colors shrink-0">
+                          <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
+                          <Video className="h-6 w-6 mb-1 text-primary" />
+                          <span className="text-[10px] text-primary">{t("products.add.addVideo")}</span>
+                        </label>
+                      )}
                       <div className="text-xs text-muted-foreground space-y-1 pt-1">
                         <ul className="list-disc pl-4 space-y-1">
                           <li>{t("products.add.videoHint1")}</li>
@@ -338,20 +487,192 @@ export function AddProduct() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="sales" className="mt-0">
-                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-in fade-in duration-300">
-                    <p>{t("common.featureComingSoon")}</p>
+                <TabsContent value="sales" className="mt-0 space-y-6 animate-in fade-in duration-300">
+                  <h3 className="text-lg font-medium">{t("products.add.tabs.sales")}</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-medium">Phân loại hàng</h4>
+                      <Button variant="outline" size="sm" onClick={() => setVariants([...variants, { name: '', options: [''] }])} disabled={variants.length >= 2}>
+                        <Plus className="h-4 w-4 mr-2" /> Thêm nhóm phân loại
+                      </Button>
+                    </div>
+
+                    {variants.map((variant, vIdx) => (
+                      <Card key={vIdx} className="p-4 relative bg-muted/30">
+                        <button onClick={() => setVariants(variants.filter((_, i) => i !== vIdx))} className="absolute top-2 right-2 text-muted-foreground hover:text-destructive">
+                          <X className="h-4 w-4" />
+                        </button>
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                            <label className="text-sm">Tên nhóm</label>
+                            <Input 
+                              value={variant.name} 
+                              onChange={(e) => {
+                                const newVariants = [...variants];
+                                newVariants[vIdx].name = e.target.value;
+                                setVariants(newVariants);
+                              }} 
+                              placeholder="VD: Màu sắc, Kích thước..." 
+                            />
+                          </div>
+                          <div className="grid grid-cols-[120px_1fr] items-start gap-4">
+                            <label className="text-sm pt-2">Phân loại</label>
+                            <div className="space-y-2">
+                              {variant.options.map((opt, oIdx) => (
+                                <div key={oIdx} className="flex gap-2">
+                                  <Input 
+                                    value={opt} 
+                                    onChange={(e) => {
+                                      const newVariants = [...variants];
+                                      newVariants[vIdx].options[oIdx] = e.target.value;
+                                      setVariants(newVariants);
+                                    }} 
+                                    placeholder="VD: Đỏ, Xanh, S, M..." 
+                                  />
+                                  <Button variant="ghost" size="icon" onClick={() => {
+                                    const newVariants = [...variants];
+                                    newVariants[vIdx].options = newVariants[vIdx].options.filter((_, i) => i !== oIdx);
+                                    setVariants(newVariants);
+                                  }}>
+                                    <X className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              ))}
+                              <Button variant="ghost" size="sm" onClick={() => {
+                                const newVariants = [...variants];
+                                newVariants[vIdx].options.push('');
+                                setVariants(newVariants);
+                              }}>
+                                <Plus className="h-4 w-4 mr-2" /> Thêm phân loại
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+
+                    {/* Combinations Table */}
+                    {combinations.length > 0 && (
+                      <div className="mt-6 border rounded-md overflow-hidden overflow-x-auto">
+                        <table className="w-full text-sm text-left whitespace-nowrap">
+                          <thead className="bg-muted text-muted-foreground">
+                            <tr>
+                              {variants.filter(v => v.name.trim() !== '').map((v, i) => <th key={i} className="px-4 py-2 font-medium">{v.name}</th>)}
+                              <th className="px-4 py-2 font-medium">Giá</th>
+                              <th className="px-4 py-2 font-medium">Kho hàng</th>
+                              <th className="px-4 py-2 font-medium">SKU</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y">
+                            {combinations.map((comb, cIdx) => (
+                              <tr key={comb.id}>
+                                {Object.values(comb.options).map((opt, i) => (
+                                  <td key={i} className="px-4 py-2">{opt}</td>
+                                ))}
+                                <td className="px-4 py-2">
+                                  <Input 
+                                    type="number" 
+                                    value={comb.price} 
+                                    onChange={(e) => {
+                                      const newCombs = [...combinations];
+                                      newCombs[cIdx].price = e.target.value;
+                                      setCombinations(newCombs);
+                                    }} 
+                                    placeholder="0" 
+                                    className="w-24 h-8" 
+                                  />
+                                </td>
+                                <td className="px-4 py-2">
+                                  <Input 
+                                    type="number" 
+                                    value={comb.stock} 
+                                    onChange={(e) => {
+                                      const newCombs = [...combinations];
+                                      newCombs[cIdx].stock = e.target.value;
+                                      setCombinations(newCombs);
+                                    }} 
+                                    placeholder="0" 
+                                    className="w-24 h-8" 
+                                  />
+                                </td>
+                                <td className="px-4 py-2">
+                                  <Input 
+                                    value={comb.sku} 
+                                    onChange={(e) => {
+                                      const newCombs = [...combinations];
+                                      newCombs[cIdx].sku = e.target.value;
+                                      setCombinations(newCombs);
+                                    }} 
+                                    placeholder="SKU" 
+                                    className="w-32 h-8" 
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
-                <TabsContent value="shipping" className="mt-0">
-                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-in fade-in duration-300">
-                    <p>{t("common.featureComingSoon")}</p>
+                <TabsContent value="shipping" className="mt-0 space-y-6 animate-in fade-in duration-300">
+                  <h3 className="text-lg font-medium">{t("products.add.tabs.shipping")}</h3>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">Cân nặng (Sau khi đóng gói)</div>
+                    <div className="flex items-center gap-2">
+                      <Input type="number" value={weight} onChange={e => setWeight(e.target.value)} placeholder="0" className="w-32" />
+                      <span className="text-muted-foreground">gr</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">Kích thước đóng gói</div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <Input type="number" value={length} onChange={e => setLength(e.target.value)} placeholder="D" className="w-20" />
+                        <span className="text-muted-foreground">cm</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" value={width} onChange={e => setWidth(e.target.value)} placeholder="R" className="w-20" />
+                        <span className="text-muted-foreground">cm</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" value={height} onChange={e => setHeight(e.target.value)} placeholder="C" className="w-20" />
+                        <span className="text-muted-foreground">cm</span>
+                      </div>
+                    </div>
                   </div>
                 </TabsContent>
-                <TabsContent value="other" className="mt-0">
-                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-in fade-in duration-300">
-                    <p>{t("common.featureComingSoon")}</p>
+                <TabsContent value="other" className="mt-0 space-y-6 animate-in fade-in duration-300">
+                  <h3 className="text-lg font-medium">{t("products.add.tabs.other")}</h3>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">Tình trạng</div>
+                    <Select value={condition} onValueChange={setCondition}>
+                      <SelectTrigger className="w-64">
+                        <SelectValue placeholder="Chọn tình trạng" />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        <SelectItem value="new">Mới</SelectItem>
+                        <SelectItem value="used">Đã sử dụng</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">Hàng đặt trước</div>
+                    <div className="flex items-center gap-4 pt-2">
+                      <Switch checked={isPreOrder} onCheckedChange={setIsPreOrder} />
+                      <span className="text-sm text-muted-foreground">Tôi sẽ cần thêm thời gian để chuẩn bị hàng</span>
+                    </div>
+                  </div>
+                  {isPreOrder && (
+                    <div className="grid grid-cols-[200px_1fr] gap-4">
+                      <div className="text-sm font-medium pt-2">Thời gian chuẩn bị hàng</div>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" value={prepTime} onChange={e => setPrepTime(e.target.value)} className="w-32" />
+                        <span className="text-muted-foreground">ngày</span>
+                      </div>
+                    </div>
+                  )}
                 </TabsContent>
               </CardContent>
             </Card>
@@ -368,13 +689,25 @@ export function AddProduct() {
               {/* Mobile Mockup */}
               <div className="bg-white rounded-xl shadow-sm overflow-hidden border mx-auto max-w-[280px]">
                 {/* Image placeholder */}
-                <div className="aspect-square bg-muted flex items-center justify-center">
-                  <ShoppingBag className="h-12 w-12 text-muted-foreground/30" />
+                <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
+                  {coverImage || images[0] ? (
+                    <img src={coverImage || images[0]} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <ShoppingBag className="h-12 w-12 text-muted-foreground/30" />
+                  )}
                 </div>
                 
                 <div className="p-3 space-y-3">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-4 bg-muted rounded w-1/2"></div>
+                  <div className="text-sm font-medium line-clamp-2 min-h-[40px]">
+                    {productName || "Tên sản phẩm sẽ hiển thị ở đây"}
+                  </div>
+                  <div className="text-primary font-semibold">
+                    {combinations.length > 0 ? (
+                      `₫${combinations[0].price || '0'} - ₫${combinations[combinations.length - 1].price || '0'}`
+                    ) : (
+                      `₫${costPrice || '0'}`
+                    )}
+                  </div>
                   
                   <div className="pt-2 border-t flex items-center gap-2">
                     <div className="w-6 h-6 rounded-full bg-muted"></div>
@@ -407,8 +740,8 @@ export function AddProduct() {
       {/* Bottom Sticky Bar */}
       <div className="bg-card border-t p-4 flex items-center justify-end gap-3 sticky bottom-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] rounded-t-xl">
         <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("products.add.cancel")}</Button>
-        <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("products.add.saveHidden")}</Button>
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("products.add.savePublish")}</Button>
+        <Button variant="outline" onClick={() => handleSave(false)}>{t("products.add.saveHidden")}</Button>
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => handleSave(true)}>{t("products.add.savePublish")}</Button>
       </div>
     </div>
   )
