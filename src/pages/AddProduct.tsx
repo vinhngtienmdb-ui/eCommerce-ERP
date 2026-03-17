@@ -114,6 +114,7 @@ export function AddProduct() {
   const [platformFee, setPlatformFee] = useState("")
   const [description, setDescription] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isCategorizing, setIsCategorizing] = useState(false)
   
   const [selectedLevel1, setSelectedLevel1] = useState<string>("")
   const [selectedLevel2, setSelectedLevel2] = useState<string>("")
@@ -336,6 +337,73 @@ export function AddProduct() {
       setIsGenerating(false)
     }
   }
+
+  const autoCategorize = async () => {
+    if (images.length === 0 && !coverImage) {
+      toast.error("Vui lòng tải lên ít nhất 1 hình ảnh để AI phân tích.");
+      return;
+    }
+
+    setIsCategorizing(true);
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+      
+      // Get the first available image
+      const imageUrl = coverImage || images[0].url;
+      
+      // Convert blob URL to base64
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const reader = new FileReader();
+      
+      const base64Promise = new Promise<string>((resolve) => {
+        reader.onloadend = () => {
+          const base64data = reader.result as string;
+          // Extract just the base64 part
+          resolve(base64data.split(',')[1]);
+        };
+      });
+      reader.readAsDataURL(blob);
+      const base64Data = await base64Promise;
+
+      // Provide the available categories to the AI
+      const availableCategories = level1Options.join(", ");
+
+      const aiResponse = await ai.models.generateContent({
+        model: "gemini-3.1-flash-preview",
+        contents: {
+          parts: [
+            {
+              inlineData: {
+                mimeType: blob.type,
+                data: base64Data
+              }
+            },
+            {
+              text: `Analyze this product image and determine the most appropriate category from this list: [${availableCategories}]. Return ONLY the exact category name from the list. If none fit perfectly, return the closest match.`
+            }
+          ]
+        }
+      });
+
+      if (aiResponse.text) {
+        const suggestedCategory = aiResponse.text.trim();
+        if (level1Options.includes(suggestedCategory)) {
+          setSelectedLevel1(suggestedCategory);
+          setSelectedLevel2("");
+          setSelectedLevel3("");
+          toast.success(`AI đã đề xuất danh mục: ${suggestedCategory}`);
+        } else {
+          toast.error("AI không thể tìm thấy danh mục phù hợp.");
+        }
+      }
+    } catch (error) {
+      console.error("AI Categorization Error:", error);
+      toast.error("Lỗi khi phân tích hình ảnh.");
+    } finally {
+      setIsCategorizing(false);
+    }
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -654,6 +722,16 @@ export function AddProduct() {
                   <div className="grid grid-cols-[200px_1fr] gap-4 relative z-50">
                     <div className="text-sm font-medium pt-2">
                       <span className="text-destructive">*</span> {t("products.add.category")}
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-4 w-full gap-2 text-xs h-8 border-primary/50 text-primary hover:bg-primary/5"
+                        onClick={autoCategorize}
+                        disabled={isCategorizing}
+                      >
+                        {isCategorizing ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        Gợi ý bằng AI
+                      </Button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 z-50">
                       <Select value={selectedLevel1} onValueChange={(val) => { setSelectedLevel1(val); setSelectedLevel2(""); setSelectedLevel3(""); }}>

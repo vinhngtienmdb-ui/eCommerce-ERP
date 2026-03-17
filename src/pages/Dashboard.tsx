@@ -42,6 +42,8 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import { db } from "@/src/lib/firebase"
+import { collection, getDocs } from "firebase/firestore"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -73,6 +75,16 @@ export function Dashboard() {
 
   const [aiBriefing, setAiBriefing] = useState<string | null>(null)
   const [isAiLoading, setIsAiLoading] = useState(false)
+  const [productCount, setProductCount] = useState<number | null>(null)
+
+  const fetchStats = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "products"))
+      setProductCount(querySnapshot.size)
+    } catch (error) {
+      console.error("Error fetching product count:", error)
+    }
+  }
 
   const fetchAiBriefing = async () => {
     setIsAiLoading(true)
@@ -93,6 +105,7 @@ export function Dashboard() {
 
   useEffect(() => {
     fetchAiBriefing()
+    fetchStats()
   }, [])
 
   const modules = [
@@ -225,13 +238,9 @@ export function Dashboard() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+573</div>
+            <div className="text-2xl font-bold">{productCount !== null ? productCount : "..."}</div>
             <p className="text-xs text-muted-foreground flex items-center mt-1">
-              <span className="text-rose-500 flex items-center mr-1">
-                <ArrowDown className="h-3 w-3 mr-1" />
-                -201
-              </span>
-              {t("dashboard.sinceLastHour")}
+              Sản phẩm đang bán
             </p>
           </CardContent>
         </Card>

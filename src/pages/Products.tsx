@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import {
@@ -24,7 +24,9 @@ import {
   XCircle,
   TrendingDown,
   Sparkles,
-  Loader2
+  Loader2,
+  Trash2,
+  Edit
 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -40,6 +42,8 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog"
 import Markdown from "react-markdown"
+import { db } from "@/src/lib/firebase"
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -60,16 +64,57 @@ export function Products() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState<string | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [products, setProducts] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const { t } = useTranslation()
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+  const fetchProducts = async () => {
+    setIsLoading(true)
+    try {
+      const querySnapshot = await getDocs(collection(db, "products"))
+      const productsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      // Sort by createdAt descending
+      productsData.sort((a: any, b: any) => {
+        if (!a.createdAt || !b.createdAt) return 0;
+        return b.createdAt.toMillis() - a.createdAt.toMillis();
+      })
+      setProducts(productsData)
+    } catch (error) {
+      console.error("Error fetching products:", error)
+      toast.error("Failed to load products")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteDoc(doc(db, "products", id))
+        toast.success("Product deleted successfully")
+        setProducts(products.filter(p => p.id !== id))
+      } catch (error) {
+        console.error("Error deleting product:", error)
+        toast.error("Failed to delete product")
+      }
+    }
+  }
 
   const runAiAnalysis = async () => {
     setIsAnalyzing(true)
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
-      const inventoryData = initialProducts.map(p => ({
-        name: p.name,
-        stock: p.stock,
-        performance: p.performance
+      const inventoryData = products.map(p => ({
+        name: p.productName,
+        stock: p.stock || 0,
+        price: p.price || 0
       }))
 
       const response = await ai.models.generateContent({
@@ -92,9 +137,9 @@ export function Products() {
     }
   }
 
-  const filteredProducts = initialProducts.filter(product => 
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.id.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter(product => 
+    (product.productName?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (product.id?.toLowerCase() || "").includes(searchTerm.toLowerCase())
   )
 
   const tabs = [
@@ -143,7 +188,7 @@ export function Products() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{initialProducts.length}</div>
+            <div className="text-2xl font-bold">{products.length}</div>
             <p className="text-xs text-muted-foreground mt-1">{t("products.stats.activeItems")}</p>
           </CardContent>
         </Card>
@@ -300,66 +345,93 @@ export function Products() {
             <TableRow>
               <TableHead className="w-[40px]"></TableHead>
               <TableHead>{t("products.name")}</TableHead>
-              <TableHead className="text-right">{t("products.currentPrice")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
-              <TableHead className="text-right">{t("products.suggestedPrice")}</TableHead>
-              <TableHead className="text-right">{t("products.costPrice")}</TableHead>
-              <TableHead className="text-right">{t("products.platformFee")}</TableHead>
-              <TableHead className="text-right">{t("products.profit")}</TableHead>
-              <TableHead className="text-right">{t("products.stock")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
-              <TableHead className="text-right">{t("products.performance")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
-              <TableHead className="text-right">{t("products.rating")}</TableHead>
+              <TableHead className="text-right">Giá bán</TableHead>
+              <TableHead className="text-right">Kho hàng</TableHead>
+              <TableHead className="text-right">Ngành hàng</TableHead>
+              <TableHead className="text-right">Trạng thái</TableHead>
               <TableHead className="text-right">{t("common.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredProducts.map((product) => {
-              const profit = product.suggestedPrice - product.costPrice - product.platformFee;
-              return (
-                <TableRow key={product.id}>
-                  <TableCell>
-                    <Input type="checkbox" className="h-4 w-4" />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{product.name}</span>
-                      <span className="text-xs text-muted-foreground">SKU: {product.id}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right font-medium text-primary">
-                    {formatVND(product.currentPrice)}
-                  </TableCell>
-                  <TableCell className="text-right font-medium text-blue-600">
-                    {formatVND(product.suggestedPrice)}
-                  </TableCell>
-                  <TableCell className="text-right">{formatVND(product.costPrice)}</TableCell>
-                  <TableCell className="text-right">{formatVND(product.platformFee)}</TableCell>
-                  <TableCell className={cn("text-right font-medium", profit >= 0 ? "text-green-600" : "text-red-600")}>
-                    {formatVND(profit)}
-                  </TableCell>
-                  <TableCell className="text-right">{product.stock}</TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant={product.performance === "High" ? "default" : "secondary"}>
-                      {product.performance}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">{product.rating} / 5.0</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
-                      {t("common.edit")}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-            {filteredProducts.length === 0 && (
+            {isLoading ? (
               <TableRow>
-                <TableCell colSpan={10} className="h-64 text-center text-muted-foreground">
+                <TableCell colSpan={7} className="h-64 text-center">
+                  <div className="flex flex-col items-center justify-center text-muted-foreground">
+                    <Loader2 className="h-8 w-8 animate-spin mb-4" />
+                    <p>Đang tải dữ liệu...</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : filteredProducts.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="h-64 text-center text-muted-foreground">
                   <div className="flex flex-col items-center justify-center">
                     <Package className="h-12 w-12 mb-4 opacity-20" />
                     <p>{t("products.noProducts")}</p>
                   </div>
                 </TableCell>
               </TableRow>
+            ) : (
+              filteredProducts.map((product) => {
+                // Calculate total stock if combinations exist
+                let totalStock = product.stock || 0;
+                let displayPrice = product.price ? formatVND(product.price) : "N/A";
+                
+                if (product.combinations && product.combinations.length > 0) {
+                  totalStock = product.combinations.reduce((sum: number, comb: any) => sum + (Number(comb.stock) || 0), 0);
+                  const prices = product.combinations.map((c: any) => Number(c.price) || 0).filter((p: number) => p > 0);
+                  if (prices.length > 0) {
+                    const minPrice = Math.min(...prices);
+                    const maxPrice = Math.max(...prices);
+                    displayPrice = minPrice === maxPrice ? formatVND(minPrice) : `${formatVND(minPrice)} - ${formatVND(maxPrice)}`;
+                  }
+                }
+
+                return (
+                  <TableRow key={product.id}>
+                    <TableCell>
+                      <Input type="checkbox" className="h-4 w-4" />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-md border overflow-hidden bg-muted flex-shrink-0">
+                          {product.images && product.images.length > 0 ? (
+                            <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" />
+                          ) : (
+                            <Package className="h-5 w-5 m-2.5 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div className="flex flex-col max-w-[300px]">
+                          <span className="font-medium truncate" title={product.productName}>{product.productName}</span>
+                          <span className="text-xs text-muted-foreground">SKU: {product.id.substring(0, 8)}</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right font-medium text-primary">
+                      {displayPrice}
+                    </TableCell>
+                    <TableCell className="text-right">{totalStock}</TableCell>
+                    <TableCell className="text-right">
+                      <Badge variant="outline" className="font-normal">
+                        {product.category?.[product.category.length - 1] || "N/A"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge variant="default" className="bg-green-500 hover:bg-green-600">Đang bán</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(product.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
             )}
           </TableBody>
         </Table>
