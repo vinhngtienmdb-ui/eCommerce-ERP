@@ -12,9 +12,26 @@ import { GoogleGenAI } from "@google/genai"
 export function AddProduct() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("basic")
+  const [brand, setBrand] = useState("")
+  const [model, setModel] = useState("")
+  const [baseName, setBaseName] = useState("")
+  const [specifications, setSpecifications] = useState("")
   const [productName, setProductName] = useState("")
+  const [costPrice, setCostPrice] = useState("")
+  const [suggestedPrice, setSuggestedPrice] = useState("")
+  const [platformFee, setPlatformFee] = useState("")
   const [description, setDescription] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
+
+  // Auto-generate full product name
+  const updateProductName = (b: string, m: string, bn: string, s: string) => {
+    setProductName(`${b} ${m} ${bn} ${s}`.trim())
+  }
+
+  const handleBrandChange = (val: string) => { setBrand(val); updateProductName(val, model, baseName, specifications); }
+  const handleModelChange = (val: string) => { setModel(val); updateProductName(brand, val, baseName, specifications); }
+  const handleBaseNameChange = (val: string) => { setBaseName(val); updateProductName(brand, model, val, specifications); }
+  const handleSpecsChange = (val: string) => { setSpecifications(val); updateProductName(brand, model, baseName, val); }
 
   const generateDescription = async () => {
     if (!productName) {
@@ -183,18 +200,88 @@ export function AddProduct() {
                   </div>
                 </div>
 
-                {/* Product Name */}
+                {/* Product Name Fields */}
                 <div className="grid grid-cols-[200px_1fr] gap-4">
                   <div className="text-sm font-medium pt-2">
-                    <span className="text-destructive">*</span> {t("products.add.productName")}
+                    <span className="text-destructive">*</span> {t("products.add.brand")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.brandPlaceholder")} 
+                    value={brand}
+                    onChange={(e) => handleBrandChange(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    <span className="text-destructive">*</span> {t("products.add.model")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.modelPlaceholder")} 
+                    value={model}
+                    onChange={(e) => handleModelChange(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    <span className="text-destructive">*</span> {t("products.add.baseName")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.baseNamePlaceholder")} 
+                    value={baseName}
+                    onChange={(e) => handleBaseNameChange(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    <span className="text-destructive">*</span> {t("products.add.specifications")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.specificationsPlaceholder")} 
+                    value={specifications}
+                    onChange={(e) => handleSpecsChange(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    {t("products.add.costPrice")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.costPricePlaceholder")} 
+                    value={costPrice}
+                    onChange={(e) => setCostPrice(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    {t("products.add.suggestedPrice")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.suggestedPricePlaceholder")} 
+                    value={suggestedPrice}
+                    onChange={(e) => setSuggestedPrice(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    {t("products.add.platformFee")}
+                  </div>
+                  <Input 
+                    placeholder={t("products.add.platformFeePlaceholder")} 
+                    value={platformFee}
+                    onChange={(e) => setPlatformFee(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-[200px_1fr] gap-4">
+                  <div className="text-sm font-medium pt-2">
+                    {t("products.add.productName")}
                   </div>
                   <div>
                     <div className="relative">
                       <Input 
                         placeholder={t("products.add.productNamePlaceholder")} 
-                        className="pr-16" 
+                        className="pr-16 bg-muted" 
                         value={productName}
-                        onChange={(e) => setProductName(e.target.value)}
+                        readOnly
                       />
                       <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{productName.length}/120</span>
                     </div>

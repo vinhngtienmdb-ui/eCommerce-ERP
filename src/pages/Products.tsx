@@ -46,11 +46,11 @@ const formatVND = (amount: number) => {
 };
 
 const initialProducts = [
-  { id: "PROD-001", name: "iPhone 15 Pro Max 256GB", category: "Điện thoại", seller: "Apple Flagship Store", price: 34990000, stock: 50, performance: "High", rating: 4.9 },
-  { id: "PROD-002", name: "MacBook Pro M3 14 inch", category: "Laptop", seller: "Apple Flagship Store", price: 45990000, stock: 20, performance: "High", rating: 4.8 },
-  { id: "PROD-003", name: "Tai nghe Sony WH-1000XM5", category: "Phụ kiện", seller: "Sony Center", price: 8490000, stock: 100, performance: "Medium", rating: 4.7 },
-  { id: "PROD-004", name: "Bàn phím cơ Keychron K2", category: "Phụ kiện", seller: "GearVN", price: 2100000, stock: 30, performance: "Medium", rating: 4.6 },
-  { id: "PROD-005", name: "Chuột Logitech MX Master 3S", category: "Phụ kiện", seller: "GearVN", price: 2500000, stock: 45, performance: "High", rating: 4.9 },
+  { id: "PROD-001", name: "iPhone 15 Pro Max 256GB", category: "Điện thoại", seller: "Apple Flagship Store", currentPrice: 34990000, suggestedPrice: 35990000, costPrice: 30000000, platformFee: 1500000, stock: 50, performance: "High", rating: 4.9 },
+  { id: "PROD-002", name: "MacBook Pro M3 14 inch", category: "Laptop", seller: "Apple Flagship Store", currentPrice: 45990000, suggestedPrice: 46990000, costPrice: 40000000, platformFee: 2000000, stock: 20, performance: "High", rating: 4.8 },
+  { id: "PROD-003", name: "Tai nghe Sony WH-1000XM5", category: "Phụ kiện", seller: "Sony Center", currentPrice: 8490000, suggestedPrice: 8990000, costPrice: 7000000, platformFee: 400000, stock: 100, performance: "Medium", rating: 4.7 },
+  { id: "PROD-004", name: "Bàn phím cơ Keychron K2", category: "Phụ kiện", seller: "GearVN", currentPrice: 2100000, suggestedPrice: 2300000, costPrice: 1500000, platformFee: 100000, stock: 30, performance: "Medium", rating: 4.6 },
+  { id: "PROD-005", name: "Chuột Logitech MX Master 3S", category: "Phụ kiện", seller: "GearVN", currentPrice: 2500000, suggestedPrice: 2700000, costPrice: 1800000, platformFee: 120000, stock: 45, performance: "High", rating: 4.9 },
 ]
 
 export function Products() {
@@ -300,7 +300,11 @@ export function Products() {
             <TableRow>
               <TableHead className="w-[40px]"></TableHead>
               <TableHead>{t("products.name")}</TableHead>
-              <TableHead className="text-right">{t("products.price")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
+              <TableHead className="text-right">{t("products.currentPrice")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
+              <TableHead className="text-right">{t("products.suggestedPrice")}</TableHead>
+              <TableHead className="text-right">{t("products.costPrice")}</TableHead>
+              <TableHead className="text-right">{t("products.platformFee")}</TableHead>
+              <TableHead className="text-right">{t("products.profit")}</TableHead>
               <TableHead className="text-right">{t("products.stock")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
               <TableHead className="text-right">{t("products.performance")} <ArrowUpDown className="inline h-3 w-3 ml-1 opacity-50" /></TableHead>
               <TableHead className="text-right">{t("products.rating")}</TableHead>
@@ -308,37 +312,48 @@ export function Products() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredProducts.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell>
-                  <Input type="checkbox" className="h-4 w-4" />
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-col">
-                    <span className="font-medium">{product.name}</span>
-                    <span className="text-xs text-muted-foreground">SKU: {product.id}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="text-right font-medium text-primary">
-                  {formatVND(product.price)}
-                </TableCell>
-                <TableCell className="text-right">{product.stock}</TableCell>
-                <TableCell className="text-right">
-                  <Badge variant={product.performance === "High" ? "default" : "secondary"}>
-                    {product.performance}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">{product.rating} / 5.0</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
-                    {t("common.edit")}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {filteredProducts.map((product) => {
+              const profit = product.suggestedPrice - product.costPrice - product.platformFee;
+              return (
+                <TableRow key={product.id}>
+                  <TableCell>
+                    <Input type="checkbox" className="h-4 w-4" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <span className="font-medium">{product.name}</span>
+                      <span className="text-xs text-muted-foreground">SKU: {product.id}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right font-medium text-primary">
+                    {formatVND(product.currentPrice)}
+                  </TableCell>
+                  <TableCell className="text-right font-medium text-blue-600">
+                    {formatVND(product.suggestedPrice)}
+                  </TableCell>
+                  <TableCell className="text-right">{formatVND(product.costPrice)}</TableCell>
+                  <TableCell className="text-right">{formatVND(product.platformFee)}</TableCell>
+                  <TableCell className={cn("text-right font-medium", profit >= 0 ? "text-green-600" : "text-red-600")}>
+                    {formatVND(profit)}
+                  </TableCell>
+                  <TableCell className="text-right">{product.stock}</TableCell>
+                  <TableCell className="text-right">
+                    <Badge variant={product.performance === "High" ? "default" : "secondary"}>
+                      {product.performance}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">{product.rating} / 5.0</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                      {t("common.edit")}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
             {filteredProducts.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="h-64 text-center text-muted-foreground">
+                <TableCell colSpan={10} className="h-64 text-center text-muted-foreground">
                   <div className="flex flex-col items-center justify-center">
                     <Package className="h-12 w-12 mb-4 opacity-20" />
                     <p>{t("products.noProducts")}</p>
