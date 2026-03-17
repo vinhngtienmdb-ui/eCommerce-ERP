@@ -307,11 +307,11 @@ export function AddProduct() {
                 </div>
 
                 {/* Category */}
-                <div className="grid grid-cols-[200px_1fr] gap-4">
+                <div className="grid grid-cols-[200px_1fr] gap-4 relative z-50">
                   <div className="text-sm font-medium pt-2">
                     <span className="text-destructive">*</span> {t("products.add.category")}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 z-50">
                     <Select value={selectedLevel1} onValueChange={(val) => { setSelectedLevel1(val); setSelectedLevel2(""); setSelectedLevel3(""); }}>
                       <SelectTrigger>
                         <SelectValue placeholder={t("settings.fees.categoryLevel1Placeholder")} />
