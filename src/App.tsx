@@ -61,6 +61,7 @@ function FallbackRoute() {
   return <div className="p-6 text-center text-muted-foreground">{t("common.moduleUnderConstruction")}</div>
 }
 
+// App component
 export default function App() {
   return (
     <BrowserRouter>

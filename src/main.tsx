@@ -4,6 +4,8 @@ import App from './App.tsx';
 import './index.css';
 import './i18n';
 
+console.log("Main.tsx is running");
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
