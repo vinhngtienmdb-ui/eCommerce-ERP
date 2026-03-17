@@ -30,6 +30,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog"
 import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { toast } from "sonner"
 
 import { useDataStore } from "@/src/store/useDataStore"
@@ -111,6 +112,33 @@ const EContract = () => {
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="party" className="text-right">Party</Label>
                     <Input id="party" value={newContract.party} onChange={(e) => setNewContract({...newContract, party: e.target.value})} className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="type" className="text-right">Type</Label>
+                    <Select value={newContract.type} onValueChange={(val) => setNewContract({...newContract, type: val})}>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="HR">HR</SelectItem>
+                        <SelectItem value="Purchasing">Purchasing</SelectItem>
+                        <SelectItem value="Legal">Legal</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="security" className="text-right">Security</Label>
+                    <Select value={newContract.security} onValueChange={(val) => setNewContract({...newContract, security: val})}>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select security" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Standard">Standard</SelectItem>
+                        <SelectItem value="High">High</SelectItem>
+                        <SelectItem value="Encrypted">Encrypted</SelectItem>
+                        <SelectItem value="Blockchain Verified">Blockchain Verified</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <DialogFooter>
