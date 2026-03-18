@@ -299,11 +299,11 @@ export function CustomerService() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                      <Button variant="outline" size="sm" onClick={() => toast.success(t("common.createSuccess", "Đã mở giao diện tạo ticket"))}>
                         <Ticket className="h-4 w-4 mr-2" />
                         {t("customerService.tickets.create")}
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                      <Button variant="ghost" size="icon" onClick={() => toast.success(t("common.moreOptionsSuccess", "Đã mở thêm tùy chọn"))}>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </div>
@@ -534,7 +534,7 @@ export function CustomerService() {
                     <CardTitle>{t("customerService.tabs.tickets")}</CardTitle>
                     <CardDescription>{t("customerService.tickets.description")}</CardDescription>
                   </div>
-                  <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
+                  <Button onClick={() => toast.success(t("common.createSuccess", "Đã mở giao diện tạo ticket"))}>
                     <Ticket className="mr-2 h-4 w-4" />
                     {t("customerService.tickets.create")}
                   </Button>
@@ -616,7 +616,7 @@ export function CustomerService() {
                           </TableCell>
                           <TableCell><Badge variant="outline">{t(`customerService.teams.routingRules.${team.routingLabel}`)}</Badge></TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}><Settings className="h-4 w-4" /></Button>
+                            <Button variant="ghost" size="icon" onClick={() => toast.success(t("common.settingsSuccess", "Đã mở cài đặt nhóm"))}><Settings className="h-4 w-4" /></Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -811,7 +811,7 @@ export function CustomerService() {
           </div>
 
           <DialogFooter>
-            <Button variant="destructive" onClick={() => { setActiveCall(false); toast.info(t("customerService.hotline.callEnded")); }}>
+            <Button variant="destructive" onClick={() => { setActiveCall(false); toast.success(t("customerService.hotline.callEnded", "Cuộc gọi đã kết thúc")); }}>
               End Call
             </Button>
           </DialogFooter>

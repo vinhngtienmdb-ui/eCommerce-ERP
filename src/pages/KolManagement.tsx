@@ -42,9 +42,17 @@ import {
 } from "@/src/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 
+import { toast } from "sonner"
+
 export default function KolManagement() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState("list")
+
+  const handleInvite = () => toast.success(t("common.inviteSuccess", "Đã mở giao diện mời KOL"));
+  const handleApprove = () => toast.success(t("common.approveSuccess", "Đã duyệt yêu cầu"));
+  const handleReject = () => toast.success(t("common.rejectSuccess", "Đã từ chối yêu cầu"));
+  const handleViewProfile = () => toast.success(t("common.viewProfileSuccess", "Đang mở hồ sơ..."));
+  const handleTerminate = () => toast.success(t("common.terminateSuccess", "Đã chấm dứt hợp tác"));
 
   const kols = [
     { id: 1, name: "Linh Trương", platform: "TikTok", followers: "1.2M", status: "active", revenue: 450000000, commission: 45000000, rating: 4.8 },
@@ -79,7 +87,7 @@ export default function KolManagement() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button>
+          <Button onClick={handleInvite}>
             <UserPlus className="mr-2 h-4 w-4" />
             {t("kolManagement.invite")}
           </Button>
@@ -227,10 +235,10 @@ export default function KolManagement() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>{t("kolManagement.list.table.actions")}</DropdownMenuLabel>
-                            <DropdownMenuItem>{t("kolManagement.list.menu.viewProfile")}</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleViewProfile}>{t("kolManagement.list.menu.viewProfile")}</DropdownMenuItem>
                             <DropdownMenuItem>{t("kolManagement.list.menu.campaignHistory")}</DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">{t("kolManagement.list.menu.terminate")}</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600" onClick={handleTerminate}>{t("kolManagement.list.menu.terminate")}</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -282,8 +290,8 @@ export default function KolManagement() {
                       <TableCell>{req.followers}</TableCell>
                       <TableCell>{req.date}</TableCell>
                       <TableCell className="text-right space-x-2">
-                        <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">{t("kolManagement.approval.reject")}</Button>
-                        <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">{t("kolManagement.approval.approve")}</Button>
+                        <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700" onClick={handleReject}>{t("kolManagement.approval.reject")}</Button>
+                        <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700" onClick={handleApprove}>{t("kolManagement.approval.approve")}</Button>
                       </TableCell>
                     </TableRow>
                   ))}

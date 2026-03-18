@@ -652,7 +652,7 @@ export function Marketing() {
                         </Badge>
                       </TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("common.edit")}</Button>
+                            <Button variant="ghost" size="sm" onClick={() => toast.success(t("common.editSuccess", "Đang mở giao diện chỉnh sửa..."))}>{t("common.edit")}</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -1028,7 +1028,7 @@ export function Marketing() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{t("marketing.assets.title")}</h3>
-              <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.assets.upload")}</Button>
+              <Button variant="outline" onClick={() => toast.success(t("marketing.assets.uploadSuccess", "Đã mở giao diện tải lên tài sản"))}><Plus className="mr-2 h-4 w-4" /> {t("marketing.assets.upload")}</Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (

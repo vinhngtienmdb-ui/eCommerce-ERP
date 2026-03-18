@@ -19,6 +19,10 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
+import { toast } from "sonner"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Input } from "@/src/components/ui/input"
 
 interface Workflow {
   id: string
@@ -31,7 +35,9 @@ interface Workflow {
 }
 
 const Automation = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newWorkflowName, setNewWorkflowName] = useState("");
   const [workflows, setWorkflows] = useState<Workflow[]>([
     {
       id: "1",
@@ -60,7 +66,51 @@ const Automation = () => {
       lastRun: "3 days ago",
       icon: Bell
     }
-  ])
+  ]);
+
+  const handleToggleStatus = (id: string) => {
+    setWorkflows(workflows.map(wf => {
+      if (wf.id === id) {
+        const newStatus = wf.status === "active" ? "paused" : "active";
+        toast.success(`Workflow ${newStatus === "active" ? "activated" : "paused"}`);
+        return { ...wf, status: newStatus };
+      }
+      return wf;
+    }));
+  };
+
+  const handleDelete = (id: string) => {
+    setWorkflows(workflows.filter(wf => wf.id !== id));
+    toast.success("Workflow deleted");
+  };
+
+  const handleAddWorkflow = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCreateWorkflow = () => {
+    if (!newWorkflowName) {
+      toast.error("Please enter a workflow name");
+      return;
+    }
+    const newWf: Workflow = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: newWorkflowName,
+      trigger: "Manual Trigger",
+      action: "Custom Action",
+      status: "active",
+      lastRun: "Never",
+      icon: Zap
+    };
+    setWorkflows([newWf, ...workflows]);
+    toast.success("Workflow created successfully");
+    setIsModalOpen(false);
+    setNewWorkflowName("");
+  };
+
+  const handleSettings = () => {
+    toast.success("Opening workflow settings...");
+  };
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] p-4 md:p-8">
@@ -70,7 +120,7 @@ const Automation = () => {
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">Smart Workflow Automation</h1>
             <p className="text-slate-500">Automate your business processes with AI-driven triggers and actions.</p>
           </div>
-          <Button className="bg-indigo-600 hover:bg-indigo-700">
+          <Button className="bg-indigo-600 hover:bg-indigo-700" onClick={handleAddWorkflow}>
             <Plus className="mr-2 h-4 w-4" /> Create New Workflow
           </Button>
         </div>
@@ -81,9 +131,9 @@ const Automation = () => {
               <CardTitle className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Automations</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-slate-900">12</div>
+              <div className="text-3xl font-bold text-slate-900">{workflows.length}</div>
               <p className="text-xs text-emerald-600 mt-1 flex items-center">
-                <Zap className="h-3 w-3 mr-1" /> 8 currently active
+                <Zap className="h-3 w-3 mr-1" /> {workflows.filter(w => w.status === 'active').length} currently active
               </p>
             </CardContent>
           </Card>
@@ -146,14 +196,14 @@ const Automation = () => {
                   <div className="flex items-center gap-2">
                     <div 
                       className={`w-10 h-5 rounded-full relative cursor-pointer transition-colors ${workflow.status === "active" ? 'bg-indigo-600' : 'bg-slate-300'}`}
-                      onClick={() => {}}
+                      onClick={() => handleToggleStatus(workflow.id)}
                     >
                       <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${workflow.status === "active" ? 'left-6' : 'left-1'}`} />
                     </div>
-                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-indigo-600">
+                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-indigo-600" onClick={handleSettings}>
                       <Settings2 className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-600">
+                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-600" onClick={() => handleDelete(workflow.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -179,7 +229,7 @@ const Automation = () => {
                   <p className="text-xs text-indigo-200">Send survey 3 days after delivery to improve NPS.</p>
                 </div>
               </div>
-              <Button size="sm" variant="secondary">Add Workflow</Button>
+              <Button size="sm" variant="secondary" onClick={handleAddWorkflow}>Add Workflow</Button>
             </div>
             <div className="p-4 bg-white/10 rounded-lg border border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -189,7 +239,7 @@ const Automation = () => {
                   <p className="text-xs text-indigo-200">Adjust prices based on competitor stock levels.</p>
                 </div>
               </div>
-              <Button size="sm" variant="secondary">Add Workflow</Button>
+              <Button size="sm" variant="secondary" onClick={handleAddWorkflow}>Add Workflow</Button>
             </div>
           </CardContent>
           <div className="absolute -right-8 -bottom-8 opacity-10">
@@ -197,6 +247,32 @@ const Automation = () => {
           </div>
         </Card>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Workflow</DialogTitle>
+            <DialogDescription>
+              Enter a name for your new automation workflow.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Workflow Name</Label>
+              <Input
+                id="name"
+                value={newWorkflowName}
+                onChange={(e) => setNewWorkflowName(e.target.value)}
+                placeholder="e.g. Summer Sale Broadcast"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateWorkflow}>Create Workflow</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

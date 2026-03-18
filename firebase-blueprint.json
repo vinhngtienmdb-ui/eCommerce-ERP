@@ -121,6 +121,89 @@
         "currentNumber": { "type": "integer" },
         "suffix": { "type": "string" }
       }
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer profile and loyalty information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "totalOrders": { "type": "integer" },
+        "totalSpent": { "type": "number" },
+        "walletBalance": { "type": "number" },
+        "pointsBalance": { "type": "number" },
+        "lastOrder": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "vip", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phone"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "POS Order record",
+      "type": "object",
+      "properties": {
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "total": { "type": "number" },
+        "platformFee": { "type": "number" },
+        "pointsEarned": { "type": "number" },
+        "storeCredit": { "type": "number" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "creatorId": { "type": "string" },
+        "storeId": { "type": "string" }
+      },
+      "required": ["items", "total", "createdAt"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "POS Staff member",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "creatorId": { "type": "string" }
+      },
+      "required": ["name", "role"]
+    },
+    "Shipment": {
+      "title": "Shipment",
+      "description": "Logistics shipment tracking",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "customer": { "type": "string" },
+        "carrier": { "type": "string" },
+        "trackingNumber": { "type": "string" },
+        "status": { "type": "string" },
+        "lastUpdate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "customer"]
+    },
+    "Warehouse": {
+      "title": "Warehouse",
+      "description": "Warehouse location and capacity",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "location": { "type": "string" },
+        "capacity": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["name", "location"]
     }
   },
   "firestore": {
@@ -155,6 +238,26 @@
     "/document_templates/{templateId}": {
       "schema": "DocumentTemplate",
       "description": "Document templates"
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Customer profiles"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "POS Orders"
+    },
+    "/staff/{staffId}": {
+      "schema": "Staff",
+      "description": "POS Staff members"
+    },
+    "/shipments/{shipmentId}": {
+      "schema": "Shipment",
+      "description": "Logistics shipment tracking"
+    },
+    "/warehouses/{warehouseId}": {
+      "schema": "Warehouse",
+      "description": "Warehouse management"
     }
   }
 }

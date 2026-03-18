@@ -83,5 +83,39 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
+
+    // POS Customers rules
+    match /customers/{customerId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // POS Orders rules
+    match /orders/{orderId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // POS Staff rules
+    match /staff/{staffId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Logistics Shipments rules
+    match /shipments/{shipmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Logistics Warehouses rules
+    match /warehouses/{warehouseId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
   }
 }

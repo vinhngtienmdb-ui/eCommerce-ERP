@@ -8,6 +8,7 @@ import { Switch } from "@/src/components/ui/switch";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 import { Loader2, Save } from "lucide-react";
 
 export function DocumentSettingsPage() {
@@ -34,8 +35,7 @@ export function DocumentSettingsPage() {
           setSettings(docSnap.data() as any);
         }
       } catch (error) {
-        console.error("Error fetching document settings:", error);
-        toast.error("Lỗi khi tải cài đặt: " + (error as Error).message);
+        handleFirestoreError(error, OperationType.GET, "settings/documents");
       } finally {
         setLoading(false);
       }
@@ -49,8 +49,7 @@ export function DocumentSettingsPage() {
       await setDoc(doc(db, "settings", "documents"), settings);
       toast.success("Đã lưu cài đặt văn bản");
     } catch (error) {
-      console.error("Error saving settings:", error);
-      toast.error("Lỗi khi lưu cài đặt");
+      handleFirestoreError(error, OperationType.WRITE, "settings/documents");
     } finally {
       setSaving(false);
     }

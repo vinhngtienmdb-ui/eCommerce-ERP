@@ -11,6 +11,7 @@ import { Input } from "./components/ui/input"
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })))
 const Products = lazy(() => import("./pages/Products").then(m => ({ default: m.Products })))
 const AddProduct = lazy(() => import("./pages/AddProduct").then(m => ({ default: m.AddProduct })))
+const EditProduct = lazy(() => import("./pages/EditProduct").then(m => ({ default: m.EditProduct })))
 const Orders = lazy(() => import("./pages/Orders").then(m => ({ default: m.Orders })))
 const SellerList = lazy(() => import("./pages/sellers/SellerList").then(m => ({ default: m.SellerList })))
 const SellerApproval = lazy(() => import("./pages/sellers/SellerApproval").then(m => ({ default: m.SellerApproval })))
@@ -135,6 +136,7 @@ export default function App() {
                 <Route index element={<Navigate to="all" replace />} />
                 <Route path="all" element={<Products />} />
                 <Route path="add" element={<AddProduct />} />
+                <Route path="edit/:id" element={<EditProduct />} />
                 <Route path="ai-tools" element={<FallbackRoute />} />
               </Route>
               <Route path="workspace">

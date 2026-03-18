@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Textarea } from "@/src/components/ui/textarea"
@@ -98,6 +99,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 
 export function AddProduct() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { settings, fetchSettings } = useSettingsStore()
   
   useEffect(() => {
@@ -1157,7 +1159,7 @@ export function AddProduct() {
 
       {/* Bottom Sticky Bar */}
       <div className="bg-card border-t p-4 flex items-center justify-end gap-3 sticky bottom-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] rounded-t-xl">
-        <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("products.add.cancel")}</Button>
+        <Button variant="outline" onClick={() => navigate("/products")}>{t("products.add.cancel")}</Button>
         <Button variant="outline" onClick={() => handleSave(false)}>{t("products.add.saveHidden")}</Button>
         <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => handleSave(true)}>{t("products.add.savePublish")}</Button>
       </div>

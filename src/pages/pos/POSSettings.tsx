@@ -1,24 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Switch } from "@/src/components/ui/switch";
-import { Save, Store, Palette, Printer } from "lucide-react";
+import { Save, Store, Palette, Printer, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { db, auth } from "@/src/lib/firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 
 export function POSSettings() {
   const { t } = useTranslation();
-  const [storeName, setStoreName] = useState("Cửa hàng Quận 1");
-  const [address, setAddress] = useState("123 Lê Lợi, Quận 1, TP.HCM");
-  const [phone, setPhone] = useState("0901234567");
-  const [theme, setTheme] = useState("light");
-  const [autoPrintReceipt, setAutoPrintReceipt] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [settings, setSettings] = useState({
+    storeName: "Cửa hàng Quận 1",
+    address: "123 Lê Lợi, Quận 1, TP.HCM",
+    phone: "0901234567",
+    theme: "light",
+    autoPrintReceipt: true,
+  });
 
-  const handleSave = () => {
-    toast.success(t("pos.settings.saveSuccess", "Đã lưu cấu hình cửa hàng!"));
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const docRef = doc(db, "settings", "pos");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setSettings(docSnap.data() as any);
+        }
+      } catch (error) {
+        handleFirestoreError(error, OperationType.GET, "settings/pos");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const docRef = doc(db, "settings", "pos");
+      await setDoc(docRef, {
+        ...settings,
+        updatedAt: serverTimestamp(),
+        updatedBy: auth.currentUser?.uid
+      });
+      toast.success(t("pos.settings.saveSuccess", "Đã lưu cấu hình cửa hàng!"));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.UPDATE, "settings/pos");
+    } finally {
+      setIsSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -42,15 +88,27 @@ export function POSSettings() {
           <CardContent className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="storeName">{t("pos.settings.storeName", "Tên cửa hàng")}</Label>
-              <Input id="storeName" value={storeName} onChange={(e) => setStoreName(e.target.value)} />
+              <Input 
+                id="storeName" 
+                value={settings.storeName} 
+                onChange={(e) => setSettings({ ...settings, storeName: e.target.value })} 
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="address">{t("pos.settings.address", "Địa chỉ")}</Label>
-              <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+              <Input 
+                id="address" 
+                value={settings.address} 
+                onChange={(e) => setSettings({ ...settings, address: e.target.value })} 
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="phone">{t("pos.settings.phone", "Số điện thoại")}</Label>
-              <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+              <Input 
+                id="phone" 
+                value={settings.phone} 
+                onChange={(e) => setSettings({ ...settings, phone: e.target.value })} 
+              />
             </div>
           </CardContent>
         </Card>
@@ -75,8 +133,8 @@ export function POSSettings() {
                 </p>
               </div>
               <Switch 
-                checked={theme === "dark"} 
-                onCheckedChange={(c) => setTheme(c ? "dark" : "light")} 
+                checked={settings.theme === "dark"} 
+                onCheckedChange={(c) => setSettings({ ...settings, theme: c ? "dark" : "light" })} 
               />
             </div>
           </CardContent>
@@ -102,16 +160,16 @@ export function POSSettings() {
                 </p>
               </div>
               <Switch 
-                checked={autoPrintReceipt} 
-                onCheckedChange={setAutoPrintReceipt} 
+                checked={settings.autoPrintReceipt} 
+                onCheckedChange={(c) => setSettings({ ...settings, autoPrintReceipt: c })} 
               />
             </div>
           </CardContent>
         </Card>
 
         <div className="flex justify-end">
-          <Button onClick={handleSave} size="lg">
-            <Save className="mr-2 h-4 w-4" />
+          <Button onClick={handleSave} size="lg" disabled={isSaving}>
+            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {t("pos.settings.save", "Lưu thay đổi")}
           </Button>
         </div>

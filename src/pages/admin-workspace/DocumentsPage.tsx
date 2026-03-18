@@ -19,6 +19,7 @@ import { toast } from "sonner"
 import { useDataStore } from "@/src/store/useDataStore"
 import { db, auth } from "@/src/lib/firebase"
 import { collection, addDoc, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore"
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
 import { DOCUMENT_TYPES, DOCUMENT_FIELDS } from "@/src/constants/documentConstants"
 import { downloadPDF, downloadWord, generatePDF } from "@/src/utils/documentUtils"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog"
@@ -65,8 +66,7 @@ export function DocumentsPage() {
       setDocuments(docs)
       setLoading(false)
     }, (error) => {
-      console.error("Snapshot listener error:", error);
-      toast.error("Lỗi khi tải dữ liệu văn bản: " + error.message);
+      handleFirestoreError(error, OperationType.LIST, "documents")
       setLoading(false);
     })
 
@@ -83,7 +83,7 @@ export function DocumentsPage() {
           }
         }
       } catch (error) {
-        console.error("Error fetching settings:", error);
+        handleFirestoreError(error, OperationType.GET, "settings/documents")
       }
     };
     fetchSettings();
@@ -131,8 +131,7 @@ export function DocumentsPage() {
         await updateDoc(docRef, { currentNumber: settings.currentNumber + 1 });
       }
     } catch (error) {
-      console.error("Error creating document:", error)
-      toast.error("Lỗi khi lưu văn bản")
+      handleFirestoreError(error, OperationType.WRITE, "documents")
     }
   }
 
@@ -158,8 +157,7 @@ export function DocumentsPage() {
         setIsSigningOpen(false)
       }
     } catch (error) {
-      console.error("Error signing document:", error)
-      toast.error("Lỗi khi ký văn bản")
+      handleFirestoreError(error, OperationType.UPDATE, `documents/${docId}`)
     }
   }
 

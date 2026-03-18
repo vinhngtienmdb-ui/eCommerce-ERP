@@ -1,25 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Search, ShoppingCart, Plus, Minus, Wallet, User } from "lucide-react";
+import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-
-// Mock Data
-const MOCK_POS_PRODUCTS = [
-  { id: "1", name: "Cà phê sữa đá", price: 25000, image: "https://picsum.photos/seed/coffee/100/100" },
-  { id: "2", name: "Trà đào cam sả", price: 35000, image: "https://picsum.photos/seed/tea/100/100" },
-  { id: "3", name: "Bánh mì thịt nướng", price: 20000, image: "https://picsum.photos/seed/banhmi/100/100" },
-  { id: "4", name: "Sinh tố bơ", price: 40000, image: "https://picsum.photos/seed/avocado/100/100" },
-  { id: "5", name: "Trà sữa trân châu", price: 30000, image: "https://picsum.photos/seed/milktea/100/100" },
-  { id: "6", name: "Cà phê đen", price: 20000, image: "https://picsum.photos/seed/blackcoffee/100/100" },
-];
-
-const MOCK_CUSTOMERS = [
-  { id: "c1", name: "Nguyễn Văn A", phone: "0901234567", pointsBalance: 5000, walletBalance: 500000 },
-  { id: "c2", name: "Trần Thị B", phone: "0987654321", pointsBalance: 12000, walletBalance: 150000 },
-];
+import { db, auth } from "@/src/lib/firebase";
+import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot } from "firebase/firestore";
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 
 const STORE_CONFIG = {
   id: "s1",
@@ -30,14 +18,33 @@ const STORE_CONFIG = {
 
 export function POSCheckout() {
   const { t } = useTranslation();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState<Array<{ product: any; quantity: number }>>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [pointsToUse, setPointsToUse] = useState<number>(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const filteredProducts = MOCK_POS_PRODUCTS.filter((p) =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  useEffect(() => {
+    if (!auth.currentUser) return;
+
+    const q = query(collection(db, "products"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProducts(docs);
+      setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, "products");
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const filteredProducts = products.filter((p) =>
+    p.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const addToCart = (product: any) => {
@@ -62,40 +69,96 @@ export function POSCheckout() {
     );
   };
 
-  const searchCustomer = () => {
-    const customer = MOCK_CUSTOMERS.find((c) => c.phone === customerPhone);
-    if (customer) {
-      setSelectedCustomer(customer);
-      setPointsToUse(0);
-    } else {
-      toast.error("Customer not found");
-      setSelectedCustomer(null);
+  const searchCustomer = async () => {
+    if (!customerPhone) return;
+    try {
+      const q = query(collection(db, "customers"), where("phone", "==", customerPhone), limit(1));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        setSelectedCustomer({ id: doc.id, ...doc.data() });
+        setPointsToUse(0);
+      } else {
+        toast.error(t("pos.customerNotFound", "Không tìm thấy khách hàng"));
+        setSelectedCustomer(null);
+      }
+    } catch (error) {
+      handleFirestoreError(error, OperationType.GET, "customers");
     }
   };
 
-  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + (item.product.price || item.product.currentPrice || 0) * item.quantity, 0);
   const discount = pointsToUse; // 1 point = 1 VND
   const total = Math.max(0, subtotal - discount);
   const platformFee = total * STORE_CONFIG.platformFeeRate;
   const pointsEarned = total * STORE_CONFIG.pointsEarnRate;
   const storeCredit = total - platformFee - pointsEarned;
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (cart.length === 0) return;
-    if (selectedCustomer && selectedCustomer.walletBalance < total) {
-      toast.error(t("pos.insufficientFunds"));
+    if (selectedCustomer && (selectedCustomer.walletBalance || 0) < total) {
+      toast.error(t("pos.insufficientFunds", "Số dư ví không đủ"));
       return;
     }
 
-    // Process payment
-    toast.success(t("pos.paymentSuccess"));
-    
-    // Reset state
-    setCart([]);
-    setSelectedCustomer(null);
-    setCustomerPhone("");
-    setPointsToUse(0);
+    setIsProcessing(true);
+    try {
+      // 1. Save Order
+      const orderData = {
+        items: cart.map(item => ({
+          productId: item.product.id,
+          name: item.product.name,
+          price: item.product.price || item.product.currentPrice || 0,
+          quantity: item.quantity
+        })),
+        subtotal,
+        discount,
+        total,
+        platformFee,
+        pointsEarned,
+        storeCredit,
+        customerId: selectedCustomer?.id || null,
+        customerName: selectedCustomer?.name || "Khách vãng lai",
+        status: "completed",
+        createdAt: new Date().toISOString(),
+        creatorId: auth.currentUser?.uid,
+        storeId: STORE_CONFIG.id
+      };
+      await addDoc(collection(db, "orders"), orderData);
+
+      // 2. Update Customer (if selected)
+      if (selectedCustomer) {
+        const customerRef = doc(db, "customers", selectedCustomer.id);
+        await updateDoc(customerRef, {
+          walletBalance: (selectedCustomer.walletBalance || 0) - total,
+          pointsBalance: (selectedCustomer.pointsBalance || 0) - pointsToUse + pointsEarned,
+          totalSpent: (selectedCustomer.totalSpent || 0) + total,
+          totalOrders: (selectedCustomer.totalOrders || 0) + 1,
+          lastOrder: new Date().toISOString()
+        });
+      }
+
+      toast.success(t("pos.paymentSuccess", "Thanh toán thành công"));
+      
+      // Reset state
+      setCart([]);
+      setSelectedCustomer(null);
+      setCustomerPhone("");
+      setPointsToUse(0);
+    } catch (error) {
+      handleFirestoreError(error, OperationType.WRITE, "orders/payment");
+    } finally {
+      setIsProcessing(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="h-[calc(100vh-10rem)] flex gap-6">

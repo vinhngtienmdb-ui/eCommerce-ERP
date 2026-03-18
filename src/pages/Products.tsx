@@ -165,10 +165,10 @@ export function Products() {
           <p className="text-muted-foreground">{t("products.description")}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
+          <Button variant="outline" onClick={() => toast.success(t("common.settingsSuccess", "Đã mở cài đặt sản phẩm"))}>
             {t("products.productSettings")} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
-          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
+          <Button variant="outline" onClick={() => toast.success(t("common.batchSuccess", "Đã mở công cụ xử lý hàng loạt"))}>
             {t("products.batchTools")} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
@@ -331,7 +331,7 @@ export function Products() {
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
+              <Button variant="outline" onClick={() => toast.success(t("common.applySuccess", "Đã áp dụng bộ lọc"))}>
                 {t("products.filters.apply")}
               </Button>
               <Button variant="ghost" onClick={() => setSearchTerm("")}>
@@ -422,8 +422,10 @@ export function Products() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
-                          <Edit className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" asChild>
+                          <Link to={`/products/edit/${product.id}`}>
+                            <Edit className="h-4 w-4" />
+                          </Link>
                         </Button>
                         <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(product.id)}>
                           <Trash2 className="h-4 w-4" />

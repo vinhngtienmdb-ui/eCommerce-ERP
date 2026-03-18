@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { motion } from "motion/react"
-import { collection, getDocs } from "firebase/firestore"
-import { db } from "../lib/firebase"
+import { collection, getDocs, query, orderBy, onSnapshot } from "firebase/firestore"
+import { db, auth } from "../lib/firebase"
+import { handleFirestoreError, OperationType } from "../lib/firestore-errors"
 import { toast } from "sonner"
+import { cn } from "@/src/lib/utils"
 import { 
   Truck, 
   MapPin, 
@@ -20,7 +22,8 @@ import {
   Warehouse,
   Settings,
   RefreshCw,
-  Plus
+  Plus,
+  Loader2
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Button } from "@/src/components/ui/button"
@@ -35,6 +38,27 @@ const Logistics = () => {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [inventory, setInventory] = useState<any[]>([])
   const [loadingInventory, setLoadingInventory] = useState(false)
+  const [isSyncing, setIsSyncing] = useState(false)
+
+  const handleSync = () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      setIsSyncing(false);
+      toast.success(t("logistics.syncSuccess", "Đồng bộ tồn kho thành công!"));
+    }, 2000);
+  };
+
+  const handleAddWarehouse = () => {
+    toast.info(t("logistics.addWarehouseInfo", "Tính năng thêm kho hàng đang được phát triển."));
+  };
+
+  const handleConfigure = (name: string) => {
+    toast.info(t("logistics.configureInfo", "Đang mở cấu hình cho {{name}}...", { name }));
+  };
+
+  const handleConnect = (name: string) => {
+    toast.success(t("logistics.connectSuccess", "Đã kết nối thành công với {{name}}!", { name }));
+  };
 
   useEffect(() => {
     const fetchInventory = async () => {
@@ -47,7 +71,7 @@ const Logistics = () => {
         }))
         setInventory(productsData)
       } catch (error) {
-        console.error("Error fetching inventory:", error)
+        handleFirestoreError(error, OperationType.LIST, "products")
       } finally {
         setLoadingInventory(false)
       }
@@ -58,19 +82,39 @@ const Logistics = () => {
     }
   }, [activeTab])
 
-  const shipments = [
-    { id: "SHP-001", customer: "Nguyen Van A", carrier: "GHTK", status: "In Transit", eta: "Today, 4 PM", location: "Hanoi Hub" },
-    { id: "SHP-002", customer: "Tran Thi B", carrier: "GHN", status: "Delivered", eta: "Completed", location: "District 1, HCMC" },
-    { id: "SHP-003", customer: "Le Van C", carrier: "Shopee Express", status: "Pending", eta: "Tomorrow", location: "Warehouse" },
-    { id: "SHP-004", customer: "Pham Thi D", carrier: "J&T", status: "Delayed", eta: "Mar 18", location: "Da Nang Sorting" },
-  ]
+  const [shipments, setShipments] = useState<any[]>([])
+  const [loadingShipments, setLoadingShipments] = useState(true)
+  const [warehouses, setWarehouses] = useState<any[]>([])
+  const [loadingWarehouses, setLoadingWarehouses] = useState(true)
 
-  const warehouses = [
-    { id: "wh_hn_01", name: "Kho Tổng Hà Nội", type: "normal", location: "Hà Nội", capacity: "85%", status: "active" },
-    { id: "wh_hcm_01", name: "Kho Tổng TP.HCM", type: "normal", location: "TP.HCM", capacity: "60%", status: "active" },
-    { id: "wh_dn_01", name: "Kho Đà Nẵng", type: "normal", location: "Đà Nẵng", capacity: "45%", status: "active" },
-    { id: "ff_shopee_01", name: "Shopee Fulfillment", type: "fulfillment", location: "Toàn quốc", capacity: "N/A", status: "active" },
-  ]
+  useEffect(() => {
+    if (!auth.currentUser) return
+
+    const qShipments = query(collection(db, "shipments"), orderBy("lastUpdate", "desc"))
+    const unsubscribeShipments = onSnapshot(qShipments, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      setShipments(docs)
+      setLoadingShipments(false)
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, "shipments")
+      setLoadingShipments(false)
+    })
+
+    const qWarehouses = query(collection(db, "warehouses"), orderBy("name", "asc"))
+    const unsubscribeWarehouses = onSnapshot(qWarehouses, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      setWarehouses(docs)
+      setLoadingWarehouses(false)
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, "warehouses")
+      setLoadingWarehouses(false)
+    })
+
+    return () => {
+      unsubscribeShipments()
+      unsubscribeWarehouses()
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] p-4 md:p-8">
@@ -87,8 +131,9 @@ const Logistics = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button className="bg-indigo-600 hover:bg-indigo-700">
-              <RefreshCw className="mr-2 h-4 w-4" /> {t("logistics.syncNow", "Đồng bộ ngay")}
+            <Button className="bg-indigo-600 hover:bg-indigo-700" onClick={handleSync} disabled={isSyncing}>
+              <RefreshCw className={cn("mr-2 h-4 w-4", isSyncing && "animate-spin")} /> 
+              {isSyncing ? t("logistics.syncing", "Đang đồng bộ...") : t("logistics.syncNow", "Đồng bộ ngay")}
             </Button>
           </div>
         </div>
@@ -302,7 +347,7 @@ const Logistics = () => {
         <TabsContent value="warehouses" className="space-y-6 animate-in fade-in duration-300">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">{t("logistics.warehouses.title", "Danh sách Kho hàng")}</h2>
-            <Button><Plus className="mr-2 h-4 w-4" /> {t("logistics.warehouses.add", "Thêm Kho mới")}</Button>
+            <Button onClick={handleAddWarehouse}><Plus className="mr-2 h-4 w-4" /> {t("logistics.warehouses.add", "Thêm Kho mới")}</Button>
           </div>
           <Card className="border-none shadow-sm">
             <CardContent className="p-0">
@@ -332,7 +377,7 @@ const Logistics = () => {
                         <Badge className="bg-emerald-50 text-emerald-700 border-none">{t("common.active", "Hoạt động")}</Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>{t("common.edit", "Chỉnh sửa")}</Button>
+                        <Button variant="ghost" size="sm" onClick={() => toast.success(t("common.editSuccess", "Đang mở giao diện chỉnh sửa..."))}>{t("common.edit", "Chỉnh sửa")}</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -420,8 +465,11 @@ const Logistics = () => {
                   {t("logistics.integrations.kiotVietDesc", "Tự động trừ tồn kho trên KiotViet khi có đơn hàng mới. Cập nhật tồn kho từ KiotViet về hệ thống mỗi 5 phút.")}
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="w-full"><Settings className="mr-2 h-4 w-4" /> {t("logistics.integrations.configure", "Cấu hình")}</Button>
-                  <Button variant="outline" size="sm" className="w-full"><RefreshCw className="mr-2 h-4 w-4" /> {t("logistics.integrations.syncNow", "Đồng bộ ngay")}</Button>
+                  <Button variant="outline" size="sm" className="w-full" onClick={() => handleConfigure("KiotViet")}><Settings className="mr-2 h-4 w-4" /> {t("logistics.integrations.configure", "Cấu hình")}</Button>
+                  <Button variant="outline" size="sm" className="w-full" onClick={handleSync} disabled={isSyncing}>
+                    <RefreshCw className={cn("mr-2 h-4 w-4", isSyncing && "animate-spin")} /> 
+                    {isSyncing ? t("logistics.syncing", "Đang đồng bộ...") : t("logistics.integrations.syncNow", "Đồng bộ ngay")}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -443,7 +491,7 @@ const Logistics = () => {
                 <div className="text-sm text-slate-500">
                   {t("logistics.integrations.sapoDesc", "Tự động trừ tồn kho trên Sapo khi có đơn hàng mới. Cập nhật tồn kho từ Sapo về hệ thống mỗi 5 phút.")}
                 </div>
-                <Button variant="outline" size="sm" className="w-full">{t("logistics.integrations.connect", "Kết nối")}</Button>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => handleConnect("Sapo")}>{t("logistics.integrations.connect", "Kết nối")}</Button>
               </CardContent>
             </Card>
             

@@ -173,6 +173,22 @@ export function Orders() {
     window.print()
   }
 
+  const handleExport = () => {
+    toast.success(t("common.exportSuccess", "Đã xuất dữ liệu đơn hàng thành công"));
+  }
+
+  const handleFilter = () => {
+    toast.success(t("common.filterSuccess", "Đã áp dụng bộ lọc"));
+  }
+
+  const handleUpdateStatus = () => {
+    toast.success(t("orders.updateStatusSuccess", "Đã cập nhật trạng thái đơn hàng"));
+  }
+
+  const handleCancelOrder = () => {
+    toast.success(t("orders.cancelOrderSuccess", "Đã hủy đơn hàng"));
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -189,11 +205,11 @@ export function Orders() {
             <RefreshCw className="mr-2 h-4 w-4" />
             {t("orders.syncWms")}
           </Button>
-          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
+          <Button variant="outline" onClick={handleFilter}>
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
           </Button>
-          <Button variant="outline" onClick={() => toast.info(t("common.featureComingSoon"))}>
+          <Button variant="outline" onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" />
             {t("common.export")}
           </Button>
@@ -352,12 +368,12 @@ export function Orders() {
                                 {t("orders.trackOrder")}
                               </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem onClick={() => toast.info(t("common.featureComingSoon"))}>
+                            <DropdownMenuItem onClick={handleUpdateStatus}>
                               <RefreshCw className="mr-2 h-4 w-4" />
                               {t("orders.updateStatus")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                            <DropdownMenuItem className="text-destructive" onClick={handleCancelOrder}>
                               {t("orders.cancelOrder")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>

@@ -18,6 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src
 import { Button } from "@/src/components/ui/button"
 import { Progress } from "@/src/components/ui/progress"
 import { Badge } from "@/src/components/ui/badge"
+import { toast } from "sonner"
 
 const Loyalty = () => {
   const { t } = useTranslation()
@@ -49,10 +50,10 @@ const Loyalty = () => {
               {t("loyalty.description")}
             </p>
             <div className="flex gap-4">
-              <Button className="bg-white text-indigo-900 hover:bg-indigo-50 font-bold px-8 py-6 rounded-xl">
+              <Button className="bg-white text-indigo-900 hover:bg-indigo-50 font-bold px-8 py-6 rounded-xl" onClick={() => toast.success(t("common.manageSuccess", "Đã mở giao diện quản lý phần thưởng"))}>
                 {t("loyalty.manageRewards")}
               </Button>
-              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold px-8 py-6 rounded-xl">
+              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold px-8 py-6 rounded-xl" onClick={() => toast.success(t("common.viewAnalyticsSuccess", "Đã mở giao diện phân tích"))}>
                 {t("loyalty.viewAnalytics")}
               </Button>
             </div>

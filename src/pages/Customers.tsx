@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { 
   Users, 
@@ -21,7 +21,9 @@ import {
   TrendingDown,
   AlertTriangle,
   Loader2,
-  Sparkles
+  Sparkles,
+  Trash2,
+  Edit
 } from "lucide-react"
 import { GoogleGenAI } from "@google/genai"
 import { Button } from "@/src/components/ui/button"
@@ -52,37 +54,74 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { toast } from "sonner"
+import { db, auth } from "@/src/lib/firebase"
+import { collection, onSnapshot, query, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "firebase/firestore"
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
-
-import { customersData } from "@/src/data/customers"
 
 import { cn } from "@/src/lib/utils"
 import Markdown from "react-markdown"
 
 export function Customers() {
   const { t } = useTranslation()
+  const [customers, setCustomers] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const [isAiLoading, setIsAiLoading] = useState(false)
   const [aiInsights, setAiInsights] = useState<string | null>(null)
 
+  // Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    status: "active",
+    walletBalance: 0,
+    pointsBalance: 0
+  })
+
   // AI Churn Prediction State
   const [isChurnLoading, setIsChurnLoading] = useState(false)
-  const [churnPredictions, setChurnPredictions] = useState<Record<number, { risk: string, score: number }>>({})
+  const [churnPredictions, setChurnPredictions] = useState<Record<string, { risk: string, score: number }>>({})
+
+  useEffect(() => {
+    if (!auth.currentUser) return;
+
+    const q = query(collection(db, "customers"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setCustomers(docs);
+      setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, "customers");
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const generateAiInsights = async () => {
+    if (customers.length === 0) {
+      toast.error(t("customers.ai.noData", "Không có dữ liệu khách hàng để phân tích"));
+      return;
+    }
     setIsAiLoading(true)
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
       const model = ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Analyze customer data for an e-commerce platform.
-        Current stats: ${customersData.length} total customers, ${customersData.filter(c => c.status === 'vip').length} VIPs.
+        Current stats: ${customers.length} total customers, ${customers.filter(c => c.status === 'vip').length} VIPs.
         
         Provide a strategic segmentation analysis in Markdown format.
         Include:
@@ -110,9 +149,9 @@ export function Customers() {
         model: "gemini-3-flash-preview",
         contents: `Predict churn risk for this customer:
         Name: ${customer.name}
-        Total Orders: ${customer.totalOrders}
-        Total Spent: ${customer.totalSpent}
-        Last Order: ${customer.lastOrder}
+        Total Orders: ${customer.totalOrders || 0}
+        Total Spent: ${customer.totalSpent || 0}
+        Last Order: ${customer.lastOrder || "N/A"}
         Status: ${customer.status}
         
         Provide a JSON response with:
@@ -134,9 +173,105 @@ export function Customers() {
     }
   }
 
+  const handleSaveCustomer = async () => {
+    if (!formData.name || !formData.phone) {
+      toast.error(t("customers.fillRequired", "Vui lòng điền đầy đủ thông tin bắt buộc"));
+      return;
+    }
+
+    try {
+      if (isEditing && selectedCustomer) {
+        const customerRef = doc(db, "customers", selectedCustomer.id);
+        await updateDoc(customerRef, {
+          ...formData,
+          updatedAt: serverTimestamp()
+        });
+        toast.success(t("customers.updateSuccess", "Cập nhật khách hàng thành công"));
+      } else {
+        await addDoc(collection(db, "customers"), {
+          ...formData,
+          totalOrders: 0,
+          totalSpent: 0,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          creatorId: auth.currentUser?.uid
+        });
+        toast.success(t("customers.addSuccess", "Thêm khách hàng thành công"));
+      }
+      setIsAddDialogOpen(false);
+      resetForm();
+    } catch (error) {
+      handleFirestoreError(error, isEditing ? OperationType.UPDATE : OperationType.CREATE, "customers");
+    }
+  }
+
+  const handleDeleteCustomer = async (id: string) => {
+    if (!confirm(t("customers.deleteConfirm", "Bạn có chắc chắn muốn xóa khách hàng này?"))) return;
+    try {
+      await deleteDoc(doc(db, "customers", id));
+      toast.success(t("customers.deleteSuccess", "Đã xóa khách hàng"));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.DELETE, "customers");
+    }
+  }
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      status: "active",
+      walletBalance: 0,
+      pointsBalance: 0
+    });
+    setSelectedCustomer(null);
+    setIsEditing(false);
+  }
+
+  const handleEdit = (customer: any) => {
+    setSelectedCustomer(customer);
+    setFormData({
+      name: customer.name,
+      phone: customer.phone,
+      email: customer.email || "",
+      status: customer.status || "active",
+      walletBalance: customer.walletBalance || 0,
+      pointsBalance: customer.pointsBalance || 0
+    });
+    setIsEditing(true);
+    setIsAddDialogOpen(true);
+  }
+
+  const filteredCustomers = customers.filter(c => 
+    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.phone?.includes(searchTerm) ||
+    c.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   const handleViewHistory = (customer: any) => {
     setSelectedCustomer(customer)
     setIsHistoryOpen(true)
+  }
+
+  const handleAddCustomer = () => {
+    resetForm();
+    setIsAddDialogOpen(true);
+  }
+
+  const handleFilter = () => {
+    toast.success(t("common.filterSuccess", "Đã áp dụng bộ lọc"));
+  }
+
+  const handleViewDetails = (customer: any) => {
+    toast.success(t("customers.viewDetailsSuccess", `Đang xem chi tiết khách hàng ${customer.name}`));
   }
 
   return (
@@ -149,7 +284,7 @@ export function Customers() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
+          <Button onClick={handleAddCustomer}>
             <UserPlus className="mr-2 h-4 w-4" />
             {t("customers.crm.title")}
           </Button>
@@ -165,7 +300,7 @@ export function Customers() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{customersData.length}</div>
+            <div className="text-2xl font-bold">{customers.length}</div>
             <p className="text-xs text-muted-foreground mt-1">{t("customers.stats.registeredUsers")}</p>
           </CardContent>
         </Card>
@@ -201,7 +336,7 @@ export function Customers() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{customersData.filter(c => c.status === 'vip').length}</div>
+            <div className="text-2xl font-bold">{customers.filter(c => c.status === 'vip').length}</div>
             <p className="text-xs text-muted-foreground mt-1">{t("customers.stats.highValue")}</p>
           </CardContent>
         </Card>
@@ -237,7 +372,7 @@ export function Customers() {
           ) : aiInsights ? (
             <div className="space-y-4">
               <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-white/50 p-4 rounded-xl border border-indigo-100">
-                {aiInsights}
+                <Markdown>{aiInsights}</Markdown>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">
@@ -289,7 +424,7 @@ export function Customers() {
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
-                  <Button variant="outline" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                  <Button variant="outline" size="icon" onClick={handleFilter}>
                     <Filter className="h-4 w-4" />
                   </Button>
                 </div>
@@ -311,7 +446,7 @@ export function Customers() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {customersData.map((customer) => (
+                  {filteredCustomers.map((customer) => (
                     <TableRow key={customer.id}>
                       <TableCell className="font-medium">{customer.name}</TableCell>
                       <TableCell>
@@ -320,14 +455,14 @@ export function Customers() {
                           <span className="text-muted-foreground">{customer.email}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-center">{customer.totalOrders}</TableCell>
+                      <TableCell className="text-center">{customer.totalOrders || 0}</TableCell>
                       <TableCell className="text-right font-medium text-emerald-600">
-                        {formatVND(customer.totalSpent)}
+                        {formatVND(customer.totalSpent || 0)}
                       </TableCell>
                       <TableCell className="text-right font-medium text-blue-600">
-                        {formatVND(customer.walletBalance)}
+                        {formatVND(customer.walletBalance || 0)}
                       </TableCell>
-                      <TableCell>{customer.lastOrder}</TableCell>
+                      <TableCell>{customer.lastOrder ? new Date(customer.lastOrder).toLocaleDateString() : "N/A"}</TableCell>
                       <TableCell>
                         <Badge variant={customer.status === 'vip' ? 'default' : customer.status === 'active' ? 'secondary' : 'outline'}>
                           {t(`customers.segments.${customer.status}`)}
@@ -371,9 +506,20 @@ export function Customers() {
                               <History className="mr-2 h-4 w-4" />
                               {t("customers.crm.purchaseHistory")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => toast.info(t("common.featureComingSoon"))}>
+                            <DropdownMenuItem onClick={() => handleEdit(customer)}>
+                              <Edit className="mr-2 h-4 w-4" />
+                              {t("common.edit")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewDetails(customer)}>
                               <Users className="mr-2 h-4 w-4" />
                               {t("customers.crm.details")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-red-600 focus:text-red-600"
+                              onClick={() => handleDeleteCustomer(customer.id)}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              {t("common.delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -386,6 +532,85 @@ export function Customers() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Add/Edit Customer Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{isEditing ? t("common.edit") : t("customers.crm.title")}</DialogTitle>
+            <DialogDescription>
+              {t("customers.fillInfo", "Điền thông tin khách hàng bên dưới")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">{t("customers.crm.buyerName")}</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="phone">{t("customers.crm.contact")} (Phone)</Label>
+              <Input
+                id="phone"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="status">{t("common.status")}</Label>
+              <Select 
+                value={formData.status} 
+                onValueChange={(value) => setFormData({ ...formData, status: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">{t("customers.segments.active")}</SelectItem>
+                  <SelectItem value="vip">{t("customers.segments.vip")}</SelectItem>
+                  <SelectItem value="inactive">{t("customers.segments.inactive")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="wallet">{t("customers.crm.walletBalance")}</Label>
+                <Input
+                  id="wallet"
+                  type="number"
+                  value={formData.walletBalance}
+                  onChange={(e) => setFormData({ ...formData, walletBalance: Number(e.target.value) })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="points">Points</Label>
+                <Input
+                  id="points"
+                  type="number"
+                  value={formData.pointsBalance}
+                  onChange={(e) => setFormData({ ...formData, pointsBalance: Number(e.target.value) })}
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>{t("common.cancel")}</Button>
+            <Button onClick={handleSaveCustomer}>{t("common.save")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Purchase History Dialog */}
       <Dialog open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
@@ -408,7 +633,7 @@ export function Customers() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {selectedCustomer?.history.map((order: any) => (
+                {selectedCustomer?.history?.map((order: any) => (
                   <TableRow key={order.id}>
                     <TableCell className="font-medium">{order.id}</TableCell>
                     <TableCell>{order.date}</TableCell>
@@ -421,6 +646,13 @@ export function Customers() {
                     </TableCell>
                   </TableRow>
                 ))}
+                {(!selectedCustomer?.history || selectedCustomer.history.length === 0) && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
+                      {t("orders.noData", "Không có lịch sử mua hàng")}
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>

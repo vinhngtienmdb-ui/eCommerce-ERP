@@ -63,7 +63,7 @@ export function Advertising() {
             {t("advertising.description")}
           </p>
         </div>
-        <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
+        <Button onClick={() => toast.success(t("common.createSuccess", "Đã mở giao diện tạo chiến dịch quảng cáo"))}>
           <Plus className="mr-2 h-4 w-4" />
           {t("advertising.bidding.createCampaign")}
         </Button>

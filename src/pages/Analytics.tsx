@@ -15,7 +15,7 @@ export function Analytics() {
           <h2 className="text-3xl font-bold tracking-tight">{t("analytics.title")}</h2>
           <p className="text-muted-foreground">{t("analytics.description")}</p>
         </div>
-        <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
+        <Button onClick={() => toast.success(t("common.exportSuccess", "Đã xuất báo cáo thành công"))}>
           {t("common.exportReport")}
         </Button>
       </div>

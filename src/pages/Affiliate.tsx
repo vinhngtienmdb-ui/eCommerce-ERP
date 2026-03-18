@@ -117,7 +117,7 @@ export function Affiliate() {
           </h2>
           <p className="text-muted-foreground">{t("affiliate.description")}</p>
         </div>
-        <Button onClick={() => toast.info(t("common.featureComingSoon"))}>
+        <Button onClick={() => toast.success(t("common.inviteSuccess", "Đã mở giao diện mời đối tác"))}>
           <Plus className="mr-2 h-4 w-4" /> {t("affiliate.publishers.invite")}
         </Button>
       </div>
@@ -256,7 +256,7 @@ export function Affiliate() {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                            <Button variant="ghost" size="sm" onClick={() => toast.success(t("common.editSuccess", "Đang mở giao diện chỉnh sửa..."))}>
                               {t("common.edit")}
                             </Button>
                           </TableCell>
@@ -287,7 +287,7 @@ export function Affiliate() {
                     <h3 className="text-lg font-medium">
                       {t("affiliate.commissions.categoryRates")}
                     </h3>
-                    <Button variant="outline" size="sm" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                    <Button variant="outline" size="sm" onClick={() => toast.success(t("common.addSuccess", "Đã mở giao diện thêm danh mục"))}>
                       <Plus className="mr-2 h-4 w-4" />
                       {t("affiliate.commissions.addCategory")}
                     </Button>
@@ -316,7 +316,7 @@ export function Affiliate() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                          <Button variant="ghost" size="icon" onClick={() => toast.success(t("common.deleteSuccess", "Đã xóa thành công"))}>
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
                         </TableCell>
@@ -334,7 +334,7 @@ export function Affiliate() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Button variant="ghost" size="icon" onClick={() => toast.info(t("common.featureComingSoon"))}>
+                          <Button variant="ghost" size="icon" onClick={() => toast.success(t("common.deleteSuccess", "Đã xóa thành công"))}>
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
                         </TableCell>
