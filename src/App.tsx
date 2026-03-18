@@ -63,6 +63,7 @@ const HRDashboard = lazy(() => import("./pages/hr/HRDashboard").then(m => ({ def
 const AdminDashboard = lazy(() => import("./pages/admin-workspace/AdminDashboard").then(m => ({ default: m.AdminDashboard })))
 const GroupBuying = lazy(() => import("./pages/marketing/GroupBuying").then(m => ({ default: m.GroupBuying })))
 const PointWallet = lazy(() => import("./pages/loyalty/PointWallet").then(m => ({ default: m.PointWallet })))
+const POS = lazy(() => import("./pages/pos/POS").then(m => ({ default: m.POS })))
 
 function FallbackRoute() {
   const { t } = useTranslation()
@@ -151,6 +152,7 @@ export default function App() {
                 <Route path="registration" element={<SellerRegistrationPage />} />
               </Route>
               <Route path="customers" element={<Customers />} />
+              <Route path="pos" element={<POS />} />
               <Route path="kol-koc" element={<KolManagement />} />
               <Route path="customer-service" element={<CustomerService />} />
               <Route path="marketing">

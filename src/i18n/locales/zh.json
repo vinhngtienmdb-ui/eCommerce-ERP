@@ -40,6 +40,7 @@
     "growthMarketing": "营销",
     "marketing": "营销渠道",
     "groupBuying": "拼团",
+    "pos": "门店 POS",
     "affiliate": "联盟营销",
     "purchasing": "采购",
     "finance": "财务",
@@ -1588,6 +1589,75 @@
       "connect": "连接"
     }
   },
+  "pos": {
+    "title": "门店 POS 软件",
+    "subtitle": "独立管理销售、员工和门店设置",
+    "tabs": {
+      "checkout": "收银",
+      "products": "产品",
+      "staff": "员工与排班",
+      "settings": "设置"
+    },
+    "searchProduct": "搜索产品...",
+    "cart": "购物车",
+    "emptyCart": "购物车为空",
+    "customer": "客户",
+    "searchCustomer": "搜索客户 (电话)...",
+    "pointsBalance": "积分余额: {points}",
+    "walletBalance": "钱包余额: {balance}",
+    "subtotal": "小计",
+    "usePoints": "使用积分",
+    "pointsToUse": "要使用的积分",
+    "total": "总计",
+    "pay": "支付",
+    "paymentSuccess": "支付成功！",
+    "insufficientFunds": "钱包余额不足",
+    "storeWalletCredit": "已存入门店钱包: {amount}",
+    "platformFee": "平台费 ({rate}%): {fee}",
+    "pointsEarned": "获得积分: {points}",
+    "products": {
+      "title": "产品与服务",
+      "subtitle": "管理门店库存和服务",
+      "add": "添加产品",
+      "search": "搜索产品...",
+      "name": "产品名称",
+      "category": "类别",
+      "price": "价格",
+      "stock": "库存",
+      "actions": "操作"
+    },
+    "staff": {
+      "title": "员工与排班",
+      "subtitle": "管理员工和工作班次",
+      "shifts": "排班管理",
+      "add": "添加员工",
+      "search": "搜索员工...",
+      "name": "员工姓名",
+      "role": "角色",
+      "shift": "班次",
+      "status": "状态",
+      "actions": "操作"
+    },
+    "settings": {
+      "title": "门店设置",
+      "subtitle": "配置门店信息、外观和设备",
+      "info": "基本信息",
+      "infoDesc": "此信息将显示在客户收据上",
+      "storeName": "门店名称",
+      "address": "地址",
+      "phone": "电话号码",
+      "decoration": "外观与主题",
+      "decorationDesc": "自定义 POS 软件的外观和感觉",
+      "darkMode": "深色模式",
+      "darkModeDesc": "使用深色主题以减少眼睛疲劳",
+      "hardware": "硬件设备",
+      "hardwareDesc": "连接收据打印机和条形码扫描仪",
+      "autoPrint": "自动打印收据",
+      "autoPrintDesc": "付款成功后立即打印收据",
+      "save": "保存更改",
+      "saveSuccess": "门店设置保存成功！"
+    }
+  },
   "loyalty": {
     "wallet": {
       "title": "积分钱包",
@@ -1595,7 +1665,16 @@
       "redeem": "兑换",
       "viewGifts": "查看礼品",
       "history": "交易记录",
-      "noHistory": "暂无交易"
+      "noHistory": "暂无交易",
+      "redeemSuccess": "成功兑换 {reward}！",
+      "insufficientPoints": "积分不足，无法兑换此奖励。",
+      "confirmRedeem": "您确定要用 {points} 积分兑换 {reward} 吗？",
+      "cancel": "取消",
+      "confirm": "确认",
+      "earn": "获得",
+      "spent": "消费",
+      "rewards": "可用奖励",
+      "points": "积分"
     }
   },
   "socialCommerce": {

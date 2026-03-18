@@ -70,6 +70,7 @@
     "growthMarketing": "Marketing",
     "marketing": "Kênh Marketing",
     "groupBuying": "Mua chung",
+    "pos": "POS Cửa hàng",
     "affiliate": "Tiếp thị liên kết",
     "purchasing": "Mua hàng",
     "finance": "Tài chính",
@@ -216,6 +217,75 @@
       "connect": "Kết nối"
     }
   },
+  "pos": {
+    "title": "Phần mềm POS Cửa hàng",
+    "subtitle": "Quản lý bán hàng, nhân viên và thiết lập cửa hàng độc lập",
+    "tabs": {
+      "checkout": "Bán hàng",
+      "products": "Sản phẩm",
+      "staff": "Nhân viên & Ca",
+      "settings": "Thiết lập"
+    },
+    "searchProduct": "Tìm kiếm sản phẩm...",
+    "cart": "Giỏ hàng",
+    "emptyCart": "Giỏ hàng trống",
+    "customer": "Khách hàng",
+    "searchCustomer": "Tìm khách hàng (SĐT)...",
+    "pointsBalance": "Điểm tích lũy: {points}",
+    "walletBalance": "Số dư ví: {balance}",
+    "subtotal": "Tạm tính",
+    "usePoints": "Sử dụng điểm",
+    "pointsToUse": "Số điểm muốn dùng",
+    "total": "Tổng cộng",
+    "pay": "Thanh toán",
+    "paymentSuccess": "Thanh toán thành công!",
+    "insufficientFunds": "Số dư ví không đủ",
+    "storeWalletCredit": "Đã cộng vào ví cửa hàng: {amount}",
+    "platformFee": "Phí nền tảng ({rate}%): {fee}",
+    "pointsEarned": "Điểm tích lũy nhận được: {points}",
+    "products": {
+      "title": "Sản phẩm & Dịch vụ",
+      "subtitle": "Quản lý danh mục hàng hóa của cửa hàng",
+      "add": "Thêm sản phẩm",
+      "search": "Tìm kiếm sản phẩm...",
+      "name": "Tên sản phẩm",
+      "category": "Danh mục",
+      "price": "Giá bán",
+      "stock": "Tồn kho",
+      "actions": "Thao tác"
+    },
+    "staff": {
+      "title": "Nhân viên & Ca làm việc",
+      "subtitle": "Quản lý nhân sự và phân ca tại cửa hàng",
+      "shifts": "Xếp ca",
+      "add": "Thêm nhân viên",
+      "search": "Tìm kiếm nhân viên...",
+      "name": "Tên nhân viên",
+      "role": "Vai trò",
+      "shift": "Ca làm việc",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "settings": {
+      "title": "Thiết lập Cửa hàng",
+      "subtitle": "Cấu hình thông tin, giao diện và thiết bị",
+      "info": "Thông tin chung",
+      "infoDesc": "Thông tin này sẽ hiển thị trên hóa đơn của khách hàng",
+      "storeName": "Tên cửa hàng",
+      "address": "Địa chỉ",
+      "phone": "Số điện thoại",
+      "decoration": "Trang trí & Giao diện",
+      "decorationDesc": "Tùy chỉnh màu sắc và hiển thị của phần mềm POS",
+      "darkMode": "Chế độ tối (Dark Mode)",
+      "darkModeDesc": "Sử dụng giao diện tối để giảm mỏi mắt",
+      "hardware": "Thiết bị ngoại vi",
+      "hardwareDesc": "Kết nối máy in hóa đơn, máy quét mã vạch",
+      "autoPrint": "Tự động in hóa đơn",
+      "autoPrintDesc": "In hóa đơn ngay sau khi thanh toán thành công",
+      "save": "Lưu thay đổi",
+      "saveSuccess": "Đã lưu cấu hình cửa hàng!"
+    }
+  },
   "loyalty": {
     "wallet": {
       "title": "Ví điểm",
@@ -223,7 +293,16 @@
       "redeem": "Đổi quà",
       "viewGifts": "Xem quà tặng",
       "history": "Lịch sử giao dịch",
-      "noHistory": "Chưa có giao dịch nào"
+      "noHistory": "Chưa có giao dịch nào",
+      "redeemSuccess": "Đổi quà {reward} thành công!",
+      "insufficientPoints": "Không đủ điểm để đổi quà này.",
+      "confirmRedeem": "Bạn có chắc chắn muốn đổi {reward} với {points} điểm không?",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận",
+      "earn": "Nhận",
+      "spent": "Tiêu",
+      "rewards": "Quà tặng có sẵn",
+      "points": "điểm"
     }
   },
   "socialCommerce": {

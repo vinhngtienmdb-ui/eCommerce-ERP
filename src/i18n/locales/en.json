@@ -40,6 +40,7 @@
     "growthMarketing": "Marketing",
     "marketing": "Marketing Channel",
     "groupBuying": "Group Buying",
+    "pos": "Store POS",
     "affiliate": "Affiliate",
     "purchasing": "Purchasing",
     "finance": "Finance",
@@ -161,6 +162,75 @@
       "connect": "Connect"
     }
   },
+  "pos": {
+    "title": "Store POS Software",
+    "subtitle": "Manage sales, staff, and store settings independently",
+    "tabs": {
+      "checkout": "Checkout",
+      "products": "Products",
+      "staff": "Staff & Shifts",
+      "settings": "Settings"
+    },
+    "searchProduct": "Search products...",
+    "cart": "Cart",
+    "emptyCart": "Cart is empty",
+    "customer": "Customer",
+    "searchCustomer": "Search customer (Phone)...",
+    "pointsBalance": "Points Balance: {points}",
+    "walletBalance": "Wallet Balance: {balance}",
+    "subtotal": "Subtotal",
+    "usePoints": "Use Points",
+    "pointsToUse": "Points to use",
+    "total": "Total",
+    "pay": "Pay",
+    "paymentSuccess": "Payment successful!",
+    "insufficientFunds": "Insufficient wallet balance",
+    "storeWalletCredit": "Credited to store wallet: {amount}",
+    "platformFee": "Platform Fee ({rate}%): {fee}",
+    "pointsEarned": "Points earned: {points}",
+    "products": {
+      "title": "Products & Services",
+      "subtitle": "Manage store inventory and services",
+      "add": "Add Product",
+      "search": "Search products...",
+      "name": "Product Name",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "actions": "Actions"
+    },
+    "staff": {
+      "title": "Staff & Shifts",
+      "subtitle": "Manage employees and work shifts",
+      "shifts": "Manage Shifts",
+      "add": "Add Staff",
+      "search": "Search staff...",
+      "name": "Staff Name",
+      "role": "Role",
+      "shift": "Shift",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "settings": {
+      "title": "Store Settings",
+      "subtitle": "Configure store info, appearance, and devices",
+      "info": "General Information",
+      "infoDesc": "This information will appear on customer receipts",
+      "storeName": "Store Name",
+      "address": "Address",
+      "phone": "Phone Number",
+      "decoration": "Appearance & Theme",
+      "decorationDesc": "Customize the look and feel of the POS software",
+      "darkMode": "Dark Mode",
+      "darkModeDesc": "Use dark theme to reduce eye strain",
+      "hardware": "Hardware Devices",
+      "hardwareDesc": "Connect receipt printers and barcode scanners",
+      "autoPrint": "Auto-print Receipt",
+      "autoPrintDesc": "Print receipt immediately after successful payment",
+      "save": "Save Changes",
+      "saveSuccess": "Store settings saved successfully!"
+    }
+  },
   "loyalty": {
     "wallet": {
       "title": "Point Wallet",
@@ -168,7 +238,16 @@
       "redeem": "Redeem",
       "viewGifts": "View Gifts",
       "history": "Transaction History",
-      "noHistory": "No transactions yet"
+      "noHistory": "No transactions yet",
+      "redeemSuccess": "Successfully redeemed {reward}!",
+      "insufficientPoints": "Not enough points to redeem this reward.",
+      "confirmRedeem": "Are you sure you want to redeem {reward} for {points} points?",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "earn": "Earned",
+      "spent": "Spent",
+      "rewards": "Available Rewards",
+      "points": "pts"
     }
   },
   "socialCommerce": {

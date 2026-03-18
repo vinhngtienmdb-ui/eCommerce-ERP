@@ -33,7 +33,8 @@ import {
   Layout,
   Mail,
   Calendar,
-  X
+  X,
+  Store
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { Button } from "@/src/components/ui/button"
@@ -69,6 +70,7 @@ const navigationGroups = [
   {
     titleKey: "commerce",
     items: [
+      { nameKey: "pos", href: "/pos", icon: Store },
       { 
         nameKey: "products", 
         href: "/products", 
