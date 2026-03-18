@@ -39,6 +39,7 @@
     "orders": "Orders",
     "growthMarketing": "Marketing",
     "marketing": "Marketing Channel",
+    "groupBuying": "Group Buying",
     "affiliate": "Affiliate",
     "purchasing": "Purchasing",
     "finance": "Finance",
@@ -70,6 +71,8 @@
     "analytics": "Analytics",
     "sales": "Sales",
     "loyalty": "Loyalty & Gamification",
+    "loyaltyDashboard": "Loyalty Dashboard",
+    "pointWallet": "Point Wallet",
     "live": "Live Hub",
     "customers": "Customers",
     "users": "User Management",
@@ -156,6 +159,16 @@
       "configure": "Configure",
       "syncNow": "Sync Now",
       "connect": "Connect"
+    }
+  },
+  "loyalty": {
+    "wallet": {
+      "title": "Point Wallet",
+      "balance": "Balance",
+      "redeem": "Redeem",
+      "viewGifts": "View Gifts",
+      "history": "Transaction History",
+      "noHistory": "No transactions yet"
     }
   },
   "socialCommerce": {
@@ -949,9 +962,18 @@
       "status": "Status",
       "inTransit": "In Transit",
       "delivered": "Delivered",
-      "step1": { "title": "Received", "desc": "Order has been received by the carrier at the post office." },
-      "step2": { "title": "In Transit", "desc": "Order is being transferred to the sorting center." },
-      "step3": { "title": "Out for Delivery", "desc": "Shipper is on the way to deliver to you." }
+      "step1": {
+        "title": "Received",
+        "desc": "Order has been received by the carrier at the post office."
+      },
+      "step2": {
+        "title": "In Transit",
+        "desc": "Order is being transferred to the sorting center."
+      },
+      "step3": {
+        "title": "Out for Delivery",
+        "desc": "Shipper is on the way to deliver to you."
+      }
     },
     "trackOrder": "Track Order",
     "trackingNumber": "Tracking Number",
@@ -1060,92 +1082,92 @@
       "goals": "Goals",
       "info": "HR Info"
     },
-      "core": {
-        "addEmployee": "Add Employee",
-        "totalEmployees": "Total Employees",
-        "thisMonth": "this month",
-        "onboarding": "Onboarding",
-        "inProgress": "In Progress",
-        "departments": "Departments",
-        "active": "Active",
-        "employeeList": "Employee List",
-        "employeeListDesc": "Manage employee profiles and employment status.",
-        "employeeId": "Employee ID",
-        "name": "Full Name",
-        "department": "Department",
-        "position": "Position",
-        "status": "Status",
-        "contracts": "Labor Contracts",
-        "contractType": "Contract Type",
-        "startDate": "Start Date",
-        "endDate": "End Date",
-        "signedDate": "Signed Date"
-      },
-      "time": {
-        "leaveRequests": "Leave Requests",
-        "leaveRequestsDesc": "Manage leave requests and overtime.",
-        "employee": "Employee",
-        "type": "Type",
-        "dates": "Dates",
-        "status": "Status",
-        "attendanceOverview": "Attendance Overview",
-        "todayStats": "Today's Statistics",
-        "present": "Present",
-        "late": "Late",
-        "absent": "Absent",
-        "viewTimesheet": "View Timesheet",
-        "shifts": "Shifts",
-        "shiftName": "Shift Name",
-        "startTime": "Start Time",
-        "endTime": "End Time",
-        "otRequests": "OT Requests",
-        "otHours": "OT Hours"
-      },
-      "payroll": {
-        "title": "Payroll",
-        "description": "Manage payroll periods, calculations, and payslips.",
-        "runPayroll": "Run Payroll",
-        "configFormulas": "Configure Formulas",
-        "exportReport": "Export Report",
-        "period": "Period",
-        "totalEmployees": "Employees",
-        "totalAmount": "Total Amount",
-        "status": "Status",
-        "payslips": "Payslips",
-        "salaryStructure": "Salary Structure",
-        "basicSalary": "Basic Salary",
-        "allowances": "Allowances",
-        "deductions": "Deductions",
-        "netSalary": "Net Salary"
-      },
-      "performance": {
-        "kpiTitle": "Goals & KPIs",
-        "kpiDesc": "Track company and individual goal progress.",
-        "manageKPIs": "Manage KPIs",
-        "reviews": "Performance Reviews",
-        "reviewCycle": "Review Cycle",
-        "reviewer": "Reviewer",
-        "rating": "Rating"
-      },
-      "training": {
-        "title": "Internal Training",
-        "description": "Manage courses and employee training progress.",
-        "completed": "Completed",
-        "courseCatalog": "Course Catalog"
-      }
+    "core": {
+      "addEmployee": "Add Employee",
+      "totalEmployees": "Total Employees",
+      "thisMonth": "this month",
+      "onboarding": "Onboarding",
+      "inProgress": "In Progress",
+      "departments": "Departments",
+      "active": "Active",
+      "employeeList": "Employee List",
+      "employeeListDesc": "Manage employee profiles and employment status.",
+      "employeeId": "Employee ID",
+      "name": "Full Name",
+      "department": "Department",
+      "position": "Position",
+      "status": "Status",
+      "contracts": "Labor Contracts",
+      "contractType": "Contract Type",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "signedDate": "Signed Date"
     },
-    "settings": {
-      "title": "Logistics Configuration",
-      "description": "Set up shipping carriers, configure APIs, and manage shipping fees.",
-      "addCarrier": "Add New Carrier",
-      "carrierName": "Carrier Name",
-      "apiEndpoint": "API Endpoint",
-      "apiKey": "API Key",
-      "testConnection": "Test Connection",
-      "saveConfig": "Save Configuration",
-      "gateways": "Integrated Shipping Gateways",
-      "configure": "Configure API"
+    "time": {
+      "leaveRequests": "Leave Requests",
+      "leaveRequestsDesc": "Manage leave requests and overtime.",
+      "employee": "Employee",
+      "type": "Type",
+      "dates": "Dates",
+      "status": "Status",
+      "attendanceOverview": "Attendance Overview",
+      "todayStats": "Today's Statistics",
+      "present": "Present",
+      "late": "Late",
+      "absent": "Absent",
+      "viewTimesheet": "View Timesheet",
+      "shifts": "Shifts",
+      "shiftName": "Shift Name",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "otRequests": "OT Requests",
+      "otHours": "OT Hours"
     },
+    "payroll": {
+      "title": "Payroll",
+      "description": "Manage payroll periods, calculations, and payslips.",
+      "runPayroll": "Run Payroll",
+      "configFormulas": "Configure Formulas",
+      "exportReport": "Export Report",
+      "period": "Period",
+      "totalEmployees": "Employees",
+      "totalAmount": "Total Amount",
+      "status": "Status",
+      "payslips": "Payslips",
+      "salaryStructure": "Salary Structure",
+      "basicSalary": "Basic Salary",
+      "allowances": "Allowances",
+      "deductions": "Deductions",
+      "netSalary": "Net Salary"
+    },
+    "performance": {
+      "kpiTitle": "Goals & KPIs",
+      "kpiDesc": "Track company and individual goal progress.",
+      "manageKPIs": "Manage KPIs",
+      "reviews": "Performance Reviews",
+      "reviewCycle": "Review Cycle",
+      "reviewer": "Reviewer",
+      "rating": "Rating"
+    },
+    "training": {
+      "title": "Internal Training",
+      "description": "Manage courses and employee training progress.",
+      "completed": "Completed",
+      "courseCatalog": "Course Catalog"
+    }
+  },
+  "settings": {
+    "title": "Logistics Configuration",
+    "description": "Set up shipping carriers, configure APIs, and manage shipping fees.",
+    "addCarrier": "Add New Carrier",
+    "carrierName": "Carrier Name",
+    "apiEndpoint": "API Endpoint",
+    "apiKey": "API Key",
+    "testConnection": "Test Connection",
+    "saveConfig": "Save Configuration",
+    "gateways": "Integrated Shipping Gateways",
+    "configure": "Configure API"
+  },
   "sellers": {
     "title": "Seller Management",
     "description": "Manage seller profiles, ratings, commission/discount fees, and onboarding approval.",
@@ -1278,6 +1300,22 @@
       "active": "Active",
       "completed": "Completed",
       "planned": "Planned"
+    },
+    "groupBuying": {
+      "title": "Group Buying Campaigns",
+      "activeGroups": "Active Groups",
+      "totalRevenue": "Total Revenue",
+      "avgDiscount": "Avg. Discount",
+      "createCampaign": "Create Campaign",
+      "table": {
+        "productName": "Product Name",
+        "status": "Status",
+        "originalPrice": "Original Price",
+        "groupPrice": "Group Price",
+        "participants": "Participants",
+        "endDate": "End Date",
+        "actions": "Actions"
+      }
     },
     "promotions": {
       "create": "Create Promotion",

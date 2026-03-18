@@ -39,6 +39,7 @@
     "orders": "订单",
     "growthMarketing": "营销",
     "marketing": "营销渠道",
+    "groupBuying": "拼团",
     "affiliate": "联盟营销",
     "purchasing": "采购",
     "finance": "财务",
@@ -69,6 +70,8 @@
     "analytics": "分析",
     "sales": "销售",
     "loyalty": "客户忠诚度",
+    "loyaltyDashboard": "忠诚度仪表盘",
+    "pointWallet": "积分钱包",
     "live": "直播中心",
     "customers": "客户",
     "customerService": "客服",
@@ -634,6 +637,27 @@
       "active": "进行中",
       "completed": "已结束",
       "planned": "已计划"
+    },
+    "campaigns": {
+      "active": "活跃",
+      "completed": "已完成",
+      "planned": "已计划"
+    },
+    "groupBuying": {
+      "title": "拼团活动",
+      "activeGroups": "活跃拼团",
+      "totalRevenue": "总收入",
+      "avgDiscount": "平均折扣",
+      "createCampaign": "创建活动",
+      "table": {
+        "productName": "产品名称",
+        "status": "状态",
+        "originalPrice": "原价",
+        "groupPrice": "拼团价",
+        "participants": "参与人数",
+        "endDate": "结束日期",
+        "actions": "操作"
+      }
     },
     "promotions": {
       "create": "创建促销",
@@ -1562,6 +1586,16 @@
       "configure": "配置",
       "syncNow": "立即同步",
       "connect": "连接"
+    }
+  },
+  "loyalty": {
+    "wallet": {
+      "title": "积分钱包",
+      "balance": "余额",
+      "redeem": "兑换",
+      "viewGifts": "查看礼品",
+      "history": "交易记录",
+      "noHistory": "暂无交易"
     }
   },
   "socialCommerce": {

@@ -61,6 +61,8 @@ const EContract = lazy(() => import("./pages/EContract"))
 const FinanceDashboard = lazy(() => import("./pages/finance/FinanceDashboard").then(m => ({ default: m.FinanceDashboard })))
 const HRDashboard = lazy(() => import("./pages/hr/HRDashboard").then(m => ({ default: m.HRDashboard })))
 const AdminDashboard = lazy(() => import("./pages/admin-workspace/AdminDashboard").then(m => ({ default: m.AdminDashboard })))
+const GroupBuying = lazy(() => import("./pages/marketing/GroupBuying").then(m => ({ default: m.GroupBuying })))
+const PointWallet = lazy(() => import("./pages/loyalty/PointWallet").then(m => ({ default: m.PointWallet })))
 
 function FallbackRoute() {
   const { t } = useTranslation()
@@ -151,7 +153,14 @@ export default function App() {
               <Route path="customers" element={<Customers />} />
               <Route path="kol-koc" element={<KolManagement />} />
               <Route path="customer-service" element={<CustomerService />} />
-              <Route path="marketing" element={<Marketing />} />
+              <Route path="marketing">
+                <Route index element={<Marketing />} />
+                <Route path="group-buying" element={<GroupBuying />} />
+              </Route>
+              <Route path="loyalty">
+                <Route index element={<Loyalty />} />
+                <Route path="point-wallet" element={<PointWallet />} />
+              </Route>
               <Route path="planning" element={<BusinessPlanning />} />
               <Route path="social" element={<SocialCommerce />} />
               <Route path="advertising" element={<Advertising />} />

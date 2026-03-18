@@ -104,6 +104,7 @@ const navigationGroups = [
         icon: Megaphone,
         subItems: [
           { nameKey: "marketing", href: "/marketing" },
+          { nameKey: "groupBuying", href: "/marketing/group-buying" },
           { nameKey: "social", href: "/social" },
           { nameKey: "advertising", href: "/advertising" },
           { nameKey: "affiliate", href: "/affiliate" },
@@ -111,7 +112,10 @@ const navigationGroups = [
         ]
       },
       { nameKey: "contentStudio", href: "/content-studio", icon: PenTool },
-      { nameKey: "loyalty", href: "/loyalty", icon: Trophy },
+      { nameKey: "loyalty", href: "/loyalty", icon: Trophy, subItems: [
+          { nameKey: "loyaltyDashboard", href: "/loyalty" },
+          { nameKey: "pointWallet", href: "/loyalty/point-wallet" },
+      ] },
       { nameKey: "marketIntelligence", href: "/market-intelligence", icon: Globe },
     ]
   },

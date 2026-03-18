@@ -26,6 +26,8 @@ i18n
     interpolation: {
       escapeValue: false, // react already safes from xss
     },
+    ns: ['translation'],
+    defaultNS: 'translation',
   });
 
 export default i18n;
