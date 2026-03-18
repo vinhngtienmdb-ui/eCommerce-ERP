@@ -212,7 +212,6 @@ export default function App() {
               <Route path="automation" element={<Automation />} />
               <Route path="market-intelligence" element={<MarketIntelligence />} />
               <Route path="content-studio" element={<ContentStudio />} />
-              <Route path="loyalty" element={<Loyalty />} />
               <Route path="logistics" element={<Logistics />} />
               <Route path="e-contract" element={<EContract />} />
               <Route path="settings" element={<Settings />} />

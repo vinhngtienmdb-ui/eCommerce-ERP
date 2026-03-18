@@ -132,6 +132,7 @@ export function Email() {
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg/2203px-Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg.png" 
                 alt="Outlook" 
                 className="h-5 w-5 mr-3 bg-white rounded-sm p-0.5" 
+                referrerPolicy="no-referrer"
               />
               {t('workspace.email.connectButton')}
             </Button>

@@ -184,7 +184,7 @@ export function POSCheckout() {
               onClick={() => addToCart(product)}
             >
               <CardContent className="p-4 flex flex-col items-center gap-3">
-                <img src={product.image} alt={product.name} className="w-24 h-24 object-cover rounded-md" />
+                <img src={product.image} alt={product.name} className="w-24 h-24 object-cover rounded-md" referrerPolicy="no-referrer" />
                 <div className="text-center">
                   <p className="font-medium line-clamp-2">{product.name}</p>
                   <p className="text-primary font-bold">{product.price.toLocaleString()}đ</p>

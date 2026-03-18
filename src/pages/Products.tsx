@@ -397,7 +397,7 @@ export function Products() {
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-md border overflow-hidden bg-muted flex-shrink-0">
                           {product.images && product.images.length > 0 ? (
-                            <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" />
+                            <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                           ) : (
                             <Package className="h-5 w-5 m-2.5 text-muted-foreground" />
                           )}

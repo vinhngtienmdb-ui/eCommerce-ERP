@@ -53,7 +53,7 @@ const SortableImage = ({ id, url, onRemove }: { id: string, url: string, onRemov
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="relative aspect-square rounded-md border bg-muted flex items-center justify-center overflow-hidden group cursor-grab active:cursor-grabbing">
-      <img src={url} alt="Product" className="w-full h-full object-cover" />
+      <img src={url} alt="Product" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
       <button 
         onClick={(e) => { e.stopPropagation(); onRemove(); }} 
         onPointerDown={(e) => e.stopPropagation()}
@@ -387,7 +387,7 @@ export function EditProduct() {
                   <div className="flex gap-4 flex-wrap">
                     {images.map((img) => (
                       <div key={img.id} className="w-24 h-24 relative group">
-                        <img src={img.url} className="w-full h-full object-cover rounded-md" />
+                        <img src={img.url} className="w-full h-full object-cover rounded-md" referrerPolicy="no-referrer" />
                         <button onClick={() => setImages(images.filter(i => i.id !== img.id))} className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100">
                           <X className="h-3 w-3" />
                         </button>

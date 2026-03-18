@@ -108,7 +108,7 @@ export function PointWallet() {
             {MOCK_REWARDS.map((reward) => (
               <Card key={reward.id} className="overflow-hidden hover:shadow-md transition-shadow">
                 <div className="aspect-[2/1] w-full bg-muted relative">
-                  <img src={reward.image} alt={reward.title} className="w-full h-full object-cover" />
+                  <img src={reward.image} alt={reward.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   <div className="absolute top-2 right-2 bg-background/90 backdrop-blur-sm px-2 py-1 rounded-md text-sm font-bold text-primary shadow-sm">
                     {reward.pointsCost.toLocaleString()} {t("loyalty.wallet.points")}
                   </div>

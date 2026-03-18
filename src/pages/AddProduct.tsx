@@ -55,7 +55,7 @@ const SortableImage = ({ id, url, onRemove }: { id: string, url: string, onRemov
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="relative aspect-square rounded-md border bg-muted flex items-center justify-center overflow-hidden group cursor-grab active:cursor-grabbing">
-      <img src={url} alt="Product" className="w-full h-full object-cover" />
+      <img src={url} alt="Product" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
       <button 
         onClick={(e) => { e.stopPropagation(); onRemove(); }} 
         onPointerDown={(e) => e.stopPropagation()}
@@ -1111,7 +1111,7 @@ export function AddProduct() {
                 {/* Image placeholder */}
                 <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
                   {coverImage || images[0] ? (
-                    <img src={coverImage || images[0]?.url} alt="Preview" className="w-full h-full object-cover" />
+                    <img src={coverImage || images[0]?.url} alt="Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
                     <ShoppingBag className="h-12 w-12 text-muted-foreground/30" />
                   )}
