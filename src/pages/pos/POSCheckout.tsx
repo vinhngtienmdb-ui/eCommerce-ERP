@@ -44,7 +44,7 @@ export function POSCheckout() {
   }, []);
 
   const filteredProducts = products.filter((p) =>
-    p.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    p.productName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const addToCart = (product: any) => {
@@ -87,7 +87,7 @@ export function POSCheckout() {
     }
   };
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.product.price || item.product.currentPrice || 0) * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + (item.product.price || item.product.suggestedPrice || 0) * item.quantity, 0);
   const discount = pointsToUse; // 1 point = 1 VND
   const total = Math.max(0, subtotal - discount);
   const platformFee = total * STORE_CONFIG.platformFeeRate;
@@ -107,8 +107,8 @@ export function POSCheckout() {
       const orderData = {
         items: cart.map(item => ({
           productId: item.product.id,
-          name: item.product.name,
-          price: item.product.price || item.product.currentPrice || 0,
+          name: item.product.productName,
+          price: item.product.price || item.product.suggestedPrice || 0,
           quantity: item.quantity
         })),
         subtotal,
@@ -184,10 +184,10 @@ export function POSCheckout() {
               onClick={() => addToCart(product)}
             >
               <CardContent className="p-4 flex flex-col items-center gap-3">
-                <img src={product.image} alt={product.name} className="w-24 h-24 object-cover rounded-md" referrerPolicy="no-referrer" />
+                <img src={product.images?.[0]?.url || product.image || "https://picsum.photos/seed/product/200/200"} alt={product.productName} className="w-24 h-24 object-cover rounded-md" referrerPolicy="no-referrer" />
                 <div className="text-center">
-                  <p className="font-medium line-clamp-2">{product.name}</p>
-                  <p className="text-primary font-bold">{product.price.toLocaleString()}đ</p>
+                  <p className="font-medium line-clamp-2">{product.productName}</p>
+                  <p className="text-primary font-bold">{(product.price || product.suggestedPrice || 0).toLocaleString()}đ</p>
                 </div>
               </CardContent>
             </Card>
@@ -252,8 +252,8 @@ export function POSCheckout() {
                 {cart.map((item) => (
                   <div key={item.product.id} className="p-4 flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate">{item.product.name}</p>
-                      <p className="text-sm text-muted-foreground">{item.product.price.toLocaleString()}đ</p>
+                      <p className="font-medium truncate">{item.product.productName}</p>
+                      <p className="text-sm text-muted-foreground">{(item.product.price || item.product.suggestedPrice || 0).toLocaleString()}đ</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.product.id, -1)}>

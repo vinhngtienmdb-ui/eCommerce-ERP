@@ -41,7 +41,7 @@ export function SocialCommerce() {
       likes: 1245,
       comments: 89,
       shares: 12,
-      product: { name: "Son Mac Matte Lipstick", price: 550000 }
+      product: { productName: "Son Mac Matte Lipstick", price: 550000 }
     },
     { 
       id: "POST-002", 
@@ -51,7 +51,7 @@ export function SocialCommerce() {
       likes: 856,
       comments: 45,
       shares: 5,
-      product: { name: "Bàn phím cơ Keychron K8", price: 1890000 }
+      product: { productName: "Bàn phím cơ Keychron K8", price: 1890000 }
     }
   ])
 
@@ -66,7 +66,7 @@ export function SocialCommerce() {
       likes: 0,
       comments: 0,
       shares: 0,
-      product: { name: "Sản phẩm đính kèm", price: 0 }
+      product: { productName: "Sản phẩm đính kèm", price: 0 }
     }
 
     setPosts([newPost, ...posts])
@@ -193,8 +193,8 @@ export function SocialCommerce() {
                             <ShoppingCart className="h-5 w-5 text-muted-foreground" />
                           </div>
                           <div>
-                            <p className="font-medium text-sm line-clamp-1">{post.product.name}</p>
-                            <p className="text-sm font-bold text-primary">{post.product.price.toLocaleString()} ₫</p>
+                            <p className="font-medium text-sm line-clamp-1">{post.product.productName}</p>
+                            <p className="text-sm font-bold text-primary">{(post.product.price || 0).toLocaleString()} ₫</p>
                           </div>
                         </div>
                         <Button size="sm">{t("socialCommerce.feed.buyNow")}</Button>

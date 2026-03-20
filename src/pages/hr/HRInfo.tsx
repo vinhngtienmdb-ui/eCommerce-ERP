@@ -49,7 +49,7 @@ export function HRInfo() {
 
   const handleUploadDoc = () => {
     if (!newRecord.empId || !newRecord.idCard) {
-      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc")
+      toast.error(t("hr.info.toasts.fillInfo"))
       return
     }
 
@@ -66,7 +66,7 @@ export function HRInfo() {
     setRecords([record, ...records])
     setIsModalOpen(false)
     setNewRecord({ empId: "", idCard: "", phone: "", email: "", address: "" })
-    toast.success("Đã tải lên hồ sơ mới")
+    toast.success(t("hr.info.toasts.addSuccess"))
   }
 
   return (
@@ -80,9 +80,9 @@ export function HRInfo() {
       
       <Tabs defaultValue="list" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="list">Danh sách hồ sơ</TabsTrigger>
-          <TabsTrigger value="import">Nhập liệu hàng loạt</TabsTrigger>
-          <TabsTrigger value="verification">Yêu cầu xác minh</TabsTrigger>
+          <TabsTrigger value="list">{t("hr.info.tabs.list")}</TabsTrigger>
+          <TabsTrigger value="import">{t("hr.info.tabs.import")}</TabsTrigger>
+          <TabsTrigger value="verification">{t("hr.info.tabs.verification")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
@@ -110,17 +110,17 @@ export function HRInfo() {
               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Tải lên hồ sơ nhân viên</DialogTitle>
+                    <DialogTitle>{t("hr.info.records.addTitle")}</DialogTitle>
                     <DialogDescription>
-                      Điền thông tin và tải lên tài liệu liên quan.
+                      {t("hr.info.records.addDesc")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Label htmlFor="empId" className="text-right">{t("hr.info.records.employee")}</Label>
                       <Select value={newRecord.empId} onValueChange={(val) => setNewRecord({...newRecord, empId: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn nhân viên" />
+                          <SelectValue placeholder={t("hr.info.records.selectEmployee")} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees.map(emp => (
@@ -130,50 +130,50 @@ export function HRInfo() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="idCard" className="text-right">CCCD</Label>
+                      <Label htmlFor="idCard" className="text-right">{t("hr.info.records.idCard")}</Label>
                       <Input 
                         id="idCard" 
                         value={newRecord.idCard} 
                         onChange={(e) => setNewRecord({...newRecord, idCard: e.target.value})}
                         className="col-span-3" 
-                        placeholder="Số CCCD"
+                        placeholder={t("hr.info.placeholders.idCard")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="phone" className="text-right">SĐT</Label>
+                      <Label htmlFor="phone" className="text-right">{t("hr.info.records.phone")}</Label>
                       <Input 
                         id="phone" 
                         value={newRecord.phone} 
                         onChange={(e) => setNewRecord({...newRecord, phone: e.target.value})}
                         className="col-span-3" 
-                        placeholder="Số điện thoại"
+                        placeholder={t("hr.info.placeholders.phone")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="email" className="text-right">Email</Label>
+                      <Label htmlFor="email" className="text-right">{t("hr.info.records.email")}</Label>
                       <Input 
                         id="email" 
                         type="email"
                         value={newRecord.email} 
                         onChange={(e) => setNewRecord({...newRecord, email: e.target.value})}
                         className="col-span-3" 
-                        placeholder="Email"
+                        placeholder={t("hr.info.placeholders.email")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="address" className="text-right">Địa chỉ</Label>
+                      <Label htmlFor="address" className="text-right">{t("hr.info.records.address")}</Label>
                       <Input 
                         id="address" 
                         value={newRecord.address} 
                         onChange={(e) => setNewRecord({...newRecord, address: e.target.value})}
                         className="col-span-3" 
-                        placeholder="Địa chỉ"
+                        placeholder={t("hr.info.placeholders.address")}
                       />
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-                    <Button onClick={handleUploadDoc}>Tải lên</Button>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("hr.info.records.cancel")}</Button>
+                    <Button onClick={handleUploadDoc}>{t("hr.info.records.save")}</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -183,10 +183,10 @@ export function HRInfo() {
                   <TableRow>
                     <TableHead>{t("hr.core.name")}</TableHead>
                     <TableHead>{t("hr.core.idCard")}</TableHead>
-                    <TableHead>Số điện thoại</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Địa chỉ</TableHead>
-                    <TableHead>Trạng thái</TableHead>
+                    <TableHead>{t("hr.info.records.phone")}</TableHead>
+                    <TableHead>{t("hr.info.records.email")}</TableHead>
+                    <TableHead>{t("hr.info.records.address")}</TableHead>
+                    <TableHead>{t("hr.core.status")}</TableHead>
                     <TableHead className="text-right">{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -200,7 +200,7 @@ export function HRInfo() {
                       <TableCell>{item.address}</TableCell>
                       <TableCell>
                         <Badge variant={item.status === "Verified" ? "default" : "secondary"}>
-                          {item.status}
+                          {item.status === "Verified" ? t("hr.info.status.verified") : t("hr.info.status.pending")}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -217,14 +217,14 @@ export function HRInfo() {
         <TabsContent value="import" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Nhập liệu hồ sơ hàng loạt</CardTitle>
-              <CardDescription>Tải lên file Excel/CSV để cập nhật thông tin nhân viên</CardDescription>
+              <CardTitle>{t("hr.info.importTab.title")}</CardTitle>
+              <CardDescription>{t("hr.info.importTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <FileSpreadsheet className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Tính năng nhập liệu đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Hỗ trợ import danh sách nhân viên từ file Excel mẫu.</p>
+                <h3 className="font-medium">{t("hr.info.importTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.info.importTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>
@@ -233,14 +233,14 @@ export function HRInfo() {
         <TabsContent value="verification" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Xác minh hồ sơ</CardTitle>
-              <CardDescription>Danh sách hồ sơ cần xác minh thông tin (CCCD, Bằng cấp...)</CardDescription>
+              <CardTitle>{t("hr.info.verificationTab.title")}</CardTitle>
+              <CardDescription>{t("hr.info.verificationTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <ShieldCheck className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Tính năng xác minh đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tự động đối chiếu thông tin với cơ sở dữ liệu (nếu có).</p>
+                <h3 className="font-medium">{t("hr.info.verificationTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.info.verificationTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>

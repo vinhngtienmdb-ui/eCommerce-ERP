@@ -50,10 +50,10 @@ export function Performance() {
   ])
 
   const [reviews, setReviews] = useState<Review[]>([
-    { id: "REV-001", empId: employees[0]?.id || "EMP-001", cycle: "Q3 2023", reviewer: "Manager X", rating: "Exceeds Expectations", type: "Manager" },
-    { id: "REV-002", empId: employees[1]?.id || "EMP-002", cycle: "Q3 2023", reviewer: "Director Y", rating: "Outstanding", type: "Manager" },
-    { id: "REV-003", empId: employees[2]?.id || "EMP-003", cycle: "Q3 2023", reviewer: "Self", rating: "Meets Expectations", type: "Self" },
-    { id: "REV-004", empId: employees[0]?.id || "EMP-001", cycle: "Q3 2023", reviewer: employees[1]?.name || "Tran Thi B", rating: "Outstanding", type: "Peer" },
+    { id: "REV-001", empId: employees[0]?.id || "EMP-001", cycle: "Q3 2023", reviewer: "Manager X", rating: "exceeds", type: "Manager" },
+    { id: "REV-002", empId: employees[1]?.id || "EMP-002", cycle: "Q3 2023", reviewer: "Director Y", rating: "outstanding", type: "Manager" },
+    { id: "REV-003", empId: employees[2]?.id || "EMP-003", cycle: "Q3 2023", reviewer: "Self", rating: "meets", type: "Self" },
+    { id: "REV-004", empId: employees[0]?.id || "EMP-001", cycle: "Q3 2023", reviewer: employees[1]?.name || "Tran Thi B", rating: "outstanding", type: "Peer" },
   ])
 
   const [trainings] = useState<TrainingCourse[]>([
@@ -67,7 +67,7 @@ export function Performance() {
     empId: "",
     cycle: "Q4 2023",
     reviewer: "",
-    rating: "Meets Expectations",
+    rating: "meets",
     type: "Manager" as "Self" | "Manager" | "Peer",
   })
 
@@ -78,7 +78,7 @@ export function Performance() {
 
   const handleCreateReview = () => {
     if (!newReview.empId || !newReview.reviewer) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.performance.toasts.fillInfo"))
       return
     }
 
@@ -93,10 +93,10 @@ export function Performance() {
       empId: "",
       cycle: "Q4 2023",
       reviewer: "",
-      rating: "Meets Expectations",
+      rating: "meets",
       type: "Manager",
     })
-    toast.success("Đã tạo đánh giá hiệu suất")
+    toast.success(t("hr.performance.toasts.addSuccess"))
   }
 
   return (
@@ -109,19 +109,19 @@ export function Performance() {
         <div className="flex gap-2 items-center">
           <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Role" />
+              <SelectValue placeholder={t("hr.core.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="HR Manager">HR Manager</SelectItem>
-              <SelectItem value="Employee">Employee</SelectItem>
+              <SelectItem value="Admin">{t("hr.core.admin")}</SelectItem>
+              <SelectItem value="HR Manager">{t("hr.core.hrManager")}</SelectItem>
+              <SelectItem value="Employee">{t("hr.core.employee")}</SelectItem>
             </SelectContent>
           </Select>
           
           {canEdit && (
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Cấu hình
+              {t("hr.core.config")}
             </Button>
           )}
         </div>
@@ -129,11 +129,11 @@ export function Performance() {
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Tổng quan & KPI</TabsTrigger>
-          <TabsTrigger value="reviews">Đánh giá hiệu suất</TabsTrigger>
-          <TabsTrigger value="training">Đào tạo & Phát triển</TabsTrigger>
-          <TabsTrigger value="goals">Mục tiêu cá nhân</TabsTrigger>
-          <TabsTrigger value="configuration">Cấu hình</TabsTrigger>
+          <TabsTrigger value="overview">{t("hr.performance.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="reviews">{t("hr.performance.tabs.reviews")}</TabsTrigger>
+          <TabsTrigger value="training">{t("hr.performance.tabs.training")}</TabsTrigger>
+          <TabsTrigger value="goals">{t("hr.performance.tabs.goals")}</TabsTrigger>
+          <TabsTrigger value="configuration">{t("hr.performance.tabs.config")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -169,8 +169,8 @@ export function Performance() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Thống kê đào tạo</CardTitle>
-                <CardDescription>Tổng quan về tình hình đào tạo nhân sự</CardDescription>
+                <CardTitle>{t("hr.performance.stats.training")}</CardTitle>
+                <CardDescription>{t("hr.performance.stats.trainingDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -180,7 +180,7 @@ export function Performance() {
                         <BookOpen className="w-5 h-5 text-blue-600" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium">Khóa học đang diễn ra</p>
+                        <p className="text-sm font-medium">{t("hr.performance.stats.ongoingCourses")}</p>
                         <p className="text-2xl font-bold">5</p>
                       </div>
                     </div>
@@ -191,7 +191,7 @@ export function Performance() {
                         <Award className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium">Chứng chỉ đã cấp</p>
+                        <p className="text-sm font-medium">{t("hr.performance.stats.certificatesIssued")}</p>
                         <p className="text-2xl font-bold">128</p>
                       </div>
                     </div>
@@ -207,12 +207,12 @@ export function Performance() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>{t("hr.performance.reviews")}</CardTitle>
-                <CardDescription>Employee performance reviews.</CardDescription>
+                <CardDescription>{t("hr.performance.kpiDesc")}</CardDescription>
               </div>
               {canEdit && (
                 <Button size="sm" onClick={() => setIsReviewModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Tạo đánh giá
+                  {t("hr.performance.reviewModal.save")}
                 </Button>
               )}
             </CardHeader>
@@ -220,17 +220,17 @@ export function Performance() {
               <Dialog open={isReviewModalOpen} onOpenChange={setIsReviewModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Tạo đánh giá hiệu suất</DialogTitle>
+                    <DialogTitle>{t("hr.performance.reviewModal.title")}</DialogTitle>
                     <DialogDescription>
-                      Điền thông tin để tạo đánh giá hiệu suất mới cho nhân viên.
+                      {t("hr.performance.reviewModal.description")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Label htmlFor="empId" className="text-right">{t("hr.performance.reviewModal.employee")}</Label>
                       <Select value={newReview.empId} onValueChange={(val) => setNewReview({...newReview, empId: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn nhân viên" />
+                          <SelectValue placeholder={t("hr.performance.reviewModal.selectEmployee")} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees.map(emp => (
@@ -240,56 +240,56 @@ export function Performance() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="cycle" className="text-right">Chu kỳ</Label>
+                      <Label htmlFor="cycle" className="text-right">{t("hr.performance.reviewModal.cycle")}</Label>
                       <Input 
                         id="cycle" 
                         value={newReview.cycle} 
                         onChange={(e) => setNewReview({...newReview, cycle: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: Q4 2023"
+                        placeholder={t("hr.performance.reviewModal.cyclePlaceholder")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="reviewer" className="text-right">Người đánh giá</Label>
+                      <Label htmlFor="reviewer" className="text-right">{t("hr.performance.reviewModal.reviewer")}</Label>
                       <Input 
                         id="reviewer" 
                         value={newReview.reviewer} 
                         onChange={(e) => setNewReview({...newReview, reviewer: e.target.value})}
                         className="col-span-3" 
-                        placeholder="Tên người đánh giá"
+                        placeholder={t("hr.performance.reviewModal.reviewerPlaceholder")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="type" className="text-right">Loại đánh giá</Label>
+                      <Label htmlFor="type" className="text-right">{t("hr.performance.reviewModal.type")}</Label>
                       <Select value={newReview.type} onValueChange={(val: "Self" | "Manager" | "Peer") => setNewReview({...newReview, type: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn loại đánh giá" />
+                          <SelectValue placeholder={t("hr.performance.reviewModal.selectType")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Manager">Quản lý đánh giá</SelectItem>
-                          <SelectItem value="Self">Tự đánh giá</SelectItem>
-                          <SelectItem value="Peer">Đồng nghiệp đánh giá</SelectItem>
+                          <SelectItem value="Manager">{t("hr.performance.managerReview")}</SelectItem>
+                          <SelectItem value="Self">{t("hr.performance.selfReview")}</SelectItem>
+                          <SelectItem value="Peer">{t("hr.performance.peerReview")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="rating" className="text-right">Xếp loại</Label>
+                      <Label htmlFor="rating" className="text-right">{t("hr.performance.reviewModal.rating")}</Label>
                       <Select value={newReview.rating} onValueChange={(val) => setNewReview({...newReview, rating: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn xếp loại" />
+                          <SelectValue placeholder={t("hr.performance.reviewModal.selectRating")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Outstanding">Xuất sắc (Outstanding)</SelectItem>
-                          <SelectItem value="Exceeds Expectations">Vượt mong đợi (Exceeds)</SelectItem>
-                          <SelectItem value="Meets Expectations">Đạt yêu cầu (Meets)</SelectItem>
-                          <SelectItem value="Needs Improvement">Cần cải thiện (Improvement)</SelectItem>
+                          <SelectItem value="outstanding">{t("hr.performance.reviewModal.outstanding")}</SelectItem>
+                          <SelectItem value="exceeds">{t("hr.performance.reviewModal.exceeds")}</SelectItem>
+                          <SelectItem value="meets">{t("hr.performance.reviewModal.meets")}</SelectItem>
+                          <SelectItem value="needsImprovement">{t("hr.performance.reviewModal.needsImprovement")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsReviewModalOpen(false)}>Hủy</Button>
-                    <Button onClick={handleCreateReview}>Tạo đánh giá</Button>
+                    <Button variant="outline" onClick={() => setIsReviewModalOpen(false)}>{t("hr.performance.reviewModal.cancel")}</Button>
+                    <Button onClick={handleCreateReview}>{t("hr.performance.reviewModal.save")}</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -300,7 +300,7 @@ export function Performance() {
                     <TableHead>{t("hr.core.name")}</TableHead>
                     <TableHead>{t("hr.performance.reviewCycle")}</TableHead>
                     <TableHead>{t("hr.performance.reviewer")}</TableHead>
-                    <TableHead>Loại đánh giá</TableHead>
+                    <TableHead>{t("hr.performance.reviewModal.type")}</TableHead>
                     <TableHead>{t("hr.performance.rating")}</TableHead>
                     <TableHead className="text-right">{t("common.actions")}</TableHead>
                   </TableRow>
@@ -317,7 +317,13 @@ export function Performance() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline">{item.rating}</Badge>
+                        <Badge variant="outline">
+                          {item.rating === "outstanding" ? t("hr.performance.reviewModal.outstanding") :
+                           item.rating === "exceeds" ? t("hr.performance.reviewModal.exceeds") :
+                           item.rating === "meets" ? t("hr.performance.reviewModal.meets") :
+                           item.rating === "needsImprovement" ? t("hr.performance.reviewModal.needsImprovement") :
+                           item.rating}
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         {canEdit ? (
@@ -369,14 +375,14 @@ export function Performance() {
         <TabsContent value="goals" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Mục tiêu cá nhân (OKRs)</CardTitle>
-              <CardDescription>Quản lý mục tiêu và kết quả then chốt của từng nhân viên</CardDescription>
+              <CardTitle>{t("hr.performance.goalsTab.title")}</CardTitle>
+              <CardDescription>{t("hr.performance.goalsTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <Target className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Quản lý OKRs đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép thiết lập và theo dõi OKRs theo quý/năm.</p>
+                <h3 className="font-medium">{t("hr.performance.goalsTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.performance.goalsTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>
@@ -385,65 +391,65 @@ export function Performance() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader>
-                <CardTitle>Chu kỳ đánh giá</CardTitle>
-                <CardDescription>Thiết lập thời gian đánh giá định kỳ</CardDescription>
+                <CardTitle>{t("hr.performance.configTab.cycles")}</CardTitle>
+                <CardDescription>{t("hr.performance.configTab.cyclesDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex items-center justify-between p-2 border rounded">
                   <span>Q1 2024</span>
-                  <Badge variant="outline">Sắp diễn ra</Badge>
+                  <Badge variant="outline">{t("hr.performance.configTab.upcoming")}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2 border rounded">
                   <span>Q4 2023</span>
-                  <Badge className="bg-green-500">Đang thực hiện</Badge>
+                  <Badge className="bg-green-500">{t("hr.performance.configTab.inProgress")}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2 border rounded">
                   <span>Q3 2023</span>
-                  <Badge variant="secondary">Đã đóng</Badge>
+                  <Badge variant="secondary">{t("hr.performance.configTab.closed")}</Badge>
                 </div>
                 <Button className="w-full mt-2" variant="secondary">
-                  <Plus className="mr-2 h-4 w-4" /> Tạo chu kỳ mới
+                  <Plus className="mr-2 h-4 w-4" /> {t("hr.performance.configTab.newCycle")}
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Thang điểm đánh giá</CardTitle>
-                <CardDescription>Cấu hình thang điểm xếp loại nhân viên</CardDescription>
+                <CardTitle>{t("hr.performance.configTab.scales")}</CardTitle>
+                <CardDescription>{t("hr.performance.configTab.scalesDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex items-center justify-between p-2 border rounded">
-                  <span>5 - Xuất sắc (Outstanding)</span>
+                  <span>5 - {t("hr.performance.reviewModal.outstanding")}</span>
                   <Badge>A+</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2 border rounded">
-                  <span>4 - Vượt mong đợi (Exceeds)</span>
+                  <span>4 - {t("hr.performance.reviewModal.exceeds")}</span>
                   <Badge>A</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2 border rounded">
-                  <span>3 - Đạt yêu cầu (Meets)</span>
+                  <span>3 - {t("hr.performance.reviewModal.meets")}</span>
                   <Badge>B</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2 border rounded">
-                  <span>2 - Cần cải thiện (Improvement)</span>
+                  <span>2 - {t("hr.performance.reviewModal.needsImprovement")}</span>
                   <Badge variant="destructive">C</Badge>
                 </div>
                 <Button className="w-full mt-2" variant="outline">
-                  <Settings className="mr-2 h-4 w-4" /> Chỉnh sửa thang điểm
+                  <Settings className="mr-2 h-4 w-4" /> {t("hr.performance.configTab.editScales")}
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Trọng số KPI</CardTitle>
-                <CardDescription>Phân bổ trọng số cho các nhóm chỉ tiêu</CardDescription>
+                <CardTitle>{t("hr.performance.configTab.weights")}</CardTitle>
+                <CardDescription>{t("hr.performance.configTab.weightsDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span>Kết quả công việc (KPIs)</span>
+                    <span>{t("hr.performance.configTab.workResults")}</span>
                     <span>70%</span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full overflow-hidden">
@@ -452,7 +458,7 @@ export function Performance() {
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span>Năng lực cốt lõi (Core Competencies)</span>
+                    <span>{t("hr.performance.configTab.coreCompetencies")}</span>
                     <span>20%</span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full overflow-hidden">
@@ -461,7 +467,7 @@ export function Performance() {
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span>Đào tạo & Phát triển</span>
+                    <span>{t("hr.performance.configTab.trainingDevelopment")}</span>
                     <span>10%</span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full overflow-hidden">
@@ -469,7 +475,7 @@ export function Performance() {
                   </div>
                 </div>
                 <Button className="w-full mt-2" variant="outline">
-                  <Edit className="mr-2 h-4 w-4" /> Điều chỉnh trọng số
+                  <Edit className="mr-2 h-4 w-4" /> {t("hr.performance.configTab.editWeights")}
                 </Button>
               </CardContent>
             </Card>

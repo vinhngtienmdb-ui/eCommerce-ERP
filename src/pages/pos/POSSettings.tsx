@@ -21,6 +21,7 @@ export function POSSettings() {
     phone: "0901234567",
     theme: "light",
     autoPrintReceipt: true,
+    printerName: "",
   });
 
   useEffect(() => {
@@ -162,6 +163,15 @@ export function POSSettings() {
               <Switch 
                 checked={settings.autoPrintReceipt} 
                 onCheckedChange={(c) => setSettings({ ...settings, autoPrintReceipt: c })} 
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="printerName">{t("pos.settings.printerName", "Tên/IP máy in")}</Label>
+              <Input 
+                id="printerName" 
+                value={settings.printerName || ""} 
+                onChange={(e) => setSettings({ ...settings, printerName: e.target.value })} 
+                placeholder="Ví dụ: POS-Printer-01"
               />
             </div>
           </CardContent>

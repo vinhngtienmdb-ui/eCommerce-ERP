@@ -52,7 +52,7 @@ export function Goals() {
 
   const handleCreateGoal = () => {
     if (!newGoal.title || !newGoal.empId) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.goals.toasts.fillInfo"))
       return
     }
 
@@ -70,7 +70,7 @@ export function Goals() {
     setGoals([record, ...goals])
     setIsModalOpen(false)
     setNewGoal({ title: "", level: "Individual", timeframe: "Monthly", empId: "", progress: "0" })
-    toast.success("Đã tạo mục tiêu mới")
+    toast.success(t("hr.goals.toasts.addSuccess"))
   }
 
   return (
@@ -83,19 +83,19 @@ export function Goals() {
         <div className="flex gap-2 items-center">
           <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Role" />
+              <SelectValue placeholder={t("hr.core.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="HR Manager">HR Manager</SelectItem>
-              <SelectItem value="Employee">Employee</SelectItem>
+              <SelectItem value="Admin">{t("hr.core.admin")}</SelectItem>
+              <SelectItem value="HR Manager">{t("hr.core.hrManager")}</SelectItem>
+              <SelectItem value="Employee">{t("hr.core.employee")}</SelectItem>
             </SelectContent>
           </Select>
           
           {canEdit && (
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Cấu hình
+              {t("hr.core.config")}
             </Button>
           )}
         </div>
@@ -103,9 +103,9 @@ export function Goals() {
       
       <Tabs defaultValue="list" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="list">Danh sách mục tiêu</TabsTrigger>
-          <TabsTrigger value="alignment">Sơ đồ liên kết</TabsTrigger>
-          <TabsTrigger value="reviews">Đánh giá định kỳ</TabsTrigger>
+          <TabsTrigger value="list">{t("hr.goals.tabs.list")}</TabsTrigger>
+          <TabsTrigger value="alignment">{t("hr.goals.tabs.alignment")}</TabsTrigger>
+          <TabsTrigger value="reviews">{t("hr.goals.tabs.reviews")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
@@ -119,7 +119,7 @@ export function Goals() {
                 {canEdit && (
                   <Button onClick={() => setIsModalOpen(true)}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Tạo mục tiêu mới
+                    {t("hr.goals.list.create")}
                   </Button>
                 )}
               </div>
@@ -127,27 +127,27 @@ export function Goals() {
               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Tạo mục tiêu mới</DialogTitle>
+                    <DialogTitle>{t("hr.goals.list.createTitle")}</DialogTitle>
                     <DialogDescription>
-                      Điền thông tin để tạo mục tiêu mới.
+                      {t("hr.goals.list.createDesc")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="title" className="text-right">Mục tiêu</Label>
+                      <Label htmlFor="title" className="text-right">{t("hr.goals.list.goal")}</Label>
                       <Input 
                         id="title" 
                         value={newGoal.title} 
                         onChange={(e) => setNewGoal({...newGoal, title: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: Đạt doanh thu 100 tỷ VNĐ"
+                        placeholder={t("hr.goals.list.goal")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="level" className="text-right">Cấp độ</Label>
+                      <Label htmlFor="level" className="text-right">{t("hr.goals.list.level")}</Label>
                       <Select value={newGoal.level} onValueChange={(val: any) => setNewGoal({...newGoal, level: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn cấp độ" />
+                          <SelectValue placeholder={t("hr.goals.list.selectLevel")} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Company">{t("hr.goals.company")}</SelectItem>
@@ -158,10 +158,10 @@ export function Goals() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="timeframe" className="text-right">Thời hạn</Label>
+                      <Label htmlFor="timeframe" className="text-right">{t("hr.goals.list.timeframe")}</Label>
                       <Select value={newGoal.timeframe} onValueChange={(val: any) => setNewGoal({...newGoal, timeframe: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn thời hạn" />
+                          <SelectValue placeholder={t("hr.goals.list.selectTimeframe")} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Daily">{t("hr.goals.daily")}</SelectItem>
@@ -172,10 +172,10 @@ export function Goals() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="empId" className="text-right">Người phụ trách</Label>
+                      <Label htmlFor="empId" className="text-right">{t("hr.goals.list.responsible")}</Label>
                       <Select value={newGoal.empId} onValueChange={(val) => setNewGoal({...newGoal, empId: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn người phụ trách" />
+                          <SelectValue placeholder={t("hr.goals.list.selectResponsible")} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees.map(emp => (
@@ -185,7 +185,7 @@ export function Goals() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="progress" className="text-right">Tiến độ (%)</Label>
+                      <Label htmlFor="progress" className="text-right">{t("hr.goals.list.progress")}</Label>
                       <Input 
                         id="progress" 
                         type="number"
@@ -199,8 +199,8 @@ export function Goals() {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-                    <Button onClick={handleCreateGoal}>Tạo mục tiêu</Button>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("hr.goals.list.cancel")}</Button>
+                    <Button onClick={handleCreateGoal}>{t("hr.goals.list.save")}</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -208,10 +208,10 @@ export function Goals() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Mục tiêu</TableHead>
+                    <TableHead>{t("hr.goals.list.goal")}</TableHead>
                     <TableHead>{t("hr.goals.level")}</TableHead>
                     <TableHead>{t("hr.goals.timeframe")}</TableHead>
-                    <TableHead>Người phụ trách</TableHead>
+                    <TableHead>{t("hr.goals.list.responsible")}</TableHead>
                     <TableHead>{t("hr.goals.progress")}</TableHead>
                     <TableHead className="text-right">{t("common.actions")}</TableHead>
                   </TableRow>
@@ -265,14 +265,14 @@ export function Goals() {
         <TabsContent value="alignment" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Sơ đồ liên kết mục tiêu (Goal Alignment)</CardTitle>
-              <CardDescription>Trực quan hóa sự liên kết giữa mục tiêu cá nhân, phòng ban và công ty</CardDescription>
+              <CardTitle>{t("hr.goals.goalAlignment")}</CardTitle>
+              <CardDescription>{t("hr.goals.goalAlignmentDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <GitMerge className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Sơ đồ liên kết đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ hiển thị cây mục tiêu từ cấp công ty xuống nhân viên.</p>
+                <h3 className="font-medium">{t("hr.goals.alignmentUpdating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.goals.alignmentFeatureDesc")}</p>
               </div>
             </CardContent>
           </Card>
@@ -281,14 +281,14 @@ export function Goals() {
         <TabsContent value="reviews" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Đánh giá & Phản hồi (Check-in)</CardTitle>
-              <CardDescription>Ghi nhận tiến độ và phản hồi định kỳ về mục tiêu</CardDescription>
+              <CardTitle>{t("hr.goals.checkIn")}</CardTitle>
+              <CardDescription>{t("hr.goals.checkInDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Tính năng Check-in đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Cho phép quản lý và nhân viên trao đổi về tiến độ mục tiêu.</p>
+                <h3 className="font-medium">{t("hr.goals.checkInUpdating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.goals.checkInFeatureDesc")}</p>
               </div>
             </CardContent>
           </Card>

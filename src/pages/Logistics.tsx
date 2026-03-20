@@ -427,7 +427,7 @@ const Logistics = () => {
                   ) : (
                     inventory.map((item) => (
                       <TableRow key={item.id}>
-                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell className="font-medium">{item.productName}</TableCell>
                         <TableCell className="text-muted-foreground">{item.sku || "N/A"}</TableCell>
                         <TableCell>{item.warehouse || "N/A"}</TableCell>
                         <TableCell className="text-right font-medium">{item.stock || 0}</TableCell>

@@ -45,9 +45,9 @@ export function LeaveManagement() {
   const canEdit = userRole === "Admin" || userRole === "HR Manager"
 
   const [rules] = useState<LeaveRule[]>([
-    { id: "LR-01", type: "Phép năm", daysPerYear: 12, carryOver: true, description: "Theo quy định Luật LĐ" },
-    { id: "LR-02", type: "Nghỉ ốm", daysPerYear: 30, carryOver: false, description: "Hưởng BHXH" },
-    { id: "LR-03", type: "Nghỉ thai sản", daysPerYear: 180, carryOver: false, description: "6 tháng theo Luật" },
+    { id: "LR-01", type: t("hr.time.annualLeave"), daysPerYear: 12, carryOver: true, description: t("hr.core.laborLawDesc") },
+    { id: "LR-02", type: t("hr.time.sickLeave"), daysPerYear: 30, carryOver: false, description: t("hr.core.socialInsuranceDesc") },
+    { id: "LR-03", type: t("hr.time.maternityLeave"), daysPerYear: 180, carryOver: false, description: t("hr.core.maternityLawDesc") },
   ])
 
   const [holidays] = useState<Holiday[]>([
@@ -60,9 +60,9 @@ export function LeaveManagement() {
   ])
 
   const [requests, setRequests] = useState<LeaveRequest[]>([
-    { id: "REQ-001", empId: "EMP-001", type: "Phép năm", dates: "2023-11-01 - 2023-11-03", status: "Pending", reason: "Family vacation" },
-    { id: "REQ-002", empId: "EMP-002", type: "Nghỉ ốm", dates: "2023-10-30", status: "Approved", reason: "Flu" },
-    { id: "REQ-003", empId: "EMP-003", type: "Nghỉ thai sản", dates: "2023-11-05 - 2024-05-05", status: "Pending", reason: "Maternity" },
+    { id: "REQ-001", empId: "EMP-001", type: t("hr.time.annualLeave"), dates: "2023-11-01 - 2023-11-03", status: "Pending", reason: t("hr.core.familyVacation") },
+    { id: "REQ-002", empId: "EMP-002", type: t("hr.time.sickLeave"), dates: "2023-10-30", status: "Approved", reason: t("hr.core.flu") },
+    { id: "REQ-003", empId: "EMP-003", type: t("hr.time.maternityLeave"), dates: "2023-11-05 - 2024-05-05", status: "Pending", reason: t("hr.core.maternityReason") },
   ])
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -83,7 +83,7 @@ export function LeaveManagement() {
 
   const handleCreateRequest = () => {
     if (!newRequest.empId || !newRequest.type || !newRequest.dates || !newRequest.reason) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.core.toasts.requiredFields"))
       return
     }
 
@@ -99,7 +99,7 @@ export function LeaveManagement() {
     setRequests([request, ...requests])
     setIsModalOpen(false)
     setNewRequest({ empId: "", type: "", dates: "", reason: "" })
-    toast.success("Đã gửi đơn xin nghỉ phép")
+    toast.success(t("hr.core.toasts.leaveRequestSuccess"))
   }
 
   const getEmployeeName = (empId: string) => {
@@ -112,25 +112,25 @@ export function LeaveManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Quản lý ngày phép</h1>
-          <p className="text-muted-foreground">Cấu hình ngày nghỉ Lễ Tết, nguyên tắc phép năm và duyệt đơn xin nghỉ.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t("hr.core.leaveManagement")}</h1>
+          <p className="text-muted-foreground">{t("hr.core.holidaysDesc")}</p>
         </div>
         <div className="flex gap-2 items-center">
           <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Role" />
+              <SelectValue placeholder={t("hr.core.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="HR Manager">HR Manager</SelectItem>
-              <SelectItem value="Employee">Employee</SelectItem>
+              <SelectItem value="Admin">{t("hr.core.admin")}</SelectItem>
+              <SelectItem value="HR Manager">{t("hr.core.hrManager")}</SelectItem>
+              <SelectItem value="Employee">{t("hr.core.employee")}</SelectItem>
             </SelectContent>
           </Select>
           
           {canEdit && (
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Cấu hình chung
+              {t("hr.core.generalConfig")}
             </Button>
           )}
         </div>
@@ -138,38 +138,38 @@ export function LeaveManagement() {
 
       <Tabs defaultValue="requests" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="requests">Đơn xin nghỉ phép</TabsTrigger>
-          <TabsTrigger value="rules">Cấu hình ngày nghỉ</TabsTrigger>
-          <TabsTrigger value="balance">Quỹ phép</TabsTrigger>
+          <TabsTrigger value="requests">{t("hr.core.leaveRequests")}</TabsTrigger>
+          <TabsTrigger value="rules">{t("hr.core.leaveConfig")}</TabsTrigger>
+          <TabsTrigger value="balance">{t("hr.core.leaveBalance")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="requests" className="space-y-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Đơn xin nghỉ phép</CardTitle>
-                <CardDescription>Quản lý và phê duyệt đơn xin nghỉ phép của nhân viên</CardDescription>
+                <CardTitle>{t("hr.core.leaveRequests")}</CardTitle>
+                <CardDescription>{t("hr.core.manageLeaveRequests")}</CardDescription>
               </div>
               <Button size="sm" onClick={() => setIsModalOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                Tạo đơn nghỉ phép
+                {t("hr.core.createLeaveRequest")}
               </Button>
             </CardHeader>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Tạo đơn xin nghỉ phép</DialogTitle>
+                  <DialogTitle>{t("hr.core.createLeaveRequest")}</DialogTitle>
                   <DialogDescription>
-                    Điền thông tin để gửi yêu cầu nghỉ phép.
+                    {t("hr.core.leaveRequestInfoDesc")}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                    <Label htmlFor="empId" className="text-right">{t("hr.core.employee")}</Label>
                     <Select value={newRequest.empId} onValueChange={(val) => setNewRequest({...newRequest, empId: val})}>
                       <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Chọn nhân viên" />
+                        <SelectValue placeholder={t("hr.core.selectEmployee")} />
                       </SelectTrigger>
                       <SelectContent>
                         {employees.map(emp => (
@@ -179,10 +179,10 @@ export function LeaveManagement() {
                     </Select>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="type" className="text-right">Loại phép</Label>
+                    <Label htmlFor="type" className="text-right">{t("hr.core.leaveType")}</Label>
                     <Select value={newRequest.type} onValueChange={(val) => setNewRequest({...newRequest, type: val})}>
                       <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Chọn loại phép" />
+                        <SelectValue placeholder={t("hr.core.selectLeaveType")} />
                       </SelectTrigger>
                       <SelectContent>
                         {rules.map(rule => (
@@ -192,29 +192,29 @@ export function LeaveManagement() {
                     </Select>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="dates" className="text-right">Thời gian</Label>
+                    <Label htmlFor="dates" className="text-right">{t("hr.time.dates")}</Label>
                     <Input 
                       id="dates" 
                       value={newRequest.dates} 
                       onChange={(e) => setNewRequest({...newRequest, dates: e.target.value})}
                       className="col-span-3" 
-                      placeholder="VD: 2024-03-20 - 2024-03-22"
+                      placeholder={t("hr.core.placeholders.dates")}
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="reason" className="text-right">Lý do</Label>
+                    <Label htmlFor="reason" className="text-right">{t("hr.core.reason")}</Label>
                     <Input 
                       id="reason" 
                       value={newRequest.reason} 
                       onChange={(e) => setNewRequest({...newRequest, reason: e.target.value})}
                       className="col-span-3" 
-                      placeholder="VD: Việc gia đình"
+                      placeholder={t("hr.core.placeholders.reason")}
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-                  <Button onClick={handleCreateRequest}>Gửi yêu cầu</Button>
+                  <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("common.cancel") || "Hủy"}</Button>
+                  <Button onClick={handleCreateRequest}>{t("hr.core.sendRequest")}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -224,11 +224,11 @@ export function LeaveManagement() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t("hr.core.name")}</TableHead>
-                    <TableHead>Loại phép</TableHead>
-                    <TableHead>Thời gian</TableHead>
-                    <TableHead>Lý do</TableHead>
-                    <TableHead>Trạng thái</TableHead>
-                    {canEdit && <TableHead className="text-right">Duyệt/Từ chối</TableHead>}
+                    <TableHead>{t("hr.core.leaveType")}</TableHead>
+                    <TableHead>{t("hr.time.dates")}</TableHead>
+                    <TableHead>{t("hr.core.reason")}</TableHead>
+                    <TableHead>{t("hr.core.status")}</TableHead>
+                    {canEdit && <TableHead className="text-right">{t("hr.core.approveReject")}</TableHead>}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -240,7 +240,7 @@ export function LeaveManagement() {
                       <TableCell>{item.reason}</TableCell>
                       <TableCell>
                         <Badge variant={item.status === "Approved" ? "default" : item.status === "Pending" ? "secondary" : "destructive"}>
-                          {item.status}
+                          {item.status === "Approved" ? t("hr.core.approved") : item.status === "Pending" ? t("hr.core.pending") : t("hr.core.rejected")}
                         </Badge>
                       </TableCell>
                       {canEdit && (
@@ -249,11 +249,11 @@ export function LeaveManagement() {
                             <div className="flex justify-end gap-2">
                               <Button size="sm" variant="outline" className="text-green-600 border-green-600 hover:bg-green-50" onClick={() => handleApprove(item.id)}>
                                 <Check className="h-4 w-4 mr-1" />
-                                Duyệt
+                                {t("hr.core.approve")}
                               </Button>
                               <Button size="sm" variant="outline" className="text-red-600 border-red-600 hover:bg-red-50" onClick={() => handleReject(item.id)}>
                                 <X className="h-4 w-4 mr-1" />
-                                Từ chối
+                                {t("hr.core.reject")}
                               </Button>
                             </div>
                           )}
@@ -272,13 +272,13 @@ export function LeaveManagement() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle>Nguyên tắc phép năm</CardTitle>
-                  <CardDescription>Cấu hình các loại ngày phép</CardDescription>
+                  <CardTitle>{t("hr.core.leaveRuleTitle")}</CardTitle>
+                  <CardDescription>{t("hr.core.leaveRuleDesc")}</CardDescription>
                 </div>
                 {canEdit && (
                   <Button size="sm">
                     <Plus className="mr-2 h-4 w-4" />
-                    Thêm loại phép
+                    {t("hr.core.addLeaveType")}
                   </Button>
                 )}
               </CardHeader>
@@ -286,10 +286,10 @@ export function LeaveManagement() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Loại phép</TableHead>
-                      <TableHead>Số ngày/năm</TableHead>
-                      <TableHead>Cộng dồn</TableHead>
-                      {canEdit && <TableHead className="text-right">Thao tác</TableHead>}
+                      <TableHead>{t("hr.core.leaveType")}</TableHead>
+                      <TableHead>{t("hr.core.daysPerYear")}</TableHead>
+                      <TableHead>{t("hr.core.carryOver")}</TableHead>
+                      {canEdit && <TableHead className="text-right">{t("common.actions")}</TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -297,7 +297,7 @@ export function LeaveManagement() {
                       <TableRow key={item.id}>
                         <TableCell className="font-medium">{item.type}</TableCell>
                         <TableCell>{item.daysPerYear}</TableCell>
-                        <TableCell>{item.carryOver ? "Có" : "Không"}</TableCell>
+                        <TableCell>{item.carryOver ? t("hr.core.yes") : t("hr.core.no")}</TableCell>
                         {canEdit && (
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-2">
@@ -320,13 +320,13 @@ export function LeaveManagement() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle>Ngày nghỉ Lễ Tết</CardTitle>
-                  <CardDescription>Cấu hình các ngày nghỉ lễ trong năm</CardDescription>
+                  <CardTitle>{t("hr.core.holidayTitle")}</CardTitle>
+                  <CardDescription>{t("hr.core.holidayDesc")}</CardDescription>
                 </div>
                 {canEdit && (
                   <Button size="sm">
                     <Plus className="mr-2 h-4 w-4" />
-                    Thêm ngày lễ
+                    {t("hr.core.addHoliday")}
                   </Button>
                 )}
               </CardHeader>
@@ -334,10 +334,10 @@ export function LeaveManagement() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Tên ngày lễ</TableHead>
-                      <TableHead>Thời gian</TableHead>
-                      <TableHead>Số ngày</TableHead>
-                      {canEdit && <TableHead className="text-right">Thao tác</TableHead>}
+                      <TableHead>{t("hr.core.holidayName")}</TableHead>
+                      <TableHead>{t("hr.time.dates")}</TableHead>
+                      <TableHead>{t("hr.core.holidayDuration")}</TableHead>
+                      {canEdit && <TableHead className="text-right">{t("common.actions")}</TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -370,14 +370,14 @@ export function LeaveManagement() {
         <TabsContent value="balance" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Quỹ phép nhân viên</CardTitle>
-              <CardDescription>Theo dõi số ngày phép còn lại của từng nhân viên</CardDescription>
+              <CardTitle>{t("hr.core.employeeLeaveBalance")}</CardTitle>
+              <CardDescription>{t("hr.core.employeeLeaveBalanceDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <PieChart className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Quản lý quỹ phép đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ hiển thị chi tiết số ngày phép đã dùng và còn lại.</p>
+                <h3 className="font-medium">{t("hr.core.leaveBalanceUpdating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.core.leaveBalanceFeatureDesc")}</p>
               </div>
             </CardContent>
           </Card>

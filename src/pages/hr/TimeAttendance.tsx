@@ -73,13 +73,13 @@ export function TimeAttendance() {
 
   const handleCreateOt = () => {
     if (!newOt.empId || !newOt.date || !newOt.hours) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.time.toasts.fillInfo"))
       return
     }
 
     const hours = parseFloat(newOt.hours)
     if (isNaN(hours) || hours <= 0) {
-      toast.error("Số giờ OT không hợp lệ")
+      toast.error(t("hr.time.toasts.invalidHours"))
       return
     }
 
@@ -94,7 +94,7 @@ export function TimeAttendance() {
     setOtRequests([record, ...otRequests])
     setIsOtModalOpen(false)
     setNewOt({ empId: "", date: "", hours: "1" })
-    toast.success("Đã đăng ký OT")
+    toast.success(t("hr.time.toasts.addSuccess"))
   }
 
 
@@ -109,19 +109,19 @@ export function TimeAttendance() {
         <div className="flex gap-2 items-center">
           <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Role" />
+              <SelectValue placeholder={t("hr.core.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="HR Manager">HR Manager</SelectItem>
-              <SelectItem value="Employee">Employee</SelectItem>
+              <SelectItem value="Admin">{t("hr.core.admin")}</SelectItem>
+              <SelectItem value="HR Manager">{t("hr.core.hrManager")}</SelectItem>
+              <SelectItem value="Employee">{t("hr.core.employee")}</SelectItem>
             </SelectContent>
           </Select>
           
           {canEdit && (
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Cấu hình
+              {t("hr.core.config")}
             </Button>
           )}
         </div>
@@ -129,10 +129,10 @@ export function TimeAttendance() {
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-          <TabsTrigger value="timesheet">Bảng chấm công</TabsTrigger>
-          <TabsTrigger value="locations">Địa điểm làm việc</TabsTrigger>
-          <TabsTrigger value="shifts">Ca làm việc & OT</TabsTrigger>
+          <TabsTrigger value="overview">{t("hr.time.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="timesheet">{t("hr.time.tabs.timesheet")}</TabsTrigger>
+          <TabsTrigger value="locations">{t("hr.time.tabs.locations")}</TabsTrigger>
+          <TabsTrigger value="shifts">{t("hr.time.tabs.shifts")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -143,7 +143,7 @@ export function TimeAttendance() {
             <Wifi className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">Active</div>
+            <div className="text-2xl font-bold text-green-600">{t("hr.time.active")}</div>
             <p className="text-xs text-muted-foreground">HQ Office</p>
           </CardContent>
         </Card>
@@ -153,7 +153,7 @@ export function TimeAttendance() {
             <MapPin className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">Active</div>
+            <div className="text-2xl font-bold text-green-600">{t("hr.time.active")}</div>
             <p className="text-xs text-muted-foreground">Radius: 50m</p>
           </CardContent>
         </Card>
@@ -163,7 +163,7 @@ export function TimeAttendance() {
             <ScanFace className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">Active</div>
+            <div className="text-2xl font-bold text-green-600">{t("hr.time.active")}</div>
             <p className="text-xs text-muted-foreground">Devices: 2</p>
           </CardContent>
         </Card>
@@ -173,7 +173,7 @@ export function TimeAttendance() {
             <QrCode className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">Active</div>
+            <div className="text-2xl font-bold text-green-600">{t("hr.time.active")}</div>
             <p className="text-xs text-muted-foreground">Dynamic QR</p>
           </CardContent>
         </Card>
@@ -214,14 +214,14 @@ export function TimeAttendance() {
       <TabsContent value="timesheet" className="space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle>Bảng chấm công chi tiết</CardTitle>
-            <CardDescription>Xem và quản lý dữ liệu chấm công hàng ngày của nhân viên</CardDescription>
+            <CardTitle>{t("hr.time.timesheetTab.title")}</CardTitle>
+            <CardDescription>{t("hr.time.timesheetTab.description")}</CardDescription>
           </CardHeader>
           <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
             <div className="text-center space-y-2">
               <CalendarIcon className="w-12 h-12 text-muted-foreground mx-auto" />
-              <h3 className="font-medium">Bảng chấm công đang được cập nhật</h3>
-              <p className="text-sm text-muted-foreground">Tính năng này sẽ hiển thị lưới chấm công chi tiết theo tháng.</p>
+              <h3 className="font-medium">{t("hr.time.timesheetTab.updating")}</h3>
+              <p className="text-sm text-muted-foreground">{t("hr.time.timesheetTab.featureDesc")}</p>
             </div>
           </CardContent>
         </Card>
@@ -231,13 +231,13 @@ export function TimeAttendance() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Địa điểm làm việc</CardTitle>
-              <CardDescription>Cấu hình các địa điểm làm việc và chấm công</CardDescription>
+              <CardTitle>{t("hr.time.locationsTab.title")}</CardTitle>
+              <CardDescription>{t("hr.time.locationsTab.description")}</CardDescription>
             </div>
             {canEdit && (
               <Button size="sm">
                 <Plus className="mr-2 h-4 w-4" />
-                Thêm địa điểm
+                {t("hr.time.locationsTab.add")}
               </Button>
             )}
           </CardHeader>
@@ -245,9 +245,9 @@ export function TimeAttendance() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Tên địa điểm</TableHead>
-                  <TableHead>Địa chỉ</TableHead>
-                  <TableHead>Loại</TableHead>
+                  <TableHead>{t("hr.time.locationsTab.name")}</TableHead>
+                  <TableHead>{t("hr.time.locationsTab.address")}</TableHead>
+                  <TableHead>{t("hr.time.locationsTab.type")}</TableHead>
                   {canEdit && <TableHead className="text-right">{t("common.actions")}</TableHead>}
                 </TableRow>
               </TableHeader>
@@ -292,7 +292,7 @@ export function TimeAttendance() {
             {canEdit && (
               <Button size="sm">
                 <Plus className="mr-2 h-4 w-4" />
-                Thêm ca
+                {t("hr.time.shiftsTab.add")}
               </Button>
             )}
           </CardHeader>
@@ -337,28 +337,28 @@ export function TimeAttendance() {
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>{t("hr.time.otRequests")}</CardTitle>
-              <CardDescription>Overtime registration.</CardDescription>
+              <CardDescription>{t("hr.time.leaveRequestsDesc")}</CardDescription>
             </div>
             <Button size="sm" onClick={() => setIsOtModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Đăng ký OT
+              {t("hr.time.otModal.save")}
             </Button>
           </CardHeader>
           <CardContent>
             <Dialog open={isOtModalOpen} onOpenChange={setIsOtModalOpen}>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Đăng ký làm thêm giờ (OT)</DialogTitle>
+                  <DialogTitle>{t("hr.time.otModal.title")}</DialogTitle>
                   <DialogDescription>
-                    Điền thông tin để đăng ký làm thêm giờ.
+                    {t("hr.time.otModal.description")}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                    <Label htmlFor="empId" className="text-right">{t("hr.time.otModal.employee")}</Label>
                     <Select value={newOt.empId} onValueChange={(val) => setNewOt({...newOt, empId: val})}>
                       <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Chọn nhân viên" />
+                        <SelectValue placeholder={t("hr.time.otModal.selectEmployee")} />
                       </SelectTrigger>
                       <SelectContent>
                         {employees.map(emp => (
@@ -368,7 +368,7 @@ export function TimeAttendance() {
                     </Select>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="date" className="text-right">Ngày</Label>
+                    <Label htmlFor="date" className="text-right">{t("hr.time.otModal.date")}</Label>
                     <Input 
                       id="date" 
                       type="date"
@@ -378,7 +378,7 @@ export function TimeAttendance() {
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="hours" className="text-right">Số giờ</Label>
+                    <Label htmlFor="hours" className="text-right">{t("hr.time.otModal.hours")}</Label>
                     <Input 
                       id="hours" 
                       type="number"
@@ -386,13 +386,13 @@ export function TimeAttendance() {
                       value={newOt.hours} 
                       onChange={(e) => setNewOt({...newOt, hours: e.target.value})}
                       className="col-span-3" 
-                      placeholder="VD: 2"
+                      placeholder={t("hr.time.placeholders.hours")}
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsOtModalOpen(false)}>Hủy</Button>
-                  <Button onClick={handleCreateOt}>Đăng ký</Button>
+                  <Button variant="outline" onClick={() => setIsOtModalOpen(false)}>{t("hr.time.otModal.cancel")}</Button>
+                  <Button onClick={handleCreateOt}>{t("hr.time.otModal.save")}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

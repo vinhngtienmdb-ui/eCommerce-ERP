@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 import { Badge } from "@/src/components/ui/badge"
-import { Search, Truck, MoreHorizontal, RefreshCw, Edit2, Zap } from "lucide-react"
+import { Search, Truck, MoreHorizontal, RefreshCw, Edit2, Zap, Loader2 } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,52 +29,71 @@ import {
 } from "@/src/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { Label } from "@/src/components/ui/label"
+import { db } from "@/src/lib/firebase"
+import { doc, updateDoc } from "firebase/firestore"
+import { handleFirestoreError } from "@/src/lib/firestore-errors"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
-const initialFulfillment = [
-  { id: "ORD-7352", carrier: "Giao Hàng Nhanh", tracking: "GHN123456789", method: "Standard", fee: 35000, status: "In Transit" },
-  { id: "ORD-7351", carrier: "Viettel Post", tracking: "VT8822334455", method: "Express", fee: 55000, status: "Picked Up" },
-  { id: "ORD-7346", carrier: "Ninja Van", tracking: "NJV998877665", method: "Standard", fee: 30000, status: "Delivered" },
-]
+interface FulfillmentTabProps {
+  orders: any[];
+}
 
-export function FulfillmentTab() {
+export function FulfillmentTab({ orders }: FulfillmentTabProps) {
   const { t } = useTranslation()
   const [activeSubTab, setActiveSubTab] = useState("coordination")
   const [searchTerm, setSearchTerm] = useState("")
-  const [fulfillmentData, setFulfillmentData] = useState(initialFulfillment)
   const [isUpdateTrackingOpen, setIsUpdateTrackingOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<any>(null)
   const [newTracking, setNewTracking] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
 
-  const filtered = fulfillmentData.filter(item => 
-    item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.tracking.toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = orders.filter(item => 
+    (item.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.trackingNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.customerName?.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (item.status === 'shipping' || item.status === 'delivered' || item.status === 'confirmed')
   )
 
   const handleUpdateTracking = (item: any) => {
     setSelectedItem(item)
-    setNewTracking(item.tracking)
+    setNewTracking(item.trackingNumber || "")
     setIsUpdateTrackingOpen(true)
   }
 
-  const saveTracking = () => {
-    setFulfillmentData(prev => prev.map(item => 
-      item.id === selectedItem.id ? { ...item, tracking: newTracking } : item
-    ))
-    setIsUpdateTrackingOpen(false)
+  const saveTracking = async () => {
+    if (!selectedItem) return;
+    setIsSaving(true)
+    try {
+      const orderRef = doc(db, "orders", selectedItem.id);
+      await updateDoc(orderRef, {
+        trackingNumber: newTracking,
+        status: selectedItem.status === 'confirmed' ? 'shipping' : selectedItem.status
+      });
+      setIsUpdateTrackingOpen(false)
+    } catch (error) {
+      handleFirestoreError(error, 'update' as any, `orders/${selectedItem.id}`);
+    } finally {
+      setIsSaving(false)
+    }
   }
 
-  const generateTracking = (item: any) => {
+  const generateTracking = async (item: any) => {
     const prefix = item.carrier === "Giao Hàng Nhanh" ? "GHN" : item.carrier === "Viettel Post" ? "VT" : "NJV"
     const randomCode = Math.floor(100000000 + Math.random() * 900000000)
     const generatedCode = `${prefix}${randomCode}`
     
-    setFulfillmentData(prev => prev.map(i => 
-      i.id === item.id ? { ...i, tracking: generatedCode } : i
-    ))
+    try {
+      const orderRef = doc(db, "orders", item.id);
+      await updateDoc(orderRef, {
+        trackingNumber: generatedCode,
+        status: item.status === 'confirmed' ? 'shipping' : item.status
+      });
+    } catch (error) {
+      handleFirestoreError(error, 'update' as any, `orders/${item.id}`);
+    }
   }
 
   return (
@@ -129,21 +148,21 @@ export function FulfillmentTab() {
                 {filtered.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell className="font-medium">{item.id}</TableCell>
-                    <TableCell>{item.carrier}</TableCell>
+                    <TableCell>{item.carrier || "---"}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">{item.tracking || "---"}</code>
+                        <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] font-mono">{item.trackingNumber || "---"}</code>
                         <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleUpdateTracking(item)}>
                           <Edit2 className="h-3 w-3" />
                         </Button>
                       </div>
                     </TableCell>
-                    <TableCell>{item.method}</TableCell>
-                    <TableCell className="text-right">{formatVND(item.fee)}</TableCell>
+                    <TableCell>{item.shippingMethod || "Standard"}</TableCell>
+                    <TableCell className="text-right">{formatVND(item.shippingFee || 0)}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="flex w-fit items-center gap-1">
+                      <Badge variant="outline" className="flex w-fit items-center gap-1 text-[10px]">
                         <Truck className="h-3 w-3" />
-                        {t(`orders.fulfillment.statuses.${item.status.toLowerCase().replace(' ', '_')}`)}
+                        {t(`orders.statuses.${item.status}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -156,19 +175,25 @@ export function FulfillmentTab() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>{t("common.actions")}</DropdownMenuLabel>
                           <DropdownMenuItem onClick={() => generateTracking(item)}>
-                            <Zap className="mr-2 h-4 w-4" />
+                            <Zap className="mr-2 h-4 w-4 text-amber-500" />
                             {t("orders.details.generateTracking")}
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleUpdateTracking(item)}>
-                            <Edit2 className="mr-2 h-4 w-4" />
+                            <Edit2 className="mr-2 h-4 w-4 text-blue-500" />
                             {t("orders.details.updateTracking")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem>{t("orders.fulfillment.dispatch")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
+                {filtered.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                      {t("orders.noOrders")}
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>
@@ -228,10 +253,11 @@ export function FulfillmentTab() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsUpdateTrackingOpen(false)}>
+            <Button variant="outline" onClick={() => setIsUpdateTrackingOpen(false)} disabled={isSaving}>
               {t("common.cancel")}
             </Button>
-            <Button onClick={saveTracking}>
+            <Button onClick={saveTracking} disabled={isSaving}>
+              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {t("common.save")}
             </Button>
           </DialogFooter>

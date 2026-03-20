@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useAuth } from "@/src/lib/AuthContext"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import {
@@ -21,7 +22,11 @@ import {
   Eye, 
   Printer, 
   RefreshCw,
-  Clock
+  Clock,
+  ChevronUp,
+  ChevronDown,
+  Loader2,
+  Trash2
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -45,118 +50,111 @@ import { FulfillmentTab } from "@/src/components/orders/FulfillmentTab"
 import { RMATab } from "@/src/components/orders/RMATab"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { toast } from "sonner"
+import { db, auth } from "@/src/lib/firebase"
+import { collection, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
+import { cn } from "@/src/lib/utils"
 
 const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
-const initialOrders = [
-  { 
-    id: "ORD-7352", 
-    customer: "Nguyễn Văn A", 
-    phone: "0901234567",
-    address: "123 Đường Lê Lợi, Quận 1, TP.HCM",
-    productName: "iPhone 15 Pro Max 256GB",
-    productImage: "https://picsum.photos/seed/iphone/100/100",
-    shopName: "Apple Flagship Store",
-    date: "2026-03-02 14:30", 
-    total: 34990000, 
-    status: "pending_confirmation", 
-    items: 1,
-    trackingNumber: ""
-  },
-  { 
-    id: "ORD-7351", 
-    customer: "Trần Thị B", 
-    phone: "0912345678",
-    address: "456 Đường Nguyễn Huệ, Quận 1, TP.HCM",
-    productName: "Tai nghe Sony WH-1000XM5",
-    productImage: "https://picsum.photos/seed/sony/100/100",
-    shopName: "Sony Center",
-    date: "2026-03-02 10:15", 
-    total: 8490000, 
-    status: "shipping", 
-    items: 1,
-    trackingNumber: "GHTK123456789",
-    carrier: "Giao Hàng Tiết Kiệm"
-  },
-  { 
-    id: "ORD-7350", 
-    customer: "Lê Văn C", 
-    phone: "0923456789",
-    address: "789 Đường CMT8, Quận 3, TP.HCM",
-    productName: "MacBook Pro M3 14 inch",
-    productImage: "https://picsum.photos/seed/macbook/100/100",
-    shopName: "Apple Flagship Store",
-    date: "2026-03-01 16:45", 
-    total: 45990000, 
-    status: "delivered", 
-    items: 1,
-    trackingNumber: "GHN987654321",
-    carrier: "Giao Hàng Nhanh"
-  },
-  { 
-    id: "ORD-7349", 
-    customer: "Phạm Thị D", 
-    phone: "0934567890",
-    address: "101 Đường Võ Văn Kiệt, Quận 5, TP.HCM",
-    productName: "Ốp lưng iPhone 15",
-    productImage: "https://picsum.photos/seed/case/100/100",
-    shopName: "Phụ kiện Số",
-    date: "2026-03-01 09:00", 
-    total: 450000, 
-    status: "cancelled", 
-    items: 2,
-    trackingNumber: ""
-  },
-  { 
-    id: "ORD-7348", 
-    customer: "Hoàng Văn E", 
-    phone: "0945678901",
-    address: "202 Đường Nguyễn Trãi, Quận 5, TP.HCM",
-    productName: "Bàn phím cơ Keychron K2",
-    productImage: "https://picsum.photos/seed/keyboard/100/100",
-    shopName: "GearVN",
-    date: "2026-02-28 20:30", 
-    total: 2100000, 
-    status: "completed", 
-    items: 1,
-    trackingNumber: "VTP555666777",
-    carrier: "Viettel Post"
-  },
-]
+type SortField = 'id' | 'date' | 'total' | 'status' | 'customer';
+type SortOrder = 'asc' | 'desc';
 
 export function Orders() {
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const [orders, setOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [isTrackingOpen, setIsTrackingOpen] = useState(false)
-  const { t } = useTranslation()
+  
+  const [sortField, setSortField] = useState<SortField>('date')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
 
-  const filteredOrders = initialOrders.filter(order => 
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(),
+        date: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate().toLocaleString() : doc.data().createdAt
+      }));
+      setOrders(docs);
+      setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, "orders");
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedOrders = [...orders].sort((a, b) => {
+    let comparison = 0;
+    switch (sortField) {
+      case 'id':
+        comparison = a.id.localeCompare(b.id);
+        break;
+      case 'date':
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        comparison = dateA - dateB;
+        break;
+      case 'total':
+        comparison = (a.total || 0) - (b.total || 0);
+        break;
+      case 'status':
+        comparison = (a.status || "").localeCompare(b.status || "");
+        break;
+      case 'customer':
+        comparison = (a.customerName || "").localeCompare(b.customerName || "");
+        break;
+    }
+    return sortOrder === 'asc' ? comparison : -comparison;
+  });
+
+  const filteredOrders = sortedOrders.filter(order => 
     order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.shopName.toLowerCase().includes(searchTerm.toLowerCase())
+    (order.customerName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (order.items?.[0]?.name || "").toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const getStatusBadge = (status: string) => {
-    const statusMap: Record<string, { label: string, variant: any }> = {
-      pending_payment: { label: t("orders.statuses.pending_payment"), variant: "outline" },
-      pending_confirmation: { label: t("orders.statuses.pending_confirmation"), variant: "secondary" },
-      grouping: { label: t("orders.statuses.grouping"), variant: "secondary" },
-      confirmed: { label: t("orders.statuses.confirmed"), variant: "default" },
-      pending_shipping: { label: t("orders.statuses.pending_shipping"), variant: "secondary" },
-      shipping: { label: t("orders.statuses.shipping"), variant: "default" },
-      delivered: { label: t("orders.statuses.delivered"), variant: "default" },
-      cancelled: { label: t("orders.statuses.cancelled"), variant: "destructive" },
-      return_requested: { label: t("orders.statuses.return_requested"), variant: "destructive" },
-      refund_requested: { label: t("orders.statuses.refund_requested"), variant: "destructive" },
-      received: { label: t("orders.statuses.received"), variant: "default" },
-      completed: { label: t("orders.statuses.completed"), variant: "default" },
+    const statusMap: Record<string, { label: string, variant: any, color: string }> = {
+      pending_payment: { label: t("orders.statuses.pending_payment"), variant: "outline", color: "text-slate-500 bg-slate-50 border-slate-200" },
+      pending_confirmation: { label: t("orders.statuses.pending_confirmation"), variant: "secondary", color: "text-amber-600 bg-amber-50 border-amber-200" },
+      grouping: { label: t("orders.statuses.grouping"), variant: "secondary", color: "text-blue-600 bg-blue-50 border-blue-200" },
+      confirmed: { label: t("orders.statuses.confirmed"), variant: "default", color: "text-indigo-600 bg-indigo-50 border-indigo-200" },
+      pending_shipping: { label: t("orders.statuses.pending_shipping"), variant: "secondary", color: "text-orange-600 bg-orange-50 border-orange-200" },
+      shipping: { label: t("orders.statuses.shipping"), variant: "default", color: "text-sky-600 bg-sky-50 border-sky-200" },
+      delivered: { label: t("orders.statuses.delivered"), variant: "default", color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
+      cancelled: { label: t("orders.statuses.cancelled"), variant: "destructive", color: "text-rose-600 bg-rose-50 border-rose-200" },
+      return_requested: { label: t("orders.statuses.return_requested"), variant: "destructive", color: "text-pink-600 bg-pink-50 border-pink-200" },
+      refund_requested: { label: t("orders.statuses.refund_requested"), variant: "destructive", color: "text-purple-600 bg-purple-50 border-purple-200" },
+      received: { label: t("orders.statuses.received"), variant: "default", color: "text-teal-600 bg-teal-50 border-teal-200" },
+      completed: { label: t("orders.statuses.completed"), variant: "default", color: "text-green-600 bg-green-50 border-green-200" },
     }
-    const config = statusMap[status] || { label: status, variant: "outline" }
-    return <Badge variant={config.variant}>{config.label}</Badge>
+    const config = statusMap[status] || { label: status, variant: "outline", color: "text-slate-500 bg-slate-50 border-slate-200" }
+    return (
+      <Badge variant={config.variant} className={cn("font-medium px-2 py-0.5", config.color)}>
+        {config.label}
+      </Badge>
+    )
   }
 
   const handleViewDetails = (order: any) => {
@@ -181,13 +179,49 @@ export function Orders() {
     toast.success(t("common.filterSuccess", "Đã áp dụng bộ lọc"));
   }
 
-  const handleUpdateStatus = () => {
-    toast.success(t("orders.updateStatusSuccess", "Đã cập nhật trạng thái đơn hàng"));
+  const handleUpdateStatus = async (order: any, newStatus: string) => {
+    try {
+      const orderRef = doc(db, "orders", order.id);
+      await updateDoc(orderRef, { status: newStatus });
+      toast.success(t("orders.updateStatusSuccess", "Đã cập nhật trạng thái đơn hàng"));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.UPDATE, "orders");
+    }
   }
 
-  const handleCancelOrder = () => {
-    toast.success(t("orders.cancelOrderSuccess", "Đã hủy đơn hàng"));
+  const handleCancelOrder = async (order: any) => {
+    if (!confirm(t("orders.cancelConfirm", "Bạn có chắc chắn muốn hủy đơn hàng này?"))) return;
+    try {
+      const orderRef = doc(db, "orders", order.id);
+      await updateDoc(orderRef, { status: "cancelled" });
+      toast.success(t("orders.cancelOrderSuccess", "Đã hủy đơn hàng"));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.UPDATE, "orders");
+    }
   }
+
+  const handleDeleteOrder = async (id: string) => {
+    if (!confirm(t("orders.deleteConfirm", "Bạn có chắc chắn muốn xóa đơn hàng này?"))) return;
+    try {
+      await deleteDoc(doc(db, "orders", id));
+      toast.success(t("orders.deleteSuccess", "Đã xóa đơn hàng"));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.DELETE, "orders");
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) return null;
+    return sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />;
+  };
 
   return (
     <div className="space-y-6">
@@ -217,7 +251,7 @@ export function Orders() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t("orders.stats.totalOrders")}</CardTitle>
             <div className="p-2 bg-blue-100 rounded-full">
@@ -225,43 +259,49 @@ export function Orders() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{initialOrders.length}</div>
+            <div className="text-2xl font-bold">{orders.length}</div>
             <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.allTime")}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t("orders.stats.pending")}</CardTitle>
-            <div className="p-2 bg-yellow-100 rounded-full">
-              <Clock className="h-4 w-4 text-yellow-600" />
+            <div className="p-2 bg-amber-100 rounded-full">
+              <Clock className="h-4 w-4 text-amber-600" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1</div>
+            <div className="text-2xl font-bold">
+              {orders.filter(o => o.status === 'pending_confirmation' || o.status === 'pending_payment').length}
+            </div>
             <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.awaitingConfirmation")}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t("orders.stats.shipping")}</CardTitle>
-            <div className="p-2 bg-purple-100 rounded-full">
-              <Truck className="h-4 w-4 text-purple-600" />
+            <div className="p-2 bg-sky-100 rounded-full">
+              <Truck className="h-4 w-4 text-sky-600" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1</div>
+            <div className="text-2xl font-bold">
+              {orders.filter(o => o.status === 'shipping').length}
+            </div>
             <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.inTransit")}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t("orders.stats.returns")}</CardTitle>
-            <div className="p-2 bg-red-100 rounded-full">
-              <RotateCcw className="h-4 w-4 text-red-600" />
+            <div className="p-2 bg-rose-100 rounded-full">
+              <RotateCcw className="h-4 w-4 text-rose-600" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">0</div>
+            <div className="text-2xl font-bold">
+              {orders.filter(o => o.status === 'return_requested' || o.status === 'refund_requested').length}
+            </div>
             <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.requests")}</p>
           </CardContent>
         </Card>
@@ -301,48 +341,110 @@ export function Orders() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="w-[100px]">{t("orders.id")}</TableHead>
+                    <TableHead 
+                      className="w-[120px] cursor-pointer hover:bg-muted/80 transition-colors"
+                      onClick={() => handleSort('id')}
+                    >
+                      <div className="flex items-center">
+                        {t("orders.id")}
+                        <SortIcon field="id" />
+                      </div>
+                    </TableHead>
                     <TableHead>{t("orders.product")}</TableHead>
-                    <TableHead>{t("orders.trackingNumber")}</TableHead>
-                    <TableHead>{t("orders.shop")}</TableHead>
-                    <TableHead>{t("orders.customer")}</TableHead>
-                    <TableHead>{t("orders.date")}</TableHead>
-                    <TableHead className="text-right">{t("orders.total")}</TableHead>
-                    <TableHead>{t("common.status")}</TableHead>
+                    <TableHead className="hidden md:table-cell">{t("orders.trackingNumber")}</TableHead>
+                    <TableHead className="hidden lg:table-cell">{t("orders.shop")}</TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/80 transition-colors"
+                      onClick={() => handleSort('customer')}
+                    >
+                      <div className="flex items-center">
+                        {t("orders.customer")}
+                        <SortIcon field="customer" />
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/80 transition-colors hidden sm:table-cell"
+                      onClick={() => handleSort('date')}
+                    >
+                      <div className="flex items-center">
+                        {t("orders.date")}
+                        <SortIcon field="date" />
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-right cursor-pointer hover:bg-muted/80 transition-colors"
+                      onClick={() => handleSort('total')}
+                    >
+                      <div className="flex items-center justify-end">
+                        {t("orders.total")}
+                        <SortIcon field="total" />
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/80 transition-colors"
+                      onClick={() => handleSort('status')}
+                    >
+                      <div className="flex items-center">
+                        {t("common.status")}
+                        <SortIcon field="status" />
+                      </div>
+                    </TableHead>
                     <TableHead className="text-right">{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">{order.id}</TableCell>
-                      <TableCell className="max-w-[250px]">
+                    <TableRow key={order.id} className="hover:bg-muted/30 transition-colors group">
+                      <TableCell className="font-mono text-xs font-bold text-blue-600">
+                        {order.id}
+                      </TableCell>
+                      <TableCell className="max-w-[200px] sm:max-w-[250px]">
                         <div className="flex items-center gap-3">
-                          <img 
-                            src={order.productImage} 
-                            alt={order.productName} 
-                            className="h-10 w-10 rounded-md object-cover border"
-                            referrerPolicy="no-referrer"
-                          />
-                          <span className="truncate font-medium">{order.productName}</span>
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border bg-muted">
+                            <img 
+                              src={order.items?.[0]?.image || order.productImage || "https://picsum.photos/seed/placeholder/100/100"} 
+                              alt={order.items?.[0]?.name || order.productName} 
+                              className="h-full w-full object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="truncate font-semibold text-sm">
+                              {order.items?.[0]?.name || order.productName}
+                            </span>
+                            {order.items && order.items.length > 1 && (
+                              <span className="text-[10px] text-muted-foreground">
+                                + {order.items.length - 1} {t("common.otherItems")}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden md:table-cell">
                         {order.trackingNumber ? (
                           <div className="flex flex-col gap-1">
-                            <span className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded w-fit">
+                            <span className="text-[10px] font-mono bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200 w-fit">
                               {order.trackingNumber}
                             </span>
-                            <span className="text-[10px] text-muted-foreground">{order.carrier}</span>
+                            <span className="text-[10px] text-muted-foreground font-medium">{order.carrier}</span>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground text-xs italic">N/A</span>
+                          <span className="text-muted-foreground text-[10px] italic opacity-50">N/A</span>
                         )}
                       </TableCell>
-                      <TableCell>{order.shopName}</TableCell>
-                      <TableCell>{order.customer}</TableCell>
-                      <TableCell className="whitespace-nowrap">{order.date}</TableCell>
-                      <TableCell className="text-right font-semibold text-primary">
+                      <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">
+                        {order.shopName || order.storeId || "N/A"}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium">{order.customerName || order.customer}</span>
+                          <span className="text-[10px] text-muted-foreground">{order.phone}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap text-xs text-muted-foreground hidden sm:table-cell">
+                        {order.date}
+                      </TableCell>
+                      <TableCell className="text-right font-bold text-indigo-600">
                         {formatVND(order.total)}
                       </TableCell>
                       <TableCell>
@@ -351,30 +453,55 @@ export function Orders() {
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button variant="ghost" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
                               <span className="sr-only">Open menu</span>
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>{t("common.actions")}</DropdownMenuLabel>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wider">
+                              {t("common.actions")}
+                            </DropdownMenuLabel>
                             <DropdownMenuItem onClick={() => handleViewDetails(order)}>
-                              <Eye className="mr-2 h-4 w-4" />
+                              <Eye className="mr-2 h-4 w-4 text-blue-500" />
                               {t("common.viewDetails")}
                             </DropdownMenuItem>
                             {order.trackingNumber && (
                               <DropdownMenuItem onClick={() => handleTrackOrder(order)}>
-                                <Truck className="mr-2 h-4 w-4" />
+                                <Truck className="mr-2 h-4 w-4 text-sky-500" />
                                 {t("orders.trackOrder")}
                               </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem onClick={handleUpdateStatus}>
-                              <RefreshCw className="mr-2 h-4 w-4" />
+                            <DropdownMenuSeparator />
+                            <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase px-2 py-1.5">
                               {t("orders.updateStatus")}
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "confirmed")}>
+                              <RefreshCw className="mr-2 h-4 w-4 text-indigo-500" />
+                              {t("orders.statuses.confirmed")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "shipping")}>
+                              <Truck className="mr-2 h-4 w-4 text-sky-500" />
+                              {t("orders.statuses.shipping")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "delivered")}>
+                              <Package className="mr-2 h-4 w-4 text-emerald-500" />
+                              {t("orders.statuses.delivered")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive" onClick={handleCancelOrder}>
+                            <DropdownMenuItem 
+                              className="text-rose-600 focus:text-rose-600" 
+                              onClick={() => handleCancelOrder(order)}
+                            >
+                              <RotateCcw className="mr-2 h-4 w-4" />
                               {t("orders.cancelOrder")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-red-600 focus:text-red-600" 
+                              onClick={() => handleDeleteOrder(order.id)}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              {t("common.delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -383,8 +510,11 @@ export function Orders() {
                   ))}
                   {filteredOrders.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={8} className="h-24 text-center">
-                        {t("orders.noOrders")}
+                      <TableCell colSpan={9} className="h-32 text-center">
+                        <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
+                          <Package className="h-8 w-8 opacity-20" />
+                          <p>{t("orders.noOrders")}</p>
+                        </div>
                       </TableCell>
                     </TableRow>
                   )}
@@ -396,13 +526,13 @@ export function Orders() {
 
         <TabsContent value="fulfillment">
           <div className="rounded-xl border bg-card text-card-foreground shadow">
-            <FulfillmentTab />
+            <FulfillmentTab orders={orders} />
           </div>
         </TabsContent>
 
         <TabsContent value="rma">
           <div className="rounded-xl border bg-card text-card-foreground shadow">
-            <RMATab />
+            <RMATab orders={orders} />
           </div>
         </TabsContent>
       </Tabs>

@@ -71,8 +71,8 @@ export function HRDashboard() {
     },
     { 
       id: "hrLeave", 
-      title: "Quản lý ngày phép", 
-      description: "Cấu hình ngày nghỉ Lễ Tết, nguyên tắc phép năm và duyệt đơn xin nghỉ.", 
+      title: "hr.core.leaveManagement", 
+      description: "hr.core.leaveManagementDesc", 
       icon: CalendarCheck, 
       color: "text-pink-600", 
       bg: "bg-pink-50",
@@ -188,14 +188,14 @@ export function HRDashboard() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="rounded-2xl border-slate-100 shadow-sm">
           <CardHeader>
-            <CardTitle className="font-bold">Hoạt động gần đây</CardTitle>
-            <CardDescription>Các cập nhật mới nhất từ hệ thống nhân sự</CardDescription>
+            <CardTitle className="font-bold">{t("hrDashboard.recentActivity")}</CardTitle>
+            <CardDescription>{t("hrDashboard.recentActivityDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {[
-              { icon: UserCheck, color: "text-emerald-600", bg: "bg-emerald-100", title: "Nhân viên mới: Lê Văn C", desc: "Đã hoàn thành thủ tục Onboarding", time: "2 giờ trước" },
-              { icon: CalendarCheck, color: "text-purple-600", bg: "bg-purple-100", title: "Đơn xin nghỉ phép: Phạm Thị D", desc: "Đã được phê duyệt bởi Quản lý", time: "5 giờ trước" },
-              { icon: Briefcase, color: "text-blue-600", bg: "bg-blue-100", title: "Tuyển dụng: Lập trình viên Frontend", desc: "Có 3 ứng viên mới nộp hồ sơ", time: "1 ngày trước" },
+              { icon: UserCheck, color: "text-emerald-600", bg: "bg-emerald-100", title: t("hrDashboard.newEmployeeJoined", { name: "Lê Văn C" }), desc: t("hrDashboard.onboardingCompleted"), time: t("hrDashboard.timeAgo", { count: 2 }) },
+              { icon: CalendarCheck, color: "text-purple-600", bg: "bg-purple-100", title: t("hrDashboard.leaveApproved", { name: "Phạm Thị D" }), desc: t("hrDashboard.approvedByManager"), time: t("hrDashboard.timeAgo", { count: 5 }) },
+              { icon: Briefcase, color: "text-blue-600", bg: "bg-blue-100", title: t("hrDashboard.recruitmentFrontend"), desc: t("hrDashboard.newCandidates"), time: t("hrDashboard.timeAgo", { count: 24 }) },
             ].map((act, i) => (
               <div key={i} className="flex items-center gap-4">
                 <div className={`p-2.5 ${act.bg} rounded-xl`}>
@@ -213,14 +213,14 @@ export function HRDashboard() {
 
         <Card className="rounded-2xl border-slate-100 shadow-sm">
           <CardHeader>
-            <CardTitle className="font-bold">Công việc sắp tới</CardTitle>
-            <CardDescription>Các nhiệm vụ nhân sự cần xử lý</CardDescription>
+            <CardTitle className="font-bold">{t("hrDashboard.upcomingTasks")}</CardTitle>
+            <CardDescription>{t("hrDashboard.upcomingTasksDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {[
-              { color: "bg-rose-500", title: "Chốt bảng lương tháng này", desc: "Hạn chót: 25/11/2023" },
-              { color: "bg-amber-500", title: "Đánh giá hiệu suất quý 4", desc: "Bắt đầu từ: 01/12/2023" },
-              { color: "bg-blue-500", title: "Gia hạn hợp đồng: Trần Thị B", desc: "Hết hạn: 15/12/2023" },
+              { color: "bg-rose-500", title: t("hrDashboard.payrollDeadline"), desc: t("hrDashboard.deadlineDate", { date: "25/11/2023" }) },
+              { color: "bg-amber-500", title: t("hrDashboard.performanceReview"), desc: t("hrDashboard.startDate", { date: "01/12/2023" }) },
+              { color: "bg-blue-500", title: t("hrDashboard.contractRenewal", { name: "Trần Thị B" }), desc: t("hrDashboard.expiryDate", { date: "15/12/2023" }) },
             ].map((task, i) => (
               <div key={i} className="flex items-center gap-4">
                 <div className={`w-2 h-2 ${task.color} rounded-full`}></div>
@@ -228,7 +228,7 @@ export function HRDashboard() {
                   <p className="text-sm font-bold text-slate-900 leading-none">{task.title}</p>
                   <p className="text-xs text-slate-500">{task.desc}</p>
                 </div>
-                <Button variant="outline" size="sm" className="rounded-lg text-xs font-bold border-slate-200">Xử lý</Button>
+                <Button variant="outline" size="sm" className="rounded-lg text-xs font-bold border-slate-200">{t("hrDashboard.process")}</Button>
               </div>
             ))}
           </CardContent>

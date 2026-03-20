@@ -8,8 +8,8 @@ service cloud.firestore {
     
     function isAdmin() {
       return isAuthenticated() && 
-        (get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin' ||
-         request.auth.token.email == "vinh.ngtienmdb@gmail.com");
+        (request.auth.token.email == "vinh.ngtienmdb@gmail.com" ||
+         get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin');
     }
 
     function isOwner(userId) {
@@ -30,6 +30,12 @@ service cloud.firestore {
     function isValidUser(data) {
       return (data.displayName is string && data.displayName.size() < 100) ||
              (data.email is string && data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"));
+    }
+
+    // Notifications rules
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
     }
 
     // Settings rules

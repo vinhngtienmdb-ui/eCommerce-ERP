@@ -24,6 +24,8 @@
     "status": "Trạng thái",
     "moduleUnderConstruction": "Mô-đun đang được xây dựng",
     "languageCode": "Vietnamese",
+    "minutesAgo": "phút trước",
+    "hoursAgo": "giờ trước",
     "months": {
       "jan": "Tháng 1",
       "feb": "Tháng 2",
@@ -92,6 +94,7 @@
     "hrInfo": "Thông tin nhân sự",
     "admin": "Quản trị",
     "adminWorkspace": "Hành chính",
+    "notifications": "Thông báo hệ thống",
     "kolKoc": "Quản lý KOL/KOC",
     "assets": "Quản lý Tài sản",
     "stationery": "Văn phòng phẩm & Nhu yếu phẩm",
@@ -1556,10 +1559,10 @@
       "recruitment": "Tuyển dụng",
       "employees": "Nhân viên",
       "time": "Chấm công",
-      "performance": "Đánh giá",
+      "performance": "Hiệu suất",
       "pit": "Thuế TNCN",
       "goals": "Mục tiêu",
-      "info": "Thông tin nhân sự"
+      "info": "Hồ sơ nhân sự"
     },
     "core": {
       "addEmployee": "Thêm nhân viên",
@@ -1587,9 +1590,240 @@
       "probation": "Thử việc",
       "definiteTerm": "Xác định thời hạn",
       "indefiniteTerm": "Không xác định thời hạn",
+      "onboarding": "Đang thử việc",
       "working": "Đang làm việc",
       "maternity": "Nghỉ thai sản",
-      "resigned": "Đã nghỉ việc"
+      "resigned": "Đã nghỉ việc",
+      "toasts": {
+        "updateSuccess": "Cập nhật nhân viên thành công",
+        "addSuccess": "Thêm nhân viên thành công",
+        "deleteSuccess": "Đã xóa nhân viên",
+        "requiredFields": "Vui lòng điền đầy đủ thông tin bắt buộc",
+        "contractSuccess": "Đã tạo hợp đồng mới",
+        "leaveRequestSuccess": "Đã gửi đơn xin nghỉ phép"
+      },
+      "laborLawDesc": "Theo quy định Luật LĐ",
+      "socialInsuranceDesc": "Hưởng BHXH",
+      "maternityLawDesc": "6 tháng theo Luật",
+      "docs": {
+        "laborContract": "Hợp đồng lao động",
+        "appointmentDecision": "Quyết định bổ nhiệm"
+      },
+      "manageContracts": "Quản lý hợp đồng lao động của nhân viên.",
+      "createContract": "Tạo hợp đồng",
+      "newContract": "Tạo hợp đồng mới",
+      "contractInfoDesc": "Điền thông tin để tạo hợp đồng lao động mới.",
+      "selectEmployee": "Chọn nhân viên",
+      "selectContractType": "Chọn loại hợp đồng",
+      "emptyEndDateDesc": "Bỏ trống nếu không xác định thời hạn",
+      "digitalSignature": "Ký số",
+      "orgChart": "Sơ đồ tổ chức",
+      "orgChartDesc": "Cấu trúc phòng ban và nhân sự công ty",
+      "orgChartUpdating": "Sơ đồ tổ chức đang được cập nhật",
+      "orgChartFeatureDesc": "Tính năng này sẽ cho phép kéo thả và quản lý cấu trúc công ty trực quan.",
+      "documents": "Hồ sơ & Tài liệu",
+      "documentsDesc": "Quản lý hợp đồng, quyết định và các tài liệu nhân sự khác",
+      "documentName": "Tên tài liệu",
+      "documentType": "Loại",
+      "documentDate": "Ngày tạo",
+      "careerPath": "Lộ trình công danh",
+      "careerPathDesc": "Theo dõi và phát triển sự nghiệp của nhân viên",
+      "careerPathUpdating": "Lộ trình công danh đang được cập nhật",
+      "careerPathFeatureDesc": "Tính năng này giúp thiết lập mục tiêu và theo dõi sự thăng tiến của từng cá nhân.",
+      "personal": "Cá nhân",
+      "work": "Công việc",
+      "finance": "Tài chính",
+      "fullName": "Họ tên",
+      "dob": "Ngày sinh",
+      "gender": "Giới tính",
+      "address": "Địa chỉ",
+      "bankName": "Ngân hàng",
+      "bankAccount": "Số tài khoản",
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác",
+      "admin": "Quản trị viên",
+      "hrManager": "Quản lý nhân sự",
+      "employee": "Nhân viên",
+      "role": "Vai trò",
+      "config": "Cấu hình",
+      "contractStatus": {
+        "active": "Đang hiệu lực",
+        "expired": "Hết hạn"
+      },
+      "engineering": "Kỹ thuật",
+      "it": "Công nghệ thông tin (IT)",
+      "marketing": "Marketing",
+      "sales": "Kinh doanh",
+      "hr": "Nhân sự",
+      "finance": "Tài chính",
+      "financeDept": "Tài chính",
+      "contract": "Hợp đồng",
+      "decision": "Quyết định",
+      "generalConfig": "Cấu hình chung",
+      "leaveRequests": "Đơn xin nghỉ phép",
+      "leaveConfig": "Cấu hình ngày nghỉ",
+      "leaveBalance": "Quỹ phép",
+      "manageLeaveRequests": "Quản lý và phê duyệt đơn xin nghỉ phép của nhân viên",
+      "createLeaveRequest": "Tạo đơn nghỉ phép",
+      "leaveRequestInfoDesc": "Điền thông tin để gửi yêu cầu nghỉ phép.",
+      "leaveType": "Loại phép",
+      "selectLeaveType": "Chọn loại phép",
+      "reason": "Lý do",
+      "familyVacation": "Nghỉ mát gia đình",
+      "flu": "Cảm cúm",
+      "maternityReason": "Nghỉ thai sản",
+      "sendRequest": "Gửi yêu cầu",
+      "approveReject": "Duyệt/Từ chối",
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "leaveRules": "Nguyên tắc phép năm",
+      "leaveRulesDesc": "Cấu hình các loại ngày phép",
+      "addLeaveType": "Thêm loại phép",
+      "daysPerYear": "Số ngày/năm",
+      "carryOver": "Cộng dồn",
+      "holidays": "Ngày nghỉ Lễ Tết",
+      "holidaysDesc": "Cấu hình các ngày nghỉ lễ trong năm",
+      "addHoliday": "Thêm ngày lễ",
+      "holidayName": "Tên ngày lễ",
+    "holidayDuration": "Số ngày",
+    "yes": "Có",
+    "no": "Không",
+    "leaveRuleTitle": "Nguyên tắc phép năm",
+    "leaveRuleDesc": "Cấu hình các loại ngày phép",
+    "holidayTitle": "Ngày nghỉ Lễ Tết",
+    "holidayDesc": "Cấu hình các ngày nghỉ lễ trong năm",
+      "days": "Số ngày",
+      "employeeLeaveBalance": "Quỹ phép nhân viên",
+      "employeeLeaveBalanceDesc": "Theo dõi số ngày phép còn lại của từng nhân viên",
+      "leaveBalanceUpdating": "Quản lý quỹ phép đang được cập nhật",
+      "leaveBalanceFeatureDesc": "Tính năng này sẽ hiển thị chi tiết số ngày phép đã dùng và còn lại.",
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "placeholders": {
+        "dates": "VD: 2024-03-20 - 2024-03-22",
+        "reason": "VD: Việc gia đình"
+      }
+    },
+    "socialInsurance": {
+      "title": "Bảo hiểm xã hội",
+      "description": "Quản lý hồ sơ bảo hiểm xã hội và các khoản trích theo lương.",
+      "insuranceNo": "Số sổ BHXH",
+      "salaryBase": "Lương cơ bản",
+      "employeeRate": "NLĐ đóng (10.5%)",
+      "employerRate": "DN đóng (21.5%)",
+      "status": "Trạng thái",
+      "tabs": {
+        "records": "Hồ sơ bảo hiểm",
+        "claims": "Giải quyết chế độ",
+        "config": "Cấu hình mức đóng"
+      },
+      "placeholders": {
+        "insuranceNo": "VD: 7912345678",
+        "salaryBase": "VD: 25000000"
+      },
+      "insuranceStatus": {
+        "active": "Đang đóng",
+        "pending": "Chờ xử lý",
+        "closed": "Đã báo giảm"
+      },
+      "records": {
+        "add": "Thêm hồ sơ",
+        "title": "Hồ sơ bảo hiểm xã hội",
+        "description": "Quản lý thông tin bảo hiểm xã hội của nhân viên.",
+        "addTitle": "Thêm hồ sơ bảo hiểm",
+        "addDesc": "Điền thông tin để tạo hồ sơ bảo hiểm mới cho nhân viên.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "insuranceNo": "Số sổ BHXH",
+        "salaryBase": "Lương cơ bản",
+        "save": "Thêm hồ sơ",
+        "cancel": "Hủy",
+        "invalidSalary": "Lương cơ bản không hợp lệ",
+        "addSuccess": "Đã thêm hồ sơ bảo hiểm"
+      },
+      "claimsTab": {
+        "title": "Giải quyết chế độ (Ốm đau, Thai sản...)",
+        "description": "Quản lý hồ sơ và tiến độ giải quyết chế độ bảo hiểm cho nhân viên",
+        "updating": "Quản lý chế độ đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép theo dõi các hồ sơ ốm đau, thai sản, dưỡng sức."
+      },
+      "configTab": {
+        "title": "Cấu hình mức đóng BHXH, BHYT, BHTN",
+        "description": "Thiết lập tỷ lệ đóng bảo hiểm theo quy định mới nhất",
+        "updating": "Cấu hình mức đóng đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép tùy chỉnh tỷ lệ đóng BHXH cho DN và NLĐ."
+      }
+    },
+    "payroll": {
+      "description": "Quản lý bảng lương, thuế và các khoản trích theo lương.",
+      "title": "Quản lý Tiền lương",
+      "runPayroll": "Chạy bảng lương",
+      "configFormulas": "Cấu hình & Công thức",
+      "exportReport": "Xuất báo cáo",
+      "period": "Kỳ lương",
+      "totalEmployees": "Tổng nhân viên",
+      "totalAmount": "Tổng tiền",
+      "status": "Trạng thái",
+      "payslips": "Phiếu lương",
+      "salaryStructure": "Cấu trúc lương",
+      "basicSalary": "Lương cơ bản",
+      "allowances": "Phụ cấp",
+      "deductions": "Khấu trừ",
+      "tax": "Thuế",
+      "netSalary": "Lương thực nhận",
+      "tabs": {
+        "periods": "Kỳ lương",
+        "salaryStructure": "Cấu trúc lương",
+        "payslips": "Phiếu lương",
+        "config": "Cấu hình & Công thức"
+      },
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin",
+        "invalidSalary": "Lương cơ bản không hợp lệ",
+        "addSuccess": "Đã thêm cấu trúc lương"
+      },
+      "placeholders": {
+        "salary": "VD: 25000000",
+        "allowance": "VD: 2000000"
+      },
+      "payrollStatus": {
+        "draft": "Nháp",
+        "pending": "Chờ duyệt",
+        "approved": "Đã duyệt",
+        "paid": "Đã thanh toán"
+      },
+      "overview": {
+        "totalFund": "Tổng quỹ lương tháng này",
+        "vsLastMonth": "{{value}} so với tháng trước",
+        "estimatedPit": "Thuế TNCN dự kiến",
+        "autoDeducted": "Đã khấu trừ tự động",
+        "socialInsurance": "Bảo hiểm xã hội",
+        "companyContribution": "Công ty đóng 21.5%"
+      },
+      "structure": {
+        "add": "Thêm cấu trúc lương",
+        "description": "Thiết lập cấu trúc lương cơ bản và phụ cấp cho nhân viên.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "basic": "Lương cơ bản",
+        "allowance": "Phụ cấp",
+        "save": "Lưu cấu trúc",
+        "cancel": "Hủy"
+      },
+      "payslipsTab": {
+        "title": "Phiếu lương điện tử",
+        "description": "Quản lý và gửi phiếu lương cho nhân viên",
+        "updating": "Phiếu lương đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép xem trước và gửi phiếu lương hàng loạt qua email."
+      },
+      "configTab": {
+        "title": "Cấu hình & Công thức lương",
+        "description": "Thiết lập các khoản phụ cấp, khấu trừ và công thức tính thuế",
+        "updating": "Cấu hình lương đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép tùy chỉnh công thức lương động (Excel-like formulas)."
+      }
     },
     "time": {
       "leaveRequests": "Yêu cầu nghỉ phép",
@@ -1598,6 +1832,14 @@
       "type": "Loại nghỉ",
       "dates": "Thời gian",
       "status": "Trạng thái",
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin",
+        "invalidHours": "Số giờ OT không hợp lệ",
+        "addSuccess": "Đã đăng ký OT"
+      },
+      "placeholders": {
+        "hours": "VD: 2"
+      },
       "attendanceOverview": "Tổng quan chấm công",
       "todayStats": "Thống kê hôm nay",
       "present": "Có mặt",
@@ -1627,7 +1869,41 @@
       "assignShifts": "Phân ca làm việc",
       "leaveManagement": "Quản lý ngày phép",
       "holidays": "Ngày nghỉ Lễ Tết",
-      "leaveRules": "Nguyên tắc phép năm"
+      "leaveRules": "Nguyên tắc phép năm",
+      "active": "Đang hoạt động",
+      "tabs": {
+        "overview": "Tổng quan",
+        "timesheet": "Bảng chấm công",
+        "locations": "Địa điểm làm việc",
+        "shifts": "Ca làm việc & OT"
+      },
+      "timesheetTab": {
+        "title": "Bảng chấm công chi tiết",
+        "description": "Xem và quản lý dữ liệu chấm công hàng ngày của nhân viên",
+        "updating": "Bảng chấm công đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ hiển thị lưới chấm công chi tiết theo tháng."
+      },
+      "locationsTab": {
+        "title": "Địa điểm làm việc",
+        "description": "Cấu hình các địa điểm làm việc và chấm công",
+        "add": "Thêm địa điểm",
+        "name": "Tên địa điểm",
+        "address": "Địa chỉ",
+        "type": "Loại"
+      },
+      "shiftsTab": {
+        "add": "Thêm ca"
+      },
+      "otModal": {
+        "title": "Đăng ký làm thêm giờ (OT)",
+        "description": "Điền thông tin để đăng ký làm thêm giờ.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "date": "Ngày",
+        "hours": "Số giờ",
+        "cancel": "Hủy",
+        "save": "Đăng ký"
+      }
     },
     "payroll": {
       "title": "Bảng lương",
@@ -1645,7 +1921,48 @@
       "allowances": "Phụ cấp",
       "deductions": "Khấu trừ (BHXH, BHYT)",
       "tax": "Thuế TNCN",
-      "netSalary": "Thực nhận"
+      "netSalary": "Thực nhận",
+      "payrollStatus": {
+        "completed": "Đã hoàn thành",
+        "processing": "Đang xử lý",
+        "draft": "Bản nháp"
+      },
+      "tabs": {
+        "periods": "Kỳ lương",
+        "salaryStructure": "Cấu trúc lương",
+        "payslips": "Phiếu lương",
+        "config": "Cấu hình"
+      },
+      "overview": {
+        "totalFund": "Tổng quỹ lương dự kiến",
+        "vsLastMonth": "{{value}} so với tháng trước",
+        "estimatedPit": "Thuế TNCN dự kiến",
+        "autoDeducted": "Tự động khấu trừ từ lương",
+        "socialInsurance": "Bảo hiểm xã hội (NSDLĐ)",
+        "companyContribution": "Phần doanh nghiệp đóng (21.5%)"
+      },
+      "structure": {
+        "description": "Thiết lập mức lương và phụ cấp cho từng nhân viên.",
+        "add": "Thêm cấu trúc lương",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "basic": "Lương cơ bản",
+        "allowance": "Phụ cấp",
+        "cancel": "Hủy",
+        "save": "Lưu cấu trúc"
+      },
+      "payslipsTab": {
+        "title": "Phiếu lương nhân viên",
+        "description": "Xem và gửi phiếu lương cho từng nhân viên qua Email/App",
+        "updating": "Tính năng phiếu lương đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép nhân viên xem phiếu lương trực tuyến."
+      },
+      "configTab": {
+        "title": "Cấu hình tiền lương",
+        "description": "Thiết lập các tham số tính lương, ngày chốt công...",
+        "updating": "Cấu hình tiền lương đang được cập nhật",
+        "featureDesc": "Tính năng này cho phép tùy chỉnh công thức tính lương phức tạp."
+      }
     },
     "socialInsurance": {
       "title": "Quản lý Bảo hiểm xã hội",
@@ -1654,16 +1971,90 @@
       "salaryBase": "Mức lương đóng BHXH",
       "employeeRate": "NLĐ đóng (10.5%)",
       "employerRate": "NSDLĐ đóng (21.5%)",
-      "status": "Trạng thái sổ"
+      "status": "Trạng thái sổ",
+      "insuranceStatus": {
+        "active": "Đang đóng",
+        "pending": "Đang chờ",
+        "closed": "Đã đóng"
+      },
+      "tabs": {
+        "records": "Hồ sơ bảo hiểm",
+        "claims": "Giải quyết chế độ",
+        "config": "Cấu hình mức đóng"
+      },
+      "records": {
+        "title": "Danh sách hồ sơ bảo hiểm",
+        "description": "Theo dõi quá trình đóng bảo hiểm của nhân viên.",
+        "add": "Thêm hồ sơ",
+        "addTitle": "Thêm hồ sơ bảo hiểm",
+        "addDesc": "Điền thông tin để thêm hồ sơ bảo hiểm mới cho nhân viên.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "insuranceNo": "Số sổ BHXH",
+        "salaryBase": "Mức lương đóng BHXH",
+        "cancel": "Hủy",
+        "save": "Lưu hồ sơ"
+      },
+      "claimsTab": {
+        "title": "Giải quyết chế độ bảo hiểm",
+        "description": "Quản lý các yêu cầu hưởng chế độ ốm đau, thai sản, tai nạn lao động...",
+        "updating": "Tính năng giải quyết chế độ đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép nộp hồ sơ hưởng chế độ trực tuyến."
+      },
+      "configTab": {
+        "title": "Cấu hình mức đóng bảo hiểm",
+        "description": "Thiết lập tỷ lệ đóng bảo hiểm theo quy định của nhà nước.",
+        "updating": "Cấu hình mức đóng đang được cập nhật",
+        "featureDesc": "Tính năng này cho phép điều chỉnh tỷ lệ đóng của NLĐ và NSDLĐ."
+      }
     },
     "pit": {
-      "title": "Thuế Thu nhập cá nhân",
-      "description": "Quản lý mã số thuế, người phụ thuộc và quyết toán thuế.",
+      "title": "Thuế thu nhập cá nhân (PIT)",
+      "description": "Quản lý mã số thuế, người phụ thuộc và quyết toán thuế TNCN",
       "taxCode": "Mã số thuế",
       "dependents": "Người phụ thuộc",
       "totalIncome": "Tổng thu nhập",
       "taxableIncome": "Thu nhập tính thuế",
-      "taxAmount": "Thuế phải nộp"
+      "taxAmount": "Thuế TNCN",
+      "tabs": {
+        "tax": "Khấu trừ thuế",
+        "dependents": "Người phụ thuộc",
+        "finalization": "Quyết toán thuế"
+      },
+      "records": {
+        "add": "Thêm hồ sơ thuế",
+        "addTitle": "Thêm hồ sơ thuế",
+        "addDesc": "Điền thông tin để tạo hồ sơ thuế TNCN mới cho nhân viên.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "taxCode": "Mã số thuế",
+        "dependents": "Người phụ thuộc",
+        "totalIncome": "Tổng thu nhập",
+        "cancel": "Hủy",
+        "save": "Thêm hồ sơ"
+      },
+      "placeholders": {
+        "taxCode": "VD: 8012345678",
+        "dependents": "VD: 1",
+        "totalIncome": "VD: 25000000"
+      },
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin",
+        "invalidIncome": "Tổng thu nhập không hợp lệ",
+        "addSuccess": "Đã thêm hồ sơ thuế"
+      },
+      "dependentsTab": {
+        "title": "Quản lý người phụ thuộc",
+        "description": "Danh sách và hồ sơ chứng minh người phụ thuộc để giảm trừ gia cảnh",
+        "updating": "Quản lý người phụ thuộc đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ cho phép thêm mới và quản lý hồ sơ người phụ thuộc."
+      },
+      "finalizationTab": {
+        "title": "Quyết toán thuế TNCN",
+        "description": "Hỗ trợ quyết toán thuế thu nhập cá nhân hàng năm",
+        "updating": "Quyết toán thuế đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ hỗ trợ tính toán và xuất tờ khai quyết toán thuế."
+      }
     },
     "recruitment": {
       "title": "Quản lý Tuyển dụng",
@@ -1672,6 +2063,11 @@
       "quantity": "Số lượng",
       "expectedSalary": "Mức lương dự kiến",
       "status": "Trạng thái",
+      "jobStatus": {
+        "open": "Đang tuyển",
+        "closed": "Đã đóng",
+        "draft": "Bản nháp"
+      },
       "candidates": "Ứng viên",
       "channels": "Kênh tuyển dụng",
       "syncApi": "Đồng bộ API",
@@ -1679,35 +2075,200 @@
       "topCv": "TopCV",
       "linkedIn": "LinkedIn",
       "lastSync": "Đồng bộ lần cuối",
-      "syncNow": "Đồng bộ ngay"
+      "syncNow": "Đồng bộ ngay",
+      "syncing": "Đang đồng bộ...",
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin",
+        "addSuccess": "Đã tạo tin tuyển dụng"
+      },
+      "placeholders": {
+        "position": "VD: Senior Frontend Developer",
+        "quantity": "VD: 1",
+        "salary": "VD: 25,000,000 - 40,000,000"
+      },
+      "tabs": {
+        "overview": "Tổng quan",
+        "jobs": "Tin tuyển dụng",
+        "candidates": "Ứng viên",
+        "interviews": "Phỏng vấn",
+        "configuration": "Cấu hình"
+      },
+      "jobs": {
+        "create": "Tạo tin tuyển dụng",
+        "createTitle": "Tạo tin tuyển dụng",
+        "createDesc": "Điền thông tin để tạo tin tuyển dụng mới.",
+        "position": "Vị trí",
+        "department": "Phòng ban",
+        "selectDepartment": "Chọn phòng ban",
+        "quantity": "Số lượng",
+        "salary": "Mức lương",
+        "cancel": "Hủy",
+        "save": "Tạo tin"
+      },
+      "candidatesTab": {
+        "title": "Quản lý ứng viên",
+        "description": "Theo dõi và quản lý hồ sơ ứng viên từ các nguồn",
+        "updating": "Danh sách ứng viên đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ hiển thị danh sách ứng viên dạng Kanban hoặc danh sách."
+      },
+      "interviewsTab": {
+        "title": "Lịch phỏng vấn",
+        "description": "Quản lý lịch phỏng vấn và đánh giá ứng viên",
+        "updating": "Lịch phỏng vấn đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ tích hợp với Google Calendar để đặt lịch phỏng vấn."
+      },
+      "config": {
+        "emailTemplates": "Mẫu Email (Email Templates)",
+        "emailTemplatesDesc": "Cấu hình mẫu email gửi ứng viên",
+        "interviewInvite": "Thư mời phỏng vấn",
+        "offerLetter": "Thư mời nhận việc (Offer Letter)",
+        "rejectionLetter": "Thư từ chối",
+        "interviewProcess": "Quy trình phỏng vấn",
+        "interviewProcessDesc": "Thiết lập các vòng phỏng vấn",
+        "round1": "Vòng 1: Sơ loại hồ sơ",
+        "round2": "Vòng 2: Phỏng vấn chuyên môn",
+        "round3": "Vòng 3: Phỏng vấn văn hóa",
+        "default": "Mặc định",
+        "technical": "Kỹ thuật",
+        "hr": "HR",
+        "addRound": "Thêm vòng phỏng vấn",
+        "jobBoards": "Tích hợp Job Boards",
+        "jobBoardsDesc": "Kết nối API với các trang tuyển dụng",
+        "connected": "Đã kết nối",
+        "connect": "Kết nối"
+      }
     },
     "performance": {
-      "kpiTitle": "Mục tiêu & KPIs",
-      "kpiDesc": "Theo dõi tiến độ thực hiện mục tiêu của công ty và cá nhân.",
+      "kpiTitle": "Chỉ số KPI chính",
+      "kpiDesc": "Theo dõi hiệu suất làm việc dựa trên các chỉ số đo lường",
       "manageKPIs": "Quản lý KPIs",
-      "reviews": "Đánh giá 360°",
-      "reviewCycle": "Chu kỳ đánh giá",
+      "reviews": "Đánh giá hiệu suất",
+      "reviewCycle": "Kỳ đánh giá",
       "reviewer": "Người đánh giá",
       "rating": "Xếp loại",
-      "okrs": "Quản trị OKRs",
-      "selfReview": "Tự đánh giá",
       "managerReview": "Quản lý đánh giá",
-      "peerReview": "Đồng nghiệp đánh giá"
+      "selfReview": "Tự đánh giá",
+      "peerReview": "Đồng nghiệp đánh giá",
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin",
+        "addSuccess": "Đã tạo đánh giá hiệu suất"
+      },
+      "tabs": {
+        "overview": "Tổng quan",
+        "reviews": "Đánh giá",
+        "training": "Đào tạo",
+        "goals": "Mục tiêu",
+        "config": "Cấu hình"
+      },
+      "stats": {
+        "training": "Thống kê đào tạo",
+        "trainingDesc": "Theo dõi tiến độ học tập và phát triển của nhân viên",
+        "ongoingCourses": "Khóa học đang diễn ra",
+        "certificatesIssued": "Chứng chỉ đã cấp"
+      },
+      "reviewModal": {
+        "title": "Tạo đánh giá hiệu suất",
+        "description": "Điền thông tin để tạo bản đánh giá mới.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "cycle": "Kỳ đánh giá",
+        "cyclePlaceholder": "VD: Q4 2023",
+        "reviewer": "Người đánh giá",
+        "reviewerPlaceholder": "VD: Manager X",
+        "type": "Loại đánh giá",
+        "selectType": "Chọn loại",
+        "rating": "Xếp loại",
+        "selectRating": "Chọn xếp loại",
+        "outstanding": "Xuất sắc",
+        "exceeds": "Vượt mong đợi",
+        "meets": "Đạt mong đợi",
+        "needsImprovement": "Cần cải thiện",
+        "cancel": "Hủy",
+        "save": "Lưu đánh giá"
+      },
+      "training": {
+        "title": "Khóa đào tạo & Phát triển",
+        "description": "Danh sách các khóa học nâng cao kỹ năng cho nhân viên",
+        "completed": "hoàn thành",
+        "courseCatalog": "Danh mục khóa học"
+      },
+      "goalsTab": {
+        "title": "Mục tiêu & Kết quả then chốt (OKR)",
+        "description": "Thiết lập và theo dõi mục tiêu chiến lược",
+        "updating": "Mục tiêu đang được cập nhật",
+        "featureDesc": "Tính năng này sẽ giúp liên kết mục tiêu cá nhân với mục tiêu công ty."
+      },
+      "configTab": {
+        "cycles": "Chu kỳ đánh giá",
+        "cyclesDesc": "Thiết lập thời gian cho các đợt đánh giá",
+        "upcoming": "Sắp tới",
+        "inProgress": "Đang diễn ra",
+        "closed": "Đã đóng",
+        "newCycle": "Tạo chu kỳ mới",
+        "scales": "Thang điểm đánh giá",
+        "scalesDesc": "Định nghĩa các mức xếp loại",
+        "editScales": "Chỉnh sửa thang điểm",
+        "weights": "Trọng số đánh giá",
+        "weightsDesc": "Phân bổ tỷ trọng cho các tiêu chí",
+        "workResults": "Kết quả công việc",
+        "coreCompetencies": "Năng lực cốt lõi",
+        "trainingDevelopment": "Đào tạo & Phát triển",
+        "editWeights": "Chỉnh sửa trọng số"
+      }
+    },
+    "training": {
+      "title": "Đào tạo & Phát triển",
+      "description": "Quản lý các khóa đào tạo và lộ trình phát triển nhân sự.",
+      "completed": "hoàn thành",
+      "courseCatalog": "Danh mục khóa học"
     },
     "goals": {
-      "title": "Quản trị Mục tiêu",
-      "description": "Thiết lập và theo dõi mục tiêu theo cấp độ và thời gian.",
-      "level": "Cấp độ",
+      "title": "Quản lý mục tiêu (OKRs/KPIs)",
+      "description": "Theo dõi và quản lý mục tiêu của cá nhân và tổ chức",
       "company": "Công ty",
       "division": "Khối",
       "department": "Phòng ban",
       "individual": "Cá nhân",
-      "timeframe": "Thời gian",
       "daily": "Hàng ngày",
       "weekly": "Hàng tuần",
       "monthly": "Hàng tháng",
       "yearly": "Hàng năm",
-      "progress": "Tiến độ"
+      "level": "Cấp độ",
+      "timeframe": "Thời hạn",
+      "progress": "Tiến độ",
+      "responsible": "Người phụ trách",
+      "tabs": {
+        "list": "Danh sách mục tiêu",
+        "alignment": "Sơ đồ liên kết",
+        "reviews": "Đánh giá định kỳ"
+      },
+      "list": {
+        "create": "Tạo mục tiêu mới",
+        "createTitle": "Tạo mục tiêu mới",
+        "createDesc": "Điền thông tin để tạo mục tiêu mới.",
+        "goal": "Mục tiêu",
+        "level": "Cấp độ",
+        "selectLevel": "Chọn cấp độ",
+        "timeframe": "Thời hạn",
+        "selectTimeframe": "Chọn thời hạn",
+        "responsible": "Người phụ trách",
+        "selectResponsible": "Chọn người phụ trách",
+        "progress": "Tiến độ (%)",
+        "cancel": "Hủy",
+        "save": "Tạo mục tiêu"
+      },
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin",
+        "addSuccess": "Đã tạo mục tiêu mới"
+      },
+      "goalAlignment": "Sơ đồ liên kết mục tiêu (Goal Alignment)",
+      "goalAlignmentDesc": "Trực quan hóa sự liên kết giữa mục tiêu cá nhân, phòng ban và công ty",
+      "checkIn": "Đánh giá & Phản hồi (Check-in)",
+      "checkInDesc": "Ghi nhận tiến độ và phản hồi định kỳ về mục tiêu",
+      "alignmentUpdating": "Sơ đồ liên kết đang được cập nhật",
+      "alignmentFeatureDesc": "Tính năng này sẽ hiển thị cây mục tiêu từ cấp công ty xuống nhân viên.",
+      "checkInUpdating": "Tính năng Check-in đang được cập nhật",
+      "checkInFeatureDesc": "Cho phép quản lý và nhân viên trao đổi về tiến độ mục tiêu."
     },
     "info": {
       "title": "Hồ sơ Nhân sự",
@@ -1721,7 +2282,50 @@
       "bankInfo": "Thông tin ngân hàng",
       "education": "Trình độ học vấn",
       "experience": "Kinh nghiệm làm việc",
-      "family": "Gia đình & Phụ thuộc"
+      "family": "Gia đình & Phụ thuộc",
+      "tabs": {
+        "list": "Danh sách hồ sơ",
+        "import": "Nhập liệu hàng loạt",
+        "verification": "Yêu cầu xác minh"
+      },
+      "records": {
+        "addTitle": "Tải lên hồ sơ nhân viên",
+        "addDesc": "Điền thông tin và tải lên tài liệu liên quan.",
+        "employee": "Nhân viên",
+        "selectEmployee": "Chọn nhân viên",
+        "idCard": "CCCD",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "address": "Địa chỉ",
+        "cancel": "Hủy",
+        "save": "Tải lên"
+      },
+      "importTab": {
+        "title": "Nhập liệu hồ sơ hàng loạt",
+        "description": "Tải lên file Excel/CSV để cập nhật thông tin nhân viên",
+        "updating": "Tính năng nhập liệu đang được cập nhật",
+        "featureDesc": "Hỗ trợ import danh sách nhân viên từ file Excel mẫu."
+      },
+      "verificationTab": {
+        "title": "Xác minh hồ sơ",
+        "description": "Danh sách hồ sơ cần xác minh thông tin (CCCD, Bằng cấp...)",
+        "updating": "Tính năng xác minh đang được cập nhật",
+        "featureDesc": "Tự động đối chiếu thông tin với cơ sở dữ liệu (nếu có)."
+      },
+      "toasts": {
+        "fillInfo": "Vui lòng điền đầy đủ thông tin bắt buộc",
+        "addSuccess": "Đã tải lên hồ sơ mới"
+      },
+      "placeholders": {
+        "idCard": "Số CCCD",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "address": "Địa chỉ"
+      },
+      "status": {
+        "verified": "Đã xác minh",
+        "pending": "Chờ xác minh"
+      }
     },
     "training": {
       "title": "Đào tạo nội bộ",
@@ -2206,6 +2810,7 @@
     "requisitions": {
       "create": "Tạo yêu cầu",
       "listTitle": "Danh sách yêu cầu mua hàng",
+      "listDesc": "Quản lý các yêu cầu mua hàng nội bộ từ các phòng ban khác nhau.",
       "id": "Mã yêu cầu",
       "requester": "Người yêu cầu",
       "item": "Sản phẩm/Vật tư",
@@ -2213,24 +2818,44 @@
       "date": "Ngày tạo",
       "priority": "Độ ưu tiên",
       "status": "Trạng thái",
-      "actions": "Hành động"
+      "actions": "Hành động",
+      "pending": "Yêu cầu đang chờ",
+      "requiresApproval": "Cần phê duyệt",
+      "approvedMonth": "Đã duyệt (Tháng này)",
+      "totalSpend": "Tổng chi tiêu (Ước tính)",
+      "forApproved": "Cho các yêu cầu đã duyệt",
+      "rejected": "Đã từ chối",
+      "thisMonth": "Tháng này",
+      "searchPlaceholder": "Tìm kiếm yêu cầu...",
+      "viewDetails": "Xem chi tiết",
+      "approve": "Phê duyệt",
+      "reject": "Từ chối",
+      "vsLastMonth": "{{value}} so với tháng trước"
     },
     "suppliers": {
       "title": "Danh sách Nhà cung cấp",
+      "description": "Đánh giá và quản lý các nhà cung cấp thiết bị và vật tư.",
       "name": "Tên nhà cung cấp",
       "category": "Danh mục",
       "rating": "Đánh giá",
       "status": "Trạng thái",
       "lastOrder": "Đơn hàng cuối",
-      "evaluate": "Đánh giá lại"
+      "evaluate": "Đánh giá lại",
+      "actions": "Hành động"
     },
     "inventory": {
       "title": "Quản lý Tồn kho B2B",
+      "description": "Quản lý tồn kho kho chính B2B với cảnh báo tồn kho an toàn.",
+      "totalItems": "Tổng mặt hàng",
+      "lowStockAlerts": "Cảnh báo tồn thấp",
+      "value": "Giá trị tồn kho",
       "sku": "SKU",
       "productName": "Tên sản phẩm",
       "currentStock": "Tồn kho hiện tại",
       "safetyStock": "Định mức an toàn",
       "status": "Trạng thái",
+      "actions": "Hành động",
+      "adjust": "Điều chỉnh",
       "alerts": {
         "ok": "Ổn định",
         "low": "Sắp hết hàng",
@@ -2240,16 +2865,20 @@
     },
     "reports": {
       "title": "Báo cáo Xuất/Nhập/Tồn",
+      "description": "Báo cáo Nhập/Xuất/Tồn kho.",
+      "chartPlaceholder": "Biểu đồ trực quan hóa sẽ hiển thị ở đây.",
       "export": "Xuất báo cáo"
     },
     "forecasting": {
       "title": "Dự báo nhu cầu mua hàng",
+      "description": "Dự báo nhu cầu và gợi ý mua hàng dựa trên AI.",
       "item": "Sản phẩm",
       "currentStock": "Tồn hiện tại",
       "predictedDemand": "Nhu cầu dự báo (30 ngày)",
       "suggestedOrder": "Gợi ý đặt hàng",
       "confidence": "Độ tin cậy",
-      "createPO": "Tạo đơn mua hàng"
+      "createPO": "Tạo đơn mua hàng",
+      "actions": "Hành động"
     }
   },
   "finance": {
@@ -2769,7 +3398,25 @@
     "hrPerformanceDesc": "Đánh giá hiệu suất và mục tiêu nhân viên.",
     "hrPitDesc": "Quản lý thuế thu nhập cá nhân.",
     "hrGoalsDesc": "Quản lý mục tiêu cá nhân và phòng ban.",
-    "hrInfoDesc": "Thông tin nhân sự và chính sách."
+    "hrInfoDesc": "Thông tin nhân sự và chính sách.",
+    "recentActivity": "Hoạt động gần đây",
+    "recentActivityDesc": "Các cập nhật mới nhất từ hệ thống nhân sự",
+    "upcomingTasks": "Công việc sắp tới",
+    "upcomingTasksDesc": "Các nhiệm vụ nhân sự cần xử lý",
+    "process": "Xử lý",
+    "timeAgo": "{{count}} giờ trước",
+    "newEmployeeJoined": "Nhân viên mới: {{name}}",
+    "onboardingCompleted": "Đã hoàn thành thủ tục Onboarding",
+    "leaveApproved": "Đơn xin nghỉ phép: {{name}}",
+    "approvedByManager": "Đã được phê duyệt bởi Quản lý",
+    "recruitmentFrontend": "Tuyển dụng: Lập trình viên Frontend",
+    "newCandidates": "Có 3 ứng viên mới nộp hồ sơ",
+    "payrollDeadline": "Chốt bảng lương tháng này",
+    "deadlineDate": "Hạn chót: {{date}}",
+    "performanceReview": "Đánh giá hiệu suất quý 4",
+    "startDate": "Bắt đầu từ: {{date}}",
+    "contractRenewal": "Gia hạn hợp đồng: {{name}}",
+    "expiryDate": "Hết hạn: {{date}}"
   },
   "adminDashboard": {
     "title": "Tổng quan Hành chính",

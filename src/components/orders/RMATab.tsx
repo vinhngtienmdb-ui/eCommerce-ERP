@@ -15,14 +15,19 @@ const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
-const rmaData = [
-  { id: "RMA-1001", orderId: "ORD-7350", reason: "Sản phẩm lỗi", amount: 3990000, status: "Pending" },
-  { id: "RMA-1002", orderId: "ORD-7349", reason: "Gửi sai hàng", amount: 450000, status: "Approved" },
-  { id: "RMA-1003", orderId: "ORD-7348", reason: "Đổi ý", amount: 2100000, status: "Rejected" },
-]
+interface RMATabProps {
+  orders: any[];
+}
 
-export function RMATab() {
+export function RMATab({ orders }: RMATabProps) {
   const { t } = useTranslation()
+
+  const rmaOrders = orders.filter(o => 
+    o.status === 'return_requested' || 
+    o.status === 'refund_requested' || 
+    o.status === 'returned' || 
+    o.status === 'refunded'
+  )
 
   return (
     <div className="space-y-6 p-6">
@@ -35,8 +40,8 @@ export function RMATab() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("orders.rma.id")}</TableHead>
-              <TableHead>{t("orders.rma.orderId")}</TableHead>
+              <TableHead>{t("orders.id")}</TableHead>
+              <TableHead>{t("orders.customer")}</TableHead>
               <TableHead>{t("orders.rma.reason")}</TableHead>
               <TableHead className="text-right">{t("orders.rma.amount")}</TableHead>
               <TableHead>{t("orders.rma.status")}</TableHead>
@@ -44,31 +49,31 @@ export function RMATab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rmaData.map((rma) => (
+            {rmaOrders.map((rma) => (
               <TableRow key={rma.id}>
                 <TableCell className="font-medium">{rma.id}</TableCell>
-                <TableCell>{rma.orderId}</TableCell>
-                <TableCell>{rma.reason}</TableCell>
-                <TableCell className="text-right">{formatVND(rma.amount)}</TableCell>
+                <TableCell>{rma.customerName || rma.customer}</TableCell>
+                <TableCell>{rma.returnReason || t("orders.rma.defaultReason")}</TableCell>
+                <TableCell className="text-right">{formatVND(rma.total)}</TableCell>
                 <TableCell>
                   <Badge 
                     variant={
-                      rma.status === "Approved" ? "default" : 
-                      rma.status === "Pending" ? "secondary" : 
-                      rma.status === "Refunded" ? "outline" : "destructive"
+                      rma.status === "returned" ? "default" : 
+                      rma.status === "return_requested" ? "secondary" : 
+                      rma.status === "refunded" ? "outline" : "destructive"
                     }
-                    className="flex w-fit items-center gap-1"
+                    className="flex w-fit items-center gap-1 text-[10px]"
                   >
-                    {rma.status === "Approved" && <CheckCircle2 className="h-3 w-3" />}
-                    {rma.status === "Rejected" && <XCircle className="h-3 w-3" />}
-                    {rma.status === "Pending" && <AlertCircle className="h-3 w-3" />}
-                    {rma.status === "Refunded" && <RotateCcw className="h-3 w-3" />}
-                    {t(`orders.rma.statuses.${rma.status.toLowerCase()}`)}
+                    {rma.status === "returned" && <CheckCircle2 className="h-3 w-3" />}
+                    {rma.status === "refund_requested" && <AlertCircle className="h-3 w-3" />}
+                    {rma.status === "return_requested" && <AlertCircle className="h-3 w-3" />}
+                    {rma.status === "refunded" && <RotateCcw className="h-3 w-3" />}
+                    {t(`orders.statuses.${rma.status}`)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    {rma.status === "Pending" && (
+                    {(rma.status === "return_requested" || rma.status === "refund_requested") && (
                       <>
                         <Button size="sm" variant="outline" className="h-8 text-xs">
                           {t("orders.rma.approve")}
@@ -78,11 +83,6 @@ export function RMATab() {
                         </Button>
                       </>
                     )}
-                    {rma.status === "Approved" && (
-                      <Button size="sm" variant="default" className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700">
-                        {t("orders.rma.refund")}
-                      </Button>
-                    )}
                     <Button size="sm" variant="ghost" className="h-8 text-xs">
                       {t("common.viewDetails")}
                     </Button>
@@ -90,6 +90,13 @@ export function RMATab() {
                 </TableCell>
               </TableRow>
             ))}
+            {rmaOrders.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                  {t("orders.noOrders")}
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

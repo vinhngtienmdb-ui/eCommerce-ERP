@@ -50,13 +50,13 @@ export function SocialInsurance() {
 
   const handleCreateRecord = () => {
     if (!newRecord.empId || !newRecord.insuranceNo || !newRecord.salaryBase) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.core.toasts.requiredFields"))
       return
     }
 
     const salary = parseInt(newRecord.salaryBase.replace(/,/g, ''))
     if (isNaN(salary)) {
-      toast.error("Lương cơ bản không hợp lệ")
+      toast.error(t("hr.socialInsurance.records.invalidSalary"))
       return
     }
 
@@ -76,7 +76,7 @@ export function SocialInsurance() {
     setRecords([record, ...records])
     setIsModalOpen(false)
     setNewRecord({ empId: "", insuranceNo: "", salaryBase: "" })
-    toast.success("Đã thêm hồ sơ bảo hiểm")
+    toast.success(t("hr.socialInsurance.records.addSuccess"))
   }
 
   return (
@@ -89,19 +89,19 @@ export function SocialInsurance() {
         <div className="flex gap-2 items-center">
           <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Role" />
+              <SelectValue placeholder={t("hr.core.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="HR Manager">HR Manager</SelectItem>
-              <SelectItem value="Employee">Employee</SelectItem>
+              <SelectItem value="Admin">{t("hr.core.admin")}</SelectItem>
+              <SelectItem value="HR Manager">{t("hr.core.hrManager")}</SelectItem>
+              <SelectItem value="Employee">{t("hr.core.employee")}</SelectItem>
             </SelectContent>
           </Select>
           
           {canEdit && (
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Cấu hình
+              {t("hr.core.config")}
             </Button>
           )}
         </div>
@@ -109,22 +109,22 @@ export function SocialInsurance() {
       
       <Tabs defaultValue="records" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="records">Hồ sơ bảo hiểm</TabsTrigger>
-          <TabsTrigger value="claims">Giải quyết chế độ</TabsTrigger>
-          <TabsTrigger value="config">Cấu hình mức đóng</TabsTrigger>
+          <TabsTrigger value="records">{t("hr.socialInsurance.tabs.records")}</TabsTrigger>
+          <TabsTrigger value="claims">{t("hr.socialInsurance.tabs.claims")}</TabsTrigger>
+          <TabsTrigger value="config">{t("hr.socialInsurance.tabs.config")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="records" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>{t("hr.socialInsurance.title")}</CardTitle>
-              <CardDescription>{t("hr.socialInsurance.description")}</CardDescription>
+              <CardTitle>{t("hr.socialInsurance.records.title")}</CardTitle>
+              <CardDescription>{t("hr.socialInsurance.records.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex justify-between mb-4">
                 <Button onClick={() => setIsModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Thêm hồ sơ
+                  {t("hr.socialInsurance.records.add")}
                 </Button>
                 <Button variant="outline">
                   <Download className="mr-2 h-4 w-4" />
@@ -135,17 +135,17 @@ export function SocialInsurance() {
               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Thêm hồ sơ bảo hiểm</DialogTitle>
+                    <DialogTitle>{t("hr.socialInsurance.records.addTitle")}</DialogTitle>
                     <DialogDescription>
-                      Điền thông tin để tạo hồ sơ bảo hiểm mới cho nhân viên.
+                      {t("hr.socialInsurance.records.addDesc")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Label htmlFor="empId" className="text-right">{t("hr.socialInsurance.records.employee")}</Label>
                       <Select value={newRecord.empId} onValueChange={(val) => setNewRecord({...newRecord, empId: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn nhân viên" />
+                          <SelectValue placeholder={t("hr.socialInsurance.records.selectEmployee")} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees.map(emp => (
@@ -155,29 +155,29 @@ export function SocialInsurance() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="insuranceNo" className="text-right">Số sổ BHXH</Label>
+                      <Label htmlFor="insuranceNo" className="text-right">{t("hr.socialInsurance.records.insuranceNo")}</Label>
                       <Input 
                         id="insuranceNo" 
                         value={newRecord.insuranceNo} 
                         onChange={(e) => setNewRecord({...newRecord, insuranceNo: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 7912345678"
+                        placeholder={t("hr.socialInsurance.placeholders.insuranceNo")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="salaryBase" className="text-right">Lương cơ bản</Label>
+                      <Label htmlFor="salaryBase" className="text-right">{t("hr.socialInsurance.records.salaryBase")}</Label>
                       <Input 
                         id="salaryBase" 
                         value={newRecord.salaryBase} 
                         onChange={(e) => setNewRecord({...newRecord, salaryBase: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 25000000"
+                        placeholder={t("hr.socialInsurance.placeholders.salaryBase")}
                       />
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-                    <Button onClick={handleCreateRecord}>Thêm hồ sơ</Button>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("hr.socialInsurance.records.cancel")}</Button>
+                    <Button onClick={handleCreateRecord}>{t("hr.socialInsurance.records.save")}</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -204,7 +204,9 @@ export function SocialInsurance() {
                       <TableCell className="text-blue-600">+{item.employerRate} ₫</TableCell>
                       <TableCell>
                         <Badge variant={item.status === "Active" ? "default" : item.status === "Pending" ? "secondary" : "outline"}>
-                          {item.status}
+                          {item.status === "Active" ? t("hr.socialInsurance.insuranceStatus.active") : 
+                           item.status === "Pending" ? t("hr.socialInsurance.insuranceStatus.pending") : 
+                           t("hr.socialInsurance.insuranceStatus.closed")}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -221,14 +223,14 @@ export function SocialInsurance() {
         <TabsContent value="claims" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Giải quyết chế độ (Ốm đau, Thai sản...)</CardTitle>
-              <CardDescription>Quản lý hồ sơ và tiến độ giải quyết chế độ bảo hiểm cho nhân viên</CardDescription>
+              <CardTitle>{t("hr.socialInsurance.claimsTab.title")}</CardTitle>
+              <CardDescription>{t("hr.socialInsurance.claimsTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <FileText className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Quản lý chế độ đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép theo dõi các hồ sơ ốm đau, thai sản, dưỡng sức.</p>
+                <h3 className="font-medium">{t("hr.socialInsurance.claimsTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.socialInsurance.claimsTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>
@@ -237,14 +239,14 @@ export function SocialInsurance() {
         <TabsContent value="config" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Cấu hình mức đóng BHXH, BHYT, BHTN</CardTitle>
-              <CardDescription>Thiết lập tỷ lệ đóng bảo hiểm theo quy định mới nhất</CardDescription>
+              <CardTitle>{t("hr.socialInsurance.configTab.title")}</CardTitle>
+              <CardDescription>{t("hr.socialInsurance.configTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <Percent className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Cấu hình mức đóng đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép tùy chỉnh tỷ lệ đóng BHXH cho DN và NLĐ.</p>
+                <h3 className="font-medium">{t("hr.socialInsurance.configTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.socialInsurance.configTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>

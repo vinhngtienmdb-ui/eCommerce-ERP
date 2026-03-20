@@ -20,7 +20,7 @@ export function POSProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [formData, setFormData] = useState({
-    name: "",
+    productName: "",
     price: 0,
     category: "",
     stock: 0,
@@ -29,7 +29,7 @@ export function POSProducts() {
   useEffect(() => {
     if (!auth.currentUser) return;
 
-    const q = query(collection(db, "products"), orderBy("name", "asc"));
+    const q = query(collection(db, "products"), orderBy("productName", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setProducts(docs);
@@ -43,28 +43,28 @@ export function POSProducts() {
   }, []);
 
   const filteredProducts = products.filter((p) =>
-    p.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    p.productName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleAddProduct = () => {
     setEditingProduct(null);
-    setFormData({ name: "", price: 0, category: "", stock: 0 });
+    setFormData({ productName: "", price: 0, category: "", stock: 0 });
     setIsModalOpen(true);
   };
 
   const handleEditProduct = (product: any) => {
     setEditingProduct(product);
     setFormData({ 
-      name: product.name || "", 
-      price: product.price || product.currentPrice || 0, 
-      category: product.category || "", 
+      productName: product.productName || "", 
+      price: product.price || product.suggestedPrice || 0, 
+      category: Array.isArray(product.category) ? product.category[0] : (product.category || ""), 
       stock: product.stock || 0 
     });
     setIsModalOpen(true);
   };
 
   const handleSaveProduct = async () => {
-    if (!formData.name) {
+    if (!formData.productName) {
       toast.error("Vui lòng nhập tên sản phẩm");
       return;
     }
@@ -73,16 +73,22 @@ export function POSProducts() {
       if (editingProduct) {
         const docRef = doc(db, "products", editingProduct.id);
         await updateDoc(docRef, {
-          ...formData,
+          productName: formData.productName,
+          price: Number(formData.price),
+          category: [formData.category],
+          stock: Number(formData.stock),
           updatedAt: new Date().toISOString()
         });
         toast.success(t("pos.products.editSuccess", "Đã cập nhật sản phẩm"));
       } else {
         await addDoc(collection(db, "products"), {
-          ...formData,
+          productName: formData.productName,
+          price: Number(formData.price),
+          category: [formData.category],
+          stock: Number(formData.stock),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          creatorId: auth.currentUser?.uid
+          userId: auth.currentUser?.uid || 'anonymous'
         });
         toast.success(t("pos.products.addSuccess", "Đã thêm sản phẩm mới"));
       }
@@ -149,9 +155,9 @@ export function POSProducts() {
             <TableBody>
               {filteredProducts.map((product) => (
                 <TableRow key={product.id}>
-                  <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>{product.price.toLocaleString()}đ</TableCell>
+                  <TableCell className="font-medium">{product.productName}</TableCell>
+                  <TableCell>{Array.isArray(product.category) ? product.category.join(", ") : product.category}</TableCell>
+                  <TableCell>{(product.price || product.suggestedPrice || 0).toLocaleString()}đ</TableCell>
                   <TableCell>{product.stock}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => handleEditProduct(product)}>
@@ -177,8 +183,8 @@ export function POSProducts() {
             <div className="space-y-2">
               <Label>Tên sản phẩm</Label>
               <Input 
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                value={formData.productName} 
+                onChange={(e) => setFormData({...formData, productName: e.target.value})} 
                 placeholder="Nhập tên sản phẩm"
               />
             </div>

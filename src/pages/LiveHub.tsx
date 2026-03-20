@@ -133,8 +133,8 @@ const ProductsContent = ({ t, products, pinnedProducts, togglePin }: { t: any, p
         <TableBody>
           {products.map((product) => (
             <TableRow key={product.id}>
-              <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell className="text-right">{product.price.toLocaleString()} ₫</TableCell>
+              <TableCell className="font-medium">{product.productName}</TableCell>
+              <TableCell className="text-right">{(product.price || product.suggestedPrice || 0).toLocaleString()} ₫</TableCell>
               <TableCell className="text-right">{product.stock}</TableCell>
               <TableCell className="text-right">
                 <Button size="sm" variant={pinnedProducts.includes(product.id) ? "secondary" : "default"} onClick={() => togglePin(product.id)}>
@@ -161,9 +161,9 @@ export function LiveHub() {
   }
 
   const products = [
-    { id: "PROD-001", name: "Áo thun Cotton Premium", price: 250000, stock: 150 },
-    { id: "PROD-002", name: "Quần Jeans Slimfit", price: 550000, stock: 80 },
-    { id: "PROD-003", name: "Giày Sneaker Basic", price: 890000, stock: 45 },
+    { id: "PROD-001", productName: "Áo thun Cotton Premium", price: 250000, stock: 150 },
+    { id: "PROD-002", productName: "Quần Jeans Slimfit", price: 550000, stock: 80 },
+    { id: "PROD-003", productName: "Giày Sneaker Basic", price: 890000, stock: 45 },
   ]
 
   const groups = [

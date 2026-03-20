@@ -50,13 +50,13 @@ export function PIT() {
 
   const handleCreateRecord = () => {
     if (!newRecord.empId || !newRecord.taxCode || !newRecord.totalIncome) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.pit.toasts.fillInfo"))
       return
     }
 
     const income = parseInt(newRecord.totalIncome.replace(/,/g, ''))
     if (isNaN(income)) {
-      toast.error("Tổng thu nhập không hợp lệ")
+      toast.error(t("hr.pit.toasts.invalidIncome"))
       return
     }
 
@@ -82,7 +82,7 @@ export function PIT() {
     setRecords([record, ...records])
     setIsModalOpen(false)
     setNewRecord({ empId: "", taxCode: "", dependents: "0", totalIncome: "" })
-    toast.success("Đã thêm hồ sơ thuế")
+    toast.success(t("hr.pit.toasts.addSuccess"))
   }
 
   return (
@@ -115,9 +115,9 @@ export function PIT() {
       
       <Tabs defaultValue="tax" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="tax">Khấu trừ thuế</TabsTrigger>
-          <TabsTrigger value="dependents">Người phụ thuộc</TabsTrigger>
-          <TabsTrigger value="finalization">Quyết toán thuế</TabsTrigger>
+          <TabsTrigger value="tax">{t("hr.pit.tabs.tax")}</TabsTrigger>
+          <TabsTrigger value="dependents">{t("hr.pit.tabs.dependents")}</TabsTrigger>
+          <TabsTrigger value="finalization">{t("hr.pit.tabs.finalization")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="tax" className="space-y-4">
@@ -130,7 +130,7 @@ export function PIT() {
               <div className="flex justify-between mb-4">
                 <Button onClick={() => setIsModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Thêm hồ sơ thuế
+                  {t("hr.pit.records.add")}
                 </Button>
                 <Button variant="outline">
                   <Download className="mr-2 h-4 w-4" />
@@ -141,17 +141,17 @@ export function PIT() {
               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Thêm hồ sơ thuế</DialogTitle>
+                    <DialogTitle>{t("hr.pit.records.addTitle")}</DialogTitle>
                     <DialogDescription>
-                      Điền thông tin để tạo hồ sơ thuế TNCN mới cho nhân viên.
+                      {t("hr.pit.records.addDesc")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Label htmlFor="empId" className="text-right">{t("hr.pit.records.employee")}</Label>
                       <Select value={newRecord.empId} onValueChange={(val) => setNewRecord({...newRecord, empId: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn nhân viên" />
+                          <SelectValue placeholder={t("hr.pit.records.selectEmployee")} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees.map(emp => (
@@ -161,40 +161,40 @@ export function PIT() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="taxCode" className="text-right">Mã số thuế</Label>
+                      <Label htmlFor="taxCode" className="text-right">{t("hr.pit.records.taxCode")}</Label>
                       <Input 
                         id="taxCode" 
                         value={newRecord.taxCode} 
                         onChange={(e) => setNewRecord({...newRecord, taxCode: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 8012345678"
+                        placeholder={t("hr.pit.placeholders.taxCode")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="dependents" className="text-right">Người phụ thuộc</Label>
+                      <Label htmlFor="dependents" className="text-right">{t("hr.pit.records.dependents")}</Label>
                       <Input 
                         id="dependents" 
                         type="number"
                         value={newRecord.dependents} 
                         onChange={(e) => setNewRecord({...newRecord, dependents: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 1"
+                        placeholder={t("hr.pit.placeholders.dependents")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="totalIncome" className="text-right">Tổng thu nhập</Label>
+                      <Label htmlFor="totalIncome" className="text-right">{t("hr.pit.records.totalIncome")}</Label>
                       <Input 
                         id="totalIncome" 
                         value={newRecord.totalIncome} 
                         onChange={(e) => setNewRecord({...newRecord, totalIncome: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 25000000"
+                        placeholder={t("hr.pit.placeholders.totalIncome")}
                       />
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-                    <Button onClick={handleCreateRecord}>Thêm hồ sơ</Button>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("hr.pit.records.cancel")}</Button>
+                    <Button onClick={handleCreateRecord}>{t("hr.pit.records.save")}</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -234,14 +234,14 @@ export function PIT() {
         <TabsContent value="dependents" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Quản lý người phụ thuộc</CardTitle>
-              <CardDescription>Danh sách và hồ sơ chứng minh người phụ thuộc để giảm trừ gia cảnh</CardDescription>
+              <CardTitle>{t("hr.pit.dependentsTab.title")}</CardTitle>
+              <CardDescription>{t("hr.pit.dependentsTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <Users className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Quản lý người phụ thuộc đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép thêm mới và quản lý hồ sơ người phụ thuộc.</p>
+                <h3 className="font-medium">{t("hr.pit.dependentsTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.pit.dependentsTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>
@@ -250,14 +250,14 @@ export function PIT() {
         <TabsContent value="finalization" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Quyết toán thuế TNCN</CardTitle>
-              <CardDescription>Hỗ trợ quyết toán thuế thu nhập cá nhân hàng năm</CardDescription>
+              <CardTitle>{t("hr.pit.finalizationTab.title")}</CardTitle>
+              <CardDescription>{t("hr.pit.finalizationTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <FileCheck className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Quyết toán thuế đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ hỗ trợ tính toán và xuất tờ khai quyết toán thuế.</p>
+                <h3 className="font-medium">{t("hr.pit.finalizationTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.pit.finalizationTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>

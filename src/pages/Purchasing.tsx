@@ -202,42 +202,42 @@ export function Purchasing() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.requisitions.pending")}</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">12</div>
-                <p className="text-xs text-muted-foreground">Requires approval</p>
+                <p className="text-xs text-muted-foreground">{t("purchasing.requisitions.requiresApproval")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Approved (This Month)</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.requisitions.approvedMonth")}</CardTitle>
                 <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">45</div>
-                <p className="text-xs text-muted-foreground">+10% from last month</p>
+                <p className="text-xs text-muted-foreground">{t("purchasing.requisitions.vsLastMonth", { value: "+10%" })}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Spend (Est.)</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.requisitions.totalSpend")}</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">$12,450</div>
-                <p className="text-xs text-muted-foreground">For approved requests</p>
+                <p className="text-xs text-muted-foreground">{t("purchasing.requisitions.forApproved")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.requisitions.rejected")}</CardTitle>
                 <XCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">3</div>
-                <p className="text-xs text-muted-foreground">This month</p>
+                <p className="text-xs text-muted-foreground">{t("purchasing.requisitions.thisMonth")}</p>
               </CardContent>
             </Card>
           </div>
@@ -246,27 +246,27 @@ export function Purchasing() {
             <CardHeader>
               <CardTitle>{t("purchasing.requisitions.listTitle")}</CardTitle>
               <CardDescription>
-                Manage internal purchase requests from various departments.
+                {t("purchasing.requisitions.listDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Input placeholder="Search requests..." className="w-[300px]" />
+                  <Input placeholder={t("purchasing.requisitions.searchPlaceholder")} className="w-[300px]" />
                   <Button variant="outline" size="icon"><Filter className="h-4 w-4" /></Button>
                 </div>
               </div>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Requester</TableHead>
-                    <TableHead>Item</TableHead>
-                    <TableHead>Quantity</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{t("purchasing.requisitions.id")}</TableHead>
+                    <TableHead>{t("purchasing.requisitions.requester")}</TableHead>
+                    <TableHead>{t("purchasing.requisitions.item")}</TableHead>
+                    <TableHead>{t("purchasing.requisitions.quantity")}</TableHead>
+                    <TableHead>{t("purchasing.requisitions.date")}</TableHead>
+                    <TableHead>{t("purchasing.requisitions.priority")}</TableHead>
+                    <TableHead>{t("purchasing.requisitions.status")}</TableHead>
+                    <TableHead className="text-right">{t("purchasing.requisitions.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -295,10 +295,10 @@ export function Purchasing() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Approve</DropdownMenuItem>
-                            <DropdownMenuItem>Reject</DropdownMenuItem>
+                            <DropdownMenuLabel>{t("purchasing.requisitions.actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("purchasing.requisitions.viewDetails")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("purchasing.requisitions.approve")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("purchasing.requisitions.reject")}</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -316,19 +316,19 @@ export function Purchasing() {
             <CardHeader>
               <CardTitle>{t("purchasing.suppliers.title")}</CardTitle>
               <CardDescription>
-                Evaluate and manage equipment and material suppliers.
+                {t("purchasing.suppliers.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Supplier Name</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Last Order</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{t("purchasing.suppliers.name")}</TableHead>
+                    <TableHead>{t("purchasing.suppliers.category")}</TableHead>
+                    <TableHead>{t("purchasing.suppliers.rating")}</TableHead>
+                    <TableHead>{t("purchasing.suppliers.status")}</TableHead>
+                    <TableHead>{t("purchasing.suppliers.lastOrder")}</TableHead>
+                    <TableHead className="text-right">{t("purchasing.suppliers.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -349,7 +349,7 @@ export function Purchasing() {
                       </TableCell>
                       <TableCell>{supplier.lastOrder}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="outline" size="sm">Evaluate</Button>
+                        <Button variant="outline" size="sm">{t("purchasing.suppliers.evaluate")}</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -364,7 +364,7 @@ export function Purchasing() {
           <div className="grid gap-4 md:grid-cols-3">
              <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Items</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.inventory.totalItems")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">1,234</div>
@@ -372,7 +372,7 @@ export function Purchasing() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Low Stock Alerts</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.inventory.lowStockAlerts")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-red-600">15</div>
@@ -380,7 +380,7 @@ export function Purchasing() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Inventory Value</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("purchasing.inventory.value")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">$450,000</div>
@@ -392,19 +392,19 @@ export function Purchasing() {
             <CardHeader>
               <CardTitle>{t("purchasing.inventory.title")}</CardTitle>
               <CardDescription>
-                B2B Main Warehouse Inventory Management with Safety Stock Alerts.
+                {t("purchasing.inventory.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>SKU</TableHead>
-                    <TableHead>Product Name</TableHead>
-                    <TableHead>Current Stock</TableHead>
-                    <TableHead>Safety Stock</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{t("purchasing.inventory.sku")}</TableHead>
+                    <TableHead>{t("purchasing.inventory.productName")}</TableHead>
+                    <TableHead>{t("purchasing.inventory.currentStock")}</TableHead>
+                    <TableHead>{t("purchasing.inventory.safetyStock")}</TableHead>
+                    <TableHead>{t("purchasing.inventory.status")}</TableHead>
+                    <TableHead className="text-right">{t("purchasing.inventory.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -425,7 +425,7 @@ export function Purchasing() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">Adjust</Button>
+                        <Button variant="ghost" size="sm">{t("purchasing.inventory.adjust")}</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -441,16 +441,16 @@ export function Purchasing() {
             <CardHeader>
               <CardTitle>{t("purchasing.reports.title")}</CardTitle>
               <CardDescription>
-                Stock In/Out/Balance Reports.
+                {t("purchasing.reports.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] flex items-center justify-center border-2 border-dashed rounded-lg">
                 <div className="text-center">
                   <BarChart3 className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
-                  <p className="text-muted-foreground">Chart visualization would go here.</p>
+                  <p className="text-muted-foreground">{t("purchasing.reports.chartPlaceholder")}</p>
                   <Button variant="outline" className="mt-4">
-                    <Download className="mr-2 h-4 w-4" /> Export Report
+                    <Download className="mr-2 h-4 w-4" /> {t("purchasing.reports.export")}
                   </Button>
                 </div>
               </div>
@@ -464,19 +464,19 @@ export function Purchasing() {
             <CardHeader>
               <CardTitle>{t("purchasing.forecasting.title")}</CardTitle>
               <CardDescription>
-                AI-driven demand forecasting and purchase suggestions.
+                {t("purchasing.forecasting.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Item</TableHead>
-                    <TableHead>Current Stock</TableHead>
-                    <TableHead>Predicted Demand (30 days)</TableHead>
-                    <TableHead>Suggested Order</TableHead>
-                    <TableHead>Confidence</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{t("purchasing.forecasting.item")}</TableHead>
+                    <TableHead>{t("purchasing.forecasting.currentStock")}</TableHead>
+                    <TableHead>{t("purchasing.forecasting.predictedDemand")}</TableHead>
+                    <TableHead>{t("purchasing.forecasting.suggestedOrder")}</TableHead>
+                    <TableHead>{t("purchasing.forecasting.confidence")}</TableHead>
+                    <TableHead className="text-right">{t("purchasing.forecasting.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -493,7 +493,7 @@ export function Purchasing() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button size="sm">Create PO</Button>
+                        <Button size="sm">{t("purchasing.forecasting.createPO")}</Button>
                       </TableCell>
                     </TableRow>
                   ))}

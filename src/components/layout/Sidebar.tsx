@@ -172,6 +172,7 @@ const navigationGroups = [
           { nameKey: "requests", href: "/admin-workspace/requests" },
           { nameKey: "documents", href: "/admin-workspace/documents" },
           { nameKey: "documentSettings", href: "/admin-workspace/document-settings" },
+          { nameKey: "notifications", href: "/admin-workspace/notifications" },
         ]
       },
       { nameKey: "legal", href: "/legal", icon: ShieldCheck },
@@ -260,7 +261,7 @@ export function Sidebar() {
                       <div
                         onClick={(e) => toggleExpand(item.nameKey, e)}
                         className={cn(
-                          "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer",
+                          "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                           isActive
                             ? "bg-sidebar-accent text-sidebar-accent-foreground"
                             : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -286,7 +287,7 @@ export function Sidebar() {
                         to={item.href}
                         className={({ isActive }) =>
                           cn(
-                            "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors",
+                            "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                             isActive
                               ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
                               : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -314,7 +315,7 @@ export function Sidebar() {
                             to={subItem.href}
                             className={({ isActive }) =>
                               cn(
-                                "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+                                "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                                 isActive
                                   ? "text-sidebar-primary font-semibold bg-sidebar-accent/50"
                                   : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/30"

@@ -62,7 +62,7 @@ export function Payroll() {
 
   const handleCreateSalary = () => {
     if (!newSalary.empId || !newSalary.basic) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error(t("hr.payroll.toasts.fillInfo"))
       return
     }
 
@@ -70,7 +70,7 @@ export function Payroll() {
     const allowance = parseInt(newSalary.allowance.replace(/,/g, '')) || 0
 
     if (isNaN(basic)) {
-      toast.error("Lương cơ bản không hợp lệ")
+      toast.error(t("hr.payroll.toasts.invalidSalary"))
       return
     }
 
@@ -93,7 +93,7 @@ export function Payroll() {
     setSalaries([record, ...salaries])
     setIsModalOpen(false)
     setNewSalary({ empId: "", basic: "", allowance: "0" })
-    toast.success("Đã thêm cấu trúc lương")
+    toast.success(t("hr.payroll.toasts.addSuccess"))
   }
 
   const handleRunPayroll = (id: string) => {
@@ -118,19 +118,19 @@ export function Payroll() {
         <div className="flex gap-2 items-center">
           <Select value={userRole} onValueChange={(v: any) => setUserRole(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Role" />
+              <SelectValue placeholder={t("hr.core.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="HR Manager">HR Manager</SelectItem>
-              <SelectItem value="Employee">Employee</SelectItem>
+              <SelectItem value="Admin">{t("hr.core.admin")}</SelectItem>
+              <SelectItem value="HR Manager">{t("hr.core.hrManager")}</SelectItem>
+              <SelectItem value="Employee">{t("hr.core.employee")}</SelectItem>
             </SelectContent>
           </Select>
           
           {canEdit && (
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Cấu hình
+              {t("hr.core.config")}
             </Button>
           )}
         </div>
@@ -138,42 +138,42 @@ export function Payroll() {
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Kỳ lương</TabsTrigger>
-          <TabsTrigger value="salary">Cấu trúc lương</TabsTrigger>
-          <TabsTrigger value="payslips">Phiếu lương</TabsTrigger>
-          <TabsTrigger value="config">Cấu hình & Công thức</TabsTrigger>
+          <TabsTrigger value="overview">{t("hr.payroll.tabs.periods")}</TabsTrigger>
+          <TabsTrigger value="salary">{t("hr.payroll.tabs.salaryStructure")}</TabsTrigger>
+          <TabsTrigger value="payslips">{t("hr.payroll.tabs.payslips")}</TabsTrigger>
+          <TabsTrigger value="config">{t("hr.payroll.tabs.config")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Tổng quỹ lương tháng này</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("hr.payroll.overview.totalFund")}</CardTitle>
                 <DollarSign className="h-4 w-4 text-green-600" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">15,600,000,000 ₫</div>
-                <p className="text-xs text-muted-foreground">+1.2% so với tháng trước</p>
+                <p className="text-xs text-muted-foreground">{t("hr.payroll.overview.vsLastMonth", { value: "+1.2%" })}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Thuế TNCN dự kiến</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("hr.payroll.overview.estimatedPit")}</CardTitle>
                 <PieChart className="h-4 w-4 text-blue-600" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">1,200,000,000 ₫</div>
-                <p className="text-xs text-muted-foreground">Đã khấu trừ tự động</p>
+                <p className="text-xs text-muted-foreground">{t("hr.payroll.overview.autoDeducted")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Bảo hiểm xã hội</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("hr.payroll.overview.socialInsurance")}</CardTitle>
                 <FileText className="h-4 w-4 text-orange-600" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">850,000,000 ₫</div>
-                <p className="text-xs text-muted-foreground">Công ty đóng 21.5%</p>
+                <p className="text-xs text-muted-foreground">{t("hr.payroll.overview.companyContribution")}</p>
               </CardContent>
             </Card>
           </div>
@@ -212,7 +212,9 @@ export function Payroll() {
                       <TableCell>{item.amount}</TableCell>
                       <TableCell>
                         <Badge variant={item.status === "Completed" ? "default" : item.status === "Processing" ? "outline" : "secondary"}>
-                          {item.status}
+                          {item.status === "Completed" ? t("hr.payroll.payrollStatus.completed") : 
+                           item.status === "Processing" ? t("hr.payroll.payrollStatus.processing") : 
+                           t("hr.payroll.payrollStatus.draft")}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -239,13 +241,13 @@ export function Payroll() {
           <Card>
             <CardHeader>
               <CardTitle>{t("hr.payroll.salaryStructure")}</CardTitle>
-              <CardDescription>Employee salary configuration.</CardDescription>
+              <CardDescription>{t("hr.payroll.structure.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex justify-between mb-4">
                 <Button onClick={() => setIsModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Thêm cấu trúc lương
+                  {t("hr.payroll.structure.add")}
                 </Button>
                 <Button variant="outline">
                   <Download className="mr-2 h-4 w-4" />
@@ -256,17 +258,17 @@ export function Payroll() {
               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Thêm cấu trúc lương</DialogTitle>
+                    <DialogTitle>{t("hr.payroll.structure.add")}</DialogTitle>
                     <DialogDescription>
-                      Thiết lập cấu trúc lương cơ bản và phụ cấp cho nhân viên.
+                      {t("hr.payroll.structure.description")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="empId" className="text-right">Nhân viên</Label>
+                      <Label htmlFor="empId" className="text-right">{t("hr.payroll.structure.employee")}</Label>
                       <Select value={newSalary.empId} onValueChange={(val) => setNewSalary({...newSalary, empId: val})}>
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Chọn nhân viên" />
+                          <SelectValue placeholder={t("hr.payroll.structure.selectEmployee")} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees.map(emp => (
@@ -276,29 +278,29 @@ export function Payroll() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="basic" className="text-right">Lương cơ bản</Label>
+                      <Label htmlFor="basic" className="text-right">{t("hr.payroll.structure.basic")}</Label>
                       <Input 
                         id="basic" 
                         value={newSalary.basic} 
                         onChange={(e) => setNewSalary({...newSalary, basic: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 25000000"
+                        placeholder={t("hr.payroll.placeholders.salary")}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="allowance" className="text-right">Phụ cấp</Label>
+                      <Label htmlFor="allowance" className="text-right">{t("hr.payroll.structure.allowance")}</Label>
                       <Input 
                         id="allowance" 
                         value={newSalary.allowance} 
                         onChange={(e) => setNewSalary({...newSalary, allowance: e.target.value})}
                         className="col-span-3" 
-                        placeholder="VD: 2000000"
+                        placeholder={t("hr.payroll.placeholders.allowance")}
                       />
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-                    <Button onClick={handleCreateSalary}>Lưu cấu trúc</Button>
+                    <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("hr.payroll.structure.cancel")}</Button>
+                    <Button onClick={handleCreateSalary}>{t("hr.payroll.structure.save")}</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -334,14 +336,14 @@ export function Payroll() {
         <TabsContent value="payslips" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Phiếu lương điện tử</CardTitle>
-              <CardDescription>Quản lý và gửi phiếu lương cho nhân viên</CardDescription>
+              <CardTitle>{t("hr.payroll.payslipsTab.title")}</CardTitle>
+              <CardDescription>{t("hr.payroll.payslipsTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <FileText className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Phiếu lương đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép xem trước và gửi phiếu lương hàng loạt qua email.</p>
+                <h3 className="font-medium">{t("hr.payroll.payslipsTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.payroll.payslipsTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>
@@ -350,14 +352,14 @@ export function Payroll() {
         <TabsContent value="config" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Cấu hình & Công thức lương</CardTitle>
-              <CardDescription>Thiết lập các khoản phụ cấp, khấu trừ và công thức tính thuế</CardDescription>
+              <CardTitle>{t("hr.payroll.configTab.title")}</CardTitle>
+              <CardDescription>{t("hr.payroll.configTab.description")}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[400px] flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
               <div className="text-center space-y-2">
                 <Calculator className="w-12 h-12 text-muted-foreground mx-auto" />
-                <h3 className="font-medium">Cấu hình lương đang được cập nhật</h3>
-                <p className="text-sm text-muted-foreground">Tính năng này sẽ cho phép tùy chỉnh công thức lương động (Excel-like formulas).</p>
+                <h3 className="font-medium">{t("hr.payroll.configTab.updating")}</h3>
+                <p className="text-sm text-muted-foreground">{t("hr.payroll.configTab.featureDesc")}</p>
               </div>
             </CardContent>
           </Card>

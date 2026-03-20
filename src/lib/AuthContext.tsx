@@ -1,16 +1,23 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { auth } from './firebase';
+import { 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword, 
+  signOut,
+  User as FirebaseUser
+} from 'firebase/auth';
 
 interface User {
   uid: string;
-  email: string;
-  displayName: string;
-  photoURL?: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL?: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
 }
 
@@ -21,27 +28,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL,
+        });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
-    if (username === 'admin' && password === 'admin') {
-      const adminUser = { uid: 'admin', email: 'admin@admin.com', displayName: 'Admin' };
-      setUser(adminUser);
-      localStorage.setItem('user', JSON.stringify(adminUser));
-      return true;
+  const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // Map 'admin' to 'admin@example.com'
+      const email = username === 'admin' ? 'admin@example.com' : username;
+      await signInWithEmailAndPassword(auth, email, password);
+      return { success: true };
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      return { success: false, error: 'Invalid username or password' };
     }
-    return false;
   };
 
   const logout = async () => {
-    setUser(null);
-    localStorage.removeItem('user');
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (

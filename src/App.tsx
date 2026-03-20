@@ -6,7 +6,6 @@ import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
 import { AiAssistant } from "./components/AiAssistant"
 import { Button } from "./components/ui/button"
-import { Input } from "./components/ui/input"
 
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })))
 const Products = lazy(() => import("./pages/Products").then(m => ({ default: m.Products })))
@@ -62,6 +61,7 @@ const EContract = lazy(() => import("./pages/EContract"))
 const FinanceDashboard = lazy(() => import("./pages/finance/FinanceDashboard").then(m => ({ default: m.FinanceDashboard })))
 const HRDashboard = lazy(() => import("./pages/hr/HRDashboard").then(m => ({ default: m.HRDashboard })))
 const AdminDashboard = lazy(() => import("./pages/admin-workspace/AdminDashboard").then(m => ({ default: m.AdminDashboard })))
+const NotificationsPage = lazy(() => import("./pages/admin-workspace/NotificationsPage").then(m => ({ default: m.default })))
 const GroupBuying = lazy(() => import("./pages/marketing/GroupBuying").then(m => ({ default: m.GroupBuying })))
 const PointWallet = lazy(() => import("./pages/loyalty/PointWallet").then(m => ({ default: m.PointWallet })))
 const POS = lazy(() => import("./pages/pos/POS").then(m => ({ default: m.POS })))
@@ -87,9 +87,11 @@ function ProtectedLayout() {
   const [error, setError] = useState("")
 
   const handleLogin = async () => {
-    const success = await login(username, password)
+    const { success, error: loginError } = await login(username, password)
     if (!success) {
-      setError("Invalid username or password")
+      setError(loginError || "Login failed. Please try again.")
+    } else {
+      setError("")
     }
   }
 
@@ -99,18 +101,30 @@ function ProtectedLayout() {
 
   if (!user) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-muted/20 p-4">
-        <div className="w-full max-w-md space-y-8 rounded-xl bg-card p-8 shadow-lg border">
+      <div className="flex h-screen flex-col items-center justify-center bg-background p-4">
+        <div className="w-full max-w-md space-y-8 rounded-2xl bg-card p-8 shadow-xl border border-border">
           <div className="text-center">
-            <h1 className="text-3xl font-bold">Lucky ERP</h1>
+            <h1 className="text-4xl font-bold text-primary">Lucky ERP</h1>
             <p className="mt-2 text-muted-foreground">{t("auth.loginToContinue")}</p>
           </div>
           <div className="space-y-4">
-            <Input placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-            <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
             {error && <p className="text-destructive text-sm text-center">{error}</p>}
-            <Button onClick={handleLogin} className="w-full py-6 text-lg" size="lg">
-              Login
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-3 rounded-lg border border-border bg-background"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded-lg border border-border bg-background"
+            />
+            <Button onClick={handleLogin} className="w-full py-6 text-lg bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
+              Truy cập hệ thống
             </Button>
           </div>
         </div>
@@ -205,6 +219,7 @@ export default function App() {
                 <Route path="requests" element={<RequestsPage />} />
                 <Route path="documents" element={<DocumentsPage />} />
                 <Route path="document-settings" element={<DocumentSettingsPage />} />
+                <Route path="notifications" element={<NotificationsPage />} />
               </Route>
               <Route path="analytics" element={<Analytics />} />
               <Route path="sales" element={<Sales />} />
