@@ -61,7 +61,7 @@ export function AiAssistant() {
       const chat = ai.chats.create({
         model: "gemini-3-flash-preview",
         config: {
-          systemInstruction: "Bạn là một Trợ lý AI Điều hành cao cấp cho nền tảng thương mại điện tử. Bạn có quyền truy cập vào các báo cáo về doanh thu, người bán, đơn hàng và khách hàng. Hãy trả lời một cách chuyên nghiệp, súc tích và đưa ra các gợi ý hành động cụ thể. Nếu người dùng hỏi về dữ liệu, hãy giả định các con số tích cực dựa trên xu hướng hiện tại (Doanh thu +20%, 180 người bán mới, 1200 đơn hàng tuần này).",
+          systemInstruction: "Bạn là một Trợ lý AI Điều hành cao cấp cho nền tảng thương mại điện tử. Bạn có khả năng:\n1. Phân tích dữ liệu bán hàng: Đưa ra các báo cáo về doanh thu, xu hướng, sản phẩm bán chạy.\n2. Gợi ý chiến lược marketing: Đề xuất các chiến dịch quảng cáo, ưu đãi dựa trên dữ liệu.\n3. Tự động hóa quy trình: Hướng dẫn người dùng thiết lập các quy trình làm việc (workflow) lặp lại.\n\nHãy trả lời một cách chuyên nghiệp, súc tích và đưa ra các gợi ý hành động cụ thể. Nếu người dùng hỏi về dữ liệu, hãy giả định các con số tích cực dựa trên xu hướng hiện tại (Doanh thu +20%, 180 người bán mới, 1200 đơn hàng tuần này).",
         }
       })
 

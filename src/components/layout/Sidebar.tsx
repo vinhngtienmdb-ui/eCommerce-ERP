@@ -71,6 +71,7 @@ const navigationGroups = [
     titleKey: "commerce",
     items: [
       { nameKey: "pos", href: "/pos", icon: Store },
+      { nameKey: "orders", href: "/orders", icon: ShoppingCart },
       { 
         nameKey: "products", 
         href: "/products", 
@@ -81,6 +82,7 @@ const navigationGroups = [
           { nameKey: "aiOptimization", href: "/products/ai-tools" },
         ]
       },
+      { nameKey: "customers", href: "/customers", icon: UsersRound },
       { 
         nameKey: "sellers", 
         href: "/sellers", 
@@ -91,8 +93,6 @@ const navigationGroups = [
           { nameKey: "sellerRegistration", href: "/sellers/registration" },
         ]
       },
-      { nameKey: "customers", href: "/customers", icon: UsersRound },
-      { nameKey: "orders", href: "/orders", icon: ShoppingCart },
       { nameKey: "sales", href: "/sales", icon: TrendingUp },
       { nameKey: "live", href: "/live", icon: Video },
     ]
@@ -113,6 +113,7 @@ const navigationGroups = [
           { nameKey: "planning", href: "/planning" },
         ]
       },
+      { nameKey: "kolKoc", href: "/kol-koc", icon: Users },
       { nameKey: "contentStudio", href: "/content-studio", icon: PenTool },
       { nameKey: "loyalty", href: "/loyalty", icon: Trophy, subItems: [
           { nameKey: "loyaltyDashboard", href: "/loyalty" },
@@ -139,6 +140,7 @@ const navigationGroups = [
         icon: Wallet,
         subItems: [
           { nameKey: "accounting", href: "/finance/accounting" },
+          { nameKey: "invoices", href: "/finance/invoices" },
           { nameKey: "reconciliation", href: "/finance/reconciliation" },
           { nameKey: "pnl", href: "/finance/pnl" },
           { nameKey: "paymentWallet", href: "/finance/payment-wallet" },
@@ -150,15 +152,17 @@ const navigationGroups = [
         href: "/hr", 
         icon: UsersRound,
         subItems: [
-          { nameKey: "hrPayroll", href: "/hr/payroll" },
-          { nameKey: "hrSocialInsurance", href: "/hr/social-insurance" },
-          { nameKey: "hrRecruitment", href: "/hr/recruitment" },
+          { nameKey: "hrPortal", href: "/hr/portal" },
+          { nameKey: "hrInfo", href: "/hr/info" },
           { nameKey: "hrEmployees", href: "/hr/employees" },
           { nameKey: "hrTimeAttendance", href: "/hr/time-attendance" },
-          { nameKey: "hrPerformance", href: "/hr/performance" },
+          { nameKey: "hrLeave", href: "/hr/leave" },
+          { nameKey: "hrPayroll", href: "/hr/payroll" },
+          { nameKey: "hrSocialInsurance", href: "/hr/social-insurance" },
           { nameKey: "hrPit", href: "/hr/pit" },
+          { nameKey: "hrRecruitment", href: "/hr/recruitment" },
+          { nameKey: "hrPerformance", href: "/hr/performance" },
           { nameKey: "hrGoals", href: "/hr/goals" },
-          { nameKey: "hrInfo", href: "/hr/info" },
         ]
       },
       { 
@@ -166,17 +170,19 @@ const navigationGroups = [
         href: "/admin-workspace", 
         icon: Briefcase,
         subItems: [
+          { nameKey: "requests", href: "/admin-workspace/requests" },
+          { nameKey: "paymentRequest", href: "/admin-workspace/payment-request" },
+          { nameKey: "workflow", href: "/admin-workspace/workflow" },
           { nameKey: "assets", href: "/admin-workspace/assets" },
           { nameKey: "stationery", href: "/admin-workspace/stationery" },
           { nameKey: "booking", href: "/admin-workspace/booking" },
-          { nameKey: "requests", href: "/admin-workspace/requests" },
           { nameKey: "documents", href: "/admin-workspace/documents" },
           { nameKey: "documentSettings", href: "/admin-workspace/document-settings" },
           { nameKey: "notifications", href: "/admin-workspace/notifications" },
         ]
       },
-      { nameKey: "legal", href: "/legal", icon: ShieldCheck },
       { nameKey: "eContract", href: "/e-contract", icon: FileSignature },
+      { nameKey: "legal", href: "/legal", icon: ShieldCheck },
     ]
   },
   {

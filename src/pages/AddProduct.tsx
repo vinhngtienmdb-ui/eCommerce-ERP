@@ -4,6 +4,7 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Textarea } from "@/src/components/ui/textarea"
 import { useTranslation } from "react-i18next"
+import { ProfitCalculator } from "@/src/components/products/ProfitCalculator"
 import { CheckCircle2, ImagePlus, Video, ShoppingBag, MessageSquare, ShoppingCart, ChevronDown, Sparkles, Loader2, Bold, Italic, List } from "lucide-react"
 import { cn } from "@/src/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
@@ -13,7 +14,7 @@ import { Switch } from "@/src/components/ui/switch"
 import { toast } from "sonner"
 import { GoogleGenAI } from "@google/genai"
 import { useSettingsStore } from "@/src/store/useSettingsStore"
-import { initialPlatformFees } from "@/src/data/fees"
+import { initialPlatformFees, initialOtherFees } from "@/src/data/fees"
 import { X, Plus } from "lucide-react"
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -813,6 +814,13 @@ export function AddProduct() {
 
                 <TabsContent value="sales" className="mt-0 space-y-6 animate-in fade-in duration-300">
                   <h3 className="text-lg font-medium">{t("products.add.tabs.sales")}</h3>
+                  
+                  <ProfitCalculator 
+                    costPrice={Number(costPrice) || 0} 
+                    sellingPrice={Number(suggestedPrice) || 0} 
+                    platformFee={Number(platformFee) || 0} 
+                    otherFees={settings?.otherFees || initialOtherFees} 
+                  />
                   
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">

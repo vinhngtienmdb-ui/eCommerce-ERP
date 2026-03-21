@@ -77,6 +77,7 @@
     "purchasing": "Mua hàng",
     "finance": "Tài chính",
     "accounting": "Kế toán & Tài chính",
+    "invoices": "Quản lý Hóa đơn",
     "reconciliation": "Công nợ & Đối soát",
     "pnl": "Phân tích P&L",
     "paymentWallet": "Thanh toán & Ví nội bộ",
@@ -88,12 +89,16 @@
     "hrRecruitment": "Tuyển dụng",
     "hrEmployees": "Nhân viên",
     "hrTimeAttendance": "Chấm công",
+    "hrLeave": "Nghỉ phép",
     "hrPerformance": "Đánh giá",
     "hrPit": "Thuế TNCN",
     "hrGoals": "Mục tiêu",
+    "hrPortal": "Cổng thông tin NV",
     "hrInfo": "Thông tin nhân sự",
     "admin": "Quản trị",
     "adminWorkspace": "Hành chính",
+    "paymentRequest": "Đề nghị thanh toán",
+    "workflow": "Quy trình làm việc",
     "notifications": "Thông báo hệ thống",
     "kolKoc": "Quản lý KOL/KOC",
     "assets": "Quản lý Tài sản",
@@ -581,6 +586,13 @@
       "high": "Cao",
       "medium": "Trung bình",
       "low": "Thấp",
+      "projects": {
+        "finance": "Tài chính",
+        "marketing": "Marketing",
+        "sales": "Bán hàng",
+        "it": "IT",
+        "hr": "Nhân sự"
+      },
       "activeTasks": "Công việc đang làm",
       "completed": "Hoàn thành",
       "viewTasks": "Xem công việc",
@@ -702,7 +714,11 @@
     "description": "Định hướng chiến lược và theo dõi hiệu suất cốt lõi của doanh nghiệp.",
     "tabs": {
       "direction": "Định hướng BGĐ",
-      "strategy": "Chiến lược & KPIs"
+      "strategy": "Chiến lược & KPIs",
+      "decisionLog": "Nhật ký quyết định",
+      "simulator": "Mô phỏng nguồn lực",
+      "marketIntel": "Tình báo thị trường",
+      "knowledgeHub": "Trung tâm tri thức"
     },
     "direction": {
       "mission": "Sứ mệnh & Tầm nhìn",
@@ -1123,7 +1139,10 @@
     "markAllRead": "Đánh dấu đã đọc",
     "viewAllNotifications": "Xem tất cả thông báo",
     "darkMode": "Chế độ tối",
-    "lightMode": "Chế độ sáng"
+    "lightMode": "Chế độ sáng",
+    "noNotifications": "Không có thông báo mới",
+    "user": "Người dùng",
+    "userFallback": "U"
   },
   "dashboard": {
     "title": "Bảng điều khiển",
@@ -3373,6 +3392,7 @@
     "expenses": "Chi phí",
     "modules": "Module Tài chính",
     "accountingDesc": "Quản lý tài khoản, sổ cái và giao dịch.",
+    "invoicesDesc": "Quản lý hóa đơn VAT và hóa đơn hoa hồng.",
     "reconciliationDesc": "Đối chiếu sao kê ngân hàng và hồ sơ nội bộ.",
     "pnlDesc": "Báo cáo lãi lỗ và phân tích tài chính.",
     "paymentWalletDesc": "Quản lý ví điện tử và phương thức thanh toán.",

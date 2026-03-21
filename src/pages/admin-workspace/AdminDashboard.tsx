@@ -15,7 +15,8 @@ import {
   Users,
   AlertCircle,
   ArrowUpRight,
-  Plus
+  Plus,
+  FileText
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card"
 import { Button } from "@/src/components/ui/button"
@@ -60,6 +61,24 @@ export function AdminDashboard() {
       color: "text-orange-500", 
       bg: "bg-orange-100",
       href: "/admin-workspace/requests"
+    },
+    { 
+      id: "payment-request", 
+      title: "nav.paymentRequest", 
+      description: "Quản lý và tạo đề nghị thanh toán", 
+      icon: FileText, 
+      color: "text-red-500", 
+      bg: "bg-red-100",
+      href: "/admin-workspace/payment-request"
+    },
+    { 
+      id: "workflow", 
+      title: "nav.workflow", 
+      description: "Quản lý và thiết lập quy trình làm việc", 
+      icon: TrendingUp, 
+      color: "text-teal-500", 
+      bg: "bg-teal-100",
+      href: "/admin-workspace/workflow"
     },
   ]
 

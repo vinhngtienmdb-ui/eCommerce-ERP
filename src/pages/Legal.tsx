@@ -37,7 +37,7 @@ import {
   Copyright
 } from "lucide-react"
 
-export function Legal() {
+export default function Legal() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("brandPortal")

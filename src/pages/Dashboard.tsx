@@ -77,6 +77,13 @@ export function Dashboard() {
   const [aiBriefing, setAiBriefing] = useState<string | null>(null)
   const [isAiLoading, setIsAiLoading] = useState(false)
   const [productCount, setProductCount] = useState<number | null>(null)
+  const [isCustomizing, setIsCustomizing] = useState(false)
+  const [visibleWidgets, setVisibleWidgets] = useState({
+    aiBriefing: true,
+    stats: true,
+    quickAccess: true,
+    charts: true
+  })
 
   const fetchStats = async () => {
     try {
@@ -129,8 +136,40 @@ export function Dashboard() {
             {t("dashboard.description")}
           </p>
         </div>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant={isCustomizing ? "default" : "outline"} 
+            onClick={() => setIsCustomizing(!isCustomizing)}
+          >
+            {isCustomizing ? "Lưu cấu hình" : "Tùy chỉnh Dashboard"}
+          </Button>
+        </div>
       </div>
 
+      {isCustomizing && (
+        <Card className="bg-slate-50 border-dashed border-2">
+          <CardContent className="p-4 flex flex-wrap gap-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={visibleWidgets.aiBriefing} onChange={(e) => setVisibleWidgets(p => ({...p, aiBriefing: e.target.checked}))} />
+              AI Briefing
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={visibleWidgets.stats} onChange={(e) => setVisibleWidgets(p => ({...p, stats: e.target.checked}))} />
+              Chỉ số tổng quan
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={visibleWidgets.quickAccess} onChange={(e) => setVisibleWidgets(p => ({...p, quickAccess: e.target.checked}))} />
+              Truy cập nhanh
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={visibleWidgets.charts} onChange={(e) => setVisibleWidgets(p => ({...p, charts: e.target.checked}))} />
+              Biểu đồ
+            </label>
+          </CardContent>
+        </Card>
+      )}
+
+      {visibleWidgets.aiBriefing && (
       <Card className="bg-primary text-primary-foreground border border-primary-foreground/20 shadow-sm">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
@@ -176,7 +215,9 @@ export function Dashboard() {
           )}
         </CardContent>
       </Card>
+      )}
 
+      {visibleWidgets.stats && (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border border-border shadow-sm bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -247,7 +288,9 @@ export function Dashboard() {
           </CardContent>
         </Card>
       </div>
+      )}
 
+      {visibleWidgets.quickAccess && (
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
@@ -279,7 +322,9 @@ export function Dashboard() {
           ))}
         </div>
       </div>
+      )}
 
+      {visibleWidgets.charts && (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
@@ -370,6 +415,7 @@ export function Dashboard() {
           </CardContent>
         </Card>
       </div>
+      )}
     </div>
   )
 }

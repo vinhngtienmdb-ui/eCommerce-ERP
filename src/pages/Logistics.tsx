@@ -144,6 +144,7 @@ const Logistics = () => {
             <TabsTrigger value="warehouses">{t("logistics.tabs.warehouses", "Quản lý Kho")}</TabsTrigger>
             <TabsTrigger value="inventory">{t("logistics.tabs.inventory", "Tồn kho")}</TabsTrigger>
             <TabsTrigger value="integrations">{t("logistics.tabs.integrations", "Kết nối WMS")}</TabsTrigger>
+            <TabsTrigger value="scanner">{t("logistics.tabs.scanner", "Quét Mã Vạch")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-8 animate-in fade-in duration-300">
@@ -406,6 +407,7 @@ const Logistics = () => {
                     <TableHead>{t("logistics.inventory.product", "Sản phẩm")}</TableHead>
                     <TableHead>{t("common.sku", "SKU")}</TableHead>
                     <TableHead>{t("logistics.inventory.warehouse", "Kho hàng")}</TableHead>
+                    <TableHead>{t("logistics.inventory.binLocation", "Vị trí (Bin)")}</TableHead>
                     <TableHead className="text-right">{t("logistics.inventory.stock", "Tồn kho")}</TableHead>
                     <TableHead className="text-right">{t("logistics.inventory.reserved", "Đang giao dịch")}</TableHead>
                     <TableHead className="text-right">{t("logistics.inventory.available", "Có thể bán")}</TableHead>
@@ -430,6 +432,11 @@ const Logistics = () => {
                         <TableCell className="font-medium">{item.productName}</TableCell>
                         <TableCell className="text-muted-foreground">{item.sku || "N/A"}</TableCell>
                         <TableCell>{item.warehouse || "N/A"}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="font-mono bg-slate-50">
+                            {item.binLocation || `A${Math.floor(Math.random() * 5 + 1)}-${Math.floor(Math.random() * 10 + 1)}`}
+                          </Badge>
+                        </TableCell>
                         <TableCell className="text-right font-medium">{item.stock || 0}</TableCell>
                         <TableCell className="text-right text-orange-600">{item.reserved || 0}</TableCell>
                         <TableCell className="text-right text-emerald-600 font-bold">{(item.stock || 0) - (item.reserved || 0)}</TableCell>
@@ -513,6 +520,82 @@ const Logistics = () => {
                   {t("logistics.integrations.nhanhVnDesc", "Tự động trừ tồn kho trên Nhanh.vn khi có đơn hàng mới. Cập nhật tồn kho từ Nhanh.vn về hệ thống mỗi 5 phút.")}
                 </div>
                 <Button variant="outline" size="sm" className="w-full">{t("logistics.integrations.connect", "Kết nối")}</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="scanner" className="space-y-6 animate-in fade-in duration-300">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">{t("logistics.scanner.title", "Quét Mã Vạch (Barcode/QR)")}</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card className="border-none shadow-sm overflow-hidden">
+              <CardHeader className="bg-slate-900 text-white">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Camera Scanner
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0 relative">
+                <div className="h-[400px] bg-black flex items-center justify-center relative">
+                  <div className="absolute inset-0 opacity-30 bg-[url('https://picsum.photos/seed/warehouse/800/600')] bg-cover grayscale" />
+                  
+                  {/* Scanner Overlay */}
+                  <div className="relative z-10 w-64 h-64 border-2 border-emerald-500 rounded-xl flex items-center justify-center">
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-emerald-500 rounded-tl-lg -mt-1 -ml-1" />
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-emerald-500 rounded-tr-lg -mt-1 -mr-1" />
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-emerald-500 rounded-bl-lg -mb-1 -ml-1" />
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-emerald-500 rounded-br-lg -mb-1 -mr-1" />
+                    
+                    <div className="w-full h-0.5 bg-emerald-500 shadow-[0_0_10px_2px_rgba(16,185,129,0.5)] animate-[scan_2s_ease-in-out_infinite]" />
+                  </div>
+                  
+                  <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4">
+                    <Button variant="secondary" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-md">
+                      Nhập kho
+                    </Button>
+                    <Button variant="secondary" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-md">
+                      Xuất kho
+                    </Button>
+                    <Button variant="secondary" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-md">
+                      Kiểm kê
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg">Kết quả quét gần đây</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-slate-50/50">
+                      <TableHead>Mã vạch</TableHead>
+                      <TableHead>Sản phẩm</TableHead>
+                      <TableHead>Hành động</TableHead>
+                      <TableHead className="text-right">Thời gian</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {[
+                      { code: "8935244820123", name: "Áo thun Cotton (L)", action: "Nhập kho (+50)", time: "Vừa xong", color: "text-emerald-600" },
+                      { code: "8935244820124", name: "Quần Jean Nam (32)", action: "Xuất kho (-2)", time: "5 phút trước", color: "text-orange-600" },
+                      { code: "8935244820125", name: "Giày Sneaker (42)", action: "Kiểm kê (Khớp)", time: "15 phút trước", color: "text-blue-600" },
+                    ].map((item, i) => (
+                      <TableRow key={i}>
+                        <TableCell className="font-mono text-xs font-bold">{item.code}</TableCell>
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell className={`font-medium ${item.color}`}>{item.action}</TableCell>
+                        <TableCell className="text-right text-slate-500 text-sm">{item.time}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </div>

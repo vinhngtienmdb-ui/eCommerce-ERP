@@ -52,11 +52,31 @@ export interface EContract {
   security: string
 }
 
+export interface PaymentRequestData {
+  id: string;
+  type: string;
+  supplier: string;
+  period: string;
+  invoiceNumber: string;
+  department: string;
+  requester: string;
+  content: string;
+  totalAmount: string;
+  advanceAmount: string;
+  bankAccount: string;
+  beneficiary: string;
+  bankName: string;
+  paymentMethod: string;
+  status: 'draft' | 'pending_sign' | 'signed' | 'paid';
+  createdAt: string;
+}
+
 interface DataState {
   employees: Employee[]
   users: User[]
   contracts: Contract[]
   eContracts: EContract[]
+  paymentRequests: PaymentRequestData[]
   addEmployee: (emp: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
   deleteEmployee: (id: string) => void
@@ -67,6 +87,8 @@ interface DataState {
   updateUser: (id: string, data: Partial<User>) => void
   deleteUser: (id: string) => void
   syncEmployeeToUser: (emp: Employee) => void
+  addPaymentRequest: (req: PaymentRequestData) => void
+  updatePaymentRequest: (id: string, data: Partial<PaymentRequestData>) => void
 }
 
 const initialEmployees: Employee[] = [
@@ -96,11 +118,33 @@ const initialUsers: User[] = [
   { id: "4", employeeId: "EMP-004", name: "Phạm Thị D", email: "thid@example.com", role: "Marketing", department: "Phòng Marketing", status: "active", lastActive: "1 giờ trước" },
 ]
 
+const initialPaymentRequests: PaymentRequestData[] = [
+  {
+    id: "PR-001",
+    type: "electricity",
+    supplier: "evn",
+    period: "Tháng 03/2026",
+    invoiceNumber: "PE0413-000123",
+    department: "PHÒNG TCTH",
+    requester: "Hoàng Văn Long",
+    content: "Thanh toán tiền điện Tháng 03/2026",
+    totalAmount: "1500000",
+    advanceAmount: "0",
+    bankAccount: "123456789",
+    beneficiary: "EVN HCMC",
+    bankName: "VietinBank",
+    paymentMethod: "transfer",
+    status: "pending_sign",
+    createdAt: "2026-03-20T10:00:00Z"
+  }
+]
+
 export const useDataStore = create<DataState>((set) => ({
   employees: initialEmployees,
   users: initialUsers,
   contracts: initialContracts,
   eContracts: initialEContracts,
+  paymentRequests: initialPaymentRequests,
   addEmployee: (emp) => set((state) => ({ employees: [...state.employees, emp] })),
   updateEmployee: (id, data) => set((state) => ({
     employees: state.employees.map(e => e.id === id ? { ...e, ...data } : e)
@@ -117,6 +161,10 @@ export const useDataStore = create<DataState>((set) => ({
   })),
   deleteUser: (id) => set((state) => ({
     users: state.users.filter(u => u.id !== id)
+  })),
+  addPaymentRequest: (req) => set((state) => ({ paymentRequests: [...state.paymentRequests, req] })),
+  updatePaymentRequest: (id, data) => set((state) => ({
+    paymentRequests: state.paymentRequests.map(r => r.id === id ? { ...r, ...data } : r)
   })),
   syncEmployeeToUser: (emp) => set((state) => {
     const existingUser = state.users.find(u => u.employeeId === emp.id)

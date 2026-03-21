@@ -164,15 +164,15 @@ export function Header() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-primary/10 p-1">
               <Avatar className="h-8 w-8 rounded-full">
-                <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/avatar/100/100"} alt={user?.displayName || "User"} />
-                <AvatarFallback className="bg-primary/10 text-primary font-bold">{user?.displayName?.charAt(0) || "U"}</AvatarFallback>
+                <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/avatar/100/100"} alt={user?.displayName || t("header.user")} />
+                <AvatarFallback className="bg-primary/10 text-primary font-bold">{user?.displayName?.charAt(0) || t("header.userFallback")}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 rounded-2xl" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-bold leading-none">{user?.displayName || "User"}</p>
+                <p className="text-sm font-bold leading-none">{user?.displayName || t("header.user")}</p>
                 <p className="text-xs leading-none text-muted-foreground">
                   {user?.email}
                 </p>

@@ -45,7 +45,7 @@ const Sales = lazy(() => import("./pages/Sales").then(m => ({ default: m.Sales }
 const Settings = lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })))
 const LiveHub = lazy(() => import("./pages/LiveHub").then(m => ({ default: m.LiveHub })))
 const Advertising = lazy(() => import("./pages/Advertising").then(m => ({ default: m.Advertising })))
-const Legal = lazy(() => import("./pages/Legal").then(m => ({ default: m.Legal })))
+const Legal = lazy(() => import("./pages/Legal"))
 const SellerFinance = lazy(() => import("./pages/SellerFinance").then(m => ({ default: m.SellerFinance })))
 const SocialCommerce = lazy(() => import("./pages/SocialCommerce").then(m => ({ default: m.SocialCommerce })))
 const BusinessPlanning = lazy(() => import("./pages/planning/BusinessPlanning").then(m => ({ default: m.BusinessPlanning })))
@@ -57,14 +57,19 @@ const MarketIntelligence = lazy(() => import("./pages/MarketIntelligence"))
 const ContentStudio = lazy(() => import("./pages/ContentStudio"))
 const Loyalty = lazy(() => import("./pages/Loyalty"))
 const Logistics = lazy(() => import("./pages/Logistics"))
-const EContract = lazy(() => import("./pages/EContract"))
+const EContract = lazy(() => import("./pages/EContract").then(m => ({ default: m.default })))
+const InvoiceManagement = lazy(() => import("./pages/finance/InvoiceManagement").then(m => ({ default: m.default })))
 const FinanceDashboard = lazy(() => import("./pages/finance/FinanceDashboard").then(m => ({ default: m.FinanceDashboard })))
 const HRDashboard = lazy(() => import("./pages/hr/HRDashboard").then(m => ({ default: m.HRDashboard })))
+const EmployeePortal = lazy(() => import("./pages/hr/EmployeePortal").then(m => ({ default: m.EmployeePortal })))
+const WorkflowManagement = lazy(() => import("./pages/admin-workspace/WorkflowManagement").then(m => ({ default: m.WorkflowManagement })))
 const AdminDashboard = lazy(() => import("./pages/admin-workspace/AdminDashboard").then(m => ({ default: m.AdminDashboard })))
 const NotificationsPage = lazy(() => import("./pages/admin-workspace/NotificationsPage").then(m => ({ default: m.default })))
 const GroupBuying = lazy(() => import("./pages/marketing/GroupBuying").then(m => ({ default: m.GroupBuying })))
 const PointWallet = lazy(() => import("./pages/loyalty/PointWallet").then(m => ({ default: m.PointWallet })))
 const POS = lazy(() => import("./pages/pos/POS").then(m => ({ default: m.POS })))
+
+const PaymentRequest = lazy(() => import("./pages/PaymentRequest"))
 
 function FallbackRoute() {
   const { t } = useTranslation()
@@ -197,6 +202,7 @@ export default function App() {
                 <Route path="pnl" element={<PnL />} />
                 <Route path="payment-wallet" element={<PaymentWallet />} />
                 <Route path="seller-finance" element={<SellerFinance />} />
+                <Route path="invoices" element={<InvoiceManagement />} />
               </Route>
               <Route path="hr">
                 <Route index element={<HRDashboard />} />
@@ -204,6 +210,7 @@ export default function App() {
                 <Route path="social-insurance" element={<SocialInsurance />} />
                 <Route path="recruitment" element={<Recruitment />} />
                 <Route path="employees" element={<Employees />} />
+                <Route path="portal" element={<EmployeePortal />} />
                 <Route path="time-attendance" element={<TimeAttendance />} />
                 <Route path="leave" element={<LeaveManagement />} />
                 <Route path="performance" element={<Performance />} />
@@ -220,6 +227,8 @@ export default function App() {
                 <Route path="documents" element={<DocumentsPage />} />
                 <Route path="document-settings" element={<DocumentSettingsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
+                <Route path="workflow" element={<WorkflowManagement />} />
+                <Route path="payment-request" element={<PaymentRequest />} />
               </Route>
               <Route path="analytics" element={<Analytics />} />
               <Route path="sales" element={<Sales />} />

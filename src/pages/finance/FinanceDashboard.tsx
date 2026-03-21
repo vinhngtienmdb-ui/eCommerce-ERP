@@ -97,6 +97,15 @@ export function FinanceDashboard() {
       href: "/finance/accounting"
     },
     { 
+      id: "invoices", 
+      title: "nav.invoices", 
+      description: "financeDashboard.invoicesDesc", 
+      icon: FileText, 
+      color: "text-indigo-600", 
+      bg: "bg-indigo-50",
+      href: "/finance/invoices"
+    },
+    { 
       id: "reconciliation", 
       title: "nav.reconciliation", 
       description: "financeDashboard.reconciliationDesc", 

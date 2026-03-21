@@ -38,11 +38,11 @@ export function Tasks() {
   const [activeTab, setActiveTab] = useState("my-tasks")
 
   const tasks = [
-    { id: 1, title: "Q1 Financial Report", status: "In Progress", priority: "High", assignee: "Alice", dueDate: "2024-03-15", project: "Finance", comments: 3, attachments: 2 },
-    { id: 2, title: "Update Website Homepage", status: "To Do", priority: "Medium", assignee: "Bob", dueDate: "2024-03-20", project: "Marketing", comments: 0, attachments: 1 },
-    { id: 3, title: "Client Meeting Preparation", status: "Completed", priority: "High", assignee: "Charlie", dueDate: "2024-03-10", project: "Sales", comments: 5, attachments: 4 },
-    { id: 4, title: "Server Maintenance", status: "To Do", priority: "Low", assignee: "Dave", dueDate: "2024-03-25", project: "IT", comments: 1, attachments: 0 },
-    { id: 5, title: "Onboard New Hires", status: "In Progress", priority: "Medium", assignee: "Eve", dueDate: "2024-03-18", project: "HR", comments: 2, attachments: 3 },
+    { id: 1, title: "Báo cáo tài chính Q1", status: "In Progress", priority: "High", assignee: "Alice", dueDate: "2024-03-15", project: t('workspace.tasks.projects.finance'), comments: 3, attachments: 2 },
+    { id: 2, title: "Cập nhật trang chủ", status: "To Do", priority: "Medium", assignee: "Bob", dueDate: "2024-03-20", project: t('workspace.tasks.projects.marketing'), comments: 0, attachments: 1 },
+    { id: 3, title: "Chuẩn bị họp khách hàng", status: "Completed", priority: "High", assignee: "Charlie", dueDate: "2024-03-10", project: t('workspace.tasks.projects.sales'), comments: 5, attachments: 4 },
+    { id: 4, title: "Bảo trì máy chủ", status: "To Do", priority: "Low", assignee: "Dave", dueDate: "2024-03-25", project: t('workspace.tasks.projects.it'), comments: 1, attachments: 0 },
+    { id: 5, title: "Đào tạo nhân viên mới", status: "In Progress", priority: "Medium", assignee: "Eve", dueDate: "2024-03-18", project: t('workspace.tasks.projects.hr'), comments: 2, attachments: 3 },
   ]
 
   const columns = [
@@ -144,15 +144,18 @@ export function Tasks() {
 
       <Tabs defaultValue="my-tasks" className="flex-1 flex flex-col" onValueChange={setActiveTab}>
         <TabsList className="w-full justify-start border-b border-slate-100 dark:border-slate-800 rounded-none h-auto p-0 bg-transparent space-x-6">
-          {["my-tasks", "team", "department", "company"].map((tab) => (
-            <TabsTrigger 
-              key={tab}
-              value={tab} 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-indigo-600 data-[state=active]:bg-transparent px-2 py-3 text-sm font-bold text-slate-500 data-[state=active]:text-indigo-600 transition-all"
-            >
-              {t(`workspace.tasks.${tab.replace("-", "T")}`)}
-            </TabsTrigger>
-          ))}
+          {["my-tasks", "team", "department", "company"].map((tab) => {
+            const tabKey = tab === "my-tasks" ? "myTasks" : `${tab}Tasks`;
+            return (
+              <TabsTrigger 
+                key={tab}
+                value={tab} 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-indigo-600 data-[state=active]:bg-transparent px-2 py-3 text-sm font-bold text-slate-500 data-[state=active]:text-indigo-600 transition-all"
+              >
+                {t(`workspace.tasks.${tabKey}`)}
+              </TabsTrigger>
+            )
+          })}
         </TabsList>
 
         <AnimatePresence mode="wait">
