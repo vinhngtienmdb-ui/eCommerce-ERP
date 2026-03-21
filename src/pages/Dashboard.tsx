@@ -131,11 +131,11 @@ export function Dashboard() {
         </div>
       </div>
 
-      <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-100">
+      <Card className="bg-primary text-primary-foreground border border-primary-foreground/20 shadow-sm">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold flex items-center gap-2 text-purple-700">
-              <Sparkles className="h-5 w-5" />
+            <CardTitle className="text-base font-bold flex items-center gap-2 text-primary-foreground">
+              <Sparkles className="h-5 w-5" aria-hidden="true" />
               {t("dashboard.aiBriefing.title")}
             </CardTitle>
             <Button 
@@ -143,32 +143,33 @@ export function Dashboard() {
               size="sm" 
               onClick={fetchAiBriefing} 
               disabled={isAiLoading}
-              className="text-purple-600 hover:text-purple-700 hover:bg-purple-100"
+              className="hover:bg-primary-foreground/20 text-primary-foreground focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+              aria-label="Refresh AI Briefing"
             >
-              {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <TrendingUp className="h-4 w-4" />}
+              {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <TrendingUp className="h-4 w-4" aria-hidden="true" />}
             </Button>
           </div>
-          <CardDescription className="text-purple-600/80">
+          <CardDescription className="text-primary-foreground/90 font-medium">
             {t("dashboard.aiBriefing.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {isAiLoading ? (
-            <div className="flex items-center gap-2 text-muted-foreground italic py-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
+            <div className="flex items-center gap-2 text-primary-foreground/90 italic py-2">
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
               {t("dashboard.aiBriefing.loading")}
             </div>
           ) : (
             <div className="space-y-3">
-              <p className="text-sm leading-relaxed text-slate-700">
+              <p className="text-sm leading-relaxed text-primary-foreground font-medium">
                 {aiBriefing || t("dashboard.aiBriefing.placeholder")}
               </p>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border-emerald-200">
-                  <Lightbulb className="h-3 w-3 mr-1" /> {t("dashboard.aiBriefing.tip1")}
+                <Badge variant="secondary" className="bg-primary-foreground text-primary border-none hover:bg-primary-foreground/90 font-semibold">
+                  <Lightbulb className="h-3 w-3 mr-1" aria-hidden="true" /> {t("dashboard.aiBriefing.tip1")}
                 </Badge>
-                <Badge variant="secondary" className="bg-amber-100 text-amber-700 border-amber-200">
-                  <AlertTriangle className="h-3 w-3 mr-1" /> {t("dashboard.aiBriefing.tip2")}
+                <Badge variant="secondary" className="bg-primary-foreground text-primary border-none hover:bg-primary-foreground/90 font-semibold">
+                  <AlertTriangle className="h-3 w-3 mr-1" aria-hidden="true" /> {t("dashboard.aiBriefing.tip2")}
                 </Badge>
               </div>
             </div>
@@ -177,70 +178,70 @@ export function Dashboard() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="border border-border shadow-sm bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("dashboard.totalRevenue")}</CardTitle>
-            <div className="p-2 bg-emerald-100 rounded-full">
-              <DollarSign className="h-4 w-4 text-emerald-600" />
+            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.totalRevenue")}</CardTitle>
+            <div className="p-2.5 bg-muted rounded-md border border-border">
+              <DollarSign className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatVND(1250431000)}</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1">
-              <span className="text-emerald-500 flex items-center mr-1">
-                <ArrowUp className="h-3 w-3 mr-1" />
+            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
+              <span className="text-emerald-700 dark:text-emerald-400 flex items-center mr-1">
+                <ArrowUp className="h-3 w-3 mr-1" aria-hidden="true" />
                 +20.1%
               </span>
               {t("dashboard.fromLastMonth")}
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-border shadow-sm bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("dashboard.activeSellers")}</CardTitle>
-            <div className="p-2 bg-blue-100 rounded-full">
-              <Users className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.activeSellers")}</CardTitle>
+            <div className="p-2.5 bg-muted rounded-md border border-border">
+              <Users className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+2.350</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1">
-              <span className="text-emerald-500 flex items-center mr-1">
-                <ArrowUp className="h-3 w-3 mr-1" />
+            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
+              <span className="text-emerald-700 dark:text-emerald-400 flex items-center mr-1">
+                <ArrowUp className="h-3 w-3 mr-1" aria-hidden="true" />
                 +180.1%
               </span>
               {t("dashboard.fromLastMonth")}
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-border shadow-sm bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("dashboard.totalOrders")}</CardTitle>
-            <div className="p-2 bg-orange-100 rounded-full">
-              <ShoppingCart className="h-4 w-4 text-orange-600" />
+            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.totalOrders")}</CardTitle>
+            <div className="p-2.5 bg-muted rounded-md border border-border">
+              <ShoppingCart className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+12.234</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1">
-              <span className="text-emerald-500 flex items-center mr-1">
-                <ArrowUp className="h-3 w-3 mr-1" />
+            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
+              <span className="text-emerald-700 dark:text-emerald-400 flex items-center mr-1">
+                <ArrowUp className="h-3 w-3 mr-1" aria-hidden="true" />
                 +19%
               </span>
               {t("dashboard.fromLastMonth")}
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-border shadow-sm bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("dashboard.activeProducts")}</CardTitle>
-            <div className="p-2 bg-purple-100 rounded-full">
-              <Package className="h-4 w-4 text-purple-600" />
+            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.activeProducts")}</CardTitle>
+            <div className="p-2.5 bg-muted rounded-md border border-border">
+              <Package className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{productCount !== null ? productCount : "..."}</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1">
+            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
               {t("dashboard.activeProductsDesc")}
             </p>
           </CardContent>

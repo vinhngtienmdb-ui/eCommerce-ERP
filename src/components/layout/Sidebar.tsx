@@ -263,7 +263,7 @@ export function Sidebar() {
                         className={cn(
                           "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                           isActive
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            ? "bg-primary text-primary-foreground font-semibold shadow-sm"
                             : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                           !isSidebarOpen && !isMobile && "justify-center"
                         )}
@@ -289,7 +289,7 @@ export function Sidebar() {
                           cn(
                             "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                             isActive
-                              ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
+                              ? "bg-primary text-primary-foreground font-semibold shadow-sm"
                               : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                             !isSidebarOpen && !isMobile && "justify-center"
                           )
@@ -317,8 +317,8 @@ export function Sidebar() {
                               cn(
                                 "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                                 isActive
-                                  ? "text-sidebar-primary font-semibold bg-sidebar-accent/50"
-                                  : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/30"
+                                  ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+                                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
                               )
                             }
                           >
@@ -343,7 +343,7 @@ export function Sidebar() {
         {/* Overlay */}
         {isSidebarOpen && (
           <div 
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 z-40 bg-black/60 transition-opacity"
             onClick={() => setSidebarOpen(false)}
           />
         )}
