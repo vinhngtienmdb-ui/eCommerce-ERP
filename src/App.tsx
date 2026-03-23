@@ -55,7 +55,11 @@ const SellerFinance = lazy(() => import("./pages/SellerFinance").then(m => ({ de
 const SocialCommerce = lazy(() => import("./pages/SocialCommerce").then(m => ({ default: m.SocialCommerce })))
 const BusinessPlanning = lazy(() => import("./pages/planning/BusinessPlanning").then(m => ({ default: m.BusinessPlanning })))
 const KolManagement = lazy(() => import("./pages/KolManagement"))
-const Workspace = lazy(() => import("./pages/workspace"))
+const WorkspaceDashboard = lazy(() => import("./pages/workspace/Dashboard").then(m => ({ default: m.Dashboard })))
+const WorkspaceTasks = lazy(() => import("./pages/workspace/Tasks").then(m => ({ default: m.Tasks })))
+const WorkspaceChat = lazy(() => import("./pages/workspace/Chat").then(m => ({ default: m.Chat })))
+const WorkspaceEmail = lazy(() => import("./pages/workspace/Email").then(m => ({ default: m.Email })))
+const WorkspaceCalendar = lazy(() => import("./pages/workspace/Calendar").then(m => ({ default: m.Calendar })))
 const ExecutiveCenter = lazy(() => import("./pages/executive/ExecutiveCenter"))
 const Automation = lazy(() => import("./pages/Automation"))
 const MarketIntelligence = lazy(() => import("./pages/MarketIntelligence"))
@@ -175,11 +179,11 @@ export default function App() {
                 <Route path="ai-tools" element={<FallbackRoute />} />
               </Route>
               <Route path="workspace">
-                <Route index element={<Workspace />} />
-                <Route path="tasks" element={<Workspace />} />
-                <Route path="chat" element={<Workspace />} />
-                <Route path="email" element={<Workspace />} />
-                <Route path="calendar" element={<Workspace />} />
+                <Route index element={<WorkspaceDashboard />} />
+                <Route path="tasks" element={<WorkspaceTasks />} />
+                <Route path="chat" element={<WorkspaceChat />} />
+                <Route path="email" element={<WorkspaceEmail />} />
+                <Route path="calendar" element={<WorkspaceCalendar />} />
               </Route>
               <Route path="orders" element={<Orders />} />
               <Route path="sellers">

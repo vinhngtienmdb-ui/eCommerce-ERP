@@ -1,4 +1,4 @@
-import { Bell, Menu, Search, Sun, Moon, Globe, X, LogOut, User as UserIcon, Settings as SettingsIcon } from "lucide-react"
+import { Bell, Menu, Search, Sun, Moon, Globe, X, LogOut, User as UserIcon, Settings as SettingsIcon, MessageSquare, Mail } from "lucide-react"
 import { useAppStore } from "@/src/store/useAppStore"
 import { useDevice } from "@/src/hooks/useDevice"
 import { Button } from "@/src/components/ui/button"
@@ -17,6 +17,9 @@ import { useTranslation } from "react-i18next"
 import { useAuth } from "@/src/lib/AuthContext"
 import { db } from "@/src/lib/firebase"
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore"
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/src/components/ui/dialog"
+import { Chat } from "@/src/pages/workspace/Chat"
+import { Email } from "@/src/pages/workspace/Email"
 
 export function Header() {
   const { toggleSidebar, isSidebarOpen } = useAppStore()
@@ -120,6 +123,32 @@ export function Header() {
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="hidden sm:inline-flex hover:bg-primary/10 hover:text-primary rounded-xl">
+              <MessageSquare className="h-5 w-5" />
+              <span className="sr-only">Chat</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl p-0 border-none bg-transparent shadow-none">
+            <DialogTitle className="sr-only">Chat</DialogTitle>
+            <Chat isPopup={true} />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="hidden sm:inline-flex hover:bg-primary/10 hover:text-primary rounded-xl">
+              <Mail className="h-5 w-5" />
+              <span className="sr-only">Email</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-5xl p-0 border-none bg-transparent shadow-none">
+            <DialogTitle className="sr-only">Email</DialogTitle>
+            <Email isPopup={true} />
+          </DialogContent>
+        </Dialog>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

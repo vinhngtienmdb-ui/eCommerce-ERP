@@ -67,7 +67,7 @@ export function Dashboard() {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
             {t('workspace.dashboard.welcome')}, Admin 👋
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">
@@ -101,7 +101,7 @@ export function Dashboard() {
           <motion.div key={index} variants={item}>
             <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-slate-900">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <CardTitle className="text-base font-semibold text-slate-500 uppercase tracking-wider">
                   {stat.title}
                 </CardTitle>
                 <div className={`p-2.5 rounded-xl ${stat.bg}`}>
@@ -110,11 +110,11 @@ export function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stat.value}</span>
-                  <span className="text-sm text-slate-400 font-medium">/ {stat.total}</span>
+                  <span className="text-4xl font-bold text-slate-900 dark:text-slate-50">{stat.value}</span>
+                  <span className="text-base text-slate-400 font-medium">/ {stat.total}</span>
                 </div>
                 <div className="mt-4 space-y-2">
-                  <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                  <div className="flex justify-between text-xs font-bold text-slate-400 uppercase">
                     <span>Progress</span>
                     <span>{Math.round((parseInt(stat.value) / parseInt(stat.total)) * 100)}%</span>
                   </div>
@@ -132,7 +132,7 @@ export function Dashboard() {
           <Card className="border-none shadow-sm bg-white dark:bg-slate-900">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-xl font-bold">Daily Focus</CardTitle>
+                <CardTitle className="text-2xl font-bold">Daily Focus</CardTitle>
                 <CardDescription>Key priorities for today</CardDescription>
               </div>
               <Button variant="ghost" size="icon">

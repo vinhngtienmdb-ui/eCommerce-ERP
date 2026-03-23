@@ -87,7 +87,7 @@ export function Calendar() {
         <ScrollArea className="flex-1 px-4">
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4 px-2">
-              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">My Calendars</h3>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">My Calendars</h3>
               <Settings className="h-3.5 w-3.5 text-slate-400 hover:text-indigo-600 cursor-pointer transition-colors" />
             </div>
             <div className="space-y-1">
@@ -97,7 +97,7 @@ export function Calendar() {
                 { name: "Project X", color: "bg-amber-500", active: false },
                 { name: "Holidays", color: "bg-rose-500", active: true },
               ].map((cal) => (
-                <Button key={cal.name} variant="ghost" className="w-full justify-start h-9 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 text-xs font-bold group">
+                <Button key={cal.name} variant="ghost" className="w-full justify-start h-9 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 text-sm font-bold group">
                   <div className={`h-2.5 w-2.5 rounded-full mr-3 ${cal.active ? cal.color : "bg-slate-200 dark:bg-slate-800"}`} />
                   {cal.name}
                   {cal.active && <div className="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-600" />}
@@ -108,7 +108,7 @@ export function Calendar() {
 
           <div>
             <div className="flex items-center justify-between mb-4 px-2">
-              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('workspace.calendar.upcomingEvents')}</h3>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t('workspace.calendar.upcomingEvents')}</h3>
               <Badge variant="secondary" className="bg-slate-200 dark:bg-slate-800 text-slate-500 border-none text-[9px] font-bold px-1.5">3</Badge>
             </div>
             <div className="space-y-4">
@@ -120,7 +120,7 @@ export function Calendar() {
                     </Badge>
                     <span className="text-[9px] font-bold text-slate-400 uppercase">{event.time.split(' - ')[0]}</span>
                   </div>
-                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 transition-colors truncate">{event.title}</h4>
+                  <h4 className="text-base font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 transition-colors truncate">{event.title}</h4>
                   <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-400 font-medium">
                     <MapPin className="h-3 w-3" />
                     <span className="truncate">{event.location}</span>
@@ -152,7 +152,7 @@ export function Calendar() {
                 <CalendarIcon className="h-5 w-5 text-indigo-600" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50">{monthName} {year}</h3>
+                <h3 className="font-bold text-2xl text-slate-900 dark:text-slate-50">{monthName} {year}</h3>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Today is March 17, 2026</p>
               </div>
             </div>
@@ -184,7 +184,7 @@ export function Calendar() {
                   key={v}
                   variant="ghost"
                   size="sm"
-                  className={`h-8 px-4 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${
+                  className={`h-8 px-4 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
                     view === v 
                       ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm" 
                       : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"

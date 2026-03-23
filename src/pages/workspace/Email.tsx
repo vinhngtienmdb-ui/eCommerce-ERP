@@ -37,7 +37,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src
 import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert"
 import { motion, AnimatePresence } from "motion/react"
 
-export function Email() {
+export function Email({ isPopup = false }: { isPopup?: boolean }) {
   const { t } = useTranslation()
   const [isConnected, setIsConnected] = useState(false)
   const [selectedEmail, setSelectedEmail] = useState<number | null>(1)
@@ -104,7 +104,7 @@ export function Email() {
 
   if (!isConnected) {
     return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-180px)] space-y-8 text-center bg-slate-50/30 dark:bg-slate-950/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+      <div className={`flex flex-col items-center justify-center ${isPopup ? 'h-[600px] max-h-[80vh]' : 'h-[calc(100vh-180px)]'} space-y-8 text-center bg-slate-50/30 dark:bg-slate-950/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800`}>
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -113,14 +113,14 @@ export function Email() {
           <Mail className="h-20 w-20 text-indigo-600 dark:text-indigo-400" />
         </motion.div>
         <div className="max-w-md space-y-3">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">{t('workspace.email.connectTitle')}</h2>
+          <h2 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50">{t('workspace.email.connectTitle')}</h2>
           <p className="text-slate-500 font-medium">
             {t('workspace.email.connectDescription')}
           </p>
         </div>
         <Card className="w-full max-w-sm border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-3xl overflow-hidden">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-bold">{t('workspace.email.outlookIntegration')}</CardTitle>
+            <CardTitle className="text-xl font-bold">{t('workspace.email.outlookIntegration')}</CardTitle>
             <CardDescription className="font-medium">{t('workspace.email.secureConnection')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -136,7 +136,7 @@ export function Email() {
               />
               {t('workspace.email.connectButton')}
             </Button>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
               {t('workspace.email.connectDisclaimer')}
             </p>
           </CardContent>
@@ -144,7 +144,7 @@ export function Email() {
         <Alert className="max-w-md text-left border-amber-100 dark:border-amber-900/30 bg-amber-50/50 dark:bg-amber-900/10 rounded-2xl">
           <AlertCircle className="h-4 w-4 text-amber-600" />
           <AlertTitle className="text-amber-800 dark:text-amber-400 font-bold">{t('workspace.email.noteTitle')}</AlertTitle>
-          <AlertDescription className="text-amber-700/80 dark:text-amber-400/80 text-xs font-medium">
+          <AlertDescription className="text-amber-700/80 dark:text-amber-400/80 text-sm font-medium">
             {t('workspace.email.simulationNote')}
           </AlertDescription>
         </Alert>
@@ -153,7 +153,7 @@ export function Email() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-180px)] border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-950 shadow-sm">
+    <div className={`flex ${isPopup ? 'h-[600px] max-h-[80vh]' : 'h-[calc(100vh-180px)]'} border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-950 shadow-sm`}>
       {/* Sidebar */}
       <div className="w-64 border-r border-slate-100 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-900/20">
         <div className="p-6">
@@ -190,10 +190,10 @@ export function Email() {
           </div>
 
           <div className="mt-8 px-3">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">{t('workspace.email.foldersTitle')}</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">{t('workspace.email.foldersTitle')}</h3>
             <div className="space-y-1">
               {["Work", "Personal", "Important", "Social"].map((label) => (
-                <Button key={label} variant="ghost" className="w-full justify-start h-9 px-2 rounded-lg text-slate-500 hover:bg-white dark:hover:bg-slate-800 text-xs font-bold group">
+                <Button key={label} variant="ghost" className="w-full justify-start h-9 px-2 rounded-lg text-slate-500 hover:bg-white dark:hover:bg-slate-800 text-sm font-bold group">
                   <Tag className="h-3.5 w-3.5 mr-3 text-slate-300 group-hover:text-indigo-500" />
                   {label}
                 </Button>
@@ -235,8 +235,8 @@ export function Email() {
               </Button>
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sort by:</span>
-              <Button variant="ghost" size="sm" className="h-7 px-2 rounded-lg text-[10px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sort by:</span>
+              <Button variant="ghost" size="sm" className="h-7 px-2 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
                 Newest <ChevronDown className="h-3 w-3 ml-1" />
               </Button>
             </div>
@@ -265,22 +265,22 @@ export function Email() {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className={`text-sm truncate ${email.unread ? "font-bold text-slate-900 dark:text-slate-50" : "font-medium text-slate-600 dark:text-slate-400"}`}>
+                      <span className={`text-base truncate ${email.unread ? "font-bold text-slate-900 dark:text-slate-50" : "font-medium text-slate-600 dark:text-slate-400"}`}>
                         {email.sender}
                       </span>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">{email.time}</span>
+                      <span className="text-xs font-bold text-slate-400 uppercase">{email.time}</span>
                     </div>
-                    <h4 className={`text-sm truncate mb-1 ${email.unread ? "font-bold text-slate-900 dark:text-slate-50" : "font-medium text-slate-700 dark:text-slate-300"}`}>
+                    <h4 className={`text-base truncate mb-1 ${email.unread ? "font-bold text-slate-900 dark:text-slate-50" : "font-medium text-slate-700 dark:text-slate-300"}`}>
                       {email.subject}
                     </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                       {email.preview}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       {email.starred && <Star className="h-3 w-3 text-amber-400 fill-amber-400" />}
                       <div className="flex gap-1">
                         {email.tags.map(tag => (
-                          <Badge key={tag} variant="secondary" className="h-4 px-1.5 text-[9px] font-bold uppercase tracking-tighter bg-slate-100 dark:bg-slate-800 text-slate-500 border-none">
+                          <Badge key={tag} variant="secondary" className="h-4 px-1.5 text-[10px] font-bold uppercase tracking-tighter bg-slate-100 dark:bg-slate-800 text-slate-500 border-none">
                             {tag}
                           </Badge>
                         ))}
@@ -345,12 +345,12 @@ export function Email() {
                 <div className="p-8 max-w-4xl mx-auto">
                   <div className="flex items-start justify-between mb-8">
                     <div>
-                      <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3 leading-tight tracking-tight">
+                      <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-3 leading-tight tracking-tight">
                         {currentEmail.subject}
                       </h2>
                       <div className="flex gap-2">
                         {currentEmail.tags.map(tag => (
-                          <Badge key={tag} className="rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-none font-bold text-[10px] px-2 py-0.5">
+                          <Badge key={tag} className="rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-none font-bold text-xs px-2 py-0.5">
                             {tag}
                           </Badge>
                         ))}
@@ -370,14 +370,14 @@ export function Email() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-900 dark:text-slate-50">{currentEmail.sender}</span>
-                          <span className="text-xs text-slate-400 font-medium">&lt;{currentEmail.sender.toLowerCase().replace(' ', '.')}@example.com&gt;</span>
+                          <span className="text-sm text-slate-400 font-medium">&lt;{currentEmail.sender.toLowerCase().replace(' ', '.')}@example.com&gt;</span>
                         </div>
-                        <p className="text-xs text-slate-500 font-medium mt-0.5">{t('workspace.email.toMe')}</p>
+                        <p className="text-sm text-slate-500 font-medium mt-0.5">{t('workspace.email.toMe')}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{currentEmail.time}</p>
-                      <Button variant="ghost" size="sm" className="h-7 px-2 mt-1 rounded-lg text-[10px] font-bold text-indigo-600 hover:bg-indigo-50">
+                      <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{currentEmail.time}</p>
+                      <Button variant="ghost" size="sm" className="h-7 px-2 mt-1 rounded-lg text-xs font-bold text-indigo-600 hover:bg-indigo-50">
                         Details
                       </Button>
                     </div>
@@ -407,7 +407,7 @@ export function Email() {
                   <Separator className="my-10" />
 
                   <div className="space-y-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                    <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                       <Paperclip className="h-3.5 w-3.5" />
                       Attachments (2)
                     </h4>
@@ -417,8 +417,8 @@ export function Email() {
                           <ImageIcon className="h-5 w-5 text-rose-600" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate group-hover:text-indigo-600">marketing_chart_q1.png</p>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase">1.2 MB</p>
+                          <p className="text-base font-bold text-slate-700 dark:text-slate-300 truncate group-hover:text-indigo-600">marketing_chart_q1.png</p>
+                          <p className="text-xs font-bold text-slate-400 uppercase">1.2 MB</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors cursor-pointer group">
@@ -426,8 +426,8 @@ export function Email() {
                           <FileText className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate group-hover:text-indigo-600">feedback_notes.pdf</p>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase">450 KB</p>
+                          <p className="text-base font-bold text-slate-700 dark:text-slate-300 truncate group-hover:text-indigo-600">feedback_notes.pdf</p>
+                          <p className="text-xs font-bold text-slate-400 uppercase">450 KB</p>
                         </div>
                       </div>
                     </div>

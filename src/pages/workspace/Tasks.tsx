@@ -84,8 +84,8 @@ export function Tasks() {
     <div className="space-y-6 h-full flex flex-col pb-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">{t('workspace.tabs.tasks')}</h2>
-          <p className="text-sm text-slate-500 mt-1">Manage and track your team's progress</p>
+          <h2 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50">{t('workspace.tabs.tasks')}</h2>
+          <p className="text-base text-slate-500 mt-1">Manage and track your team's progress</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
@@ -93,7 +93,7 @@ export function Tasks() {
               variant={view === "kanban" ? "secondary" : "ghost"} 
               size="sm" 
               onClick={() => setView("kanban")}
-              className={`h-8 px-3 rounded-lg text-xs font-bold transition-all ${view === "kanban" ? "bg-white dark:bg-slate-700 shadow-sm" : "text-slate-500"}`}
+              className={`h-8 px-3 rounded-lg text-sm font-bold transition-all ${view === "kanban" ? "bg-white dark:bg-slate-700 shadow-sm" : "text-slate-500"}`}
             >
               <LayoutGrid className="h-3.5 w-3.5 mr-2" />
               {t('workspace.tasks.kanban')}

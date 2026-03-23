@@ -28,7 +28,7 @@ import { Separator } from "@/src/components/ui/separator"
 import { Badge } from "@/src/components/ui/badge"
 import { motion, AnimatePresence } from "motion/react"
 
-export function Chat() {
+export function Chat({ isPopup = false }: { isPopup?: boolean }) {
   const { t } = useTranslation()
   const [activeChannel, setActiveChannel] = useState("general")
   const [message, setMessage] = useState("")
@@ -54,12 +54,12 @@ export function Chat() {
   ]
 
   return (
-    <div className="flex h-[calc(100vh-180px)] border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-950 shadow-sm">
+    <div className={`flex ${isPopup ? 'h-[600px] max-h-[80vh]' : 'h-[calc(100vh-180px)]'} border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-950 shadow-sm`}>
       {/* Sidebar */}
       <div className="w-72 border-r border-slate-100 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-900/20">
         <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group">
-            <h2 className="font-bold text-lg tracking-tight text-slate-900 dark:text-slate-50">Workspace</h2>
+            <h2 className="font-bold text-2xl tracking-tight text-slate-900 dark:text-slate-50">Workspace</h2>
             <ChevronDown className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
           </div>
           <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white dark:hover:bg-slate-800 shadow-sm">
@@ -81,7 +81,7 @@ export function Chat() {
           <div className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-3 px-2">
-                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   {t('workspace.chat.channels')}
                 </h3>
                 <Plus className="h-3.5 w-3.5 text-slate-400 hover:text-indigo-600 cursor-pointer transition-colors" />
@@ -112,7 +112,7 @@ export function Chat() {
 
             <div>
               <div className="flex items-center justify-between mb-3 px-2">
-                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   {t('workspace.chat.directMessages')}
                 </h3>
                 <Plus className="h-3.5 w-3.5 text-slate-400 hover:text-indigo-600 cursor-pointer transition-colors" />

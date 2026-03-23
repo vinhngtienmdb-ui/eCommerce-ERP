@@ -34,7 +34,8 @@ import {
   Mail,
   Calendar,
   X,
-  Store
+  Store,
+  CheckSquare
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { Button } from "@/src/components/ui/button"
@@ -45,17 +46,6 @@ const navigationGroups = [
     items: [
       { nameKey: "dashboard", href: "/", icon: LayoutDashboard },
       { 
-        nameKey: "workspace", 
-        href: "/workspace", 
-        icon: Layout,
-        subItems: [
-          { nameKey: "personalWork", href: "/workspace/tasks" },
-          { nameKey: "internalChat", href: "/workspace/chat" },
-          { nameKey: "email", href: "/workspace/email" },
-          { nameKey: "calendar", href: "/workspace/calendar" },
-        ]
-      },
-      { 
         nameKey: "executive", 
         href: "/executive", 
         icon: Target,
@@ -65,6 +55,16 @@ const navigationGroups = [
         ]
       },
       { nameKey: "analytics", href: "/analytics", icon: ShieldCheck },
+    ]
+  },
+  {
+    titleKey: "workspace",
+    items: [
+      { nameKey: "dashboard", href: "/workspace", icon: Layout },
+      { nameKey: "tasks", href: "/workspace/tasks", icon: CheckSquare },
+      { nameKey: "chat", href: "/workspace/chat", icon: MessageSquare },
+      { nameKey: "email", href: "/workspace/email", icon: Mail },
+      { nameKey: "calendar", href: "/workspace/calendar", icon: Calendar },
     ]
   },
   {

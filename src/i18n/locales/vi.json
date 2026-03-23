@@ -64,7 +64,12 @@
       "system": "Hệ thống"
     },
     "dashboard": "Bảng điều khiển",
-    "products": "Quản Lý Sản Phẩm",
+    "tasks": "Công việc",
+    "chat": "Trò chuyện",
+    "email": "Email",
+    "calendar": "Lịch",
+    "personalWork": "Công việc cá nhân",
+    "internalChat": "Chat nội bộ",
     "allProducts": "Tất Cả Sản Phẩm",
     "addProduct": "Thêm Sản Phẩm",
     "aiOptimization": "Công cụ Tối ưu AI",

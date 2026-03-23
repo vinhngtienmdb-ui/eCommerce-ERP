@@ -28,6 +28,13 @@
       "system": "系统"
     },
     "dashboard": "仪表盘",
+    "tasks": "任务",
+    "chat": "聊天",
+    "personalWork": "个人工作",
+    "internalChat": "内部聊天",
+    "email": "电子邮件",
+    "calendar": "日历",
+    "workspace": "工作区",
     "products": "产品管理",
     "allProducts": "所有产品",
     "addProduct": "添加产品",
