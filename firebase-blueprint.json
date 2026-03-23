@@ -152,6 +152,7 @@
         "items": { "type": "array" },
         "subtotal": { "type": "number" },
         "discount": { "type": "number" },
+        "pointsUsed": { "type": "number" },
         "total": { "type": "number" },
         "platformFee": { "type": "number" },
         "pointsEarned": { "type": "number" },
@@ -159,7 +160,17 @@
         "customerId": { "type": "string" },
         "customerName": { "type": "string" },
         "status": { "type": "string" },
-        "paymentMethod": { "type": "string", "enum": ["cash", "card", "wallet", "dealtot"] },
+        "paymentMethod": { "type": "string", "enum": ["cash", "card", "wallet", "dealtot", "split"] },
+        "payments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "method": { "type": "string", "enum": ["cash", "card", "wallet", "dealtot"] },
+              "amount": { "type": "number" }
+            }
+          }
+        },
         "shiftId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
         "creatorId": { "type": "string" },

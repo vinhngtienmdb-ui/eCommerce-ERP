@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode, Printer, CreditCard, Smartphone, AppWindow, DollarSign } from "lucide-react";
+import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode, Printer, CreditCard, Smartphone, AppWindow, DollarSign, Layout } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
@@ -33,7 +33,8 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
   const [showPaymentQR, setShowPaymentQR] = useState(false);
   const [storeConfig, setStoreConfig] = useState(STORE_CONFIG);
   const [activeShift, setActiveShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "wallet" | "dealtot">("cash");
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "wallet" | "dealtot" | "split">("cash");
+  const [splitAmounts, setSplitAmounts] = useState({ cash: 0, card: 0, wallet: 0, dealtot: 0 });
   const [showPrintPreview, setShowPrintPreview] = useState(false);
   const [lastOrder, setLastOrder] = useState<any>(null);
 
@@ -175,7 +176,26 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
       toast.error("Vui lòng mở ca làm việc trước khi thanh toán");
       return;
     }
-    if (paymentMethod === "wallet" && selectedCustomer && (selectedCustomer.walletBalance || 0) < total) {
+
+    const totalToPay = total;
+    let payments: any[] = [];
+
+    if (paymentMethod === "split") {
+      const splitTotal = Object.values(splitAmounts).reduce((a, b) => a + b, 0);
+      if (Math.abs(splitTotal - totalToPay) > 1) {
+        toast.error(`Tổng tiền thanh toán (${splitTotal.toLocaleString()}đ) phải bằng tổng hóa đơn (${totalToPay.toLocaleString()}đ)`);
+        return;
+      }
+      payments = Object.entries(splitAmounts)
+        .filter(([_, amount]) => amount > 0)
+        .map(([method, amount]) => ({ method, amount }));
+    } else {
+      payments = [{ method: paymentMethod, amount: totalToPay }];
+    }
+
+    // Check wallet balance if wallet is used
+    const walletPayment = payments.find(p => p.method === "wallet");
+    if (walletPayment && selectedCustomer && (selectedCustomer.walletBalance || 0) < walletPayment.amount) {
       toast.error(t("pos.insufficientFunds", "Số dư ví không đủ"));
       return;
     }
@@ -200,6 +220,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
         })),
         subtotal,
         discount,
+        pointsUsed: pointsToUse,
         total,
         platformFee,
         pointsEarned,
@@ -208,6 +229,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
         customerName: selectedCustomer?.name || "Khách vãng lai",
         status: "completed",
         paymentMethod,
+        payments,
         shiftId: activeShift.id,
         createdAt: new Date().toISOString(),
         creatorId: auth.currentUser?.uid,
@@ -224,7 +246,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
         updatedAt: serverTimestamp()
       });
 
-      // 3. Update Customer (if selected and paying with wallet/points)
+      // 3. Update Customer
       if (selectedCustomer) {
         const customerRef = doc(db, "customers", selectedCustomer.id);
         const updates: any = {
@@ -233,23 +255,22 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
           totalOrders: increment(1),
           lastOrder: new Date().toISOString()
         };
-        if (paymentMethod === "wallet") {
-          updates.walletBalance = increment(-total);
+        if (walletPayment) {
+          updates.walletBalance = increment(-walletPayment.amount);
         }
         await updateDoc(customerRef, updates);
       }
 
       toast.success(t("pos.paymentSuccess", "Thanh toán thành công"));
       
-      // Show print preview automatically
       setShowPrintPreview(true);
-
-      // Reset state
       setCart([]);
       setSelectedCustomer(null);
       setCustomerPhone("");
       setPointsToUse(0);
       setShowPaymentQR(false);
+      setSplitAmounts({ cash: 0, card: 0, wallet: 0, dealtot: 0 });
+      setPaymentMethod("cash");
     } catch (error) {
       const ordersPath = branchId 
         ? `stores/${storeId}/branches/${branchId}/orders` 
@@ -291,7 +312,23 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
         <div className="border-t border-dashed pt-2 space-y-1">
           <p className="flex justify-between"><span>Tạm tính:</span> <span>{order.subtotal.toLocaleString()}đ</span></p>
           {order.discount > 0 && <p className="flex justify-between"><span>Giảm giá:</span> <span>-{order.discount.toLocaleString()}đ</span></p>}
+          {order.pointsUsed > 0 && <p className="flex justify-between text-xs text-muted-foreground italic"><span>(Dùng {order.pointsUsed.toLocaleString()} điểm)</span></p>}
           <p className="flex justify-between font-bold text-lg"><span>TỔNG CỘNG:</span> <span>{order.total.toLocaleString()}đ</span></p>
+          
+          <div className="pt-2 border-t border-dotted mt-2">
+            <p className="text-[10px] font-bold uppercase mb-1">Thanh toán:</p>
+            {order.payments?.map((p: any, idx: number) => (
+              <p key={idx} className="flex justify-between text-xs italic">
+                <span>{p.method === 'cash' ? 'Tiền mặt' : p.method === 'card' ? 'Thẻ/CK' : p.method === 'wallet' ? 'Ví App' : 'Dealtot'}:</span>
+                <span>{p.amount.toLocaleString()}đ</span>
+              </p>
+            ))}
+          </div>
+          {order.pointsEarned > 0 && (
+            <div className="pt-2 border-t border-dotted mt-2 text-[10px] text-center">
+              <p>Điểm tích lũy mới: +{order.pointsEarned.toLocaleString()}</p>
+            </div>
+          )}
         </div>
         <div className="mt-6 text-center text-xs">
           <p>Cảm ơn Quý khách!</p>
@@ -484,18 +521,31 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
             </div>
             
             {selectedCustomer && selectedCustomer.pointsBalance > 0 && (
-              <div className="flex items-center gap-2 text-sm">
-                <Input
-                  type="number"
-                  placeholder={t("pos.pointsToUse")}
-                  value={pointsToUse || ""}
-                  onChange={(e) => setPointsToUse(Math.min(Number(e.target.value), selectedCustomer.pointsBalance, subtotal))}
-                  className="h-8"
-                  max={Math.min(selectedCustomer.pointsBalance, subtotal)}
-                />
-                <span className="text-muted-foreground whitespace-nowrap">
-                  - {pointsToUse.toLocaleString()}đ
-                </span>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Dùng điểm (1đ = 1đ)</span>
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    className="h-auto p-0 text-xs"
+                    onClick={() => setPointsToUse(Math.min(selectedCustomer.pointsBalance, subtotal))}
+                  >
+                    Dùng tối đa
+                  </Button>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Input
+                    type="number"
+                    placeholder={t("pos.pointsToUse")}
+                    value={pointsToUse || ""}
+                    onChange={(e) => setPointsToUse(Math.min(Number(e.target.value), selectedCustomer.pointsBalance, subtotal))}
+                    className="h-8"
+                    max={Math.min(selectedCustomer.pointsBalance, subtotal)}
+                  />
+                  <span className="text-primary font-bold whitespace-nowrap">
+                    - {pointsToUse.toLocaleString()}đ
+                  </span>
+                </div>
               </div>
             )}
 
@@ -537,7 +587,65 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
               >
                 <AppWindow className="mr-1 h-4 w-4" /> App Dealtot
               </Button>
+              <Button 
+                variant={paymentMethod === "split" ? "default" : "outline"} 
+                size="sm" 
+                className="h-9 col-span-2"
+                onClick={() => setPaymentMethod("split")}
+              >
+                <Layout className="mr-1 h-4 w-4" /> Thanh toán hỗn hợp (Split)
+              </Button>
             </div>
+
+            {paymentMethod === "split" && (
+              <div className="p-3 bg-primary/5 rounded-xl border border-primary/10 space-y-3 animate-in slide-in-from-top-2">
+                <p className="text-xs font-bold text-primary uppercase">Nhập số tiền cho từng loại:</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Tiền mặt</label>
+                    <Input 
+                      type="number" 
+                      className="h-8 text-xs" 
+                      value={splitAmounts.cash || ""} 
+                      onChange={(e) => setSplitAmounts(prev => ({ ...prev, cash: Number(e.target.value) }))}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Thẻ/CK</label>
+                    <Input 
+                      type="number" 
+                      className="h-8 text-xs" 
+                      value={splitAmounts.card || ""} 
+                      onChange={(e) => setSplitAmounts(prev => ({ ...prev, card: Number(e.target.value) }))}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Ví App</label>
+                    <Input 
+                      type="number" 
+                      className="h-8 text-xs" 
+                      value={splitAmounts.wallet || ""} 
+                      onChange={(e) => setSplitAmounts(prev => ({ ...prev, wallet: Number(e.target.value) }))}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Dealtot</label>
+                    <Input 
+                      type="number" 
+                      className="h-8 text-xs" 
+                      value={splitAmounts.dealtot || ""} 
+                      onChange={(e) => setSplitAmounts(prev => ({ ...prev, dealtot: Number(e.target.value) }))}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t border-primary/10">
+                  <span className="text-xs font-bold">Đã nhập:</span>
+                  <span className={`text-sm font-bold ${Math.abs(Object.values(splitAmounts).reduce((a, b) => a + b, 0) - total) < 1 ? 'text-green-600' : 'text-red-500'}`}>
+                    {Object.values(splitAmounts).reduce((a, b) => a + b, 0).toLocaleString()} / {total.toLocaleString()}đ
+                  </span>
+                </div>
+              </div>
+            )}
 
             {total > 0 && (
               <div className="text-xs text-muted-foreground space-y-1 pt-2">

@@ -77,6 +77,12 @@ service cloud.firestore {
         allow read: if isAuthenticated();
         allow write: if isAuthenticated();
       }
+      match /shifts/{shiftId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated();
+        allow update: if isAuthenticated();
+        allow delete: if isAdmin();
+      }
 
       // Branches rules
       match /branches/{branchId} {
@@ -99,6 +105,12 @@ service cloud.firestore {
         match /staff/{staffId} {
           allow read: if isAuthenticated();
           allow write: if isAuthenticated();
+        }
+        match /shifts/{shiftId} {
+          allow read: if isAuthenticated();
+          allow create: if isAuthenticated();
+          allow update: if isAuthenticated();
+          allow delete: if isAdmin();
         }
       }
     }
