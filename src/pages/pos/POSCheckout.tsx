@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode, Printer, CreditCard, Smartphone, AppWindow, DollarSign, Layout } from "lucide-react";
+import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode, Printer, CreditCard, Smartphone, AppWindow, DollarSign, Layout, Bell, Check, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../../components/ui/dialog";
+import { Badge } from "../../components/ui/badge";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
-import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot, getDoc, increment, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot, getDoc, increment, serverTimestamp, deleteDoc } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 import { format } from "date-fns";
 
@@ -51,12 +53,69 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
   const [splitAmounts, setSplitAmounts] = useState({ cash: 0, card: 0, wallet: 0, dealtot: 0, vietqr: 0 });
   const [showPrintPreview, setShowPrintPreview] = useState(false);
   const [lastOrder, setLastOrder] = useState<any>(null);
+  const [onlineOrders, setOnlineOrders] = useState<any[]>([]);
+  const [showOnlineOrders, setShowOnlineOrders] = useState(false);
+
+  useEffect(() => {
+    if (!storeId) return;
+
+    const ordersPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/orders` 
+      : `stores/${storeId}/orders`;
+
+    const q = query(collection(db, ordersPath), where("status", "==", "new"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setOnlineOrders(docs);
+    });
+
+    return () => unsubscribe();
+  }, [storeId, branchId]);
+
+  const acceptOnlineOrder = async (order: any) => {
+    try {
+      const ordersPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/orders` 
+        : `stores/${storeId}/orders`;
+      
+      await updateDoc(doc(db, ordersPath, order.id), {
+        status: "processing",
+        acceptedAt: serverTimestamp(),
+        acceptedBy: auth.currentUser?.uid
+      });
+      
+      // Load into cart for processing? Or just mark as processing.
+      // Usually, staff will prepare then mark as completed.
+      toast.success(t("pos.orders.orderAccepted", "Đã tiếp nhận đơn hàng"));
+    } catch (error) {
+      console.error("Error accepting order:", error);
+    }
+  };
+
+  const completeOnlineOrder = async (order: any) => {
+    try {
+      const ordersPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/orders` 
+        : `stores/${storeId}/orders`;
+      
+      await updateDoc(doc(db, ordersPath, order.id), {
+        status: "completed",
+        completedAt: serverTimestamp()
+      });
+      
+      toast.success(t("pos.orders.orderCompleted", "Đơn hàng đã hoàn thành"));
+    } catch (error) {
+      console.error("Error completing order:", error);
+    }
+  };
+
+  const customerSearchRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        document.getElementById("customer-search")?.focus();
+        customerSearchRef.current?.focus();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -399,6 +458,20 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
               <ScanLine className="h-4 w-4" />
             </Button>
           </div>
+
+          <Button 
+            variant="outline" 
+            className="relative h-9 rounded-lg border-primary/20 hover:bg-primary/5"
+            onClick={() => setShowOnlineOrders(true)}
+          >
+            <Bell className="h-4 w-4 mr-2" />
+            {t("pos.onlineOrders", "Đơn Online")}
+            {onlineOrders.length > 0 && (
+              <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center bg-red-500 animate-pulse">
+                {onlineOrders.length}
+              </Badge>
+            )}
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto pb-4">
@@ -466,7 +539,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
           <CardContent className="space-y-4">
             <div className="flex gap-2">
               <Input
-                id="customer-search"
+                ref={customerSearchRef}
                 placeholder={t("pos.searchCustomer")}
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
@@ -766,12 +839,66 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
           </div>
         </Card>
       </div>
-      {/* Print Preview Modal */}
-      {showPrintPreview && lastOrder && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
-          <PrintBill order={lastOrder} />
-        </div>
-      )}
+      {/* Online Orders Dialog */}
+      <Dialog open={showOnlineOrders} onOpenChange={setShowOnlineOrders}>
+        <DialogContent className="sm:max-w-2xl rounded-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+              <Bell className="h-6 w-6 text-primary" /> {t("pos.onlineOrders", "Đơn hàng trực tuyến")}
+            </DialogTitle>
+            <DialogDescription>
+              {t("pos.onlineOrdersDesc", "Quản lý các đơn hàng khách đặt qua QR Code")}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="max-h-[60vh] overflow-y-auto space-y-4 py-4">
+            {onlineOrders.length === 0 ? (
+              <div className="text-center py-10 text-muted-foreground">
+                <p>{t("pos.noOnlineOrders", "Hiện không có đơn hàng mới")}</p>
+              </div>
+            ) : (
+              onlineOrders.map((order) => (
+                <Card key={order.id} className="border-primary/10 shadow-sm">
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <p className="font-bold text-lg">#{order.id.slice(-6).toUpperCase()}</p>
+                        <p className="text-sm text-muted-foreground">{order.customerName} - {order.customerPhone}</p>
+                      </div>
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                        {t("pos.status.new", "Mới")}
+                      </Badge>
+                    </div>
+                    <div className="space-y-1 mb-4">
+                      {order.items.map((item: any, idx: number) => (
+                        <div key={idx} className="flex justify-between text-sm">
+                          <span>{item.quantity}x {item.name}</span>
+                          <span>{(item.price * item.quantity).toLocaleString()}đ</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between pt-3 border-t">
+                      <p className="font-bold text-primary">{order.total.toLocaleString()}đ</p>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className="text-red-500 hover:text-red-600" onClick={async () => {
+                          const ordersPath = branchId ? `stores/${storeId}/branches/${branchId}/orders` : `stores/${storeId}/orders`;
+                          await updateDoc(doc(db, ordersPath, order.id), { status: 'cancelled' });
+                          toast.info("Đã hủy đơn hàng");
+                        }}>
+                          <X className="h-4 w-4 mr-1" /> {t("common.cancel")}
+                        </Button>
+                        <Button size="sm" onClick={() => acceptOnlineOrder(order)}>
+                          <Check className="h-4 w-4 mr-1" /> {t("pos.accept", "Tiếp nhận")}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {

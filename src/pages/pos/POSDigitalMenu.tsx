@@ -14,17 +14,23 @@ export function POSDigitalMenu({ storeId, branchId, store, branch }: { storeId: 
   const [showLogo, setShowLogo] = useState(true);
 
   const getMenuUrl = () => {
+    const origin = window.location.origin;
+    const storeSlug = store?.slug || storeId;
+    const branchSlug = branch?.slug || branchId;
+
     if (branchId && branch) {
       if (branch.customUrl) return `https://${branch.customUrl}`;
       if (branch.branchCode) return `https://${branch.branchCode.toLowerCase()}.dealtot.io.vn`;
+      return `${origin}/menu/${storeSlug}/${branchSlug}`;
     }
+    
     if (store) {
       if (store.customUrl) return `https://${store.customUrl}`;
       if (store.storeCode) return `https://${store.storeCode.toLowerCase()}.dealtot.io.vn`;
+      return `${origin}/menu/${storeSlug}`;
     }
-    return branchId 
-      ? `${window.location.origin}/menu/${storeId}/${branchId}` 
-      : `${window.location.origin}/menu/${storeId}`;
+
+    return `${origin}/menu/${storeId}${branchId ? `/${branchId}` : ""}`;
   };
 
   const menuUrl = getMenuUrl();
