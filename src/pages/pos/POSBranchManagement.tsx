@@ -165,65 +165,65 @@ export function POSBranchManagement() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/pos")}>
+          <Button variant="ghost" size="icon" className="rounded-none hover:bg-slate-100 transition-colors" onClick={() => navigate("/pos")}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h2 className="text-2xl font-bold">{t("pos.branches.title", "Quản lý Chi nhánh")} - {store?.name}</h2>
-            <p className="text-muted-foreground">{t("pos.branches.subtitle", "Quản lý các điểm bán hàng của cửa hàng")}</p>
+            <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900">{t("pos.branches.title", "Quản lý Chi nhánh")} - {store?.name}</h2>
+            <p className="text-sm text-slate-500 font-bold">{t("pos.branches.subtitle", "Quản lý các điểm bán hàng của cửa hàng")}</p>
           </div>
         </div>
-        <Button onClick={handleAddBranch}>
+        <Button onClick={handleAddBranch} className="rounded-none font-black uppercase tracking-widest px-6 h-12 transition-colors">
           <Plus className="mr-2 h-4 w-4" /> {t("pos.branches.add", "Thêm chi nhánh")}
         </Button>
       </div>
 
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
         <Input
           placeholder={t("pos.branches.search", "Tìm kiếm chi nhánh...")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9"
+          className="h-10 pl-10 rounded-none bg-white border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold text-sm"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredBranches.map((branch) => (
-          <Card key={branch.id} className="hover:shadow-lg transition-shadow border-white/20 bg-white/50 backdrop-blur-sm">
-            <CardHeader className="pb-3">
+          <Card key={branch.id} className="border-2 border-slate-200 rounded-none overflow-hidden bg-white hover:border-primary transition-colors">
+            <CardHeader className="pb-3 px-6 pt-6">
               <div className="flex justify-between items-start">
-                <div className="bg-primary/10 p-3 rounded-xl">
-                  <MapPin className="h-6 w-6 text-primary" />
+                <div className="bg-slate-100 p-3 rounded-none border-2 border-slate-200">
+                  <MapPin className="h-6 w-6 text-slate-600" />
                 </div>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" onClick={() => handleEditBranch(branch)}>
-                    <Edit className="h-4 w-4 text-blue-500" />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none hover:bg-slate-100 transition-colors" onClick={() => handleEditBranch(branch)}>
+                    <Edit className="h-4 w-4 text-slate-600" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDeleteBranch(branch.id)}>
-                    <Trash2 className="h-4 w-4 text-red-500" />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none hover:bg-slate-100 text-rose-500 hover:text-rose-600 transition-colors" onClick={() => handleDeleteBranch(branch.id)}>
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-              <CardTitle className="mt-4">{branch.name}</CardTitle>
-              <CardDescription>
-                <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded mr-2">{branch.branchCode}</span>
+              <CardTitle className="mt-4 text-lg font-black uppercase tracking-tight text-slate-900">{branch.name}</CardTitle>
+              <CardDescription className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <span className="font-mono bg-slate-900 text-white px-2 py-0.5 rounded-none">{branch.branchCode}</span>
                 {branch.address.province}, {branch.address.district}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2 text-sm text-muted-foreground mb-6">
-                <p><strong>{t("pos.branches.manager", "Quản lý")}:</strong> {branch.managerName || "N/A"}</p>
-                <p><strong>{t("pos.branches.phone", "SĐT")}:</strong> {branch.phone || "N/A"}</p>
-                <p><strong>URL:</strong> <a href={`https://${branch.customUrl || `${branch.branchCode?.toLowerCase()}.dealtot.io.vn`}`} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">{branch.customUrl || `${branch.branchCode?.toLowerCase()}.dealtot.io.vn`}</a></p>
-                <p><strong>{t("pos.branches.status", "Trạng thái")}:</strong> 
-                  <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${branch.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+            <CardContent className="px-6 pb-6">
+              <div className="space-y-3 text-xs text-slate-600 mb-6 border-y-2 border-slate-50 py-4">
+                <p className="flex justify-between"><strong className="uppercase tracking-widest text-[10px] text-slate-400">{t("pos.branches.manager", "Quản lý")}:</strong> <span className="font-bold text-slate-900">{branch.managerName || "N/A"}</span></p>
+                <p className="flex justify-between"><strong className="uppercase tracking-widest text-[10px] text-slate-400">{t("pos.branches.phone", "SĐT")}:</strong> <span className="font-bold text-slate-900">{branch.phone || "N/A"}</span></p>
+                <p className="flex justify-between"><strong className="uppercase tracking-widest text-[10px] text-slate-400">URL:</strong> <a href={`https://${branch.customUrl || `${branch.branchCode?.toLowerCase()}.dealtot.io.vn`}`} target="_blank" rel="noreferrer" className="text-primary font-bold hover:underline">{branch.customUrl || `${branch.branchCode?.toLowerCase()}.dealtot.io.vn`}</a></p>
+                <p className="flex justify-between items-center"><strong className="uppercase tracking-widest text-[10px] text-slate-400">{t("pos.branches.status", "Trạng thái")}:</strong> 
+                  <span className={`px-2 py-0.5 rounded-none text-[8px] font-black uppercase tracking-widest border-2 ${branch.status === 'active' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-rose-50 border-rose-200 text-rose-700'}`}>
                     {branch.status === 'active' ? t("pos.stores.active", "Hoạt động") : t("pos.stores.inactive", "Tạm dừng")}
                   </span>
                 </p>
               </div>
               <Link to={`/pos/${storeId}/${branch.id}`}>
-                <Button className="w-full group">
+                <Button className="w-full rounded-none font-black uppercase tracking-widest h-12 transition-colors group">
                   {t("pos.branches.access", "Truy cập POS")}
                   <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -234,42 +234,44 @@ export function POSBranchManagement() {
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-none border-4 border-slate-900 shadow-none scrollbar-hide">
           <DialogHeader>
-            <DialogTitle>{editingBranch ? t("pos.branches.editTitle", "Chỉnh sửa chi nhánh") : t("pos.branches.addTitle", "Thêm chi nhánh mới")}</DialogTitle>
+            <DialogTitle className="text-2xl font-black uppercase tracking-tight">{editingBranch ? t("pos.branches.editTitle", "Chỉnh sửa chi nhánh") : t("pos.branches.addTitle", "Thêm chi nhánh mới")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-6 py-4">
             {/* Basic Info */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{t("pos.branches.formName", "Tên chi nhánh")}</Label>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.formName", "Tên chi nhánh")}</Label>
                 <Input 
                   value={formData.name} 
                   onChange={(e) => setFormData({...formData, name: e.target.value})} 
                   placeholder="Ví dụ: Chi nhánh Quận 1"
+                  className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                 />
               </div>
-              <div className="space-y-2">
-                <Label>{t("pos.branches.formCode", "Mã chi nhánh")}</Label>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.formCode", "Mã chi nhánh")}</Label>
                 <Input 
                   value={formData.branchCode} 
                   onChange={(e) => setFormData({...formData, branchCode: e.target.value})} 
                   placeholder="HL-001"
+                  className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold font-mono"
                 />
               </div>
             </div>
 
             {/* Address Selection */}
-            <div className="space-y-4 border-t pt-4">
-              <h3 className="font-semibold text-sm flex items-center gap-2">
+            <div className="space-y-4 border-t-2 border-slate-100 pt-4">
+              <h3 className="text-[10px] uppercase tracking-widest font-black text-slate-400 flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
                 {t("pos.branches.addressSection", "Địa chỉ hành chính")}
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>{t("pos.branches.province", "Tỉnh/Thành phố")}</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.province", "Tỉnh/Thành phố")}</Label>
                   <select 
-                    className="w-full p-2 rounded-md border border-input bg-background"
+                    className="w-full h-11 px-3 rounded-none bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-primary font-bold text-sm"
                     value={formData.address.province}
                     onChange={(e) => {
                       const province = VIETNAM_PROVINCES.find(p => p.name === e.target.value);
@@ -288,10 +290,10 @@ export function POSBranchManagement() {
                     ))}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <Label>{t("pos.branches.district", "Quận/Huyện")}</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.district", "Quận/Huyện")}</Label>
                   <select 
-                    className="w-full p-2 rounded-md border border-input bg-background"
+                    className="w-full h-11 px-3 rounded-none bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-primary font-bold text-sm"
                     value={formData.address.district}
                     onChange={(e) => setFormData({...formData, address: {...formData.address, district: e.target.value}})}
                   >
@@ -301,91 +303,98 @@ export function POSBranchManagement() {
                   </select>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>{t("pos.branches.detailAddress", "Địa chỉ chi tiết")}</Label>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.detailAddress", "Địa chỉ chi tiết")}</Label>
                 <Input 
                   value={formData.address.detail} 
                   onChange={(e) => setFormData({...formData, address: {...formData.address, detail: e.target.value}})} 
                   placeholder="Số nhà, tên đường..."
+                  className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                 />
               </div>
               
               {/* Map Positioning */}
-              <div className="space-y-4 border-t pt-4">
-                <h3 className="font-semibold text-sm flex items-center gap-2">
+              <div className="space-y-4 border-t-2 border-slate-100 pt-4">
+                <h3 className="text-[10px] uppercase tracking-widest font-black text-slate-400 flex items-center gap-2">
                   <MapIcon className="h-4 w-4" />
                   {t("pos.branches.mapSection", "Định vị trên bản đồ")}
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{t("pos.branches.lat", "Vĩ độ (Latitude)")}</Label>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.lat", "Vĩ độ (Latitude)")}</Label>
                     <Input 
                       type="number"
                       step="any"
                       value={formData.location.lat} 
                       onChange={(e) => setFormData({...formData, location: {...formData.location, lat: parseFloat(e.target.value)}})} 
+                      className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label>{t("pos.branches.lng", "Kinh độ (Longitude)")}</Label>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.lng", "Kinh độ (Longitude)")}</Label>
                     <Input 
                       type="number"
                       step="any"
                       value={formData.location.lng} 
                       onChange={(e) => setFormData({...formData, location: {...formData.location, lng: parseFloat(e.target.value)}})} 
+                      className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                     />
                   </div>
                 </div>
-                <div className="bg-slate-100 h-32 rounded-lg flex items-center justify-center text-muted-foreground text-xs italic">
+                <div className="bg-slate-900 h-32 rounded-none flex items-center justify-center text-white text-[10px] font-black uppercase tracking-widest italic border-4 border-slate-200">
                   [ Bản đồ hiển thị tại: {formData.location.lat}, {formData.location.lng} ]
                 </div>
               </div>
             </div>
 
             {/* Manager Info */}
-            <div className="space-y-4 border-t pt-4">
-              <h3 className="font-semibold text-sm">{t("pos.branches.managerSection", "Thông tin quản lý chi nhánh")}</h3>
+            <div className="space-y-4 border-t-2 border-slate-100 pt-4">
+              <h3 className="text-[10px] uppercase tracking-widest font-black text-slate-400">{t("pos.branches.managerSection", "Thông tin quản lý chi nhánh")}</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>{t("pos.branches.managerName", "Họ tên quản lý")}</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.managerName", "Họ tên quản lý")}</Label>
                   <Input 
                     value={formData.managerName} 
                     onChange={(e) => setFormData({...formData, managerName: e.target.value})} 
                     placeholder="Nguyễn Văn B"
+                    className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>{t("pos.branches.managerContact", "Liên lạc quản lý")}</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.managerContact", "Liên lạc quản lý")}</Label>
                   <Input 
                     value={formData.managerContact} 
                     onChange={(e) => setFormData({...formData, managerContact: e.target.value})} 
                     placeholder="SĐT hoặc Email"
+                    className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>{t("pos.branches.phone", "SĐT chi nhánh")}</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.phone", "SĐT chi nhánh")}</Label>
                   <Input 
                     value={formData.phone} 
                     onChange={(e) => setFormData({...formData, phone: e.target.value})} 
                     placeholder="090..."
+                    className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>{t("pos.branches.customUrl", "Tùy chỉnh URL chi nhánh")}</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.branches.customUrl", "Tùy chỉnh URL chi nhánh")}</Label>
                   <Input 
                     value={formData.customUrl} 
                     onChange={(e) => setFormData({...formData, customUrl: e.target.value})} 
                     placeholder={formData.branchCode ? `${formData.branchCode.toLowerCase()}.dealtot.io.vn` : "branch.dealtot.io.vn"}
+                    className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("common.cancel", "Hủy")}</Button>
-            <Button onClick={handleSaveBranch}>{t("common.save", "Lưu")}</Button>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" className="rounded-none font-bold text-slate-500 uppercase tracking-widest" onClick={() => setIsModalOpen(false)}>{t("common.cancel", "Hủy")}</Button>
+            <Button onClick={handleSaveBranch} className="rounded-none font-black uppercase tracking-widest px-8 transition-colors">{t("common.save", "Lưu")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

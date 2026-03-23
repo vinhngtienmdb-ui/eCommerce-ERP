@@ -216,86 +216,92 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">{t("pos.staff.title", "Nhân viên & Ca làm việc")}</h2>
-          <p className="text-muted-foreground">{t("pos.staff.subtitle", "Quản lý nhân sự và phân ca tại cửa hàng")}</p>
+          <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900">{t("pos.staff.title", "Nhân viên & Ca làm việc")}</h2>
+          <p className="text-sm text-slate-500 font-bold">{t("pos.staff.subtitle", "Quản lý nhân sự và phân ca tại cửa hàng")}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant={activeShift ? "destructive" : "outline"} onClick={handleManageShifts}>
+          <Button 
+            variant={activeShift ? "destructive" : "outline"} 
+            onClick={handleManageShifts}
+            className={`rounded-none font-black uppercase tracking-widest h-12 px-6 transition-colors ${activeShift ? '' : 'border-2 border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+          >
             {activeShift ? (
               <><Square className="mr-2 h-4 w-4" /> {t("pos.staff.closeShift", "Kết thúc ca")}</>
             ) : (
               <><Play className="mr-2 h-4 w-4" /> {t("pos.staff.openShift", "Mở ca mới")}</>
             )}
           </Button>
-          <Button onClick={handleAddStaff}>
+          <Button onClick={handleAddStaff} className="rounded-none font-black uppercase tracking-widest h-12 px-6 transition-colors">
             <Plus className="mr-2 h-4 w-4" /> {t("pos.staff.add", "Thêm nhân viên")}
           </Button>
         </div>
       </div>
 
       {activeShift && (
-        <Card className="bg-primary/5 border-primary/20">
-          <CardContent className="pt-6">
+        <Card className="bg-primary/[0.03] border-2 border-primary/20 rounded-none overflow-hidden">
+          <CardContent className="pt-6 px-6 pb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary/10 rounded-full">
+                <div className="p-3 bg-white rounded-none border-2 border-primary">
                   <CalendarClock className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-primary">Ca đang hoạt động: {activeShift.staffName}</p>
-                  <p className="text-xs text-muted-foreground">Bắt đầu lúc: {format(new Date(activeShift.startTime), "HH:mm dd/MM/yyyy")}</p>
+                  <p className="text-sm font-black uppercase tracking-tight text-slate-900">Ca đang hoạt động: {activeShift.staffName}</p>
+                  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Bắt đầu lúc: {format(new Date(activeShift.startTime), "HH:mm dd/MM/yyyy")}</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium">Doanh thu hiện tại</p>
-                <p className="text-xl font-bold text-primary">{(activeShift.totalSales || 0).toLocaleString()}đ</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Doanh thu hiện tại</p>
+                <p className="text-2xl font-black text-primary tracking-tighter">{(activeShift.totalSales || 0).toLocaleString()}đ</p>
               </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <Card>
-        <CardHeader className="pb-3">
+      <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+        <CardHeader className="pb-3 px-6 pt-6">
           <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
               placeholder={t("pos.staff.search", "Tìm kiếm nhân viên...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="pl-10 h-10 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold text-sm"
             />
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>{t("pos.staff.name", "Tên nhân viên")}</TableHead>
-                <TableHead>{t("pos.staff.role", "Vai trò")}</TableHead>
-                <TableHead>{t("pos.staff.shift", "Ca làm việc")}</TableHead>
-                <TableHead>{t("pos.staff.status", "Trạng thái")}</TableHead>
-                <TableHead className="text-right">{t("pos.staff.actions", "Thao tác")}</TableHead>
+              <TableRow className="hover:bg-transparent border-b-2 border-slate-200">
+                <TableHead className="text-[10px] uppercase tracking-widest font-black text-slate-900">{t("pos.staff.name", "Tên nhân viên")}</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-widest font-black text-slate-900">{t("pos.staff.role", "Vai trò")}</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-widest font-black text-slate-900">{t("pos.staff.shift", "Ca làm việc")}</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-widest font-black text-slate-900">{t("pos.staff.status", "Trạng thái")}</TableHead>
+                <TableHead className="text-right text-[10px] uppercase tracking-widest font-black text-slate-900">{t("pos.staff.actions", "Thao tác")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredStaff.map((s) => (
-                <TableRow key={s.id}>
-                  <TableCell className="font-medium">{s.name}</TableCell>
-                  <TableCell>{s.role}</TableCell>
-                  <TableCell>{s.shift}</TableCell>
+                <TableRow key={s.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                  <TableCell className="font-bold text-slate-900 py-4">{s.name}</TableCell>
+                  <TableCell className="text-slate-500 font-bold text-xs">{s.role}</TableCell>
+                  <TableCell className="text-slate-500 font-bold text-xs">{s.shift}</TableCell>
                   <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${s.status === 'Đang làm việc' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                    <span className={`px-2.5 py-1 rounded-none text-[10px] font-black uppercase tracking-widest border-2 ${s.status === 'Đang làm việc' ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-slate-50 border-slate-200 text-slate-500'}`}>
                       {s.status}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" onClick={() => handleEditStaff(s)}>
-                      <Edit className="h-4 w-4 text-blue-500" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDeleteStaff(s.id)}>
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
+                    <div className="flex justify-end gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none hover:bg-slate-100 transition-colors" onClick={() => handleEditStaff(s)}>
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-none hover:bg-slate-100 text-rose-500 hover:text-rose-600 transition-colors" onClick={() => handleDeleteStaff(s.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -305,63 +311,67 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
       </Card>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md rounded-none border-4 border-slate-900 shadow-none">
           <DialogHeader>
-            <DialogTitle>{editingStaff ? "Chỉnh sửa nhân viên" : "Thêm nhân viên mới"}</DialogTitle>
+            <DialogTitle className="text-xl font-black uppercase tracking-tight">{editingStaff ? "Chỉnh sửa nhân viên" : "Thêm nhân viên mới"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label>Tên nhân viên</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Tên nhân viên</Label>
               <Input 
                 value={formData.name} 
                 onChange={(e) => setFormData({...formData, name: e.target.value})} 
                 placeholder="Nhập tên nhân viên"
+                className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
               />
             </div>
-            <div className="space-y-2">
-              <Label>Vai trò</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Vai trò</Label>
               <Input 
                 value={formData.role} 
                 onChange={(e) => setFormData({...formData, role: e.target.value})} 
                 placeholder="Nhập vai trò (VD: Thu ngân, Pha chế)"
+                className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Ca làm việc</Label>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Ca làm việc</Label>
                 <Input 
                   value={formData.shift} 
                   onChange={(e) => setFormData({...formData, shift: e.target.value})} 
                   placeholder="Nhập ca làm việc"
+                  className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Trạng thái</Label>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Trạng thái</Label>
                 <Input 
                   value={formData.status} 
                   onChange={(e) => setFormData({...formData, status: e.target.value})} 
                   placeholder="Đang làm việc / Nghỉ"
+                  className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-bold"
                 />
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-            <Button onClick={handleSaveStaff}>Lưu</Button>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" className="rounded-none font-bold text-slate-500 uppercase tracking-widest" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleSaveStaff} className="rounded-none font-black uppercase tracking-widest px-8 transition-colors">Lưu</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={isShiftModalOpen} onOpenChange={setIsShiftModalOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md rounded-none border-4 border-slate-900 shadow-none">
           <DialogHeader>
-            <DialogTitle>Mở ca làm việc mới</DialogTitle>
+            <DialogTitle className="text-xl font-black uppercase tracking-tight">Mở ca làm việc mới</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label>Chọn nhân viên trực ca</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Chọn nhân viên trực ca</Label>
               <select 
-                className="w-full h-10 px-3 rounded-md border border-input bg-background"
+                className="w-full h-11 px-4 rounded-none bg-slate-50 border-2 border-slate-200 focus:ring-0 focus:border-primary font-bold text-sm appearance-none"
                 value={shiftFormData.staffId}
                 onChange={(e) => {
                   const s = staff.find(x => x.id === e.target.value);
@@ -374,18 +384,19 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
                 ))}
               </select>
             </div>
-            <div className="space-y-2">
-              <Label>Tiền mặt đầu ca (đ)</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Tiền mặt đầu ca (đ)</Label>
               <Input 
                 type="number"
                 value={shiftFormData.startCash}
                 onChange={(e) => setShiftFormData({ ...shiftFormData, startCash: Number(e.target.value) })}
+                className="h-11 rounded-none bg-slate-50 border-2 border-slate-200 focus-visible:ring-0 focus-visible:border-primary font-black text-primary"
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsShiftModalOpen(false)}>Hủy</Button>
-            <Button onClick={handleOpenShift}>Bắt đầu ca</Button>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" className="rounded-none font-bold text-slate-500 uppercase tracking-widest" onClick={() => setIsShiftModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleOpenShift} className="rounded-none font-black uppercase tracking-widest px-8 transition-colors">Bắt đầu ca</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

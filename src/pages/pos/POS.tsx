@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
-import { Store, Package, Users, Settings, LayoutDashboard, QrCode, ArrowLeft, Loader2, BarChart3 } from "lucide-react";
+import { Store, Package, Users, Settings, LayoutDashboard, QrCode, ArrowLeft, Loader2, BarChart3, MapPin, Clock } from "lucide-react";
 import { POSCheckout } from "./POSCheckout";
 import { POSProducts } from "./POSProducts";
 import { POSStaff } from "./POSStaff";
@@ -82,72 +82,79 @@ export function POS() {
   if (!store) return null;
 
   return (
-    <div className="p-6 h-[calc(100vh-4rem)] flex flex-col gap-6">
+    <div className="h-screen flex flex-col bg-slate-50 p-6 gap-6 overflow-hidden font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(branchId ? `/pos/${storeId}/branches` : "/pos")}>
-            <ArrowLeft className="h-5 w-5" />
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-10 w-10 rounded-none bg-white border-2 border-slate-200 hover:bg-slate-50 transition-colors"
+            onClick={() => navigate(branchId ? `/pos/${storeId}/branches` : "/pos")}
+          >
+            <ArrowLeft className="h-4 w-4" />
           </Button>
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Store className="h-8 w-8 text-primary" />
-              {branch ? `${store.name} - ${branch.name}` : store.name}
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              {branch 
-                ? `${branch.address.detail}, ${branch.address.district}, ${branch.address.province}` 
-                : (store.address || t("pos.subtitle", "Quản lý bán hàng, nhân viên và thiết lập cửa hàng độc lập"))}
-            </p>
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 bg-primary rounded-none flex items-center justify-center border-2 border-primary">
+              <Store className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-black uppercase tracking-tighter text-slate-900 leading-none mb-1">
+                {branch ? branch.name : store.name}
+              </h1>
+              <div className="flex items-center gap-2 text-slate-500 font-bold text-[10px] uppercase tracking-widest">
+                <MapPin className="h-3 w-3 text-slate-400" /> 
+                {branch 
+                  ? `${branch.address.detail}, ${branch.address.district}` 
+                  : (store.address || t("pos.subtitle"))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <Tabs defaultValue="checkout" className="flex-1 flex flex-col">
-        <TabsList className="grid w-full grid-cols-6 max-w-5xl mb-4">
-          <TabsTrigger value="checkout" className="flex items-center gap-2">
-            <LayoutDashboard className="h-4 w-4" />
-            {t("pos.tabs.checkout", "Bán hàng")}
-          </TabsTrigger>
-          <TabsTrigger value="products" className="flex items-center gap-2">
-            <Package className="h-4 w-4" />
-            {t("pos.tabs.products", "Sản phẩm")}
-          </TabsTrigger>
-          <TabsTrigger value="reports" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            {t("pos.tabs.reports", "Báo cáo")}
-          </TabsTrigger>
-          <TabsTrigger value="menu" className="flex items-center gap-2">
-            <QrCode className="h-4 w-4" />
-            {t("pos.tabs.menu", "Menu & QR")}
-          </TabsTrigger>
-          <TabsTrigger value="staff" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            {t("pos.tabs.staff", "Nhân viên & Ca")}
-          </TabsTrigger>
-          <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            {t("pos.tabs.settings", "Thiết lập")}
-          </TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="checkout" className="flex-1 flex flex-col gap-6 overflow-hidden">
+        <div className="flex items-center justify-between">
+          <TabsList className="h-12 p-1 bg-white rounded-none border-2 border-slate-200 w-fit">
+            {[
+              { value: "checkout", icon: LayoutDashboard, label: t("pos.tabs.checkout") },
+              { value: "products", icon: Package, label: t("pos.tabs.products") },
+              { value: "reports", icon: BarChart3, label: t("pos.tabs.reports") },
+              { value: "menu", icon: QrCode, label: t("pos.tabs.menu") },
+              { value: "staff", icon: Users, label: t("pos.tabs.staff") },
+              { value: "settings", icon: Settings, label: t("pos.tabs.settings") }
+            ].map((tab) => (
+              <TabsTrigger 
+                key={tab.value}
+                value={tab.value} 
+                className="px-4 rounded-none font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-colors"
+              >
+                <tab.icon className="h-3.5 w-3.5 mr-2" />
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
 
-        <TabsContent value="checkout" className="flex-1 mt-0">
-          <POSCheckout storeId={storeId!} branchId={branchId} />
-        </TabsContent>
-        <TabsContent value="products" className="flex-1 mt-0">
-          <POSProducts storeId={storeId!} branchId={branchId} />
-        </TabsContent>
-        <TabsContent value="reports" className="flex-1 mt-0">
-          <POSReports storeId={storeId!} branchId={branchId} />
-        </TabsContent>
-        <TabsContent value="menu" className="flex-1 mt-0">
-          <POSDigitalMenu storeId={storeId!} branchId={branchId} store={store} branch={branch} />
-        </TabsContent>
-        <TabsContent value="staff" className="flex-1 mt-0">
-          <POSStaff storeId={storeId!} branchId={branchId} />
-        </TabsContent>
-        <TabsContent value="settings" className="flex-1 mt-0">
-          <POSSettings storeId={storeId!} branchId={branchId} />
-        </TabsContent>
+        <div className="flex-1 overflow-hidden">
+          <TabsContent value="checkout" className="h-full mt-0 focus-visible:ring-0">
+            <POSCheckout storeId={storeId!} branchId={branchId} />
+          </TabsContent>
+          <TabsContent value="products" className="h-full mt-0 focus-visible:ring-0 overflow-y-auto scrollbar-hide">
+            <POSProducts storeId={storeId!} branchId={branchId} />
+          </TabsContent>
+          <TabsContent value="reports" className="h-full mt-0 focus-visible:ring-0 overflow-y-auto scrollbar-hide">
+            <POSReports storeId={storeId!} branchId={branchId} />
+          </TabsContent>
+          <TabsContent value="menu" className="h-full mt-0 focus-visible:ring-0 overflow-y-auto scrollbar-hide">
+            <POSDigitalMenu storeId={storeId!} branchId={branchId} store={store} branch={branch} />
+          </TabsContent>
+          <TabsContent value="staff" className="h-full mt-0 focus-visible:ring-0 overflow-y-auto scrollbar-hide">
+            <POSStaff storeId={storeId!} branchId={branchId} />
+          </TabsContent>
+          <TabsContent value="settings" className="h-full mt-0 focus-visible:ring-0 overflow-y-auto scrollbar-hide">
+            <POSSettings storeId={storeId!} branchId={branchId} />
+          </TabsContent>
+        </div>
       </Tabs>
     </div>
   );

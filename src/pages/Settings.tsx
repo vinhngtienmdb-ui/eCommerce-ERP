@@ -92,43 +92,46 @@ export function Settings() {
   ]
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h2>
-        <p className="text-muted-foreground">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-1">
+        <h2 className="text-4xl font-black tracking-tight text-slate-900">{t("settings.title")}</h2>
+        <p className="text-muted-foreground text-lg font-medium">
           {t("settings.description")}
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-10">
         {/* Sidebar Navigation */}
-        <aside className="w-full md:w-64 space-y-6">
+        <aside className="w-full md:w-72 space-y-8">
           {groups.map((group) => {
             const visibleItems = group.items.filter(item => !item.adminOnly || isAdmin)
             if (visibleItems.length === 0) return null
 
             return (
-              <div key={group.id} className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">
+              <div key={group.id} className="space-y-4">
+                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-4">
                   {group.title}
                 </h3>
-                <nav className="space-y-1">
+                <nav className="space-y-2">
                   {visibleItems.map((item) => (
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
                       className={cn(
-                        "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                        "w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 group",
                         activeTab === item.id
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
+                          : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
                       )}
                     >
                       <div className="flex items-center gap-3">
-                        <item.icon className="h-4 w-4" />
+                        <item.icon className={cn(
+                          "h-5 w-5 transition-transform group-hover:scale-110",
+                          activeTab === item.id ? "text-white" : "text-slate-400"
+                        )} />
                         {item.label}
                       </div>
-                      {activeTab === item.id && <ChevronRight className="h-4 w-4" />}
+                      {activeTab === item.id && <ChevronRight className="h-4 w-4 opacity-50" />}
                     </button>
                   ))}
                 </nav>
@@ -139,7 +142,7 @@ export function Settings() {
 
         {/* Content Area */}
         <main className="flex-1 min-w-0">
-          <div className="bg-card rounded-xl border shadow-sm p-6 min-h-[600px]">
+          <div className="bg-white rounded-[40px] border-none shadow-2xl shadow-slate-200/50 p-10 min-h-[700px] animate-in fade-in zoom-in-95 duration-500">
             {activeTab === "general" && <GeneralSettings />}
             {activeTab === "users" && <UserManagement />}
             {activeTab === "categories" && <CategoryConfig />}

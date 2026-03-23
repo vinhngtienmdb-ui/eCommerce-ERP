@@ -44,6 +44,13 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/src/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select"
 import { useTranslation } from "react-i18next"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { FulfillmentTab } from "@/src/components/orders/FulfillmentTab"
@@ -224,178 +231,169 @@ export function Orders() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">{t("orders.title")}</h2>
-          <p className="text-muted-foreground">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="space-y-1">
+          <h2 className="text-3xl font-semibold tracking-tight text-slate-900">{t("orders.title")}</h2>
+          <p className="text-muted-foreground/70 text-base font-medium">
             {t("orders.description")}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => {
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="outline" className="rounded-2xl h-10 border-slate-200 hover:bg-slate-50 transition-all shadow-sm font-semibold" onClick={() => {
             toast.success(t("orders.syncSuccess"))
           }}>
             <RefreshCw className="mr-2 h-4 w-4" />
             {t("orders.syncWms")}
           </Button>
-          <Button variant="outline" onClick={handleFilter}>
+          <Button variant="outline" className="rounded-2xl h-10 border-slate-200 hover:bg-slate-50 transition-all shadow-sm font-semibold" onClick={handleFilter}>
             <Filter className="mr-2 h-4 w-4" />
             {t("common.filters")}
           </Button>
-          <Button variant="outline" onClick={handleExport}>
+          <Button variant="outline" className="rounded-2xl h-10 border-slate-200 hover:bg-slate-50 transition-all shadow-sm font-semibold" onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" />
             {t("common.export")}
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("orders.stats.totalOrders")}</CardTitle>
-            <div className="p-2 bg-blue-100 rounded-full">
-              <Package className="h-4 w-4 text-blue-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{orders.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.allTime")}</p>
-          </CardContent>
-        </Card>
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("orders.stats.pending")}</CardTitle>
-            <div className="p-2 bg-amber-100 rounded-full">
-              <Clock className="h-4 w-4 text-amber-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {orders.filter(o => o.status === 'pending_confirmation' || o.status === 'pending_payment').length}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.awaitingConfirmation")}</p>
-          </CardContent>
-        </Card>
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("orders.stats.shipping")}</CardTitle>
-            <div className="p-2 bg-sky-100 rounded-full">
-              <Truck className="h-4 w-4 text-sky-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {orders.filter(o => o.status === 'shipping').length}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.inTransit")}</p>
-          </CardContent>
-        </Card>
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("orders.stats.returns")}</CardTitle>
-            <div className="p-2 bg-rose-100 rounded-full">
-              <RotateCcw className="h-4 w-4 text-rose-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {orders.filter(o => o.status === 'return_requested' || o.status === 'refund_requested').length}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{t("orders.stats.requests")}</p>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { title: t("orders.stats.totalOrders"), value: orders.length, icon: Package, color: "blue", desc: t("orders.stats.allTime") },
+          { title: t("orders.stats.pending"), value: orders.filter(o => o.status === 'pending_confirmation' || o.status === 'pending_payment').length, icon: Clock, color: "amber", desc: t("orders.stats.awaitingConfirmation") },
+          { title: t("orders.stats.shipping"), value: orders.filter(o => o.status === 'shipping').length, icon: Truck, color: "sky", desc: t("orders.stats.inTransit") },
+          { title: t("orders.stats.returns"), value: orders.filter(o => o.status === 'return_requested' || o.status === 'refund_requested').length, icon: RotateCcw, color: "rose", desc: t("orders.stats.requests") },
+        ].map((stat, i) => (
+          <Card key={i} className="border-none shadow-xl shadow-slate-200/20 rounded-[24px] overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">{stat.title}</CardTitle>
+              <div className={cn(
+                "p-3 rounded-xl transition-transform group-hover:scale-110 duration-500",
+                stat.color === "blue" && "bg-blue-50/50 text-blue-600",
+                stat.color === "amber" && "bg-amber-50/50 text-amber-600",
+                stat.color === "sky" && "bg-sky-50/50 text-sky-600",
+                stat.color === "rose" && "bg-rose-50/50 text-rose-600"
+              )}>
+                <stat.icon className="h-4 w-4" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-semibold tracking-tight text-slate-900">{stat.value}</div>
+              <p className="text-[10px] font-semibold text-slate-400 mt-1 uppercase tracking-widest">{stat.desc}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <Tabs defaultValue="orders" className="space-y-4">
-        <TabsList className="flex flex-wrap h-auto p-1 bg-muted/50">
-          <TabsTrigger value="orders" className="gap-2 py-2">
-            <Package className="h-4 w-4" />
-            {t("orders.tabs.orders")}
-          </TabsTrigger>
-          <TabsTrigger value="fulfillment" className="gap-2 py-2">
-            <Truck className="h-4 w-4" />
-            {t("orders.tabs.fulfillment")}
-          </TabsTrigger>
-          <TabsTrigger value="rma" className="gap-2 py-2">
-            <RotateCcw className="h-4 w-4" />
-            {t("orders.tabs.rma")}
-          </TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="orders" className="space-y-8">
+        <div className="rounded-[32px] border-none bg-white shadow-2xl shadow-slate-200/30 overflow-hidden">
+          <div className="border-b border-slate-100 px-8 bg-slate-50/30">
+            <TabsList className="flex h-auto p-0 bg-transparent gap-8 overflow-x-auto scrollbar-hide">
+              {[
+                { id: "orders", label: t("orders.tabs.orders"), icon: Package },
+                { id: "fulfillment", label: t("orders.tabs.fulfillment"), icon: Truck },
+                { id: "rma", label: t("orders.tabs.rma"), icon: RotateCcw },
+              ].map((tab) => (
+                <TabsTrigger
+                  key={tab.id}
+                  value={tab.id}
+                  className={cn(
+                    "py-5 text-[10px] font-semibold uppercase tracking-[0.2em] transition-all relative whitespace-nowrap flex items-center gap-2 rounded-none border-b-2 border-transparent",
+                    "data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent",
+                    "text-slate-400 hover:text-slate-600"
+                  )}
+                >
+                  <tab.icon className="h-3.5 w-3.5" />
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
 
-        <TabsContent value="orders" className="space-y-4">
-          <div className="rounded-xl border bg-card text-card-foreground shadow overflow-hidden">
-            <div className="p-4 border-b flex items-center gap-4">
-              <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <TabsContent value="orders" className="m-0">
+            <div className="p-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="relative flex-1 max-w-xl">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   type="search"
                   placeholder={t("orders.searchPlaceholder")}
-                  className="pl-8"
+                  className="h-12 rounded-xl bg-slate-50 border-none pl-12 pr-6 font-semibold text-sm focus-visible:ring-primary/10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
+              <div className="flex items-center gap-3">
+                <Select value={sortField} onValueChange={(v) => handleSort(v as SortField)}>
+                  <SelectTrigger className="h-12 rounded-xl border-slate-200 bg-white px-6 font-semibold min-w-[180px] text-sm">
+                    <SelectValue placeholder={t("common.sortBy")} />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-none shadow-2xl">
+                    <SelectItem value="date">{t("orders.date")}</SelectItem>
+                    <SelectItem value="total">{t("orders.total")}</SelectItem>
+                    <SelectItem value="status">{t("orders.status")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader className="bg-muted/50">
-                  <TableRow>
+                <TableHeader className="bg-slate-50/30">
+                  <TableRow className="hover:bg-transparent border-slate-100">
                     <TableHead 
-                      className="w-[120px] cursor-pointer hover:bg-muted/80 transition-colors"
+                      className="h-14 px-8 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 cursor-pointer hover:text-primary transition-colors"
                       onClick={() => handleSort('id')}
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center gap-2">
                         {t("orders.id")}
                         <SortIcon field="id" />
                       </div>
                     </TableHead>
-                    <TableHead>{t("orders.product")}</TableHead>
-                    <TableHead className="hidden md:table-cell">{t("orders.trackingNumber")}</TableHead>
-                    <TableHead className="hidden lg:table-cell">{t("orders.shop")}</TableHead>
+                    <TableHead className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">{t("orders.product")}</TableHead>
+                    <TableHead className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 hidden md:table-cell">{t("orders.trackingNumber")}</TableHead>
+                    <TableHead className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 hidden lg:table-cell">{t("orders.shop")}</TableHead>
                     <TableHead 
-                      className="cursor-pointer hover:bg-muted/80 transition-colors"
+                      className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 cursor-pointer hover:text-primary transition-colors"
                       onClick={() => handleSort('customer')}
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center gap-2">
                         {t("orders.customer")}
                         <SortIcon field="customer" />
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="cursor-pointer hover:bg-muted/80 transition-colors hidden sm:table-cell"
+                      className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 cursor-pointer hover:text-primary transition-colors hidden sm:table-cell"
                       onClick={() => handleSort('date')}
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center gap-2">
                         {t("orders.date")}
                         <SortIcon field="date" />
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="text-right cursor-pointer hover:bg-muted/80 transition-colors"
+                      className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 cursor-pointer hover:text-primary transition-colors text-right"
                       onClick={() => handleSort('total')}
                     >
-                      <div className="flex items-center justify-end">
+                      <div className="flex items-center justify-end gap-2">
                         {t("orders.total")}
                         <SortIcon field="total" />
                       </div>
                     </TableHead>
                     <TableHead 
-                      className="cursor-pointer hover:bg-muted/80 transition-colors"
+                      className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 cursor-pointer hover:text-primary transition-colors"
                       onClick={() => handleSort('status')}
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center gap-2">
                         {t("common.status")}
                         <SortIcon field="status" />
                       </div>
                     </TableHead>
-                    <TableHead className="text-right">{t("common.actions")}</TableHead>
+                    <TableHead className="h-14 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 text-right px-8">{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredOrders.map((order) => (
-                    <TableRow key={order.id} className="hover:bg-muted/30 transition-colors group">
-                      <TableCell className="font-mono text-xs font-bold text-blue-600">
+                    <TableRow key={order.id} className="hover:bg-slate-50/50 transition-colors group border-slate-100">
+                      <TableCell className="px-8 font-mono text-xs font-bold text-blue-600">
                         {order.id}
                       </TableCell>
                       <TableCell className="max-w-[200px] sm:max-w-[250px]">
@@ -450,7 +448,7 @@ export function Orders() {
                       <TableCell>
                         {getStatusBadge(order.status)}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right px-8">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -458,16 +456,16 @@ export function Orders() {
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuContent align="end" className="w-48 rounded-2xl border-none shadow-2xl">
                             <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wider">
                               {t("common.actions")}
                             </DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => handleViewDetails(order)}>
+                            <DropdownMenuItem onClick={() => handleViewDetails(order)} className="rounded-xl">
                               <Eye className="mr-2 h-4 w-4 text-blue-500" />
                               {t("common.viewDetails")}
                             </DropdownMenuItem>
                             {order.trackingNumber && (
-                              <DropdownMenuItem onClick={() => handleTrackOrder(order)}>
+                              <DropdownMenuItem onClick={() => handleTrackOrder(order)} className="rounded-xl">
                                 <Truck className="mr-2 h-4 w-4 text-sky-500" />
                                 {t("orders.trackOrder")}
                               </DropdownMenuItem>
@@ -476,28 +474,28 @@ export function Orders() {
                             <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase px-2 py-1.5">
                               {t("orders.updateStatus")}
                             </DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "confirmed")}>
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "confirmed")} className="rounded-xl">
                               <RefreshCw className="mr-2 h-4 w-4 text-indigo-500" />
                               {t("orders.statuses.confirmed")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "shipping")}>
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "shipping")} className="rounded-xl">
                               <Truck className="mr-2 h-4 w-4 text-sky-500" />
                               {t("orders.statuses.shipping")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "delivered")}>
+                            <DropdownMenuItem onClick={() => handleUpdateStatus(order, "delivered")} className="rounded-xl">
                               <Package className="mr-2 h-4 w-4 text-emerald-500" />
                               {t("orders.statuses.delivered")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem 
-                              className="text-rose-600 focus:text-rose-600" 
+                              className="text-rose-600 focus:text-rose-600 rounded-xl" 
                               onClick={() => handleCancelOrder(order)}
                             >
                               <RotateCcw className="mr-2 h-4 w-4" />
                               {t("orders.cancelOrder")}
                             </DropdownMenuItem>
                             <DropdownMenuItem 
-                              className="text-red-600 focus:text-red-600" 
+                              className="text-red-600 focus:text-red-600 rounded-xl" 
                               onClick={() => handleDeleteOrder(order.id)}
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
@@ -510,10 +508,12 @@ export function Orders() {
                   ))}
                   {filteredOrders.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={9} className="h-32 text-center">
-                        <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
-                          <Package className="h-8 w-8 opacity-20" />
-                          <p>{t("orders.noOrders")}</p>
+                      <TableCell colSpan={9} className="h-64 text-center">
+                        <div className="flex flex-col items-center justify-center text-slate-400 gap-4">
+                          <div className="p-6 bg-slate-50 rounded-full">
+                            <Package className="h-12 w-12 opacity-20" />
+                          </div>
+                          <p className="font-black uppercase tracking-widest text-sm">{t("orders.noOrders")}</p>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -521,20 +521,16 @@ export function Orders() {
                 </TableBody>
               </Table>
             </div>
-          </div>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="fulfillment">
-          <div className="rounded-xl border bg-card text-card-foreground shadow">
+          <TabsContent value="fulfillment" className="m-0 p-8">
             <FulfillmentTab orders={orders} />
-          </div>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="rma">
-          <div className="rounded-xl border bg-card text-card-foreground shadow">
+          <TabsContent value="rma" className="m-0 p-8">
             <RMATab orders={orders} />
-          </div>
-        </TabsContent>
+          </TabsContent>
+        </div>
       </Tabs>
 
       {/* Order Details Dialog */}

@@ -137,55 +137,55 @@ export function POSReports({ storeId, branchId }: { storeId: string; branchId?: 
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white transition-colors hover:border-blue-500">
+          <CardContent className="pt-6 px-6 pb-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 rounded-xl">
+              <div className="p-3 bg-blue-50 rounded-none border-2 border-blue-200">
                 <DollarSign className="h-6 w-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t("pos.reports.revenue", "Doanh thu")}</p>
-                <h3 className="text-2xl font-bold">{stats.totalRevenue.toLocaleString()}đ</h3>
+                <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{t("pos.reports.revenue", "Doanh thu")}</p>
+                <h3 className="text-xl font-black text-slate-900 tracking-tighter">{stats.totalRevenue.toLocaleString()}đ</h3>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white transition-colors hover:border-emerald-500">
+          <CardContent className="pt-6 px-6 pb-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 rounded-xl">
-                <ShoppingBag className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-emerald-50 rounded-none border-2 border-emerald-200">
+                <ShoppingBag className="h-6 w-6 text-emerald-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t("pos.reports.orders", "Đơn hàng")}</p>
-                <h3 className="text-2xl font-bold">{stats.totalOrders}</h3>
+                <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{t("pos.reports.orders", "Đơn hàng")}</p>
+                <h3 className="text-xl font-black text-slate-900 tracking-tighter">{stats.totalOrders}</h3>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white transition-colors hover:border-purple-500">
+          <CardContent className="pt-6 px-6 pb-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-purple-100 rounded-xl">
+              <div className="p-3 bg-purple-50 rounded-none border-2 border-purple-200">
                 <TrendingUp className="h-6 w-6 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t("pos.reports.avgValue", "Trung bình đơn")}</p>
-                <h3 className="text-2xl font-bold">{stats.avgOrderValue.toLocaleString()}đ</h3>
+                <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{t("pos.reports.avgValue", "Trung bình đơn")}</p>
+                <h3 className="text-xl font-black text-slate-900 tracking-tighter">{stats.avgOrderValue.toLocaleString()}đ</h3>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white transition-colors hover:border-orange-500">
+          <CardContent className="pt-6 px-6 pb-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-orange-100 rounded-xl">
+              <div className="p-3 bg-orange-50 rounded-none border-2 border-orange-200">
                 <Users className="h-6 w-6 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t("pos.reports.shifts", "Ca làm việc")}</p>
-                <h3 className="text-2xl font-bold">{shifts.length}</h3>
+                <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{t("pos.reports.shifts", "Ca làm việc")}</p>
+                <h3 className="text-xl font-black text-slate-900 tracking-tighter">{shifts.length}</h3>
               </div>
             </div>
           </CardContent>
@@ -193,42 +193,47 @@ export function POSReports({ storeId, branchId }: { storeId: string; branchId?: 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Phân bổ thanh toán</CardTitle>
+        <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+          <CardHeader className="px-6 pt-6">
+            <CardTitle className="text-lg font-black uppercase tracking-tight">Phân bổ thanh toán</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-6 pb-6">
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Tiền mặt</span>
-                <span className="font-bold">{(stats.paymentBreakdown.cash || 0).toLocaleString()}đ</span>
+              <div className="flex justify-between items-center p-3 bg-slate-50 rounded-none border-2 border-slate-100">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-600">Tiền mặt</span>
+                <span className="font-black text-slate-900">{(stats.paymentBreakdown.cash || 0).toLocaleString()}đ</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Thẻ/Chuyển khoản</span>
-                <span className="font-bold">{(stats.paymentBreakdown.card || 0).toLocaleString()}đ</span>
+              <div className="flex justify-between items-center p-3 bg-slate-50 rounded-none border-2 border-slate-100">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-600">Thẻ/Chuyển khoản</span>
+                <span className="font-black text-slate-900">{(stats.paymentBreakdown.card || 0).toLocaleString()}đ</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Ví điện tử</span>
-                <span className="font-bold">{(stats.paymentBreakdown.wallet || 0).toLocaleString()}đ</span>
+              <div className="flex justify-between items-center p-3 bg-slate-50 rounded-none border-2 border-slate-100">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-600">Ví điện tử</span>
+                <span className="font-black text-slate-900">{(stats.paymentBreakdown.wallet || 0).toLocaleString()}đ</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">App Dealtot</span>
-                <span className="font-bold">{(stats.paymentBreakdown.dealtot || 0).toLocaleString()}đ</span>
+              <div className="flex justify-between items-center p-3 bg-slate-50 rounded-none border-2 border-slate-100">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-600">App Dealtot</span>
+                <span className="font-black text-slate-900">{(stats.paymentBreakdown.dealtot || 0).toLocaleString()}đ</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Sản phẩm bán chạy</CardTitle>
+        <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+          <CardHeader className="px-6 pt-6">
+            <CardTitle className="text-lg font-black uppercase tracking-tight">Sản phẩm bán chạy</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-6 pb-6">
+            <div className="space-y-3">
               {stats.topProducts.map((p: any, idx: number) => (
-                <div key={idx} className="flex justify-between items-center">
-                  <span className="text-sm truncate max-w-[200px]">{p.name}</span>
-                  <span className="font-bold">{p.qty}</span>
+                <div key={idx} className="flex justify-between items-center p-3 bg-slate-50 rounded-none border-2 border-slate-100 group hover:bg-primary/5 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-none bg-white flex items-center justify-center text-[10px] font-black text-slate-400 border-2 border-slate-200">
+                      {idx + 1}
+                    </div>
+                    <span className="text-xs font-black uppercase tracking-tight text-slate-700 truncate max-w-[180px]">{p.name}</span>
+                  </div>
+                  <span className="font-black text-primary">{p.qty}</span>
                 </div>
               ))}
             </div>
@@ -236,34 +241,39 @@ export function POSReports({ storeId, branchId }: { storeId: string; branchId?: 
         </Card>
       </div>
 
-      <Tabs defaultValue="day">
-        <div className="flex items-center justify-between mb-4">
-          <TabsList>
-            <TabsTrigger value="shift">{t("pos.reports.byShift", "Theo ca")}</TabsTrigger>
-            <TabsTrigger value="day">{t("pos.reports.byDay", "Theo ngày")}</TabsTrigger>
-            <TabsTrigger value="week">{t("pos.reports.byWeek", "Theo tuần")}</TabsTrigger>
-            <TabsTrigger value="month">{t("pos.reports.byMonth", "Theo tháng")}</TabsTrigger>
+      <Tabs defaultValue="day" className="w-full">
+        <div className="flex items-center justify-between mb-6">
+          <TabsList className="bg-slate-100 p-1 rounded-none border-2 border-slate-200 h-12">
+            <TabsTrigger value="shift" className="rounded-none data-[state=active]:bg-primary data-[state=active]:text-white font-black uppercase tracking-widest text-[10px] px-5">{t("pos.reports.byShift", "Theo ca")}</TabsTrigger>
+            <TabsTrigger value="day" className="rounded-none data-[state=active]:bg-primary data-[state=active]:text-white font-black uppercase tracking-widest text-[10px] px-5">{t("pos.reports.byDay", "Theo ngày")}</TabsTrigger>
+            <TabsTrigger value="week" className="rounded-none data-[state=active]:bg-primary data-[state=active]:text-white font-black uppercase tracking-widest text-[10px] px-5">{t("pos.reports.byWeek", "Theo tuần")}</TabsTrigger>
+            <TabsTrigger value="month" className="rounded-none data-[state=active]:bg-primary data-[state=active]:text-white font-black uppercase tracking-widest text-[10px] px-5">{t("pos.reports.byMonth", "Theo tháng")}</TabsTrigger>
           </TabsList>
         </div>
 
-        <TabsContent value="shift">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("pos.reports.shiftHistory", "Lịch sử ca làm việc")}</CardTitle>
+        <TabsContent value="shift" className="animate-in fade-in-50 duration-500">
+          <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+            <CardHeader className="px-6 pt-6">
+              <CardTitle className="text-lg font-black uppercase tracking-tight">{t("pos.reports.shiftHistory", "Lịch sử ca làm việc")}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="px-6 pb-6">
+              <div className="space-y-3">
                 {shifts.map(shift => (
-                  <div key={shift.id} className="flex items-center justify-between p-4 border rounded-xl">
-                    <div>
-                      <p className="font-bold">{shift.staffName}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(shift.startTime), "dd/MM HH:mm")} - {shift.endTime ? format(new Date(shift.endTime), "HH:mm") : "Đang mở"}
-                      </p>
+                  <div key={shift.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-none border-2 border-slate-100 group hover:bg-slate-100 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-2 h-10 rounded-none ${shift.status === 'open' ? 'bg-emerald-400' : 'bg-slate-300'}`} />
+                      <div>
+                        <p className="font-black uppercase tracking-tight text-slate-900">{shift.staffName}</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                          {format(new Date(shift.startTime), "dd/MM HH:mm")} - {shift.endTime ? format(new Date(shift.endTime), "HH:mm") : "Đang mở"}
+                        </p>
+                      </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-primary">{(shift.totalSales || 0).toLocaleString()}đ</p>
-                      <p className="text-xs text-muted-foreground">{shift.status === 'open' ? 'Đang hoạt động' : 'Đã kết thúc'}</p>
+                      <p className="font-black text-primary tracking-tighter">{(shift.totalSales || 0).toLocaleString()}đ</p>
+                      <p className={`text-[10px] font-black uppercase tracking-widest ${shift.status === 'open' ? 'text-emerald-600' : 'text-slate-400'}`}>
+                        {shift.status === 'open' ? 'Đang hoạt động' : 'Đã kết thúc'}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -272,57 +282,68 @@ export function POSReports({ storeId, branchId }: { storeId: string; branchId?: 
           </Card>
         </TabsContent>
 
-        <TabsContent value="day">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("pos.reports.revenueToday", "Doanh thu hôm nay")}</CardTitle>
+        <TabsContent value="day" className="animate-in fade-in-50 duration-500">
+          <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+            <CardHeader className="px-6 pt-6">
+              <CardTitle className="text-lg font-black uppercase tracking-tight">{t("pos.reports.revenueToday", "Doanh thu hôm nay")}</CardTitle>
             </CardHeader>
-            <CardContent className="h-[400px]">
+            <CardContent className="px-6 pb-6 h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={getChartData('day')}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip formatter={(value: number) => value.toLocaleString() + "đ"} />
-                  <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8', fontWeight: 'bold'}} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8', fontWeight: 'bold'}} tickFormatter={(v) => `${v/1000}k`} />
+                  <Tooltip 
+                    cursor={{fill: '#f8fafc'}}
+                    contentStyle={{borderRadius: '0', border: '2px solid #0f172a', boxShadow: 'none', padding: '12px'}}
+                    formatter={(value: number) => [value.toLocaleString() + "đ", "Doanh thu"]} 
+                  />
+                  <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[0, 0, 0, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="week">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("pos.reports.revenueThisWeek", "Doanh thu tuần này")}</CardTitle>
+        <TabsContent value="week" className="animate-in fade-in-50 duration-500">
+          <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+            <CardHeader className="px-6 pt-6">
+              <CardTitle className="text-lg font-black uppercase tracking-tight">{t("pos.reports.revenueThisWeek", "Doanh thu tuần này")}</CardTitle>
             </CardHeader>
-            <CardContent className="h-[400px]">
+            <CardContent className="px-6 pb-6 h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={getChartData('week')}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip formatter={(value: number) => value.toLocaleString() + "đ"} />
-                  <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                  <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8', fontWeight: 'bold'}} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8', fontWeight: 'bold'}} tickFormatter={(v) => `${v/1000}k`} />
+                  <Tooltip 
+                    contentStyle={{borderRadius: '0', border: '2px solid #0f172a', boxShadow: 'none', padding: '12px'}}
+                    formatter={(value: number) => [value.toLocaleString() + "đ", "Doanh thu"]} 
+                  />
+                  <Line type="stepAfter" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={4} dot={{ r: 0 }} activeDot={{ r: 6, strokeWidth: 0 }} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="month">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("pos.reports.revenueThisMonth", "Doanh thu tháng này")}</CardTitle>
+        <TabsContent value="month" className="animate-in fade-in-50 duration-500">
+          <Card className="border-2 border-slate-200 rounded-none overflow-hidden bg-white">
+            <CardHeader className="px-6 pt-6">
+              <CardTitle className="text-lg font-black uppercase tracking-tight">{t("pos.reports.revenueThisMonth", "Doanh thu tháng này")}</CardTitle>
             </CardHeader>
-            <CardContent className="h-[400px]">
+            <CardContent className="px-6 pb-6 h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={getChartData('month')}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip formatter={(value: number) => value.toLocaleString() + "đ"} />
-                  <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8', fontWeight: 'bold'}} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8', fontWeight: 'bold'}} tickFormatter={(v) => `${v/1000}k`} />
+                  <Tooltip 
+                    cursor={{fill: '#f8fafc'}}
+                    contentStyle={{borderRadius: '0', border: '2px solid #0f172a', boxShadow: 'none', padding: '12px'}}
+                    formatter={(value: number) => [value.toLocaleString() + "đ", "Doanh thu"]} 
+                  />
+                  <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[0, 0, 0, 0]} barSize={12} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

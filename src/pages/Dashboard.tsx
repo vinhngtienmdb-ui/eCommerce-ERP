@@ -35,8 +35,10 @@ import {
   Loader2,
   TrendingUp,
   AlertTriangle,
-  Lightbulb
+  Lightbulb,
+  Check
 } from "lucide-react"
+import { cn } from "@/src/lib/utils"
 import { GoogleGenAI } from "@google/genai"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -130,15 +132,16 @@ export function Dashboard() {
   return (
     <div className="space-y-8 p-8 pt-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">{t("dashboard.title")}</h2>
-          <p className="text-muted-foreground">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">{t("dashboard.title")}</h2>
+          <p className="text-slate-500 text-sm">
             {t("dashboard.description")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button 
             variant={isCustomizing ? "default" : "outline"} 
+            className="rounded h-9 px-4 font-medium"
             onClick={() => setIsCustomizing(!isCustomizing)}
           >
             {isCustomizing ? "Lưu cấu hình" : "Tùy chỉnh Dashboard"}
@@ -147,68 +150,67 @@ export function Dashboard() {
       </div>
 
       {isCustomizing && (
-        <Card className="bg-slate-50 border-dashed border-2">
+        <Card className="bg-white border-2 border-slate-200 rounded-none">
           <CardContent className="p-4 flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={visibleWidgets.aiBriefing} onChange={(e) => setVisibleWidgets(p => ({...p, aiBriefing: e.target.checked}))} />
-              AI Briefing
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={visibleWidgets.stats} onChange={(e) => setVisibleWidgets(p => ({...p, stats: e.target.checked}))} />
-              Chỉ số tổng quan
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={visibleWidgets.quickAccess} onChange={(e) => setVisibleWidgets(p => ({...p, quickAccess: e.target.checked}))} />
-              Truy cập nhanh
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={visibleWidgets.charts} onChange={(e) => setVisibleWidgets(p => ({...p, charts: e.target.checked}))} />
-              Biểu đồ
-            </label>
+            {[
+              { id: "aiBriefing", label: "AI Briefing" },
+              { id: "stats", label: "Chỉ số tổng quan" },
+              { id: "quickAccess", label: "Truy cập nhanh" },
+              { id: "charts", label: "Biểu đồ" }
+            ].map((widget) => (
+              <label key={widget.id} className="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={visibleWidgets[widget.id as keyof typeof visibleWidgets]} 
+                  onChange={(e) => setVisibleWidgets(p => ({...p, [widget.id]: e.target.checked}))}
+                  className="h-4 w-4 rounded border-slate-300 text-primary"
+                />
+                <span className="text-sm font-medium text-slate-700">{widget.label}</span>
+              </label>
+            ))}
           </CardContent>
         </Card>
       )}
 
       {visibleWidgets.aiBriefing && (
-      <Card className="bg-primary text-primary-foreground border border-primary-foreground/20 shadow-sm">
-        <CardHeader className="pb-2">
+      <Card className="border-2 border-slate-100 rounded-none bg-white">
+        <CardHeader className="p-6 pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-bold flex items-center gap-2 text-primary-foreground">
-              <Sparkles className="h-5 w-5" aria-hidden="true" />
+            <CardTitle className="text-xl font-bold flex items-center gap-2 text-slate-900">
+              <Sparkles className="h-5 w-5 text-primary" aria-hidden="true" />
               {t("dashboard.aiBriefing.title")}
             </CardTitle>
             <Button 
               variant="ghost" 
-              size="sm" 
+              size="icon" 
               onClick={fetchAiBriefing} 
               disabled={isAiLoading}
-              className="hover:bg-primary-foreground/20 text-primary-foreground focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-              aria-label="Refresh AI Briefing"
+              className="h-8 w-8 rounded hover:bg-slate-100"
             >
-              {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <TrendingUp className="h-4 w-4" aria-hidden="true" />}
+              {isAiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <TrendingUp className="h-4 w-4" />}
             </Button>
           </div>
-          <CardDescription className="text-primary-foreground/90 font-medium">
+          <CardDescription className="text-slate-500 text-sm">
             {t("dashboard.aiBriefing.description")}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 pt-2">
           {isAiLoading ? (
-            <div className="flex items-center gap-2 text-primary-foreground/90 italic py-2">
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            <div className="flex items-center gap-2 text-slate-400 italic py-4">
+              <Loader2 className="h-4 w-4 animate-spin" />
               {t("dashboard.aiBriefing.loading")}
             </div>
           ) : (
-            <div className="space-y-3">
-              <p className="text-sm leading-relaxed text-primary-foreground font-medium">
+            <div className="space-y-4">
+              <p className="text-base text-slate-700">
                 {aiBriefing || t("dashboard.aiBriefing.placeholder")}
               </p>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="bg-primary-foreground text-primary border-none hover:bg-primary-foreground/90 font-semibold">
-                  <Lightbulb className="h-3 w-3 mr-1" aria-hidden="true" /> {t("dashboard.aiBriefing.tip1")}
+                <Badge variant="secondary" className="bg-slate-100 text-slate-700 border-none rounded px-2 py-1 text-[10px] font-bold uppercase">
+                  <Lightbulb className="h-3 w-3 mr-1 text-yellow-600" /> {t("dashboard.aiBriefing.tip1")}
                 </Badge>
-                <Badge variant="secondary" className="bg-primary-foreground text-primary border-none hover:bg-primary-foreground/90 font-semibold">
-                  <AlertTriangle className="h-3 w-3 mr-1" aria-hidden="true" /> {t("dashboard.aiBriefing.tip2")}
+                <Badge variant="secondary" className="bg-slate-100 text-slate-700 border-none rounded px-2 py-1 text-[10px] font-bold uppercase">
+                  <AlertTriangle className="h-3 w-3 mr-1 text-rose-600" /> {t("dashboard.aiBriefing.tip2")}
                 </Badge>
               </div>
             </div>
@@ -219,102 +221,64 @@ export function Dashboard() {
 
       {visibleWidgets.stats && (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border border-border shadow-sm bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.totalRevenue")}</CardTitle>
-            <div className="p-2.5 bg-muted rounded-md border border-border">
-              <DollarSign className="h-5 w-5 text-primary" aria-hidden="true" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatVND(1250431000)}</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
-              <span className="text-emerald-700 dark:text-emerald-400 flex items-center mr-1">
-                <ArrowUp className="h-3 w-3 mr-1" aria-hidden="true" />
-                +20.1%
-              </span>
-              {t("dashboard.fromLastMonth")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border border-border shadow-sm bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.activeSellers")}</CardTitle>
-            <div className="p-2.5 bg-muted rounded-md border border-border">
-              <Users className="h-5 w-5 text-primary" aria-hidden="true" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+2.350</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
-              <span className="text-emerald-700 dark:text-emerald-400 flex items-center mr-1">
-                <ArrowUp className="h-3 w-3 mr-1" aria-hidden="true" />
-                +180.1%
-              </span>
-              {t("dashboard.fromLastMonth")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border border-border shadow-sm bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.totalOrders")}</CardTitle>
-            <div className="p-2.5 bg-muted rounded-md border border-border">
-              <ShoppingCart className="h-5 w-5 text-primary" aria-hidden="true" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+12.234</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
-              <span className="text-emerald-700 dark:text-emerald-400 flex items-center mr-1">
-                <ArrowUp className="h-3 w-3 mr-1" aria-hidden="true" />
-                +19%
-              </span>
-              {t("dashboard.fromLastMonth")}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border border-border shadow-sm bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-foreground">{t("dashboard.activeProducts")}</CardTitle>
-            <div className="p-2.5 bg-muted rounded-md border border-border">
-              <Package className="h-5 w-5 text-primary" aria-hidden="true" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{productCount !== null ? productCount : "..."}</div>
-            <p className="text-xs text-muted-foreground flex items-center mt-1 font-medium">
-              {t("dashboard.activeProductsDesc")}
-            </p>
-          </CardContent>
-        </Card>
+        {[
+          { title: t("dashboard.totalRevenue"), value: formatVND(1250431000), icon: DollarSign, trend: "+20.1%", color: "blue" },
+          { title: t("dashboard.activeSellers"), value: "+2.350", icon: Users, trend: "+180.1%", color: "purple" },
+          { title: t("dashboard.totalOrders"), value: "+12.234", icon: ShoppingCart, trend: "+19%", color: "orange" },
+          { title: t("dashboard.activeProducts"), value: productCount !== null ? productCount : "...", icon: Package, trend: "Live", color: "emerald" },
+        ].map((stat, i) => (
+          <Card key={i} className="border-2 border-slate-100 bg-white rounded-none">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.title}</CardTitle>
+              <stat.icon className={cn(
+                "h-4 w-4",
+                stat.color === "blue" && "text-blue-500",
+                stat.color === "purple" && "text-purple-500",
+                stat.color === "orange" && "text-orange-500",
+                stat.color === "emerald" && "text-emerald-500"
+              )} />
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl font-bold text-slate-900">{stat.value}</div>
+              <div className="flex items-center mt-1">
+                <span className={cn(
+                  "text-[10px] font-bold mr-1",
+                  stat.trend === "Live" ? "text-emerald-500" : "text-emerald-500"
+                )}>
+                  {stat.trend}
+                </span>
+                <span className="text-[10px] text-slate-400">
+                  {stat.trend === "Live" ? t("dashboard.activeProductsDesc") : t("dashboard.fromLastMonth")}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
       )}
 
       {visibleWidgets.quickAccess && (
-      <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-          <h3 className="text-lg font-semibold text-blue-600">{t("dashboard.quickAccess")}</h3>
-        </div>
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-slate-900">{t("dashboard.quickAccess")}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {modules.map((item) => (
             <Card
               key={item.title}
-              className="hover:shadow-md transition-shadow cursor-pointer relative group"
+              className="border-2 border-slate-100 rounded-none bg-white cursor-pointer hover:border-primary transition-colors"
               onClick={() => navigate(item.href)}
             >
-              <CardContent className="p-6">
-                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.success(t("dashboard.addedToFavorites", "Đã thêm vào mục yêu thích")); }} />
-                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-blue-400 cursor-pointer" onClick={(e) => { e.stopPropagation(); toast.info(t("dashboard.helpClicked", "Đang mở hướng dẫn sử dụng")); }} />
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-xl ${item.bg}`}>
-                    <item.icon className={`w-6 h-6 ${item.color}`} />
+              <CardContent className="p-4">
+                <div className="flex items-center gap-4">
+                  <div className={cn(
+                    "p-2 rounded",
+                    item.bg,
+                    item.color
+                  )}>
+                    <item.icon className="w-5 h-5" />
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">{t(item.title)}</h4>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                  <div className="space-y-0.5">
+                    <h4 className="font-bold text-sm text-slate-900">{t(item.title)}</h4>
+                    <p className="text-[10px] text-slate-400 line-clamp-1">{item.description}</p>
                   </div>
                 </div>
               </CardContent>
@@ -326,88 +290,91 @@ export function Dashboard() {
 
       {visibleWidgets.charts && (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>{t("dashboard.revenueOverview")}</CardTitle>
-            <CardDescription>
-              {t("dashboard.revenueDesc")}
-            </CardDescription>
+        <Card className="col-span-4 border-2 border-slate-100 rounded-none bg-white">
+          <CardHeader className="p-6 pb-2">
+            <CardTitle className="text-lg font-bold text-slate-900">{t("dashboard.revenueOverview")}</CardTitle>
           </CardHeader>
-          <CardContent className="pl-2">
+          <CardContent className="p-6 pt-0">
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={revenueData}>
-                  <defs>
-                    <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
                   <XAxis
                     dataKey="name"
-                    stroke="#888888"
-                    fontSize={12}
+                    stroke="#94a3b8"
+                    fontSize={10}
+                    fontWeight={700}
                     tickLine={false}
                     axisLine={false}
                   />
                   <YAxis
-                    stroke="#888888"
+                    stroke="#94a3b8"
                     fontSize={10}
+                    fontWeight={700}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
                   />
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                  <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />
                   <Tooltip
-                    formatter={(value: any) => formatVND(value)}
-                    contentStyle={{ borderRadius: "8px", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}
+                    contentStyle={{ 
+                      borderRadius: "0", 
+                      border: "2px solid #f1f5f9", 
+                      boxShadow: "none",
+                      fontSize: "12px",
+                      fontWeight: 700
+                    }}
                   />
                   <Area
-                    type="monotone"
+                    type="stepAfter"
                     dataKey="total"
                     stroke="#3b82f6"
                     strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#colorTotal)"
+                    fill="#3b82f6"
+                    fillOpacity={0.1}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>{t("dashboard.weeklyOrders")}</CardTitle>
-            <CardDescription>
-              {t("dashboard.weeklyOrdersDesc")}
-            </CardDescription>
+        <Card className="col-span-3 border-2 border-slate-100 rounded-none bg-white">
+          <CardHeader className="p-6 pb-2">
+            <CardTitle className="text-lg font-bold text-slate-900">{t("dashboard.weeklyOrders")}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 pt-0">
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={ordersData}>
                   <XAxis
                     dataKey="name"
-                    stroke="#888888"
-                    fontSize={12}
+                    stroke="#94a3b8"
+                    fontSize={10}
+                    fontWeight={700}
                     tickLine={false}
                     axisLine={false}
                   />
                   <YAxis
-                    stroke="#888888"
-                    fontSize={12}
+                    stroke="#94a3b8"
+                    fontSize={10}
+                    fontWeight={700}
                     tickLine={false}
                     axisLine={false}
                   />
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                  <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />
                   <Tooltip
-                    cursor={{ fill: "transparent" }}
-                    contentStyle={{ borderRadius: "8px", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}
+                    cursor={{ fill: "#f8fafc" }}
+                    contentStyle={{ 
+                      borderRadius: "0", 
+                      border: "2px solid #f1f5f9", 
+                      boxShadow: "none",
+                      fontSize: "12px",
+                      fontWeight: 700
+                    }}
                   />
                   <Bar
                     dataKey="orders"
                     fill="#10b981"
-                    radius={[4, 4, 0, 0]}
+                    radius={0}
                   />
                 </BarChart>
               </ResponsiveContainer>

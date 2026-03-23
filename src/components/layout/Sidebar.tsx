@@ -246,112 +246,121 @@ export function Sidebar() {
   }
 
   const sidebarContent = (
-    <>
-      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-bold text-sidebar-primary">
-            {isSidebarOpen || isMobile ? "E-Commerce ERP" : "ERP"}
-          </span>
+    <div className="flex h-full flex-col bg-white border-r border-slate-200">
+      <div className="flex h-16 items-center justify-between border-b border-slate-200 px-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded bg-primary">
+            <Layout className="h-5 w-5 text-primary-foreground" />
+          </div>
+          {(isSidebarOpen || isMobile) && (
+            <span className="text-lg font-semibold tracking-tight text-sidebar-foreground">
+              E-Commerce <span className="text-primary">ERP</span>
+            </span>
+          )}
         </div>
         {isMobile && (
-          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)} className="rounded-full hover:bg-sidebar-accent">
             <X className="h-5 w-5" />
           </Button>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto py-4 scrollbar-hide">
-        <nav className="space-y-6 px-2">
+      <div className="flex-1 overflow-y-auto py-6 scrollbar-hide">
+        <nav className="space-y-8 px-4">
           {navigationGroups.map((group) => (
-            <div key={group.titleKey} className="space-y-1">
+            <div key={group.titleKey} className="space-y-2">
               {(isSidebarOpen || isMobile) && (
-                <h3 className="px-3 text-[10px] font-bold uppercase tracking-widest text-sidebar-foreground/40 mb-2">
+                <h3 className="px-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-sidebar-foreground/30 mb-4">
                   {t(`nav.groups.${group.titleKey}`)}
                 </h3>
               )}
-              {group.items.map((item) => {
-                const isActive = location.pathname === item.href || (item.subItems && location.pathname.startsWith(item.href))
-                const isExpanded = expandedItems[item.nameKey]
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const isActive = location.pathname === item.href || (item.subItems && location.pathname.startsWith(item.href))
+                  const isExpanded = expandedItems[item.nameKey]
 
-                return (
-                  <div key={item.nameKey}>
-                    {item.subItems ? (
-                      <div
-                        onClick={(e) => toggleExpand(item.nameKey, e)}
-                        className={cn(
-                          "group flex items-center justify-between rounded-md px-2 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                          isActive
-                            ? "bg-primary text-primary-foreground font-semibold shadow-sm"
-                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                          !isSidebarOpen && !isMobile && "justify-center"
-                        )}
-                        title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
-                      >
-                        <div className="flex items-center">
+                  return (
+                    <div key={item.nameKey}>
+                      {item.subItems ? (
+                        <div
+                          onClick={(e) => toggleExpand(item.nameKey, e)}
+                          className={cn(
+                            "group flex items-center justify-between rounded px-4 py-2 text-sm font-medium transition-colors cursor-pointer",
+                            isActive
+                              ? "bg-primary text-primary-foreground"
+                              : "text-slate-600 hover:bg-slate-100",
+                            !isSidebarOpen && !isMobile && "justify-center px-2"
+                          )}
+                          title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
+                        >
+                          <div className="flex items-center">
+                            <item.icon
+                              className={cn(
+                                "flex-shrink-0 transition-transform duration-200 group-hover:scale-110",
+                                isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
+                              )}
+                            />
+                            {(isSidebarOpen || isMobile) && <span className="tracking-tight">{t(`nav.${item.nameKey}`)}</span>}
+                          </div>
+                          {(isSidebarOpen || isMobile) && (
+                            <div className="transition-transform duration-200">
+                              {isExpanded ? <ChevronDown className="h-4 w-4 opacity-50" /> : <ChevronRight className="h-4 w-4 opacity-50" />}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <NavLink
+                          to={item.href}
+                          className={({ isActive }) =>
+                            cn(
+                              "group flex items-center rounded px-4 py-2 text-sm font-medium transition-colors",
+                              isActive
+                                ? "bg-primary text-primary-foreground"
+                                : "text-slate-600 hover:bg-slate-100",
+                              !isSidebarOpen && !isMobile && "justify-center px-2"
+                            )
+                          }
+                          title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
+                        >
                           <item.icon
                             className={cn(
-                              "flex-shrink-0",
+                              "flex-shrink-0 transition-transform duration-200 group-hover:scale-110",
                               isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
                             )}
                           />
-                          {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
-                        </div>
-                        {(isSidebarOpen || isMobile) && (
-                          isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
-                        )}
-                      </div>
-                    ) : (
-                      <NavLink
-                        to={item.href}
-                        className={({ isActive }) =>
-                          cn(
-                            "group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                            isActive
-                              ? "bg-primary text-primary-foreground font-semibold shadow-sm"
-                              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                            !isSidebarOpen && !isMobile && "justify-center"
-                          )
-                        }
-                        title={!isSidebarOpen && !isMobile ? t(`nav.${item.nameKey}`) : undefined}
-                      >
-                        <item.icon
-                          className={cn(
-                            "flex-shrink-0",
-                            isSidebarOpen || isMobile ? "mr-3 h-5 w-5" : "h-6 w-6"
-                          )}
-                        />
-                        {(isSidebarOpen || isMobile) && <span>{t(`nav.${item.nameKey}`)}</span>}
-                      </NavLink>
-                    )}
+                          {(isSidebarOpen || isMobile) && <span className="tracking-tight">{t(`nav.${item.nameKey}`)}</span>}
+                        </NavLink>
+                      )}
 
-                    {/* Sub-items */}
-                    {item.subItems && isExpanded && (isSidebarOpen || isMobile) && (
-                      <div className="mt-1 space-y-1 pl-9">
-                        {item.subItems.map((subItem) => (
-                          <NavLink
-                            key={subItem.nameKey}
-                            to={subItem.href}
-                            className={({ isActive }) =>
-                              cn(
-                                "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                                isActive
-                                  ? "bg-primary text-primary-foreground font-semibold shadow-sm"
-                                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
-                              )
-                            }
-                          >
-                            {t(`nav.${subItem.nameKey}`)}
-                          </NavLink>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+                      {/* Sub-items */}
+                      {item.subItems && isExpanded && (isSidebarOpen || isMobile) && (
+                        <div className="mt-1 space-y-1 pl-11 relative before:absolute before:left-6 before:top-0 before:bottom-0 before:w-px before:bg-sidebar-border/50">
+                          {item.subItems.map((subItem) => (
+                            <NavLink
+                              key={subItem.nameKey}
+                              to={subItem.href}
+                              className={({ isActive }) =>
+                                cn(
+                                  "group flex items-center rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                                  isActive
+                                    ? "text-primary font-semibold bg-primary/5"
+                                    : "text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                                )
+                              }
+                            >
+                              {t(`nav.${subItem.nameKey}`)}
+                            </NavLink>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           ))}
         </nav>
       </div>
-    </>
+    </div>
   )
 
   if (isMobile) {

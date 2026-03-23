@@ -201,124 +201,108 @@ export function Products() {
   ]
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">{t("products.title")}</h2>
-          <p className="text-muted-foreground">{t("products.description")}</p>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="space-y-1">
+          <h2 className="text-4xl font-black tracking-tight text-slate-900">{t("products.title")}</h2>
+          <p className="text-muted-foreground text-lg font-medium">{t("products.description")}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => toast.success(t("common.settingsSuccess", "Đã mở cài đặt sản phẩm"))}>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="outline" className="rounded-2xl h-11 border-slate-200 hover:bg-slate-50 transition-all shadow-sm" onClick={() => toast.success(t("common.settingsSuccess", "Đã mở cài đặt sản phẩm"))}>
             {t("products.productSettings")} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
-          <Button variant="outline" onClick={() => toast.success(t("common.batchSuccess", "Đã mở công cụ xử lý hàng loạt"))}>
+          <Button variant="outline" className="rounded-2xl h-11 border-slate-200 hover:bg-slate-50 transition-all shadow-sm" onClick={() => toast.success(t("common.batchSuccess", "Đã mở công cụ xử lý hàng loạt"))}>
             {t("products.batchTools")} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
-          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl h-11 px-6 font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
             <Link to="/products/add">
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-2 h-5 w-5" />
               {t("products.addProduct")}
             </Link>
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("products.stats.totalProducts")}</CardTitle>
-            <div className="p-2 bg-blue-100 rounded-full">
-              <Package className="h-4 w-4 text-blue-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{products.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.activeItems")}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("products.stats.lowStock")}</CardTitle>
-            <div className="p-2 bg-yellow-100 rounded-full">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.needsRestock")}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("products.stats.topRated")}</CardTitle>
-            <div className="p-2 bg-green-100 rounded-full">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.ratingDesc")}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("products.stats.inactive")}</CardTitle>
-            <div className="p-2 bg-red-100 rounded-full">
-              <XCircle className="h-4 w-4 text-red-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-            <p className="text-xs text-muted-foreground mt-1">{t("products.stats.unpublished")}</p>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { title: t("products.stats.totalProducts"), value: products.length, icon: Package, color: "blue", desc: t("products.stats.activeItems") },
+          { title: t("products.stats.lowStock"), value: 2, icon: AlertTriangle, color: "amber", desc: t("products.stats.needsRestock") },
+          { title: t("products.stats.topRated"), value: 3, icon: CheckCircle2, color: "emerald", desc: t("products.stats.ratingDesc") },
+          { title: t("products.stats.inactive"), value: 0, icon: XCircle, color: "rose", desc: t("products.stats.unpublished") },
+        ].map((stat, i) => (
+          <Card key={i} className="border-none shadow-xl shadow-slate-200/50 rounded-[32px] overflow-hidden group hover:shadow-2xl transition-all duration-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs font-black uppercase tracking-widest text-slate-500">{stat.title}</CardTitle>
+              <div className={cn(
+                "p-3 rounded-2xl transition-transform group-hover:scale-110 duration-500",
+                stat.color === "blue" && "bg-blue-50 text-blue-600 shadow-lg shadow-blue-500/10",
+                stat.color === "amber" && "bg-amber-50 text-amber-600 shadow-lg shadow-amber-500/10",
+                stat.color === "emerald" && "bg-emerald-50 text-emerald-600 shadow-lg shadow-emerald-500/10",
+                stat.color === "rose" && "bg-rose-50 text-rose-600 shadow-lg shadow-rose-500/10"
+              )}>
+                <stat.icon className="h-5 w-5" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-black tracking-tight text-slate-900">{stat.value}</div>
+              <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">{stat.desc}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100">
-        <CardHeader className="pb-2 flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="text-lg font-semibold flex items-center gap-2 text-blue-700">
-              <Sparkles className="h-5 w-5" />
+      <Card className="border-none shadow-2xl shadow-primary/5 rounded-[40px] overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 relative group">
+        <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity">
+          <Sparkles className="w-48 h-48 text-white" />
+        </div>
+        <CardHeader className="p-8 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2">
+            <CardTitle className="text-3xl font-black flex items-center gap-3 text-white">
+              <div className="p-2.5 bg-white/20 rounded-2xl backdrop-blur-md">
+                <Sparkles className="h-7 w-7 text-white" />
+              </div>
               {t("products.forecasting.title")}
             </CardTitle>
-            <CardDescription className="text-blue-600/80">
+            <CardDescription className="text-blue-100/80 text-lg font-medium max-w-2xl">
               {t("products.forecasting.description")}
             </CardDescription>
           </div>
           <Button 
             onClick={runAiAnalysis} 
             disabled={isAnalyzing}
-            className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+            className="bg-white hover:bg-blue-50 text-blue-700 rounded-2xl h-14 px-8 font-black text-lg shadow-2xl shadow-black/20 gap-3 transition-all active:scale-95"
           >
-            {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {isAnalyzing ? <Loader2 className="h-6 w-6 animate-spin" /> : <Sparkles className="h-6 w-6" />}
             {t("products.forecasting.analyzeAll")}
           </Button>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <CardContent className="p-8 pt-4 relative z-10">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               { name: "iPhone 15 Pro Max", stock: 50, velocity: 12, daysLeft: 4, trend: "up" },
               { name: "MacBook Pro M3", stock: 20, velocity: 5, daysLeft: 4, trend: "stable" },
               { name: "Sony WH-1000XM5", stock: 100, velocity: 25, daysLeft: 4, trend: "up" },
             ].map((item, i) => (
-              <div key={i} className="flex items-center justify-between p-3 bg-white/50 rounded-lg border border-blue-100">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">{item.name}</p>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] h-4 bg-white">
+              <div key={i} className="flex items-center justify-between p-5 bg-white/10 backdrop-blur-md rounded-[24px] border border-white/20 group/item hover:bg-white/20 transition-all duration-300">
+                <div className="space-y-2">
+                  <p className="text-base font-black text-white">{item.name}</p>
+                  <div className="flex items-center gap-3">
+                    <Badge className="bg-white/20 text-white border-none text-[10px] font-black uppercase tracking-widest px-2.5 py-1">
                       {item.stock} {t("products.inStock")}
                     </Badge>
-                    <span className="text-[10px] text-muted-foreground">
+                    <span className="text-[10px] font-bold text-blue-100/70 uppercase tracking-widest">
                       {item.velocity} {t("products.unitsPerDay")}
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-semibold text-rose-600 flex items-center justify-end">
-                    <TrendingDown className="h-3 w-3 mr-1" />
-                    {item.daysLeft} {t("products.daysLeft")}
-                  </p>
-                  <Button variant="link" size="sm" className="h-auto p-0 text-[10px] text-blue-600">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/20 rounded-full border border-rose-500/30 mb-2">
+                    <TrendingDown className="h-3 w-3 text-rose-300" />
+                    <span className="text-xs font-black text-rose-100">
+                      {item.daysLeft} {t("products.daysLeft")}
+                    </span>
+                  </div>
+                  <Button variant="link" size="sm" className="h-auto p-0 text-[10px] font-black uppercase tracking-widest text-white hover:text-blue-200 transition-colors block ml-auto">
                     {t("products.forecasting.restockNow")}
                   </Button>
                 </div>
@@ -328,33 +312,37 @@ export function Products() {
         </CardContent>
       </Card>
 
-      <div className="rounded-xl border bg-card text-card-foreground shadow">
-        <div className="border-b px-4">
-          <div className="flex space-x-6 overflow-x-auto">
+      <div className="rounded-[40px] border-none bg-white shadow-2xl shadow-slate-200/50 overflow-hidden">
+        <div className="border-b border-slate-100 px-8 bg-slate-50/50">
+          <div className="flex space-x-10 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "py-4 text-sm font-medium transition-colors relative whitespace-nowrap",
+                  "py-6 text-sm font-black uppercase tracking-widest transition-all relative whitespace-nowrap",
                   activeTab === tab.id
-                    ? "text-primary border-b-2 border-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-primary"
+                    : "text-slate-400 hover:text-slate-600"
                 )}
               >
-                {tab.label} {tab.count !== undefined && `(${tab.count})`}
+                {tab.label} {tab.count !== undefined && <span className="ml-1 opacity-50">({tab.count})</span>}
+                {activeTab === tab.id && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full" />
+                )}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="p-4 border-b space-y-4">
+        <div className="p-8 border-b border-slate-100 space-y-6">
           <div className="flex flex-wrap gap-4">
-            <div className="relative flex-1 min-w-[300px]">
+            <div className="relative flex-1 min-w-[300px] group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
               <Input
                 type="search"
                 placeholder={t("products.searchPlaceholder")}
-                className="w-full"
+                className="w-full h-14 rounded-2xl bg-slate-100 border-none pl-12 pr-6 font-bold text-lg focus-visible:ring-primary/20"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -363,39 +351,33 @@ export function Products() {
               <Input
                 type="text"
                 placeholder={t("products.filters.category")}
-                className="w-full pr-8"
+                className="w-full h-14 rounded-2xl bg-slate-100 border-none px-6 font-bold focus-visible:ring-primary/20"
               />
-              <Wrench className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Wrench className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             </div>
-            <div className="relative flex-1 min-w-[200px]">
-              <Button variant="outline" className="w-full justify-between font-normal text-muted-foreground">
-                {t("products.filters.flagship")}
-                <ChevronDown className="h-4 w-4 opacity-50" />
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => toast.success(t("common.applySuccess", "Đã áp dụng bộ lọc"))}>
+            <div className="flex items-center gap-3">
+              <Button variant="outline" className="h-14 rounded-2xl px-6 font-bold border-slate-200 hover:bg-slate-50 transition-all shadow-sm" onClick={() => toast.success(t("common.applySuccess", "Đã áp dụng bộ lọc"))}>
                 {t("products.filters.apply")}
               </Button>
-              <Button variant="ghost" onClick={() => setSearchTerm("")}>
+              <Button variant="ghost" className="h-14 rounded-2xl px-6 font-bold text-slate-500 hover:text-slate-700" onClick={() => setSearchTerm("")}>
                 {t("products.filters.reset")}
               </Button>
-              <div className="flex items-center border rounded-md bg-muted/30 p-0.5">
+              <div className="flex items-center border border-slate-200 rounded-2xl bg-slate-50 p-1.5 shadow-inner">
                 <Button 
                   variant={viewMode === "grid" ? "secondary" : "ghost"} 
                   size="icon" 
-                  className="h-8 w-8 rounded-sm"
+                  className={cn("h-10 w-10 rounded-xl transition-all", viewMode === "grid" && "bg-white shadow-md text-primary")}
                   onClick={() => setViewMode("grid")}
                 >
-                  <LayoutGrid className="h-4 w-4" />
+                  <LayoutGrid className="h-5 w-5" />
                 </Button>
                 <Button 
                   variant={viewMode === "list" ? "secondary" : "ghost"} 
                   size="icon" 
-                  className="h-8 w-8 rounded-sm"
+                  className={cn("h-10 w-10 rounded-xl transition-all", viewMode === "list" && "bg-white shadow-md text-primary")}
                   onClick={() => setViewMode("list")}
                 >
-                  <List className="h-4 w-4" />
+                  <List className="h-5 w-5" />
                 </Button>
               </div>
             </div>
@@ -403,172 +385,179 @@ export function Products() {
         </div>
 
         {viewMode === "list" ? (
-          <Table>
-            <TableHeader className="bg-muted/30">
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="w-[40px]"></TableHead>
-                <TableHead className="font-semibold">{t("products.name")}</TableHead>
-                <TableHead className="text-right font-semibold">
-                  <Button variant="ghost" onClick={() => handleSort('price')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
-                    {t("products.table.price", "Giá bán")}
-                    <ArrowUpDown className="ml-2 h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead className="text-right font-semibold">
-                  <Button variant="ghost" onClick={() => handleSort('stock')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
-                    {t("products.table.stock", "Kho hàng")}
-                    <ArrowUpDown className="ml-2 h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead className="text-right font-semibold hidden lg:table-cell">
-                  <Button variant="ghost" onClick={() => handleSort('performance')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
-                    {t("products.performance", "Hiệu suất")}
-                    <ArrowUpDown className="ml-2 h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead className="text-right font-semibold hidden xl:table-cell">{t("products.table.category", "Ngành hàng")}</TableHead>
-                <TableHead className="text-right font-semibold hidden md:table-cell">{t("products.table.status", "Trạng thái")}</TableHead>
-                <TableHead className="text-right font-semibold">{t("common.actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="h-64 text-center">
-                    <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <Loader2 className="h-8 w-8 animate-spin mb-4" />
-                      <p>{t("products.table.loading", "Đang tải dữ liệu...")}</p>
-                    </div>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader className="bg-slate-50/50">
+                <TableRow className="hover:bg-transparent border-none">
+                  <TableHead className="w-[60px] pl-8"></TableHead>
+                  <TableHead className="font-black uppercase tracking-widest text-[10px] text-slate-400">{t("products.name")}</TableHead>
+                  <TableHead className="text-right font-black uppercase tracking-widest text-[10px] text-slate-400">
+                    <Button variant="ghost" onClick={() => handleSort('price')} className="hover:bg-transparent p-0 font-black uppercase tracking-widest text-[10px] text-slate-400 ml-auto h-8">
+                      {t("products.table.price", "Giá bán")}
+                      <ArrowUpDown className="ml-2 h-3 w-3" />
+                    </Button>
+                  </TableHead>
+                  <TableHead className="text-right font-black uppercase tracking-widest text-[10px] text-slate-400">
+                    <Button variant="ghost" onClick={() => handleSort('stock')} className="hover:bg-transparent p-0 font-black uppercase tracking-widest text-[10px] text-slate-400 ml-auto h-8">
+                      {t("products.table.stock", "Kho hàng")}
+                      <ArrowUpDown className="ml-2 h-3 w-3" />
+                    </Button>
+                  </TableHead>
+                  <TableHead className="text-right font-black uppercase tracking-widest text-[10px] text-slate-400 hidden lg:table-cell">
+                    <Button variant="ghost" onClick={() => handleSort('performance')} className="hover:bg-transparent p-0 font-black uppercase tracking-widest text-[10px] text-slate-400 ml-auto h-8">
+                      {t("products.performance", "Hiệu suất")}
+                      <ArrowUpDown className="ml-2 h-3 w-3" />
+                    </Button>
+                  </TableHead>
+                  <TableHead className="text-right font-black uppercase tracking-widest text-[10px] text-slate-400 hidden xl:table-cell">{t("products.table.category", "Ngành hàng")}</TableHead>
+                  <TableHead className="text-right font-black uppercase tracking-widest text-[10px] text-slate-400 hidden md:table-cell">{t("products.table.status", "Trạng thái")}</TableHead>
+                  <TableHead className="text-right font-black uppercase tracking-widest text-[10px] text-slate-400 pr-8">{t("common.actions")}</TableHead>
                 </TableRow>
-              ) : sortedProducts.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="h-64 text-center text-muted-foreground">
-                    <div className="flex flex-col items-center justify-center">
-                      <Package className="h-12 w-12 mb-4 opacity-20" />
-                      <p>{t("products.noProducts")}</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                sortedProducts.map((product) => {
-                  // Calculate total stock if combinations exist
-                  let totalStock = product.stock || 0;
-                  let displayPrice = (product.price || product.suggestedPrice) ? formatVND(product.price || product.suggestedPrice) : "N/A";
-                  
-                  if (product.combinations && product.combinations.length > 0) {
-                    totalStock = product.combinations.reduce((sum: number, comb: any) => sum + (Number(comb.stock) || 0), 0);
-                    const prices = product.combinations.map((c: any) => Number(c.price) || 0).filter((p: number) => p > 0);
-                    if (prices.length > 0) {
-                      const minPrice = Math.min(...prices);
-                      const maxPrice = Math.max(...prices);
-                      displayPrice = minPrice === maxPrice ? formatVND(minPrice) : `${formatVND(minPrice)} - ${formatVND(maxPrice)}`;
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="h-96 text-center">
+                      <div className="flex flex-col items-center justify-center text-slate-400">
+                        <Loader2 className="h-12 w-12 animate-spin mb-6 text-primary/30" />
+                        <p className="font-bold uppercase tracking-widest text-xs">{t("products.table.loading", "Đang tải dữ liệu...")}</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : sortedProducts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="h-96 text-center text-slate-400">
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="h-24 w-24 bg-slate-50 rounded-[32px] flex items-center justify-center mb-6">
+                          <Package className="h-12 w-12 opacity-20" />
+                        </div>
+                        <p className="font-bold uppercase tracking-widest text-xs">{t("products.noProducts")}</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  sortedProducts.map((product) => {
+                    let totalStock = product.stock || 0;
+                    let displayPrice = (product.price || product.suggestedPrice) ? formatVND(product.price || product.suggestedPrice) : "N/A";
+                    
+                    if (product.combinations && product.combinations.length > 0) {
+                      totalStock = product.combinations.reduce((sum: number, comb: any) => sum + (Number(comb.stock) || 0), 0);
+                      const prices = product.combinations.map((c: any) => Number(c.price) || 0).filter((p: number) => p > 0);
+                      if (prices.length > 0) {
+                        const minPrice = Math.min(...prices);
+                        const maxPrice = Math.max(...prices);
+                        displayPrice = minPrice === maxPrice ? formatVND(minPrice) : `${formatVND(minPrice)} - ${formatVND(maxPrice)}`;
+                      }
                     }
-                  }
 
-                  return (
-                    <TableRow key={product.id} className="group hover:bg-muted/50 transition-colors">
-                      <TableCell>
-                        <Input type="checkbox" className="h-4 w-4 rounded border-muted-foreground/30" />
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-4">
-                          <div className="h-12 w-12 rounded-lg border bg-white overflow-hidden flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
-                            {product.images && product.images.length > 0 ? (
-                              <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
-                            ) : (
-                              <div className="h-full w-full flex items-center justify-center bg-muted">
-                                <Package className="h-6 w-6 text-muted-foreground/40" />
+                    return (
+                      <TableRow key={product.id} className="group hover:bg-slate-50/80 transition-all border-slate-100">
+                        <TableCell className="pl-8">
+                          <Input type="checkbox" className="h-5 w-5 rounded-lg border-slate-200 text-primary focus:ring-primary/20" />
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-5 py-2">
+                            <div className="h-16 w-16 rounded-2xl border border-slate-100 bg-white overflow-hidden flex-shrink-0 shadow-sm group-hover:shadow-xl group-hover:scale-105 transition-all duration-500">
+                              {product.images && product.images.length > 0 ? (
+                                <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                              ) : (
+                                <div className="h-full w-full flex items-center justify-center bg-slate-50">
+                                  <Package className="h-8 w-8 text-slate-200" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex flex-col min-w-0 space-y-1">
+                              <span className="font-black text-base text-slate-900 leading-tight truncate max-w-[200px] md:max-w-[300px] group-hover:text-primary transition-colors" title={product.productName}>
+                                {product.productName}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
+                                  ID: {product.id.substring(0, 8).toUpperCase()}
+                                </span>
                               </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="font-black text-base text-primary tracking-tight">
+                              {displayPrice}
+                            </span>
+                            {product.suggestedPrice && product.price && product.price < product.suggestedPrice && (
+                              <span className="text-[10px] font-bold text-slate-400 line-through">
+                                {formatVND(product.suggestedPrice)}
+                              </span>
                             )}
                           </div>
-                          <div className="flex flex-col min-w-0">
-                            <span className="font-semibold text-sm text-foreground leading-tight truncate max-w-[200px] md:max-w-[300px]" title={product.productName}>
-                              {product.productName}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex flex-col items-end gap-1">
+                            <span className={cn(
+                              "font-black text-base tracking-tight",
+                              totalStock < 10 ? "text-rose-600" : "text-slate-900"
+                            )}>
+                              {totalStock}
                             </span>
-                            <span className="text-[11px] font-mono text-muted-foreground mt-1">
-                              ID: {product.id.substring(0, 8).toUpperCase()}
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                              {t("products.inStock")}
                             </span>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex flex-col items-end">
-                          <span className="font-bold text-sm text-primary">
-                            {displayPrice}
+                        </TableCell>
+                        <TableCell className="text-right hidden lg:table-cell">
+                          <Badge 
+                            variant="secondary" 
+                            className={cn(
+                              "font-black text-[10px] px-3 py-1 rounded-lg uppercase tracking-widest border-none shadow-sm",
+                              product.performance === "High" && "bg-emerald-100 text-emerald-700 shadow-emerald-500/10",
+                              product.performance === "Medium" && "bg-sky-100 text-sky-700 shadow-sky-500/10",
+                              product.performance === "Low" && "bg-amber-100 text-amber-700 shadow-amber-500/10"
+                            )}
+                          >
+                            {product.performance || "N/A"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right hidden xl:table-cell">
+                          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            {product.category?.[product.category.length - 1] || "N/A"}
                           </span>
-                          {product.suggestedPrice && product.price && product.price < product.suggestedPrice && (
-                            <span className="text-[10px] text-muted-foreground line-through">
-                              {formatVND(product.suggestedPrice)}
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex flex-col items-end">
-                          <span className={cn(
-                            "font-medium text-sm",
-                            totalStock < 10 ? "text-rose-600" : "text-foreground"
-                          )}>
-                            {totalStock}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
-                            {t("products.inStock")}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right hidden lg:table-cell">
-                        <Badge 
-                          variant="secondary" 
-                          className={cn(
-                            "font-semibold text-[10px] px-2 py-0 h-5 uppercase tracking-wider",
-                            product.performance === "High" && "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200",
-                            product.performance === "Medium" && "bg-sky-100 text-sky-700 hover:bg-sky-100 border-sky-200",
-                            product.performance === "Low" && "bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200"
-                          )}
-                        >
-                          {product.performance || "N/A"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right hidden xl:table-cell">
-                        <span className="text-xs text-muted-foreground font-medium">
-                          {product.category?.[product.category.length - 1] || "N/A"}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right hidden md:table-cell">
-                        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200 text-[10px] font-bold uppercase tracking-tighter">
-                          {t("products.table.active", "Đang bán")}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
-                            <Link to={`/products/edit/${product.id}`}>
-                              <Edit className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(product.id)}>
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })
-              )}
-            </TableBody>
-          </Table>
+                        </TableCell>
+                        <TableCell className="text-right hidden md:table-cell">
+                          <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-100 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg">
+                            {t("products.table.active", "Đang bán")}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right pr-8">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl text-slate-400 hover:text-primary hover:bg-primary/5 transition-all" asChild>
+                              <Link to={`/products/edit/${product.id}`}>
+                                <Edit className="h-5 w-5" />
+                              </Link>
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl text-slate-400 hover:text-destructive hover:bg-destructive/5 transition-all" onClick={() => handleDelete(product.id)}>
+                              <Trash2 className="h-5 w-5" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })
+                )}
+              </TableBody>
+            </Table>
+          </div>
         ) : (
-          <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {isLoading ? (
-              <div className="col-span-full h-64 flex flex-col items-center justify-center text-muted-foreground">
-                <Loader2 className="h-8 w-8 animate-spin mb-4" />
-                <p>{t("products.table.loading", "Đang tải dữ liệu...")}</p>
+              <div className="col-span-full h-96 flex flex-col items-center justify-center text-slate-400">
+                <Loader2 className="h-12 w-12 animate-spin mb-6 text-primary/30" />
+                <p className="font-bold uppercase tracking-widest text-xs">{t("products.table.loading", "Đang tải dữ liệu...")}</p>
               </div>
             ) : sortedProducts.length === 0 ? (
-              <div className="col-span-full h-64 flex flex-col items-center justify-center text-muted-foreground">
-                <Package className="h-12 w-12 mb-4 opacity-20" />
-                <p>{t("products.noProducts")}</p>
+              <div className="col-span-full h-96 flex flex-col items-center justify-center text-slate-400">
+                <div className="h-24 w-24 bg-slate-50 rounded-[32px] flex items-center justify-center mb-6">
+                  <Package className="h-12 w-12 opacity-20" />
+                </div>
+                <p className="font-bold uppercase tracking-widest text-xs">{t("products.noProducts")}</p>
               </div>
             ) : (
               sortedProducts.map((product) => {
@@ -586,68 +575,69 @@ export function Products() {
                 }
 
                 return (
-                  <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow border-slate-200">
-                    <div className="aspect-[4/3] bg-muted relative group">
+                  <Card key={product.id} className="group overflow-hidden border-none shadow-xl shadow-slate-200/50 rounded-[32px] bg-white hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 transform hover:-translate-y-1">
+                    <div className="aspect-[4/3] bg-slate-50 relative overflow-hidden">
                       {product.images && product.images.length > 0 ? (
-                        <img src={product.images[0].url} alt={product.productName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerPolicy="no-referrer" />
+                        <img src={product.images[0].url} alt={product.productName} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerPolicy="no-referrer" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="h-12 w-12 text-muted-foreground/40" />
+                          <Package className="h-16 w-16 text-slate-200" />
                         </div>
                       )}
-                      <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute top-4 left-4 flex flex-col gap-2 items-start">
                         {product.category && product.category.length > 0 && (
-                          <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm shadow-sm text-xs font-medium">
+                          <Badge className="bg-white/90 backdrop-blur-md shadow-xl text-[10px] font-black uppercase tracking-widest text-slate-900 px-3 py-1 rounded-lg border-none">
                             {product.category[product.category.length - 1]}
                           </Badge>
                         )}
                       </div>
-                      <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+                      <div className="absolute top-4 right-4">
                         <Badge 
-                          variant="secondary" 
                           className={cn(
-                            "bg-white/90 backdrop-blur-sm shadow-sm text-xs font-semibold uppercase tracking-wider",
-                            product.performance === "High" && "text-emerald-700",
-                            product.performance === "Medium" && "text-sky-700",
-                            product.performance === "Low" && "text-amber-700"
+                            "backdrop-blur-md shadow-xl text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg border-none",
+                            product.performance === "High" && "bg-emerald-500/90 text-white",
+                            product.performance === "Medium" && "bg-sky-500/90 text-white",
+                            product.performance === "Low" && "bg-amber-500/90 text-white"
                           )}
                         >
                           {product.performance || "N/A"}
                         </Badge>
                       </div>
-                    </div>
-                    <CardContent className="p-5">
-                      <div className="mb-4">
-                        <h3 className="font-semibold text-base line-clamp-2 leading-snug mb-1" title={product.productName}>
-                          {product.productName}
-                        </h3>
-                        <p className="text-xs text-muted-foreground font-mono">ID: {product.id.substring(0, 8).toUpperCase()}</p>
-                      </div>
-                      <div className="flex justify-between items-end mb-4">
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">{t("products.table.price", "Giá bán")}</p>
-                          <p className="font-bold text-lg text-primary leading-none">{displayPrice}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs text-muted-foreground mb-1">{t("products.table.stock", "Kho hàng")}</p>
-                          <p className={cn("font-medium leading-none", totalStock < 10 ? "text-rose-600" : "text-foreground")}>
-                            {totalStock}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200 text-[10px] font-bold uppercase tracking-tighter">
-                          {t("products.table.active", "Đang bán")}
-                        </Badge>
-                        <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
+                      <div className="absolute bottom-4 left-4 right-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                        <div className="flex gap-2">
+                          <Button className="flex-1 rounded-xl font-bold h-10 shadow-lg shadow-primary/30" asChild>
                             <Link to={`/products/edit/${product.id}`}>
-                              <Edit className="h-4 w-4" />
+                              <Edit className="h-4 w-4 mr-2" /> {t("common.edit")}
                             </Link>
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(product.id)}>
+                          <Button variant="destructive" size="icon" className="rounded-xl h-10 w-10 shadow-lg shadow-destructive/30" onClick={() => handleDelete(product.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
+                        </div>
+                      </div>
+                    </div>
+                    <CardContent className="p-6">
+                      <div className="mb-5">
+                        <h3 className="font-black text-lg text-slate-900 line-clamp-2 leading-tight mb-2 group-hover:text-primary transition-colors" title={product.productName}>
+                          {product.productName}
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
+                            ID: {product.id.substring(0, 8).toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-end pt-4 border-t border-slate-100">
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("products.table.price", "Giá bán")}</p>
+                          <p className="font-black text-xl text-primary tracking-tight leading-none">{displayPrice}</p>
+                        </div>
+                        <div className="text-right space-y-1">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("products.table.stock", "Kho hàng")}</p>
+                          <p className={cn("font-black text-xl tracking-tight leading-none", totalStock < 10 ? "text-rose-600" : "text-slate-900")}>
+                            {totalStock}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
