@@ -6,7 +6,7 @@ import { Input } from "@/src/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
 import { Plus, Search, Edit, Trash2, Loader2, Upload, Sparkles, Image as ImageIcon, Filter } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/src/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/src/components/ui/dialog";
 import { Label } from "@/src/components/ui/label";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
@@ -15,6 +15,53 @@ import { db, auth } from "@/src/lib/firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 import { GoogleGenAI } from "@google/genai";
+
+const FilterPopover = ({ label, options, selected, onChange }: { 
+  label: string, 
+  options: string[], 
+  selected: string[], 
+  onChange: (val: string[]) => void 
+}) => (
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button variant="outline" size="sm" className="h-9 gap-2">
+        <Filter className="h-4 w-4" />
+        {label}
+        {selected.length > 0 && (
+          <Badge variant="secondary" className="ml-1 h-5 px-1 font-normal">
+            {selected.length}
+          </Badge>
+        )}
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent className="w-60 p-2" align="start">
+      <div className="space-y-2 max-h-60 overflow-y-auto">
+        {options.length === 0 && <p className="text-xs text-muted-foreground p-2">Không có dữ liệu</p>}
+        {options.map((option) => (
+          <div key={option} className="flex items-center space-x-2 p-1 hover:bg-slate-50 rounded">
+            <Checkbox 
+              id={`${label}-${option}`} 
+              checked={selected.includes(option)}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  onChange([...selected, option]);
+                } else {
+                  onChange(selected.filter(s => s !== option));
+                }
+              }}
+            />
+            <label 
+              htmlFor={`${label}-${option}`}
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex-1"
+            >
+              {option}
+            </label>
+          </div>
+        ))}
+      </div>
+    </PopoverContent>
+  </Popover>
+);
 
 export function POSProducts({ storeId, branchId }: { storeId: string; branchId?: string }) {
   const { t } = useTranslation();
@@ -39,8 +86,6 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
     description: "",
   });
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -60,6 +105,20 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
 
     setIsGenerating(true);
     try {
+      let apiKey = "";
+      try {
+        apiKey = process.env.GEMINI_API_KEY || "";
+      } catch (e) {
+        console.warn("process is not defined");
+      }
+      
+      if (!apiKey) {
+        toast.error("API Key is missing");
+        setIsGenerating(false);
+        return;
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash-image",
         contents: {
@@ -118,53 +177,6 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
   const uniqueL2 = Array.from(new Set(products.map(p => p.categoryLevel2).filter(Boolean))) as string[];
   const uniqueL3 = Array.from(new Set(products.map(p => p.categoryLevel3).filter(Boolean))) as string[];
 
-  const FilterPopover = ({ label, options, selected, onChange }: { 
-    label: string, 
-    options: string[], 
-    selected: string[], 
-    onChange: (val: string[]) => void 
-  }) => (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-9 gap-2">
-          <Filter className="h-4 w-4" />
-          {label}
-          {selected.length > 0 && (
-            <Badge variant="secondary" className="ml-1 h-5 px-1 font-normal">
-              {selected.length}
-            </Badge>
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-60 p-2" align="start">
-        <div className="space-y-2 max-h-60 overflow-y-auto">
-          {options.length === 0 && <p className="text-xs text-muted-foreground p-2">Không có dữ liệu</p>}
-          {options.map((option) => (
-            <div key={option} className="flex items-center space-x-2 p-1 hover:bg-slate-50 rounded">
-              <Checkbox 
-                id={`${label}-${option}`} 
-                checked={selected.includes(option)}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    onChange([...selected, option]);
-                  } else {
-                    onChange(selected.filter(s => s !== option));
-                  }
-                }}
-              />
-              <label 
-                htmlFor={`${label}-${option}`}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex-1"
-              >
-                {option}
-              </label>
-            </div>
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-
   const handleAddProduct = () => {
     setEditingProduct(null);
     setFormData({ 
@@ -186,7 +198,7 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
     setFormData({ 
       productName: product.productName || "", 
       price: product.price || product.suggestedPrice || 0, 
-      category: Array.isArray(product.category) ? product.category[0] : (product.category || ""), 
+      category: (Array.isArray(product.category) ? product.category[0] : product.category) || "", 
       categoryLevel1: product.categoryLevel1 || "",
       categoryLevel2: product.categoryLevel2 || "",
       categoryLevel3: product.categoryLevel3 || "",
@@ -357,9 +369,12 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
       </Card>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby="dialog-description">
           <DialogHeader>
             <DialogTitle>{editingProduct ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}</DialogTitle>
+            <DialogDescription id="dialog-description" className="sr-only">
+              Điền thông tin chi tiết của sản phẩm.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -422,9 +437,11 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
                     <ImageIcon className="h-12 w-12 text-slate-300" />
                   )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <Button variant="secondary" size="sm" className="relative">
-                      <Upload className="h-4 w-4 mr-2" /> {t("common.upload", "Tải lên")}
-                      <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleImageUpload} />
+                    <Button variant="secondary" size="sm" className="relative" asChild>
+                      <label>
+                        <Upload className="h-4 w-4 mr-2" /> {t("common.upload", "Tải lên")}
+                        <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleImageUpload} />
+                      </label>
                     </Button>
                     <Button variant="secondary" size="sm" onClick={generateAIImage} disabled={isGenerating}>
                       {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Sparkles className="h-4 w-4 mr-2" /> {t("common.aiGenerate", "AI Tạo ảnh")}</>}

@@ -57,6 +57,7 @@
   "nav": {
     "groups": {
       "management": "Quản lý",
+      "workspace": "Workspace",
       "commerce": "Thương mại",
       "growth": "Tăng trưởng",
       "operations": "Vận hành",

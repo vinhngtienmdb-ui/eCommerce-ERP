@@ -21,6 +21,7 @@
   "nav": {
     "groups": {
       "management": "管理",
+      "workspace": "Workspace",
       "commerce": "商务",
       "growth": "增长",
       "operations": "运营",

@@ -330,7 +330,13 @@ export function AddProduct() {
 
     setIsGenerating(true)
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+      let apiKey = "";
+      try { apiKey = process.env.GEMINI_API_KEY || ""; } catch (e) {}
+      if (!apiKey) {
+        toast.error("API Key is missing");
+        return;
+      }
+      const ai = new GoogleGenAI({ apiKey })
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Generate a professional, engaging product description for an e-commerce site. 
@@ -359,7 +365,13 @@ export function AddProduct() {
 
     setIsCategorizing(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+      let apiKey = "";
+      try { apiKey = process.env.GEMINI_API_KEY || ""; } catch (e) {}
+      if (!apiKey) {
+        toast.error("API Key is missing");
+        return;
+      }
+      const ai = new GoogleGenAI({ apiKey });
       
       // Get the first available image
       const imageUrl = coverImage || images[0].url;

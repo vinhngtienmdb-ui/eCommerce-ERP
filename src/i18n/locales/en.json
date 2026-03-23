@@ -25,6 +25,7 @@
   "nav": {
     "groups": {
       "management": "Management",
+      "workspace": "Workspace",
       "commerce": "Commerce",
       "growth": "Growth",
       "operations": "Operations",
