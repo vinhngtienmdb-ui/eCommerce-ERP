@@ -115,6 +115,7 @@ export function AddProduct() {
   const [productName, setProductName] = useState("")
   const [costPrice, setCostPrice] = useState("")
   const [stock, setStock] = useState("")
+  const [lowStockThreshold, setLowStockThreshold] = useState("5")
   const [warehouseType, setWarehouseType] = useState("normal")
   const [warehouseId, setWarehouseId] = useState("")
   const [syncWms, setSyncWms] = useState(false)
@@ -478,6 +479,7 @@ export function AddProduct() {
         },
         shipping: { weight: Number(weight), length: Number(length), width: Number(width), height: Number(height) },
         other: { condition, isPreOrder, prepTime: Number(prepTime) },
+        lowStockThreshold: Number(lowStockThreshold),
         status: publish ? 'published' : 'hidden',
         createdAt: new Date().toISOString(),
         userId: auth.currentUser?.uid || 'anonymous'
@@ -1031,6 +1033,17 @@ export function AddProduct() {
                       </div>
                     </div>
                   )}
+
+                  <div className="grid grid-cols-[200px_1fr] gap-4">
+                    <div className="text-sm font-medium pt-2">Cảnh báo tồn kho thấp</div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" value={lowStockThreshold} onChange={e => setLowStockThreshold(e.target.value)} placeholder="5" className="w-32" />
+                        <span className="text-muted-foreground">Sản phẩm</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Nhận thông báo khi tồn kho xuống dưới mức này</p>
+                    </div>
+                  </div>
 
                   <div className="grid grid-cols-[200px_1fr] gap-4">
                     <div className="text-sm font-medium pt-2">{t("products.add.warehouse.syncWms")}</div>

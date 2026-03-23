@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "./lib/AuthContext"
 import { Toaster } from "sonner"
 import { useTranslation } from "react-i18next"
 import { AiAssistant } from "./components/AiAssistant"
+import { NotificationManager } from "./components/NotificationManager"
 import { Button } from "./components/ui/button"
 
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })))
@@ -63,6 +64,7 @@ const Loyalty = lazy(() => import("./pages/Loyalty"))
 const Logistics = lazy(() => import("./pages/Logistics"))
 const EContract = lazy(() => import("./pages/EContract").then(m => ({ default: m.default })))
 const InvoiceManagement = lazy(() => import("./pages/finance/InvoiceManagement").then(m => ({ default: m.default })))
+const FinancialReport = lazy(() => import("./pages/finance/FinancialReport").then(m => ({ default: m.FinancialReport })))
 const FinanceDashboard = lazy(() => import("./pages/finance/FinanceDashboard").then(m => ({ default: m.FinanceDashboard })))
 const HRDashboard = lazy(() => import("./pages/hr/HRDashboard").then(m => ({ default: m.HRDashboard })))
 const EmployeePortal = lazy(() => import("./pages/hr/EmployeePortal").then(m => ({ default: m.EmployeePortal })))
@@ -77,6 +79,7 @@ const POSBranchManagement = lazy(() => import("./pages/pos/POSBranchManagement")
 const POSStoreRegistration = lazy(() => import("./pages/pos/POSStoreRegistration").then(m => ({ default: m.POSStoreRegistration })))
 const POSRegistrationList = lazy(() => import("./pages/pos/POSRegistrationList").then(m => ({ default: m.POSRegistrationList })))
 const POSCustomerMenu = lazy(() => import("./pages/pos/POSCustomerMenu").then(m => ({ default: m.POSCustomerMenu })))
+const Storefront = lazy(() => import("./pages/Storefront").then(m => ({ default: m.Storefront })))
 
 const PaymentRequest = lazy(() => import("./pages/PaymentRequest"))
 
@@ -156,10 +159,12 @@ export default function App() {
       <BrowserRouter>
         <Toaster position="top-right" richColors />
         <AiAssistant />
+        <NotificationManager />
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/pos/register" element={<POSStoreRegistration />} />
             <Route path="/menu/:storeId/:branchId?" element={<POSCustomerMenu />} />
+            <Route path="/storefront" element={<Storefront />} />
             <Route path="/" element={<ProtectedLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="products">
@@ -226,6 +231,7 @@ export default function App() {
                 <Route path="payment-wallet" element={<PaymentWallet />} />
                 <Route path="seller-finance" element={<SellerFinance />} />
                 <Route path="invoices" element={<InvoiceManagement />} />
+                <Route path="reports" element={<FinancialReport />} />
               </Route>
               <Route path="hr">
                 <Route index element={<HRDashboard />} />

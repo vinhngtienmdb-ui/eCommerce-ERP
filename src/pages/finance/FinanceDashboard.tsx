@@ -141,6 +141,15 @@ export function FinanceDashboard() {
       bg: "bg-pink-50",
       href: "/finance/seller-finance"
     },
+    { 
+      id: "reports", 
+      title: "nav.reports", 
+      description: "financeDashboard.reportsDesc", 
+      icon: FileText, 
+      color: "text-cyan-600", 
+      bg: "bg-cyan-50",
+      href: "/finance/reports"
+    },
   ]
 
   return (

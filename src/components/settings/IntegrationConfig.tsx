@@ -22,7 +22,7 @@ const mockApiKeys = [
 
 const mockWebhooks = [
   { id: "1", url: "https://api.brand-erp.com/webhooks/orders", events: ["order.created", "order.updated"], status: "active" },
-  { id: "2", url: "https://sync.salesforce.com/v1/shopee/hook", events: ["customer.created"], status: "active" },
+  { id: "2", url: "https://sync.salesforce.com/v1/dealtot/hook", events: ["customer.created"], status: "active" },
   { id: "3", url: "https://test.webhook.site/12345", events: ["product.updated"], status: "inactive" },
 ]
 

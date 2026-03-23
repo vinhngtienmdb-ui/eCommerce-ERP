@@ -67,6 +67,7 @@ export function Products() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [products, setProducts] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' | null }>({ key: '', direction: null })
   const { t } = useTranslation()
 
@@ -379,60 +380,198 @@ export function Products() {
               <Button variant="ghost" onClick={() => setSearchTerm("")}>
                 {t("products.filters.reset")}
               </Button>
+              <div className="flex items-center border rounded-md bg-muted/30 p-0.5">
+                <Button 
+                  variant={viewMode === "grid" ? "secondary" : "ghost"} 
+                  size="icon" 
+                  className="h-8 w-8 rounded-sm"
+                  onClick={() => setViewMode("grid")}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant={viewMode === "list" ? "secondary" : "ghost"} 
+                  size="icon" 
+                  className="h-8 w-8 rounded-sm"
+                  onClick={() => setViewMode("list")}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        <Table>
-          <TableHeader className="bg-muted/30">
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="w-[40px]"></TableHead>
-              <TableHead className="font-semibold">{t("products.name")}</TableHead>
-              <TableHead className="text-right font-semibold">
-                <Button variant="ghost" onClick={() => handleSort('price')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
-                  {t("products.table.price", "Giá bán")}
-                  <ArrowUpDown className="ml-2 h-3 w-3" />
-                </Button>
-              </TableHead>
-              <TableHead className="text-right font-semibold">
-                <Button variant="ghost" onClick={() => handleSort('stock')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
-                  {t("products.table.stock", "Kho hàng")}
-                  <ArrowUpDown className="ml-2 h-3 w-3" />
-                </Button>
-              </TableHead>
-              <TableHead className="text-right font-semibold hidden lg:table-cell">
-                <Button variant="ghost" onClick={() => handleSort('performance')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
-                  {t("products.performance", "Hiệu suất")}
-                  <ArrowUpDown className="ml-2 h-3 w-3" />
-                </Button>
-              </TableHead>
-              <TableHead className="text-right font-semibold hidden xl:table-cell">{t("products.table.category", "Ngành hàng")}</TableHead>
-              <TableHead className="text-right font-semibold hidden md:table-cell">{t("products.table.status", "Trạng thái")}</TableHead>
-              <TableHead className="text-right font-semibold">{t("common.actions")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+        {viewMode === "list" ? (
+          <Table>
+            <TableHeader className="bg-muted/30">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-[40px]"></TableHead>
+                <TableHead className="font-semibold">{t("products.name")}</TableHead>
+                <TableHead className="text-right font-semibold">
+                  <Button variant="ghost" onClick={() => handleSort('price')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
+                    {t("products.table.price", "Giá bán")}
+                    <ArrowUpDown className="ml-2 h-3 w-3" />
+                  </Button>
+                </TableHead>
+                <TableHead className="text-right font-semibold">
+                  <Button variant="ghost" onClick={() => handleSort('stock')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
+                    {t("products.table.stock", "Kho hàng")}
+                    <ArrowUpDown className="ml-2 h-3 w-3" />
+                  </Button>
+                </TableHead>
+                <TableHead className="text-right font-semibold hidden lg:table-cell">
+                  <Button variant="ghost" onClick={() => handleSort('performance')} className="hover:bg-transparent p-0 font-semibold ml-auto h-8">
+                    {t("products.performance", "Hiệu suất")}
+                    <ArrowUpDown className="ml-2 h-3 w-3" />
+                  </Button>
+                </TableHead>
+                <TableHead className="text-right font-semibold hidden xl:table-cell">{t("products.table.category", "Ngành hàng")}</TableHead>
+                <TableHead className="text-right font-semibold hidden md:table-cell">{t("products.table.status", "Trạng thái")}</TableHead>
+                <TableHead className="text-right font-semibold">{t("common.actions")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="h-64 text-center">
+                    <div className="flex flex-col items-center justify-center text-muted-foreground">
+                      <Loader2 className="h-8 w-8 animate-spin mb-4" />
+                      <p>{t("products.table.loading", "Đang tải dữ liệu...")}</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : sortedProducts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="h-64 text-center text-muted-foreground">
+                    <div className="flex flex-col items-center justify-center">
+                      <Package className="h-12 w-12 mb-4 opacity-20" />
+                      <p>{t("products.noProducts")}</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                sortedProducts.map((product) => {
+                  // Calculate total stock if combinations exist
+                  let totalStock = product.stock || 0;
+                  let displayPrice = (product.price || product.suggestedPrice) ? formatVND(product.price || product.suggestedPrice) : "N/A";
+                  
+                  if (product.combinations && product.combinations.length > 0) {
+                    totalStock = product.combinations.reduce((sum: number, comb: any) => sum + (Number(comb.stock) || 0), 0);
+                    const prices = product.combinations.map((c: any) => Number(c.price) || 0).filter((p: number) => p > 0);
+                    if (prices.length > 0) {
+                      const minPrice = Math.min(...prices);
+                      const maxPrice = Math.max(...prices);
+                      displayPrice = minPrice === maxPrice ? formatVND(minPrice) : `${formatVND(minPrice)} - ${formatVND(maxPrice)}`;
+                    }
+                  }
+
+                  return (
+                    <TableRow key={product.id} className="group hover:bg-muted/50 transition-colors">
+                      <TableCell>
+                        <Input type="checkbox" className="h-4 w-4 rounded border-muted-foreground/30" />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-4">
+                          <div className="h-12 w-12 rounded-lg border bg-white overflow-hidden flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
+                            {product.images && product.images.length > 0 ? (
+                              <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                            ) : (
+                              <div className="h-full w-full flex items-center justify-center bg-muted">
+                                <Package className="h-6 w-6 text-muted-foreground/40" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="font-semibold text-sm text-foreground leading-tight truncate max-w-[200px] md:max-w-[300px]" title={product.productName}>
+                              {product.productName}
+                            </span>
+                            <span className="text-[11px] font-mono text-muted-foreground mt-1">
+                              ID: {product.id.substring(0, 8).toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex flex-col items-end">
+                          <span className="font-bold text-sm text-primary">
+                            {displayPrice}
+                          </span>
+                          {product.suggestedPrice && product.price && product.price < product.suggestedPrice && (
+                            <span className="text-[10px] text-muted-foreground line-through">
+                              {formatVND(product.suggestedPrice)}
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex flex-col items-end">
+                          <span className={cn(
+                            "font-medium text-sm",
+                            totalStock < 10 ? "text-rose-600" : "text-foreground"
+                          )}>
+                            {totalStock}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
+                            {t("products.inStock")}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right hidden lg:table-cell">
+                        <Badge 
+                          variant="secondary" 
+                          className={cn(
+                            "font-semibold text-[10px] px-2 py-0 h-5 uppercase tracking-wider",
+                            product.performance === "High" && "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200",
+                            product.performance === "Medium" && "bg-sky-100 text-sky-700 hover:bg-sky-100 border-sky-200",
+                            product.performance === "Low" && "bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200"
+                          )}
+                        >
+                          {product.performance || "N/A"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right hidden xl:table-cell">
+                        <span className="text-xs text-muted-foreground font-medium">
+                          {product.category?.[product.category.length - 1] || "N/A"}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right hidden md:table-cell">
+                        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200 text-[10px] font-bold uppercase tracking-tighter">
+                          {t("products.table.active", "Đang bán")}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
+                            <Link to={`/products/edit/${product.id}`}>
+                              <Edit className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(product.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
+              )}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-64 text-center">
-                  <div className="flex flex-col items-center justify-center text-muted-foreground">
-                    <Loader2 className="h-8 w-8 animate-spin mb-4" />
-                    <p>{t("products.table.loading", "Đang tải dữ liệu...")}</p>
-                  </div>
-                </TableCell>
-              </TableRow>
+              <div className="col-span-full h-64 flex flex-col items-center justify-center text-muted-foreground">
+                <Loader2 className="h-8 w-8 animate-spin mb-4" />
+                <p>{t("products.table.loading", "Đang tải dữ liệu...")}</p>
+              </div>
             ) : sortedProducts.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-64 text-center text-muted-foreground">
-                  <div className="flex flex-col items-center justify-center">
-                    <Package className="h-12 w-12 mb-4 opacity-20" />
-                    <p>{t("products.noProducts")}</p>
-                  </div>
-                </TableCell>
-              </TableRow>
+              <div className="col-span-full h-64 flex flex-col items-center justify-center text-muted-foreground">
+                <Package className="h-12 w-12 mb-4 opacity-20" />
+                <p>{t("products.noProducts")}</p>
+              </div>
             ) : (
               sortedProducts.map((product) => {
-                // Calculate total stock if combinations exist
                 let totalStock = product.stock || 0;
                 let displayPrice = (product.price || product.suggestedPrice) ? formatVND(product.price || product.suggestedPrice) : "N/A";
                 
@@ -447,97 +586,77 @@ export function Products() {
                 }
 
                 return (
-                  <TableRow key={product.id} className="group hover:bg-muted/50 transition-colors">
-                    <TableCell>
-                      <Input type="checkbox" className="h-4 w-4 rounded border-muted-foreground/30" />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg border bg-white overflow-hidden flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
-                          {product.images && product.images.length > 0 ? (
-                            <img src={product.images[0].url} alt={product.productName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
-                          ) : (
-                            <div className="h-full w-full flex items-center justify-center bg-muted">
-                              <Package className="h-6 w-6 text-muted-foreground/40" />
-                            </div>
+                  <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow border-slate-200">
+                    <div className="aspect-[4/3] bg-muted relative group">
+                      {product.images && product.images.length > 0 ? (
+                        <img src={product.images[0].url} alt={product.productName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerPolicy="no-referrer" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Package className="h-12 w-12 text-muted-foreground/40" />
+                        </div>
+                      )}
+                      <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
+                        {product.category && product.category.length > 0 && (
+                          <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm shadow-sm text-xs font-medium">
+                            {product.category[product.category.length - 1]}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+                        <Badge 
+                          variant="secondary" 
+                          className={cn(
+                            "bg-white/90 backdrop-blur-sm shadow-sm text-xs font-semibold uppercase tracking-wider",
+                            product.performance === "High" && "text-emerald-700",
+                            product.performance === "Medium" && "text-sky-700",
+                            product.performance === "Low" && "text-amber-700"
                           )}
+                        >
+                          {product.performance || "N/A"}
+                        </Badge>
+                      </div>
+                    </div>
+                    <CardContent className="p-5">
+                      <div className="mb-4">
+                        <h3 className="font-semibold text-base line-clamp-2 leading-snug mb-1" title={product.productName}>
+                          {product.productName}
+                        </h3>
+                        <p className="text-xs text-muted-foreground font-mono">ID: {product.id.substring(0, 8).toUpperCase()}</p>
+                      </div>
+                      <div className="flex justify-between items-end mb-4">
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">{t("products.table.price", "Giá bán")}</p>
+                          <p className="font-bold text-lg text-primary leading-none">{displayPrice}</p>
                         </div>
-                        <div className="flex flex-col min-w-0">
-                          <span className="font-semibold text-sm text-foreground leading-tight truncate max-w-[200px] md:max-w-[300px]" title={product.productName}>
-                            {product.productName}
-                          </span>
-                          <span className="text-[11px] font-mono text-muted-foreground mt-1">
-                            ID: {product.id.substring(0, 8).toUpperCase()}
-                          </span>
+                        <div className="text-right">
+                          <p className="text-xs text-muted-foreground mb-1">{t("products.table.stock", "Kho hàng")}</p>
+                          <p className={cn("font-medium leading-none", totalStock < 10 ? "text-rose-600" : "text-foreground")}>
+                            {totalStock}
+                          </p>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex flex-col items-end">
-                        <span className="font-bold text-sm text-primary">
-                          {displayPrice}
-                        </span>
-                        {product.suggestedPrice && product.price && product.price < product.suggestedPrice && (
-                          <span className="text-[10px] text-muted-foreground line-through">
-                            {formatVND(product.suggestedPrice)}
-                          </span>
-                        )}
+                      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200 text-[10px] font-bold uppercase tracking-tighter">
+                          {t("products.table.active", "Đang bán")}
+                        </Badge>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
+                            <Link to={`/products/edit/${product.id}`}>
+                              <Edit className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(product.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex flex-col items-end">
-                        <span className={cn(
-                          "font-medium text-sm",
-                          totalStock < 10 ? "text-rose-600" : "text-foreground"
-                        )}>
-                          {totalStock}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
-                          {t("products.inStock")}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right hidden lg:table-cell">
-                      <Badge 
-                        variant="secondary" 
-                        className={cn(
-                          "font-semibold text-[10px] px-2 py-0 h-5 uppercase tracking-wider",
-                          product.performance === "High" && "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200",
-                          product.performance === "Medium" && "bg-sky-100 text-sky-700 hover:bg-sky-100 border-sky-200",
-                          product.performance === "Low" && "bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200"
-                        )}
-                      >
-                        {product.performance || "N/A"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right hidden xl:table-cell">
-                      <span className="text-xs text-muted-foreground font-medium">
-                        {product.category?.[product.category.length - 1] || "N/A"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right hidden md:table-cell">
-                      <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200 text-[10px] font-bold uppercase tracking-tighter">
-                        {t("products.table.active", "Đang bán")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
-                          <Link to={`/products/edit/${product.id}`}>
-                            <Edit className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(product.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                    </CardContent>
+                  </Card>
                 )
               })
             )}
-          </TableBody>
-        </Table>
+          </div>
+        )}
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">

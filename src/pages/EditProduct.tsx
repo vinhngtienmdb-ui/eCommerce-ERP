@@ -110,6 +110,7 @@ export function EditProduct() {
   const [productName, setProductName] = useState("")
   const [costPrice, setCostPrice] = useState("")
   const [stock, setStock] = useState("")
+  const [lowStockThreshold, setLowStockThreshold] = useState("5")
   const [warehouseType, setWarehouseType] = useState("normal")
   const [warehouseId, setWarehouseId] = useState("")
   const [syncWms, setSyncWms] = useState(false)
@@ -207,6 +208,7 @@ export function EditProduct() {
           setStock(String(data.stock || ""))
           setCostPrice(String(data.costPrice || ""))
         }
+        setLowStockThreshold(String(data.lowStockThreshold || "5"))
       } else {
         toast.error("Không tìm thấy sản phẩm")
         navigate("/products/all")
@@ -298,6 +300,7 @@ export function EditProduct() {
         },
         shipping: { weight: Number(weight), length: Number(length), width: Number(width), height: Number(height) },
         other: { condition, isPreOrder, prepTime: Number(prepTime) },
+        lowStockThreshold: Number(lowStockThreshold),
         updatedAt: new Date().toISOString()
       }
 
@@ -411,9 +414,15 @@ export function EditProduct() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
+                  <label className="text-sm font-medium">Cảnh báo tồn kho thấp</label>
+                  <Input type="number" value={lowStockThreshold} onChange={(e) => setLowStockThreshold(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
                   <label className="text-sm font-medium">Cân nặng (gr)</label>
                   <Input type="number" value={weight} onChange={(e) => setWeight(e.target.value)} />
                 </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <label className="text-sm font-medium">Tình trạng</label>
                   <Select value={condition} onValueChange={setCondition}>

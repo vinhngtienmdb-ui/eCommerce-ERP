@@ -86,6 +86,7 @@
     "pnl": "Phân tích P&L",
     "paymentWallet": "Thanh toán & Ví nội bộ",
     "sellerFinance": "Hỗ trợ Tài chính Seller",
+    "reports": "Báo cáo tài chính",
     "withdrawals": "Yêu cầu rút tiền",
     "hr": "Nhân sự",
     "hrPayroll": "Tiền lương",
@@ -1379,7 +1380,7 @@
       "all": "Tất cả",
       "active": "Đang hoạt động",
       "violations": "Vi phạm",
-      "pending": "Chờ duyệt bởi Shopee",
+      "pending": "Chờ duyệt bởi Dealtot",
       "unpublished": "Chưa được đăng"
     },
     "subTabs": {
@@ -3534,7 +3535,8 @@
     "reconciliationDesc": "Đối chiếu sao kê ngân hàng và hồ sơ nội bộ.",
     "pnlDesc": "Báo cáo lãi lỗ và phân tích tài chính.",
     "paymentWalletDesc": "Quản lý ví điện tử và phương thức thanh toán.",
-    "sellerFinanceDesc": "Quản lý thanh toán cho người bán và thỏa thuận tài chính."
+    "sellerFinanceDesc": "Quản lý thanh toán cho người bán và thỏa thuận tài chính.",
+    "reportsDesc": "Báo cáo P&L, Cân đối kế toán, Lưu chuyển tiền tệ."
   },
   "hrDashboard": {
     "title": "Tổng quan Nhân sự",

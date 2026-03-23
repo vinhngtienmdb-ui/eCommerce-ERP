@@ -9,6 +9,8 @@ import { db } from "../../lib/firebase";
 import { collection, query, onSnapshot, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { ShoppingCart, Plus, Minus, Send, Store, Coffee, Utensils, Sparkles, Package } from "lucide-react";
 
+import { StorefrontFooter } from "../../components/storefront/StorefrontFooter";
+
 export function POSCustomerMenu() {
   const { storeId, branchId } = useParams();
   const { t } = useTranslation();

@@ -1,5 +1,17 @@
 {
   "entities": {
+    "LegalPolicy": {
+      "title": "Legal Policy",
+      "description": "Content for legal and compliance policies",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["privacy", "operating", "shipping", "refund"] },
+        "content": { "type": "string" },
+        "lastUpdated": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string" }
+      },
+      "required": ["type", "content"]
+    },
     "Settings": {
       "title": "System Settings",
       "description": "Global system configuration settings",
@@ -11,7 +23,8 @@
         "fees": { "type": "object" },
         "categories": { "type": "array" },
         "integrations": { "type": "object" },
-        "shipping": { "type": "object" }
+        "shipping": { "type": "object" },
+        "paymentGateways": { "type": "object" }
       }
     },
     "AuditLog": {
@@ -64,6 +77,8 @@
         "shipping": { "type": "object" },
         "other": { "type": "object" },
         "status": { "type": "string", "enum": ["published", "hidden"] },
+        "stock": { "type": "number", "description": "Current inventory level" },
+        "lowStockThreshold": { "type": "number", "description": "Threshold for low stock alert" },
         "createdAt": { "type": "string", "format": "date-time" },
         "userId": { "type": "string" }
       },
@@ -326,9 +341,27 @@
         "branchId": { "type": "string" }
       },
       "required": ["staffId", "startTime", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System notification for users",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "type": { "type": "string", "enum": ["order", "stock", "system"] },
+        "status": { "type": "string", "enum": ["unread", "read"] },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "body", "type", "createdAt"]
     }
   },
   "firestore": {
+    "/legal_policies/{policyId}": {
+      "schema": "LegalPolicy",
+      "description": "Legal and compliance policies"
+    },
     "/settings/global": {
       "schema": "Settings",
       "description": "Global system settings"
@@ -424,6 +457,10 @@
     "/stores/{storeId}/branches/{branchId}/shifts/{shiftId}": {
       "schema": "Shift",
       "description": "Branch-specific work shifts"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "System notifications"
     }
   }
 }

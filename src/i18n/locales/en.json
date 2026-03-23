@@ -54,6 +54,7 @@
     "pnl": "P&L Analysis",
     "paymentWallet": "Payment & Internal Wallet",
     "sellerFinance": "Seller Finance",
+    "reports": "Financial Reports",
     "withdrawals": "Withdrawal Requests",
     "hr": "HR",
     "hrPayroll": "Payroll",
@@ -1051,7 +1052,7 @@
       "all": "All",
       "active": "Active",
       "violations": "Violations",
-      "pending": "Pending Shopee Approval",
+      "pending": "Pending Dealtot Approval",
       "unpublished": "Unpublished"
     },
     "subTabs": {
@@ -2176,7 +2177,8 @@
     "reconciliationDesc": "Reconcile bank statements and internal records.",
     "pnlDesc": "Profit and Loss statements and financial analysis.",
     "paymentWalletDesc": "Manage digital wallets and payment methods.",
-    "sellerFinanceDesc": "Manage seller payouts and financial agreements."
+    "sellerFinanceDesc": "Manage seller payouts and financial agreements.",
+    "reportsDesc": "P&L, Balance Sheet, and Cash Flow reports."
   },
   "hrDashboard": {
     "title": "HR Overview",

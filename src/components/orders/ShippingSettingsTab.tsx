@@ -15,7 +15,7 @@ export function ShippingSettingsTab() {
     { id: "viettel", name: "Viettel Post", status: "disconnected", logo: "https://picsum.photos/seed/viettel/40/40" },
     { id: "jt", name: "J&T Express", status: "disconnected", logo: "https://picsum.photos/seed/jt/40/40" },
     { id: "ninja", name: "Ninja Van", status: "disconnected", logo: "https://picsum.photos/seed/ninja/40/40" },
-    { id: "shopee", name: "Shopee Express", status: "disconnected", logo: "https://picsum.photos/seed/shopee/40/40" },
+    { id: "dealtot", name: "Dealtot Express", status: "disconnected", logo: "https://picsum.photos/seed/dealtot/40/40" },
   ])
 
   return (

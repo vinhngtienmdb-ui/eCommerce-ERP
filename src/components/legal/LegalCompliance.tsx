@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/ca
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
 import { Badge } from "@/src/components/ui/badge"
 import { compliance, risks } from "@/src/constants/legalData"
+import { LegalPolicyEditor } from "./LegalPolicyEditor"
 
 export function LegalCompliance() {
   return (
@@ -52,6 +53,11 @@ export function LegalCompliance() {
           </Table>
         </CardContent>
       </Card>
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold tracking-tight mb-4">Quản lý chính sách</h2>
+        <LegalPolicyEditor />
+      </div>
     </div>
   )
 }

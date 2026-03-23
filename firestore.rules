@@ -180,6 +180,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /legal_policies/{policyId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // POS Customers rules
     match /customers/{customerId} {
       allow read: if isAuthenticated();
