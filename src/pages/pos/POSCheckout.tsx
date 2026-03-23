@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode } from "lucide-react";
+import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode, Printer, CreditCard, Smartphone, AppWindow, DollarSign } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
-import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot, getDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot, getDoc, increment, serverTimestamp } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
+import { format } from "date-fns";
 
 const STORE_CONFIG = {
   id: "s1",
@@ -31,6 +32,21 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
   const [showScanner, setShowScanner] = useState(false);
   const [showPaymentQR, setShowPaymentQR] = useState(false);
   const [storeConfig, setStoreConfig] = useState(STORE_CONFIG);
+  const [activeShift, setActiveShift] = useState<any>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "wallet" | "dealtot">("cash");
+  const [showPrintPreview, setShowPrintPreview] = useState(false);
+  const [lastOrder, setLastOrder] = useState<any>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        document.getElementById("customer-search")?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const simulateBarcodeScan = () => {
     if (!barcodeInput) return;
@@ -78,6 +94,25 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
     }, (error) => {
       handleFirestoreError(error, OperationType.LIST, productsPath);
       setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [storeId, branchId]);
+
+  useEffect(() => {
+    if (!auth.currentUser || !storeId) return;
+
+    const shiftsPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/shifts` 
+      : `stores/${storeId}/shifts`;
+
+    const q = query(collection(db, shiftsPath), where("status", "==", "open"), limit(1));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        setActiveShift({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() });
+      } else {
+        setActiveShift(null);
+      }
     });
 
     return () => unsubscribe();
@@ -136,7 +171,11 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
 
   const handlePayment = async () => {
     if (cart.length === 0) return;
-    if (selectedCustomer && (selectedCustomer.walletBalance || 0) < total) {
+    if (!activeShift) {
+      toast.error("Vui lòng mở ca làm việc trước khi thanh toán");
+      return;
+    }
+    if (paymentMethod === "wallet" && selectedCustomer && (selectedCustomer.walletBalance || 0) < total) {
       toast.error(t("pos.insufficientFunds", "Số dư ví không đủ"));
       return;
     }
@@ -146,6 +185,10 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
       const ordersPath = branchId 
         ? `stores/${storeId}/branches/${branchId}/orders` 
         : `stores/${storeId}/orders`;
+
+      const shiftsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/shifts` 
+        : `stores/${storeId}/shifts`;
 
       // 1. Save Order
       const orderData = {
@@ -164,32 +207,49 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
         customerId: selectedCustomer?.id || null,
         customerName: selectedCustomer?.name || "Khách vãng lai",
         status: "completed",
+        paymentMethod,
+        shiftId: activeShift.id,
         createdAt: new Date().toISOString(),
         creatorId: auth.currentUser?.uid,
         storeId: storeId,
         branchId: branchId || null
       };
-      await addDoc(collection(db, ordersPath), orderData);
+      const orderRef = await addDoc(collection(db, ordersPath), orderData);
+      setLastOrder({ id: orderRef.id, ...orderData });
 
-      // 2. Update Customer (if selected)
+      // 2. Update Shift
+      const shiftRef = doc(db, `${shiftsPath}/${activeShift.id}`);
+      await updateDoc(shiftRef, {
+        totalSales: increment(total),
+        updatedAt: serverTimestamp()
+      });
+
+      // 3. Update Customer (if selected and paying with wallet/points)
       if (selectedCustomer) {
         const customerRef = doc(db, "customers", selectedCustomer.id);
-        await updateDoc(customerRef, {
-          walletBalance: (selectedCustomer.walletBalance || 0) - total,
-          pointsBalance: (selectedCustomer.pointsBalance || 0) - pointsToUse + pointsEarned,
-          totalSpent: (selectedCustomer.totalSpent || 0) + total,
-          totalOrders: (selectedCustomer.totalOrders || 0) + 1,
+        const updates: any = {
+          pointsBalance: increment(-pointsToUse + pointsEarned),
+          totalSpent: increment(total),
+          totalOrders: increment(1),
           lastOrder: new Date().toISOString()
-        });
+        };
+        if (paymentMethod === "wallet") {
+          updates.walletBalance = increment(-total);
+        }
+        await updateDoc(customerRef, updates);
       }
 
       toast.success(t("pos.paymentSuccess", "Thanh toán thành công"));
       
+      // Show print preview automatically
+      setShowPrintPreview(true);
+
       // Reset state
       setCart([]);
       setSelectedCustomer(null);
       setCustomerPhone("");
       setPointsToUse(0);
+      setShowPaymentQR(false);
     } catch (error) {
       const ordersPath = branchId 
         ? `stores/${storeId}/branches/${branchId}/orders` 
@@ -198,6 +258,56 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const PrintBill = ({ order }: { order: any }) => {
+    if (!order) return null;
+    return (
+      <div className="bg-white p-8 text-black font-mono text-sm w-[300px] mx-auto shadow-2xl border">
+        <div className="text-center mb-4">
+          <h2 className="text-xl font-bold uppercase">{storeConfig.name}</h2>
+          <p className="text-xs">Địa chỉ cửa hàng</p>
+          <p className="text-xs">SĐT: 0123456789</p>
+        </div>
+        <div className="border-t border-b border-dashed py-2 mb-4">
+          <p className="flex justify-between"><span>HĐ số:</span> <span>#{order.id.slice(-6).toUpperCase()}</span></p>
+          <p className="flex justify-between"><span>Ngày:</span> <span>{format(new Date(order.createdAt), "dd/MM/yyyy HH:mm")}</span></p>
+          <p className="flex justify-between"><span>Thu ngân:</span> <span>{activeShift?.staffName || "Admin"}</span></p>
+        </div>
+        <div className="mb-4">
+          <div className="flex justify-between font-bold border-b pb-1 mb-1">
+            <span className="w-1/2">Sản phẩm</span>
+            <span className="w-1/4 text-center">SL</span>
+            <span className="w-1/4 text-right">T.Tiền</span>
+          </div>
+          {order.items.map((item: any, idx: number) => (
+            <div key={idx} className="flex justify-between py-1">
+              <span className="w-1/2 truncate">{item.name}</span>
+              <span className="w-1/4 text-center">{item.quantity}</span>
+              <span className="w-1/4 text-right">{(item.price * item.quantity).toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+        <div className="border-t border-dashed pt-2 space-y-1">
+          <p className="flex justify-between"><span>Tạm tính:</span> <span>{order.subtotal.toLocaleString()}đ</span></p>
+          {order.discount > 0 && <p className="flex justify-between"><span>Giảm giá:</span> <span>-{order.discount.toLocaleString()}đ</span></p>}
+          <p className="flex justify-between font-bold text-lg"><span>TỔNG CỘNG:</span> <span>{order.total.toLocaleString()}đ</span></p>
+        </div>
+        <div className="mt-6 text-center text-xs">
+          <p>Cảm ơn Quý khách!</p>
+          <p>Hẹn gặp lại!</p>
+          <div className="mt-4 flex justify-center">
+            <QrCode className="h-16 w-16 opacity-50" />
+          </div>
+        </div>
+        <div className="mt-8 flex gap-2 no-print">
+          <Button className="flex-1" onClick={() => window.print()}>
+            <Printer className="mr-2 h-4 w-4" /> In Bill
+          </Button>
+          <Button variant="outline" onClick={() => setShowPrintPreview(false)}>Đóng</Button>
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -282,13 +392,26 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
         {/* Customer Section */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <User className="h-5 w-5" /> {t("pos.customer")}
+            <CardTitle className="text-lg flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <User className="h-5 w-5" /> {t("pos.customer")}
+              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Tính năng quét QR khách hàng đang được phát triển")}>
+                      <ScanLine className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Quét QR khách hàng</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex gap-2">
               <Input
+                id="customer-search"
                 placeholder={t("pos.searchCustomer")}
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
@@ -298,6 +421,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
                 <Search className="h-4 w-4" />
               </Button>
             </div>
+            <p className="text-[10px] text-muted-foreground italic">Mẹo: Nhấn Ctrl+K để tìm nhanh khách hàng</p>
             
             {selectedCustomer && (
               <div className="bg-muted p-3 rounded-md space-y-2 text-sm">
@@ -380,6 +504,41 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
               <span className="text-primary">{total.toLocaleString()}đ</span>
             </div>
 
+            <div className="grid grid-cols-2 gap-2 pt-2">
+              <Button 
+                variant={paymentMethod === "cash" ? "default" : "outline"} 
+                size="sm" 
+                className="h-9"
+                onClick={() => setPaymentMethod("cash")}
+              >
+                <DollarSign className="mr-1 h-4 w-4" /> Tiền mặt
+              </Button>
+              <Button 
+                variant={paymentMethod === "card" ? "default" : "outline"} 
+                size="sm" 
+                className="h-9"
+                onClick={() => setPaymentMethod("card")}
+              >
+                <CreditCard className="mr-1 h-4 w-4" /> Thẻ/CK
+              </Button>
+              <Button 
+                variant={paymentMethod === "wallet" ? "default" : "outline"} 
+                size="sm" 
+                className="h-9"
+                onClick={() => setPaymentMethod("wallet")}
+              >
+                <Smartphone className="mr-1 h-4 w-4" /> Ví điện tử
+              </Button>
+              <Button 
+                variant={paymentMethod === "dealtot" ? "default" : "outline"} 
+                size="sm" 
+                className="h-9"
+                onClick={() => setPaymentMethod("dealtot")}
+              >
+                <AppWindow className="mr-1 h-4 w-4" /> App Dealtot
+              </Button>
+            </div>
+
             {total > 0 && (
               <div className="text-xs text-muted-foreground space-y-1 pt-2">
                 <div className="flex justify-between">
@@ -400,11 +559,11 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
               <Button 
                 className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold h-12 rounded-xl shadow-lg shadow-primary/20" 
                 size="lg" 
-                disabled={cart.length === 0 || isProcessing}
+                disabled={cart.length === 0 || isProcessing || !activeShift}
                 onClick={handlePayment}
               >
                 <Wallet className="mr-2 h-5 w-5" />
-                {t("pos.payWithWallet", "Ví App")}
+                {isProcessing ? <Loader2 className="h-5 w-5 animate-spin" /> : t("pos.payNow", "Thanh toán")}
               </Button>
               <Button 
                 variant="outline"
@@ -415,6 +574,12 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
                 <QrCode className="h-5 w-5" />
               </Button>
             </div>
+
+            {!activeShift && (
+              <p className="text-[10px] text-red-500 text-center font-bold uppercase mt-2">
+                Vui lòng mở ca làm việc để bán hàng
+              </p>
+            )}
 
             {showPaymentQR && (
               <div className="mt-4 p-4 bg-white rounded-2xl border-2 border-dashed border-primary/20 flex flex-col items-center gap-3 animate-in zoom-in-95 duration-300">
@@ -432,6 +597,22 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
           </div>
         </Card>
       </div>
+      {/* Print Preview Modal */}
+      {showPrintPreview && lastOrder && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <PrintBill order={lastOrder} />
+        </div>
+      )}
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          body * { visibility: hidden; }
+          .no-print { display: none !important; }
+          .fixed.inset-0 { position: absolute; left: 0; top: 0; width: 100%; height: auto; background: white; visibility: visible; }
+          .fixed.inset-0 * { visibility: visible; }
+          @page { margin: 0; size: 80mm auto; }
+        }
+      `}} />
     </div>
   );
 }

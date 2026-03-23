@@ -159,6 +159,8 @@
         "customerId": { "type": "string" },
         "customerName": { "type": "string" },
         "status": { "type": "string" },
+        "paymentMethod": { "type": "string", "enum": ["cash", "card", "wallet", "dealtot"] },
+        "shiftId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
         "creatorId": { "type": "string" },
         "storeId": { "type": "string" }
@@ -295,6 +297,24 @@
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["partnerName", "partnerContact", "status"]
+    },
+    "Shift": {
+      "title": "Work Shift",
+      "description": "Staff work shift record",
+      "type": "object",
+      "properties": {
+        "staffId": { "type": "string" },
+        "staffName": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "startCash": { "type": "number" },
+        "endCash": { "type": "number" },
+        "totalSales": { "type": "number" },
+        "status": { "type": "string", "enum": ["open", "closed"] },
+        "storeId": { "type": "string" },
+        "branchId": { "type": "string" }
+      },
+      "required": ["staffId", "startTime", "status"]
     }
   },
   "firestore": {
@@ -385,6 +405,14 @@
     "/store_registrations/{registrationId}": {
       "schema": "StoreRegistration",
       "description": "Store onboarding registrations"
+    },
+    "/stores/{storeId}/shifts/{shiftId}": {
+      "schema": "Shift",
+      "description": "Store-specific work shifts"
+    },
+    "/stores/{storeId}/branches/{branchId}/shifts/{shiftId}": {
+      "schema": "Shift",
+      "description": "Branch-specific work shifts"
     }
   }
 }

@@ -4,13 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
-import { Plus, Search, Edit, Trash2, CalendarClock, Loader2 } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CalendarClock, Loader2, Play, Square } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../../components/ui/dialog";
 import { Label } from "../../components/ui/label";
 import { db, auth } from "@/src/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot, where, getDocs, serverTimestamp } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
+import { format } from "date-fns";
 
 export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: string }) {
   const { t } = useTranslation();
@@ -19,6 +20,13 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStaff, setEditingStaff] = useState<any>(null);
+  const [activeShift, setActiveShift] = useState<any>(null);
+  const [isShiftModalOpen, setIsShiftModalOpen] = useState(false);
+  const [shiftFormData, setShiftFormData] = useState({
+    staffId: "",
+    staffName: "",
+    startCash: 0,
+  });
   const [formData, setFormData] = useState({
     name: "",
     role: "",
@@ -41,6 +49,25 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
     }, (error) => {
       handleFirestoreError(error, OperationType.LIST, staffPath);
       setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [storeId, branchId]);
+
+  useEffect(() => {
+    if (!auth.currentUser || !storeId) return;
+
+    const shiftsPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/shifts` 
+      : `stores/${storeId}/shifts`;
+
+    const q = query(collection(db, shiftsPath), where("status", "==", "open"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        setActiveShift({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() });
+      } else {
+        setActiveShift(null);
+      }
     });
 
     return () => unsubscribe();
@@ -116,7 +143,65 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
   };
 
   const handleManageShifts = () => {
-    toast.success(t("pos.staff.shiftSuccess", "Đã mở giao diện quản lý ca làm việc"));
+    if (activeShift) {
+      handleCloseShift();
+    } else {
+      setIsShiftModalOpen(true);
+    }
+  };
+
+  const handleOpenShift = async () => {
+    if (!shiftFormData.staffId || !shiftFormData.staffName) {
+      toast.error("Vui lòng chọn nhân viên trực ca");
+      return;
+    }
+
+    try {
+      const shiftsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/shifts` 
+        : `stores/${storeId}/shifts`;
+
+      await addDoc(collection(db, shiftsPath), {
+        staffId: shiftFormData.staffId,
+        staffName: shiftFormData.staffName,
+        startTime: new Date().toISOString(),
+        startCash: Number(shiftFormData.startCash),
+        totalSales: 0,
+        status: "open",
+        storeId,
+        branchId: branchId || null,
+        createdAt: serverTimestamp()
+      });
+
+      toast.success("Đã mở ca làm việc mới");
+      setIsShiftModalOpen(false);
+    } catch (error) {
+      console.error("Error opening shift:", error);
+      toast.error("Không thể mở ca làm việc");
+    }
+  };
+
+  const handleCloseShift = async () => {
+    if (!activeShift) return;
+    if (!confirm("Bạn có chắc chắn muốn kết thúc ca làm việc này?")) return;
+
+    try {
+      const shiftsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/shifts` 
+        : `stores/${storeId}/shifts`;
+
+      const docRef = doc(db, `${shiftsPath}/${activeShift.id}`);
+      await updateDoc(docRef, {
+        status: "closed",
+        endTime: new Date().toISOString(),
+        updatedAt: serverTimestamp()
+      });
+
+      toast.success("Đã kết thúc ca làm việc");
+    } catch (error) {
+      console.error("Error closing shift:", error);
+      toast.error("Không thể kết thúc ca làm việc");
+    }
   };
 
   if (loading) {
@@ -135,14 +220,40 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
           <p className="text-muted-foreground">{t("pos.staff.subtitle", "Quản lý nhân sự và phân ca tại cửa hàng")}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleManageShifts}>
-            <CalendarClock className="mr-2 h-4 w-4" /> {t("pos.staff.shifts", "Xếp ca")}
+          <Button variant={activeShift ? "destructive" : "outline"} onClick={handleManageShifts}>
+            {activeShift ? (
+              <><Square className="mr-2 h-4 w-4" /> {t("pos.staff.closeShift", "Kết thúc ca")}</>
+            ) : (
+              <><Play className="mr-2 h-4 w-4" /> {t("pos.staff.openShift", "Mở ca mới")}</>
+            )}
           </Button>
           <Button onClick={handleAddStaff}>
             <Plus className="mr-2 h-4 w-4" /> {t("pos.staff.add", "Thêm nhân viên")}
           </Button>
         </div>
       </div>
+
+      {activeShift && (
+        <Card className="bg-primary/5 border-primary/20">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-primary/10 rounded-full">
+                  <CalendarClock className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-primary">Ca đang hoạt động: {activeShift.staffName}</p>
+                  <p className="text-xs text-muted-foreground">Bắt đầu lúc: {format(new Date(activeShift.startTime), "HH:mm dd/MM/yyyy")}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium">Doanh thu hiện tại</p>
+                <p className="text-xl font-bold text-primary">{(activeShift.totalSales || 0).toLocaleString()}đ</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader className="pb-3">
@@ -237,6 +348,44 @@ export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: st
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
             <Button onClick={handleSaveStaff}>Lưu</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isShiftModalOpen} onOpenChange={setIsShiftModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Mở ca làm việc mới</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Chọn nhân viên trực ca</Label>
+              <select 
+                className="w-full h-10 px-3 rounded-md border border-input bg-background"
+                value={shiftFormData.staffId}
+                onChange={(e) => {
+                  const s = staff.find(x => x.id === e.target.value);
+                  setShiftFormData({ ...shiftFormData, staffId: e.target.value, staffName: s?.name || "" });
+                }}
+              >
+                <option value="">-- Chọn nhân viên --</option>
+                {staff.map(s => (
+                  <option key={s.id} value={s.id}>{s.name} ({s.role})</option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label>Tiền mặt đầu ca (đ)</Label>
+              <Input 
+                type="number"
+                value={shiftFormData.startCash}
+                onChange={(e) => setShiftFormData({ ...shiftFormData, startCash: Number(e.target.value) })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsShiftModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleOpenShift}>Bắt đầu ca</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

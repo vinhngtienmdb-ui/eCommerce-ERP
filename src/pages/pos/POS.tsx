@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
-import { Store, Package, Users, Settings, LayoutDashboard, QrCode, ArrowLeft, Loader2 } from "lucide-react";
+import { Store, Package, Users, Settings, LayoutDashboard, QrCode, ArrowLeft, Loader2, BarChart3 } from "lucide-react";
 import { POSCheckout } from "./POSCheckout";
 import { POSProducts } from "./POSProducts";
 import { POSStaff } from "./POSStaff";
 import { POSSettings } from "./POSSettings";
 import { POSDigitalMenu } from "./POSDigitalMenu";
+import { POSReports } from "./POSReports";
 import { Button } from "@/src/components/ui/button";
 import { db } from "@/src/lib/firebase";
 import { doc, getDoc, collection, query, where, onSnapshot } from "firebase/firestore";
@@ -102,7 +103,7 @@ export function POS() {
       </div>
 
       <Tabs defaultValue="checkout" className="flex-1 flex flex-col">
-        <TabsList className="grid w-full grid-cols-5 max-w-4xl mb-4">
+        <TabsList className="grid w-full grid-cols-6 max-w-5xl mb-4">
           <TabsTrigger value="checkout" className="flex items-center gap-2">
             <LayoutDashboard className="h-4 w-4" />
             {t("pos.tabs.checkout", "Bán hàng")}
@@ -110,6 +111,10 @@ export function POS() {
           <TabsTrigger value="products" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
             {t("pos.tabs.products", "Sản phẩm")}
+          </TabsTrigger>
+          <TabsTrigger value="reports" className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4" />
+            {t("pos.tabs.reports", "Báo cáo")}
           </TabsTrigger>
           <TabsTrigger value="menu" className="flex items-center gap-2">
             <QrCode className="h-4 w-4" />
@@ -130,6 +135,9 @@ export function POS() {
         </TabsContent>
         <TabsContent value="products" className="flex-1 mt-0">
           <POSProducts storeId={storeId!} branchId={branchId} />
+        </TabsContent>
+        <TabsContent value="reports" className="flex-1 mt-0">
+          <POSReports storeId={storeId!} branchId={branchId} />
         </TabsContent>
         <TabsContent value="menu" className="flex-1 mt-0">
           <POSDigitalMenu storeId={storeId!} branchId={branchId} />
