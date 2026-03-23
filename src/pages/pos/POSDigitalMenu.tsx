@@ -7,15 +7,27 @@ import { QrCode, Share2, ExternalLink, Copy, Check, Download, Palette, Settings,
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
 
-export function POSDigitalMenu({ storeId, branchId }: { storeId: string; branchId?: string }) {
+export function POSDigitalMenu({ storeId, branchId, store, branch }: { storeId: string; branchId?: string; store?: any; branch?: any }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [qrColor, setQrColor] = useState("#000000");
   const [showLogo, setShowLogo] = useState(true);
 
-  const menuUrl = branchId 
-    ? `${window.location.origin}/menu/${storeId}/${branchId}` 
-    : `${window.location.origin}/menu/${storeId}`;
+  const getMenuUrl = () => {
+    if (branchId && branch) {
+      if (branch.customUrl) return `https://${branch.customUrl}`;
+      if (branch.branchCode) return `https://${branch.branchCode.toLowerCase()}.dealtot.io.vn`;
+    }
+    if (store) {
+      if (store.customUrl) return `https://${store.customUrl}`;
+      if (store.storeCode) return `https://${store.storeCode.toLowerCase()}.dealtot.io.vn`;
+    }
+    return branchId 
+      ? `${window.location.origin}/menu/${storeId}/${branchId}` 
+      : `${window.location.origin}/menu/${storeId}`;
+  };
+
+  const menuUrl = getMenuUrl();
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(menuUrl);

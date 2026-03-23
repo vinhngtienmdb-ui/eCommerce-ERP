@@ -215,6 +215,7 @@ export function POSBranchManagement() {
               <div className="space-y-2 text-sm text-muted-foreground mb-6">
                 <p><strong>{t("pos.branches.manager", "Quản lý")}:</strong> {branch.managerName || "N/A"}</p>
                 <p><strong>{t("pos.branches.phone", "SĐT")}:</strong> {branch.phone || "N/A"}</p>
+                <p><strong>URL:</strong> <a href={`https://${branch.customUrl || `${branch.branchCode?.toLowerCase()}.dealtot.io.vn`}`} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">{branch.customUrl || `${branch.branchCode?.toLowerCase()}.dealtot.io.vn`}</a></p>
                 <p><strong>{t("pos.branches.status", "Trạng thái")}:</strong> 
                   <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${branch.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                     {branch.status === 'active' ? t("pos.stores.active", "Hoạt động") : t("pos.stores.inactive", "Tạm dừng")}
@@ -376,7 +377,7 @@ export function POSBranchManagement() {
                   <Input 
                     value={formData.customUrl} 
                     onChange={(e) => setFormData({...formData, customUrl: e.target.value})} 
-                    placeholder="branch-url"
+                    placeholder={formData.branchCode ? `${formData.branchCode.toLowerCase()}.dealtot.io.vn` : "branch.dealtot.io.vn"}
                   />
                 </div>
               </div>

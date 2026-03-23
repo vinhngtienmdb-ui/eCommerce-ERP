@@ -140,7 +140,7 @@ export function POS() {
           <POSReports storeId={storeId!} branchId={branchId} />
         </TabsContent>
         <TabsContent value="menu" className="flex-1 mt-0">
-          <POSDigitalMenu storeId={storeId!} branchId={branchId} />
+          <POSDigitalMenu storeId={storeId!} branchId={branchId} store={store} branch={branch} />
         </TabsContent>
         <TabsContent value="staff" className="flex-1 mt-0">
           <POSStaff storeId={storeId!} branchId={branchId} />
