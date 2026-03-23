@@ -182,7 +182,18 @@ const navigationGroups = [
         ]
       },
       { nameKey: "eContract", href: "/e-contract", icon: FileSignature },
-      { nameKey: "legal", href: "/legal", icon: ShieldCheck },
+      { 
+        nameKey: "legal", 
+        href: "/legal", 
+        icon: ShieldCheck,
+        subItems: [
+          { nameKey: "legalAiAgent", href: "/legal/ai-agent" },
+          { nameKey: "legalBrandPortal", href: "/legal/brand-portal" },
+          { nameKey: "legalDispute", href: "/legal/dispute" },
+          { nameKey: "legalCompliance", href: "/legal/compliance" },
+          { nameKey: "legalContracts", href: "/legal/contracts" },
+        ]
+      },
     ]
   },
   {

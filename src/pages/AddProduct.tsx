@@ -1139,7 +1139,7 @@ export function AddProduct() {
                   
                   <div className="pt-2 border-t flex items-center gap-2">
                     <div className="w-6 h-6 rounded-full bg-muted"></div>
-                    <div className="text-xs font-medium">Lucky Shop App</div>
+                    <div className="text-xs font-medium">Dealtot App</div>
                     <div className="ml-auto text-[10px] border px-2 py-0.5 rounded text-primary border-primary">Xem</div>
                   </div>
                 </div>

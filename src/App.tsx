@@ -45,7 +45,11 @@ const Sales = lazy(() => import("./pages/Sales").then(m => ({ default: m.Sales }
 const Settings = lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })))
 const LiveHub = lazy(() => import("./pages/LiveHub").then(m => ({ default: m.LiveHub })))
 const Advertising = lazy(() => import("./pages/Advertising").then(m => ({ default: m.Advertising })))
-const Legal = lazy(() => import("./pages/Legal"))
+const LegalAIAgentPage = lazy(() => import("./pages/legal/LegalAIAgentPage").then(m => ({ default: m.LegalAIAgentPage })))
+const LegalBrandPortalPage = lazy(() => import("./pages/legal/LegalBrandPortalPage").then(m => ({ default: m.LegalBrandPortalPage })))
+const LegalDisputePage = lazy(() => import("./pages/legal/LegalDisputePage").then(m => ({ default: m.LegalDisputePage })))
+const LegalCompliancePage = lazy(() => import("./pages/legal/LegalCompliancePage").then(m => ({ default: m.LegalCompliancePage })))
+const LegalContractsPage = lazy(() => import("./pages/legal/LegalContractsPage").then(m => ({ default: m.LegalContractsPage })))
 const SellerFinance = lazy(() => import("./pages/SellerFinance").then(m => ({ default: m.SellerFinance })))
 const SocialCommerce = lazy(() => import("./pages/SocialCommerce").then(m => ({ default: m.SocialCommerce })))
 const BusinessPlanning = lazy(() => import("./pages/planning/BusinessPlanning").then(m => ({ default: m.BusinessPlanning })))
@@ -109,7 +113,7 @@ function ProtectedLayout() {
       <div className="flex h-screen flex-col items-center justify-center bg-background p-4">
         <div className="w-full max-w-md space-y-8 rounded-2xl bg-card p-8 shadow-xl border border-border">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-primary">Lucky ERP</h1>
+            <h1 className="text-4xl font-bold text-primary">Dealtot ERP</h1>
             <p className="mt-2 text-muted-foreground">{t("auth.loginToContinue")}</p>
           </div>
           <div className="space-y-4">
@@ -189,7 +193,14 @@ export default function App() {
               <Route path="advertising" element={<Advertising />} />
               <Route path="affiliate" element={<Affiliate />} />
               <Route path="purchasing" element={<Purchasing />} />
-              <Route path="legal" element={<Legal />} />
+              <Route path="legal">
+                <Route index element={<Navigate to="ai-agent" replace />} />
+                <Route path="ai-agent" element={<LegalAIAgentPage />} />
+                <Route path="brand-portal" element={<LegalBrandPortalPage />} />
+                <Route path="dispute" element={<LegalDisputePage />} />
+                <Route path="compliance" element={<LegalCompliancePage />} />
+                <Route path="contracts" element={<LegalContractsPage />} />
+              </Route>
               <Route path="executive">
                 <Route index element={<ExecutiveCenter />} />
                 <Route path="direction" element={<ExecutiveCenter />} />
