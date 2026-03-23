@@ -1,31 +1,84 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
-import { Store, Package, Users, Settings, LayoutDashboard } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { Store, Package, Users, Settings, LayoutDashboard, QrCode, ArrowLeft, Loader2 } from "lucide-react";
 import { POSCheckout } from "./POSCheckout";
 import { POSProducts } from "./POSProducts";
 import { POSStaff } from "./POSStaff";
 import { POSSettings } from "./POSSettings";
+import { POSDigitalMenu } from "./POSDigitalMenu";
+import { Button } from "@/src/components/ui/button";
+import { db } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export function POS() {
   const { t } = useTranslation();
+  const { storeId, branchId } = useParams<{ storeId: string; branchId?: string }>();
+  const navigate = useNavigate();
+  const [store, setStore] = useState<any>(null);
+  const [branch, setBranch] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!storeId) return;
+      try {
+        const storeDoc = await getDoc(doc(db, "stores", storeId));
+        if (storeDoc.exists()) {
+          setStore({ id: storeDoc.id, ...storeDoc.data() });
+          
+          if (branchId) {
+            const branchDoc = await getDoc(doc(db, "stores", storeId, "branches", branchId));
+            if (branchDoc.exists()) {
+              setBranch({ id: branchDoc.id, ...branchDoc.data() });
+            }
+          }
+        } else {
+          navigate("/pos");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [storeId, branchId, navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!store) return null;
 
   return (
     <div className="p-6 h-[calc(100vh-4rem)] flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Store className="h-8 w-8 text-primary" />
-            {t("pos.title", "Phần mềm POS Cửa hàng")}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            {t("pos.subtitle", "Quản lý bán hàng, nhân viên và thiết lập cửa hàng độc lập")}
-          </p>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate(branchId ? `/pos/${storeId}/branches` : "/pos")}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Store className="h-8 w-8 text-primary" />
+              {branch ? `${store.name} - ${branch.name}` : store.name}
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              {branch 
+                ? `${branch.address.detail}, ${branch.address.district}, ${branch.address.province}` 
+                : (store.address || t("pos.subtitle", "Quản lý bán hàng, nhân viên và thiết lập cửa hàng độc lập"))}
+            </p>
+          </div>
         </div>
       </div>
 
       <Tabs defaultValue="checkout" className="flex-1 flex flex-col">
-        <TabsList className="grid w-full grid-cols-4 max-w-3xl mb-4">
+        <TabsList className="grid w-full grid-cols-5 max-w-4xl mb-4">
           <TabsTrigger value="checkout" className="flex items-center gap-2">
             <LayoutDashboard className="h-4 w-4" />
             {t("pos.tabs.checkout", "Bán hàng")}
@@ -33,6 +86,10 @@ export function POS() {
           <TabsTrigger value="products" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
             {t("pos.tabs.products", "Sản phẩm")}
+          </TabsTrigger>
+          <TabsTrigger value="menu" className="flex items-center gap-2">
+            <QrCode className="h-4 w-4" />
+            {t("pos.tabs.menu", "Menu & QR")}
           </TabsTrigger>
           <TabsTrigger value="staff" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
@@ -45,16 +102,19 @@ export function POS() {
         </TabsList>
 
         <TabsContent value="checkout" className="flex-1 mt-0">
-          <POSCheckout />
+          <POSCheckout storeId={storeId!} branchId={branchId} />
         </TabsContent>
         <TabsContent value="products" className="flex-1 mt-0">
-          <POSProducts />
+          <POSProducts storeId={storeId!} branchId={branchId} />
+        </TabsContent>
+        <TabsContent value="menu" className="flex-1 mt-0">
+          <POSDigitalMenu storeId={storeId!} branchId={branchId} />
         </TabsContent>
         <TabsContent value="staff" className="flex-1 mt-0">
-          <POSStaff />
+          <POSStaff storeId={storeId!} branchId={branchId} />
         </TabsContent>
         <TabsContent value="settings" className="flex-1 mt-0">
-          <POSSettings />
+          <POSSettings storeId={storeId!} branchId={branchId} />
         </TabsContent>
       </Tabs>
     </div>

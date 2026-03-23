@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2 } from "lucide-react";
+import { Search, ShoppingCart, Plus, Minus, Wallet, User, Loader2, ScanLine, Info, QrCode } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
-import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, doc, query, where, limit, onSnapshot, getDoc } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 
 const STORE_CONFIG = {
@@ -16,7 +17,7 @@ const STORE_CONFIG = {
   pointsEarnRate: 0.01, // 1% cashback in points
 };
 
-export function POSCheckout() {
+export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?: string }) {
   const { t } = useTranslation();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,22 +27,61 @@ export function POSCheckout() {
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [pointsToUse, setPointsToUse] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [barcodeInput, setBarcodeInput] = useState("");
+  const [showScanner, setShowScanner] = useState(false);
+  const [showPaymentQR, setShowPaymentQR] = useState(false);
+  const [storeConfig, setStoreConfig] = useState(STORE_CONFIG);
+
+  const simulateBarcodeScan = () => {
+    if (!barcodeInput) return;
+    const product = products.find(p => p.id === barcodeInput || p.productName.toLowerCase().includes(barcodeInput.toLowerCase()));
+    if (product) {
+      addToCart(product);
+      toast.success(t("pos.barcodeScanned", { name: product.productName }));
+      setBarcodeInput("");
+    } else {
+      toast.error(t("pos.productNotFound", "Không tìm thấy sản phẩm"));
+    }
+  };
 
   useEffect(() => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser || !storeId) return;
 
-    const q = query(collection(db, "products"));
+    // Fetch store config
+    const fetchStoreConfig = async () => {
+      try {
+        const docSnap = await getDoc(doc(db, "stores", storeId));
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setStoreConfig({
+            ...STORE_CONFIG,
+            id: storeId,
+            name: data.name,
+            ...(data.settings || {})
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching store config:", error);
+      }
+    };
+    fetchStoreConfig();
+
+    const productsPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/products` 
+      : `stores/${storeId}/products`;
+      
+    const q = query(collection(db, productsPath));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setProducts(docs);
       setLoading(false);
     }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, "products");
+      handleFirestoreError(error, OperationType.LIST, productsPath);
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [storeId, branchId]);
 
   const filteredProducts = products.filter((p) =>
     p.productName?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -90,8 +130,8 @@ export function POSCheckout() {
   const subtotal = cart.reduce((sum, item) => sum + (item.product.price || item.product.suggestedPrice || 0) * item.quantity, 0);
   const discount = pointsToUse; // 1 point = 1 VND
   const total = Math.max(0, subtotal - discount);
-  const platformFee = total * STORE_CONFIG.platformFeeRate;
-  const pointsEarned = total * STORE_CONFIG.pointsEarnRate;
+  const platformFee = total * storeConfig.platformFeeRate;
+  const pointsEarned = total * storeConfig.pointsEarnRate;
   const storeCredit = total - platformFee - pointsEarned;
 
   const handlePayment = async () => {
@@ -103,6 +143,10 @@ export function POSCheckout() {
 
     setIsProcessing(true);
     try {
+      const ordersPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/orders` 
+        : `stores/${storeId}/orders`;
+
       // 1. Save Order
       const orderData = {
         items: cart.map(item => ({
@@ -122,9 +166,10 @@ export function POSCheckout() {
         status: "completed",
         createdAt: new Date().toISOString(),
         creatorId: auth.currentUser?.uid,
-        storeId: STORE_CONFIG.id
+        storeId: storeId,
+        branchId: branchId || null
       };
-      await addDoc(collection(db, "orders"), orderData);
+      await addDoc(collection(db, ordersPath), orderData);
 
       // 2. Update Customer (if selected)
       if (selectedCustomer) {
@@ -146,7 +191,10 @@ export function POSCheckout() {
       setCustomerPhone("");
       setPointsToUse(0);
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, "orders/payment");
+      const ordersPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/orders` 
+        : `stores/${storeId}/orders`;
+      handleFirestoreError(error, OperationType.WRITE, ordersPath);
     } finally {
       setIsProcessing(false);
     }
@@ -168,11 +216,23 @@ export function POSCheckout() {
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder={t("pos.searchProduct")}
+              placeholder={t("pos.searchProduct", "Tìm kiếm sản phẩm...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
             />
+          </div>
+          <div className="flex items-center gap-2 bg-muted p-1 rounded-lg">
+            <Input
+              placeholder={t("pos.scanBarcode", "Quét mã vạch...")}
+              value={barcodeInput}
+              onChange={(e) => setBarcodeInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && simulateBarcodeScan()}
+              className="w-40 h-9 border-none bg-transparent focus-visible:ring-0"
+            />
+            <Button size="sm" variant="ghost" onClick={simulateBarcodeScan}>
+              <ScanLine className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 
@@ -180,14 +240,36 @@ export function POSCheckout() {
           {filteredProducts.map((product) => (
             <Card 
               key={product.id} 
-              className="cursor-pointer hover:border-primary transition-colors"
+              className="group cursor-pointer hover:border-primary transition-all hover:shadow-lg rounded-2xl overflow-hidden border-white/20 bg-white/50 backdrop-blur-sm"
               onClick={() => addToCart(product)}
             >
-              <CardContent className="p-4 flex flex-col items-center gap-3">
-                <img src={product.images?.[0]?.url || product.image || "https://picsum.photos/seed/product/200/200"} alt={product.productName} className="w-24 h-24 object-cover rounded-md" referrerPolicy="no-referrer" />
-                <div className="text-center">
-                  <p className="font-medium line-clamp-2">{product.productName}</p>
-                  <p className="text-primary font-bold">{(product.price || product.suggestedPrice || 0).toLocaleString()}đ</p>
+              <CardContent className="p-0 flex flex-col">
+                <div className="relative aspect-square overflow-hidden">
+                  <img 
+                    src={product.image || product.images?.[0]?.url || `https://picsum.photos/seed/${product.id}/400/400`} 
+                    alt={product.productName} 
+                    className="w-full h-full object-cover transition-transform group-hover:scale-110" 
+                    referrerPolicy="no-referrer" 
+                  />
+                  <div className="absolute top-2 right-2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Info className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p className="font-bold mb-1">{product.productName}</p>
+                          <p className="text-xs">{product.description || t("pos.noDescription", "Chưa có mô tả sản phẩm")}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </div>
+                <div className="p-4 text-center">
+                  <p className="font-bold line-clamp-1 text-sm">{product.productName}</p>
+                  <p className="text-primary font-black text-lg">{(product.price || product.suggestedPrice || 0).toLocaleString()}đ</p>
                 </div>
               </CardContent>
             </Card>
@@ -314,15 +396,39 @@ export function POSCheckout() {
               </div>
             )}
 
-            <Button 
-              className="w-full mt-4" 
-              size="lg" 
-              disabled={cart.length === 0}
-              onClick={handlePayment}
-            >
-              <Wallet className="mr-2 h-5 w-5" />
-              {t("pos.pay")}
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold h-12 rounded-xl shadow-lg shadow-primary/20" 
+                size="lg" 
+                disabled={cart.length === 0 || isProcessing}
+                onClick={handlePayment}
+              >
+                <Wallet className="mr-2 h-5 w-5" />
+                {t("pos.payWithWallet", "Ví App")}
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-12 w-12 rounded-xl border-primary/20 text-primary hover:bg-primary/5"
+                disabled={cart.length === 0}
+                onClick={() => setShowPaymentQR(true)}
+              >
+                <QrCode className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {showPaymentQR && (
+              <div className="mt-4 p-4 bg-white rounded-2xl border-2 border-dashed border-primary/20 flex flex-col items-center gap-3 animate-in zoom-in-95 duration-300">
+                <div className="bg-slate-100 p-3 rounded-xl">
+                  <QrCode className="h-32 w-32 text-slate-800" />
+                </div>
+                <p className="text-[10px] font-bold text-center text-muted-foreground uppercase tracking-widest">
+                  {t("pos.scanToPay", "Khách quét mã để thanh toán")}
+                </p>
+                <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => setShowPaymentQR(false)}>
+                  {t("common.cancel")}
+                </Button>
+              </div>
+            )}
           </div>
         </Card>
       </div>

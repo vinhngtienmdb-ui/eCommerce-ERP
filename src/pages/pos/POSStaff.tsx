@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { Plus, Search, Edit, Trash2, CalendarClock, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/src/components/ui/dialog";
-import { Label } from "@/src/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../../components/ui/dialog";
+import { Label } from "../../components/ui/label";
 import { db, auth } from "@/src/lib/firebase";
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 
-export function POSStaff() {
+export function POSStaff({ storeId, branchId }: { storeId: string; branchId?: string }) {
   const { t } = useTranslation();
   const [staff, setStaff] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,20 +27,24 @@ export function POSStaff() {
   });
 
   useEffect(() => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser || !storeId) return;
 
-    const q = query(collection(db, "staff"), orderBy("name", "asc"));
+    const staffPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/staff` 
+      : `stores/${storeId}/staff`;
+
+    const q = query(collection(db, staffPath), orderBy("name", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStaff(docs);
       setLoading(false);
     }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, "staff");
+      handleFirestoreError(error, OperationType.LIST, staffPath);
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [storeId, branchId]);
 
   const filteredStaff = staff.filter((s) =>
     s.name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -65,15 +69,19 @@ export function POSStaff() {
     }
     
     try {
+      const staffPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/staff` 
+        : `stores/${storeId}/staff`;
+
       if (editingStaff) {
-        const docRef = doc(db, "staff", editingStaff.id);
+        const docRef = doc(db, `${staffPath}/${editingStaff.id}`);
         await updateDoc(docRef, {
           ...formData,
           updatedAt: new Date().toISOString()
         });
         toast.success(t("pos.staff.editSuccess", "Đã cập nhật thông tin nhân viên"));
       } else {
-        await addDoc(collection(db, "staff"), {
+        await addDoc(collection(db, staffPath), {
           ...formData,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
@@ -83,7 +91,10 @@ export function POSStaff() {
       }
       setIsModalOpen(false);
     } catch (error) {
-      handleFirestoreError(error, editingStaff ? OperationType.UPDATE : OperationType.WRITE, editingStaff ? `staff/${editingStaff.id}` : "staff");
+      const staffPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/staff` 
+        : `stores/${storeId}/staff`;
+      handleFirestoreError(error, editingStaff ? OperationType.UPDATE : OperationType.WRITE, editingStaff ? `${staffPath}/${editingStaff.id}` : staffPath);
     }
   };
 
@@ -91,10 +102,16 @@ export function POSStaff() {
     if (!confirm(t("pos.staff.deleteConfirm", "Bạn có chắc chắn muốn xóa nhân viên này?"))) return;
     
     try {
-      await deleteDoc(doc(db, "staff", id));
+      const staffPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/staff` 
+        : `stores/${storeId}/staff`;
+      await deleteDoc(doc(db, `${staffPath}/${id}`));
       toast.success(t("pos.staff.deleteSuccess", "Đã xóa nhân viên"));
     } catch (error) {
-      handleFirestoreError(error, OperationType.DELETE, `staff/${id}`);
+      const staffPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/staff` 
+        : `stores/${storeId}/staff`;
+      handleFirestoreError(error, OperationType.DELETE, `${staffPath}/${id}`);
     }
   };
 

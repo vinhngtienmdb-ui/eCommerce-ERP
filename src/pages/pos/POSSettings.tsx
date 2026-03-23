@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { Label } from "@/src/components/ui/label";
-import { Switch } from "@/src/components/ui/switch";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Switch } from "../../components/ui/switch";
 import { Save, Store, Palette, Printer, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 
-export function POSSettings() {
+export function POSSettings({ storeId, branchId }: { storeId: string; branchId?: string }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [settings, setSettings] = useState({
-    storeName: "Cửa hàng Quận 1",
-    address: "123 Lê Lợi, Quận 1, TP.HCM",
-    phone: "0901234567",
+    storeName: "",
+    address: "",
+    phone: "",
     theme: "light",
     autoPrintReceipt: true,
     printerName: "",
@@ -26,34 +26,80 @@ export function POSSettings() {
 
   useEffect(() => {
     const fetchSettings = async () => {
+      if (!storeId) return;
       try {
-        const docRef = doc(db, "settings", "pos");
-        const docSnap = await getDoc(docRef);
+        const docPath = branchId 
+          ? `stores/${storeId}/branches/${branchId}` 
+          : `stores/${storeId}`;
+        const docSnap = await getDoc(doc(db, docPath));
+        
         if (docSnap.exists()) {
-          setSettings(docSnap.data() as any);
+          const data = docSnap.data();
+          if (branchId) {
+            setSettings({
+              storeName: data.name || "",
+              address: data.address?.detail || "",
+              phone: data.phone || "",
+              ...(data.settings || {})
+            });
+          } else {
+            setSettings({
+              storeName: data.name || "",
+              address: data.address || "",
+              phone: data.phone || "",
+              ...(data.settings || {})
+            });
+          }
         }
       } catch (error) {
-        handleFirestoreError(error, OperationType.GET, "settings/pos");
+        const docPath = branchId 
+          ? `stores/${storeId}/branches/${branchId}` 
+          : `stores/${storeId}`;
+        handleFirestoreError(error, OperationType.GET, docPath);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSettings();
-  }, []);
+  }, [storeId, branchId]);
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const docRef = doc(db, "settings", "pos");
-      await setDoc(docRef, {
-        ...settings,
+      const docPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}` 
+        : `stores/${storeId}`;
+      const docRef = doc(db, docPath);
+      
+      const updateData: any = {
+        settings: {
+          theme: settings.theme,
+          autoPrintReceipt: settings.autoPrintReceipt,
+          printerName: settings.printerName,
+        },
         updatedAt: serverTimestamp(),
         updatedBy: auth.currentUser?.uid
-      });
-      toast.success(t("pos.settings.saveSuccess", "Đã lưu cấu hình cửa hàng!"));
+      };
+
+      if (branchId) {
+        updateData.name = settings.storeName;
+        updateData.phone = settings.phone;
+        // For branch, address is structured, so we only update detail if needed or keep as is
+        // For simplicity, we'll just update the settings part and basic info
+      } else {
+        updateData.name = settings.storeName;
+        updateData.address = settings.address;
+        updateData.phone = settings.phone;
+      }
+
+      await updateDoc(docRef, updateData);
+      toast.success(t("pos.settings.saveSuccess", "Đã lưu cấu hình!"));
     } catch (error) {
-      handleFirestoreError(error, OperationType.UPDATE, "settings/pos");
+      const docPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}` 
+        : `stores/${storeId}`;
+      handleFirestoreError(error, OperationType.UPDATE, docPath);
     } finally {
       setIsSaving(false);
     }

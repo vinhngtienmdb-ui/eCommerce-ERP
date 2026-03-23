@@ -22,6 +22,10 @@
     "upload": "Tải lên",
     "selectFile": "Chọn tệp tin",
     "status": "Trạng thái",
+    "manageSuccess": "Đã mở giao diện quản lý phần thưởng",
+    "viewAnalyticsSuccess": "Đã mở giao diện phân tích",
+    "createSuccess": "Đã mở giao diện tạo mới",
+    "featureComingSoon": "Tính năng này sẽ sớm ra mắt",
     "moduleUnderConstruction": "Mô-đun đang được xây dựng",
     "languageCode": "Vietnamese",
     "minutesAgo": "phút trước",
@@ -233,9 +237,28 @@
   "pos": {
     "title": "Phần mềm POS Cửa hàng",
     "subtitle": "Quản lý bán hàng, nhân viên và thiết lập cửa hàng độc lập",
+    "stores": {
+      "title": "Quản lý Cửa hàng",
+      "subtitle": "Danh sách các điểm bán hàng trong hệ thống",
+      "add": "Thêm cửa hàng",
+      "search": "Tìm kiếm cửa hàng...",
+      "name": "Tên cửa hàng",
+      "address": "Địa chỉ",
+      "phone": "Số điện thoại",
+      "email": "Email",
+      "status": "Trạng thái",
+      "actions": "Thao tác",
+      "addSuccess": "Đã thêm cửa hàng mới",
+      "editSuccess": "Đã cập nhật thông tin cửa hàng",
+      "deleteSuccess": "Đã xóa cửa hàng",
+      "deleteConfirm": "Bạn có chắc chắn muốn xóa cửa hàng này? Tất cả dữ liệu liên quan sẽ bị mất.",
+      "active": "Hoạt động",
+      "inactive": "Tạm dừng"
+    },
     "tabs": {
       "checkout": "Bán hàng",
       "products": "Sản phẩm",
+      "menu": "Menu & QR",
       "staff": "Nhân viên & Ca",
       "settings": "Thiết lập"
     },
@@ -251,6 +274,12 @@
     "pointsToUse": "Số điểm muốn dùng",
     "total": "Tổng cộng",
     "pay": "Thanh toán",
+    "payWithWallet": "Thanh toán bằng Ví App",
+    "scanToPay": "Khách quét mã để thanh toán",
+    "scanBarcode": "Quét mã vạch...",
+    "barcodeScanned": "Đã quét: {{name}}",
+    "productNotFound": "Không tìm thấy sản phẩm",
+    "noDescription": "Chưa có mô tả sản phẩm",
     "paymentSuccess": "Thanh toán thành công!",
     "insufficientFunds": "Số dư ví không đủ",
     "storeWalletCredit": "Đã cộng vào ví cửa hàng: {amount}",
@@ -297,25 +326,24 @@
       "autoPrintDesc": "In hóa đơn ngay sau khi thanh toán thành công",
       "save": "Lưu thay đổi",
       "saveSuccess": "Đã lưu cấu hình cửa hàng!"
-    }
-  },
-  "loyalty": {
-    "wallet": {
-      "title": "Ví điểm",
-      "balance": "Số dư",
-      "redeem": "Đổi quà",
-      "viewGifts": "Xem quà tặng",
-      "history": "Lịch sử giao dịch",
-      "noHistory": "Chưa có giao dịch nào",
-      "redeemSuccess": "Đổi quà {reward} thành công!",
-      "insufficientPoints": "Không đủ điểm để đổi quà này.",
-      "confirmRedeem": "Bạn có chắc chắn muốn đổi {reward} với {points} điểm không?",
-      "cancel": "Hủy",
-      "confirm": "Xác nhận",
-      "earn": "Nhận",
-      "spent": "Tiêu",
-      "rewards": "Quà tặng có sẵn",
-      "points": "điểm"
+    },
+    "menu": {
+      "title": "Menu Điện tử & QR Code",
+      "subtitle": "Tạo mã QR để khách hàng tự quét và đặt hàng",
+      "qrTitle": "Mã QR Cửa hàng",
+      "qrDesc": "Dán mã này tại bàn hoặc quầy thanh toán",
+      "download": "Tải xuống",
+      "share": "Chia sẻ",
+      "linkTitle": "Liên kết Menu",
+      "linkDesc": "Gửi liên kết này cho khách hàng để xem menu trực tuyến",
+      "url": "Đường dẫn Menu",
+      "copySuccess": "Đã sao chép liên kết Menu",
+      "features": "Tính năng Menu Điện tử",
+      "feat1": "Hiển thị hình ảnh & mô tả sản phẩm sinh động",
+      "feat2": "Khách hàng tự quét mã vạch để thêm vào giỏ hàng",
+      "feat3": "Thanh toán nhanh chóng qua Ví App hoặc QR",
+      "feat4": "Tự động đồng bộ với kho hàng POS",
+      "preview": "Xem trước Menu"
     }
   },
   "socialCommerce": {
@@ -422,6 +450,23 @@
     "description": "Tăng tỷ lệ giữ chân khách hàng bằng các nhiệm vụ trò chơi hóa và phần thưởng hạng thành viên độc quyền.",
     "manageRewards": "Quản lý phần thưởng",
     "viewAnalytics": "Xem phân tích",
+    "wallet": {
+      "title": "Ví điểm thưởng",
+      "balance": "Số dư điểm",
+      "points": "điểm",
+      "rewards": "Phần thưởng có sẵn",
+      "redeem": "Đổi điểm",
+      "history": "Lịch sử giao dịch",
+      "noHistory": "Chưa có lịch sử giao dịch điểm.",
+      "insufficientPoints": "Bạn không đủ điểm để đổi phần thưởng này.",
+      "redeemSuccess": "Chúc mừng! Bạn đã đổi thành công {{reward}}.",
+      "confirmRedeem": "Bạn có chắc chắn muốn dùng {{points}} điểm để đổi {{reward}} không?",
+      "cancel": "Hủy bỏ",
+      "confirm": "Xác nhận đổi",
+      "earn": "Nhận",
+      "spent": "Tiêu",
+      "viewGifts": "Xem quà tặng"
+    },
     "tiers": {
       "title": "Hạng thành viên",
       "editStructure": "Chỉnh sửa cấu trúc",
@@ -467,6 +512,94 @@
       "status": {
         "active": "Đang hoạt động",
         "paused": "Tạm dừng"
+      }
+    },
+    "customers": {
+      "topCustomers": "Khách hàng hàng đầu",
+      "name": "Tên khách hàng",
+      "points": "Điểm tích lũy",
+      "tier": "Hạng thành viên",
+      "lastPurchase": "Giao dịch gần nhất",
+      "tiers": {
+        "diamond": "Kim cương",
+        "gold": "Vàng",
+        "silver": "Bạc",
+        "bronze": "Đồng"
+      }
+    },
+    "rules": {
+      "title": "Quy tắc Tích điểm",
+      "description": "Cấu hình cách thức khách hàng nhận điểm thưởng",
+      "status": {
+        "active": "Đang chạy",
+        "paused": "Tạm dừng"
+      },
+      "items": {
+        "purchase": {
+          "title": "Tích lũy khi Mua hàng",
+          "description": "Nhận 1 điểm cho mỗi 10,000 VNĐ chi tiêu"
+        },
+        "review": {
+          "title": "Đánh giá Sản phẩm",
+          "description": "Nhận 50 điểm cho mỗi đánh giá kèm hình ảnh"
+        },
+        "referral": {
+          "title": "Giới thiệu Bạn bè",
+          "description": "Nhận 200 điểm khi bạn bè đăng ký thành công"
+        },
+        "social": {
+          "title": "Chia sẻ Mạng xã hội",
+          "description": "Nhận 20 điểm khi chia sẻ sản phẩm lên Facebook/Zalo"
+        }
+      }
+    },
+    "activities": {
+      "title": "Hoạt động gần đây",
+      "earned": "Đã nhận",
+      "redeemed": "Đã đổi",
+      "reviewed": "Đã đánh giá",
+      "referred": "Đã giới thiệu",
+      "points": "điểm",
+      "justNow": "Vừa xong",
+      "minutesAgo": "{{count}} phút trước",
+      "hoursAgo": "{{count}} giờ trước"
+    },
+    "stats": {
+      "totalMembers": "Tổng thành viên",
+      "pointsIssued": "Điểm đã cấp",
+      "redemptionRate": "Tỷ lệ đổi thưởng",
+      "roi": "ROI Chiến dịch"
+    },
+    "hero": {
+      "newFeatures": "Tính năng mới"
+    },
+    "settings": {
+      "title": "Cấu hình Chương trình",
+      "description": "Tùy chỉnh các tính năng và thông số vận hành của hệ thống khách hàng thân thiết.",
+      "features": {
+        "title": "Tính năng kích hoạt",
+        "miniGames": "Trò chơi Mini-Games",
+        "activityFeed": "Bảng tin hoạt động",
+        "referral": "Chương trình giới thiệu",
+        "socialSharing": "Chia sẻ mạng xã hội",
+        "analytics": "Phân tích nâng cao"
+      },
+      "config": {
+        "title": "Thông số cơ bản",
+        "pointsPerUnit": "Điểm trên mỗi 10,000 VNĐ",
+        "minSpendTier": "Chi tiêu tối thiểu để lên hạng",
+        "pointExpiry": "Thời hạn hết hạn điểm (tháng)",
+        "saveSuccess": "Đã lưu cấu hình thành công"
+      }
+    },
+    "campaigns": {
+      "title": "Quản lý Chiến dịch",
+      "description": "Quản lý các chương trình khuyến mãi và chiến dịch tích điểm.",
+      "add": "Thêm chiến dịch",
+      "status": {
+        "active": "Đang chạy",
+        "scheduled": "Đã lên lịch",
+        "ended": "Đã kết thúc"
       }
     }
   },

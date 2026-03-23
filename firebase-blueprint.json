@@ -204,6 +204,60 @@
         "status": { "type": "string" }
       },
       "required": ["name", "location"]
+    },
+    "Store": {
+      "title": "Store Profile",
+      "description": "POS Store profile and business configuration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "storeCode": { "type": "string", "description": "Unique store identifier" },
+        "ownerType": { "type": "string", "enum": ["Enterprise", "Household", "Individual"] },
+        "ownerName": { "type": "string" },
+        "ownerContact": { "type": "string" },
+        "taxId": { "type": "string" },
+        "managerContact": { "type": "string" },
+        "customUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "creatorId": { "type": "string" },
+        "settings": { "type": "object" }
+      },
+      "required": ["name", "storeCode"]
+    },
+    "Branch": {
+      "title": "Store Branch",
+      "description": "Physical branch of a store",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "branchCode": { "type": "string", "description": "StoreCode + Sequence" },
+        "address": {
+          "type": "object",
+          "properties": {
+            "province": { "type": "string" },
+            "district": { "type": "string" },
+            "detail": { "type": "string" }
+          }
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "managerName": { "type": "string" },
+        "managerContact": { "type": "string" },
+        "customUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "branchCode"]
     }
   },
   "firestore": {
@@ -258,6 +312,38 @@
     "/warehouses/{warehouseId}": {
       "schema": "Warehouse",
       "description": "Warehouse management"
+    },
+    "/stores/{storeId}": {
+      "schema": "Store",
+      "description": "POS Store profiles"
+    },
+    "/stores/{storeId}/branches/{branchId}": {
+      "schema": "Branch",
+      "description": "Store branches"
+    },
+    "/stores/{storeId}/products/{productId}": {
+      "schema": "Product",
+      "description": "Store-specific products"
+    },
+    "/stores/{storeId}/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Store-specific orders"
+    },
+    "/stores/{storeId}/staff/{staffId}": {
+      "schema": "Staff",
+      "description": "Store-specific staff"
+    },
+    "/stores/{storeId}/branches/{branchId}/products/{productId}": {
+      "schema": "Product",
+      "description": "Branch-specific products"
+    },
+    "/stores/{storeId}/branches/{branchId}/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Branch-specific orders"
+    },
+    "/stores/{storeId}/branches/{branchId}/staff/{staffId}": {
+      "schema": "Staff",
+      "description": "Branch-specific staff"
     }
   }
 }

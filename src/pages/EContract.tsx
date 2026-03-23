@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { motion, AnimatePresence } from "motion/react"
-import SignatureCanvas from 'react-signature-canvas'
+import { SignaturePad, SignaturePadHandle } from "@/src/components/ui/SignaturePad"
 import { 
   FileSignature, 
   FileText, 
@@ -50,10 +50,10 @@ const EContract = () => {
     party: "",
     security: "Standard"
   })
-  const sigCanvas = useRef<any>(null)
+  const sigPadRef = useRef<SignaturePadHandle>(null)
 
   const handleSign = () => {
-    if (sigCanvas.current?.isEmpty()) {
+    if (sigPadRef.current?.isEmpty()) {
       toast.error("Please provide a signature")
       return
     }
@@ -282,17 +282,7 @@ const EContract = () => {
                 <div className="p-8 space-y-6">
                   <div className="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center space-y-4">
                     <p className="text-sm text-slate-500 italic">"I hereby agree to the terms and conditions set forth in {selectedContract.title} and authorize the use of my digital signature for this transaction."</p>
-                    <div className="h-32 bg-white rounded-xl border flex items-center justify-center relative group cursor-crosshair">
-                      <SignatureCanvas 
-                        ref={sigCanvas}
-                        penColor='black'
-                        canvasProps={{style: {width: '100%', height: '100%'}, className: 'sigCanvas'}} 
-                      />
-                      <div className="absolute bottom-2 right-2 text-[10px] text-slate-400 flex items-center gap-1">
-                        <ShieldCheck className="h-3 w-3" /> Encrypted Session
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => sigCanvas.current?.clear()}>Clear Signature</Button>
+                    <SignaturePad ref={sigPadRef} />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">

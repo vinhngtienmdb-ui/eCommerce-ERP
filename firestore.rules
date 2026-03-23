@@ -9,6 +9,7 @@ service cloud.firestore {
     function isAdmin() {
       return isAuthenticated() && 
         (request.auth.token.email == "vinh.ngtienmdb@gmail.com" ||
+         request.auth.token.email == "admin@luckyshop.vn" ||
          get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin');
     }
 
@@ -30,6 +31,72 @@ service cloud.firestore {
     function isValidUser(data) {
       return (data.displayName is string && data.displayName.size() < 100) ||
              (data.email is string && data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"));
+    }
+
+    function isValidStore(data) {
+      return hasRequiredFields(['name', 'storeCode']) &&
+             data.name is string && data.name.size() > 0 &&
+             data.storeCode is string && data.storeCode.size() > 0;
+    }
+
+    function isValidBranch(data) {
+      return hasRequiredFields(['name', 'branchCode']) &&
+             data.name is string && data.name.size() > 0 &&
+             data.branchCode is string && data.branchCode.size() > 0;
+    }
+
+    function isValidOrder(data) {
+      return hasRequiredFields(['items', 'total', 'createdAt']) &&
+             data.items is list && data.total is number;
+    }
+
+    function isValidStaff(data) {
+      return hasRequiredFields(['name', 'role']) &&
+             data.name is string && data.role is string;
+    }
+
+    // Stores rules
+    match /stores/{storeId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidStore(request.resource.data);
+      allow update: if isAuthenticated() && (resource.data.creatorId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+
+      // Store subcollections
+      match /products/{productId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated();
+      }
+      match /orders/{orderId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated();
+      }
+      match /staff/{staffId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated();
+      }
+
+      // Branches rules
+      match /branches/{branchId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && isValidBranch(request.resource.data);
+        allow update: if isAuthenticated() && (resource.data.creatorId == request.auth.uid || isAdmin());
+        allow delete: if isAdmin();
+
+        // Branch subcollections
+        match /products/{productId} {
+          allow read: if isAuthenticated();
+          allow write: if isAuthenticated();
+        }
+        match /orders/{orderId} {
+          allow read: if isAuthenticated();
+          allow write: if isAuthenticated();
+        }
+        match /staff/{staffId} {
+          allow read: if isAuthenticated();
+          allow write: if isAuthenticated();
+        }
+      }
     }
 
     // Notifications rules

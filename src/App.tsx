@@ -72,6 +72,8 @@ const NotificationsPage = lazy(() => import("./pages/admin-workspace/Notificatio
 const GroupBuying = lazy(() => import("./pages/marketing/GroupBuying").then(m => ({ default: m.GroupBuying })))
 const PointWallet = lazy(() => import("./pages/loyalty/PointWallet").then(m => ({ default: m.PointWallet })))
 const POS = lazy(() => import("./pages/pos/POS").then(m => ({ default: m.POS })))
+const POSStoreManagement = lazy(() => import("./pages/pos/POSStoreManagement").then(m => ({ default: m.POSStoreManagement })))
+const POSBranchManagement = lazy(() => import("./pages/pos/POSBranchManagement").then(m => ({ default: m.POSBranchManagement })))
 
 const PaymentRequest = lazy(() => import("./pages/PaymentRequest"))
 
@@ -177,7 +179,11 @@ export default function App() {
                 <Route path="registration" element={<SellerRegistrationPage />} />
               </Route>
               <Route path="customers" element={<Customers />} />
-              <Route path="pos" element={<POS />} />
+              <Route path="pos">
+                <Route index element={<POSStoreManagement />} />
+                <Route path=":storeId/branches" element={<POSBranchManagement />} />
+                <Route path=":storeId/:branchId?" element={<POS />} />
+              </Route>
               <Route path="kol-koc" element={<KolManagement />} />
               <Route path="customer-service" element={<CustomerService />} />
               <Route path="marketing">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
@@ -12,7 +12,7 @@ import { db, auth } from "@/src/lib/firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors";
 
-export function POSProducts() {
+export function POSProducts({ storeId, branchId }: { storeId: string; branchId?: string }) {
   const { t } = useTranslation();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,23 +24,29 @@ export function POSProducts() {
     price: 0,
     category: "",
     stock: 0,
+    image: "",
+    description: "",
   });
 
   useEffect(() => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser || !storeId) return;
 
-    const q = query(collection(db, "products"), orderBy("productName", "asc"));
+    const productsPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/products` 
+      : `stores/${storeId}/products`;
+
+    const q = query(collection(db, productsPath), orderBy("productName", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setProducts(docs);
       setLoading(false);
     }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, "products");
+      handleFirestoreError(error, OperationType.LIST, productsPath);
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [storeId, branchId]);
 
   const filteredProducts = products.filter((p) =>
     p.productName?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -48,7 +54,7 @@ export function POSProducts() {
 
   const handleAddProduct = () => {
     setEditingProduct(null);
-    setFormData({ productName: "", price: 0, category: "", stock: 0 });
+    setFormData({ productName: "", price: 0, category: "", stock: 0, image: "", description: "" });
     setIsModalOpen(true);
   };
 
@@ -58,7 +64,9 @@ export function POSProducts() {
       productName: product.productName || "", 
       price: product.price || product.suggestedPrice || 0, 
       category: Array.isArray(product.category) ? product.category[0] : (product.category || ""), 
-      stock: product.stock || 0 
+      stock: product.stock || 0,
+      image: product.image || (product.images?.[0]?.url || ""),
+      description: product.description || ""
     });
     setIsModalOpen(true);
   };
@@ -70,22 +78,30 @@ export function POSProducts() {
     }
     
     try {
+      const productsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/products` 
+        : `stores/${storeId}/products`;
+
       if (editingProduct) {
-        const docRef = doc(db, "products", editingProduct.id);
+        const docRef = doc(db, `${productsPath}/${editingProduct.id}`);
         await updateDoc(docRef, {
           productName: formData.productName,
           price: Number(formData.price),
           category: [formData.category],
           stock: Number(formData.stock),
+          image: formData.image,
+          description: formData.description,
           updatedAt: new Date().toISOString()
         });
         toast.success(t("pos.products.editSuccess", "Đã cập nhật sản phẩm"));
       } else {
-        await addDoc(collection(db, "products"), {
+        await addDoc(collection(db, productsPath), {
           productName: formData.productName,
           price: Number(formData.price),
           category: [formData.category],
           stock: Number(formData.stock),
+          image: formData.image,
+          description: formData.description,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           userId: auth.currentUser?.uid || 'anonymous'
@@ -94,7 +110,10 @@ export function POSProducts() {
       }
       setIsModalOpen(false);
     } catch (error) {
-      handleFirestoreError(error, editingProduct ? OperationType.UPDATE : OperationType.WRITE, editingProduct ? `products/${editingProduct.id}` : "products");
+      const productsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/products` 
+        : `stores/${storeId}/products`;
+      handleFirestoreError(error, editingProduct ? OperationType.UPDATE : OperationType.WRITE, editingProduct ? `${productsPath}/${editingProduct.id}` : productsPath);
     }
   };
 
@@ -102,10 +121,16 @@ export function POSProducts() {
     if (!confirm(t("pos.products.deleteConfirm", "Bạn có chắc chắn muốn xóa sản phẩm này?"))) return;
     
     try {
-      await deleteDoc(doc(db, "products", id));
+      const productsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/products` 
+        : `stores/${storeId}/products`;
+      await deleteDoc(doc(db, `${productsPath}/${id}`));
       toast.success(t("pos.products.deleteSuccess", "Đã xóa sản phẩm"));
     } catch (error) {
-      handleFirestoreError(error, OperationType.DELETE, `products/${id}`);
+      const productsPath = branchId 
+        ? `stores/${storeId}/branches/${branchId}/products` 
+        : `stores/${storeId}/products`;
+      handleFirestoreError(error, OperationType.DELETE, `${productsPath}/${id}`);
     }
   };
 
@@ -194,6 +219,22 @@ export function POSProducts() {
                 value={formData.category} 
                 onChange={(e) => setFormData({...formData, category: e.target.value})} 
                 placeholder="Nhập danh mục"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Mô tả sản phẩm</Label>
+              <Input 
+                value={formData.description} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                placeholder="Nhập mô tả sản phẩm"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>URL Hình ảnh</Label>
+              <Input 
+                value={formData.image} 
+                onChange={(e) => setFormData({...formData, image: e.target.value})} 
+                placeholder="https://example.com/image.jpg"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">

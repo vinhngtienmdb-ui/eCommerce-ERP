@@ -15,6 +15,10 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "status": "Status",
+    "manageSuccess": "Reward management interface opened",
+    "viewAnalyticsSuccess": "Analytics interface opened",
+    "createSuccess": "Creation interface opened",
+    "featureComingSoon": "This feature is coming soon",
     "moduleUnderConstruction": "Module under construction",
     "languageCode": "English"
   },
@@ -178,6 +182,7 @@
     "tabs": {
       "checkout": "Checkout",
       "products": "Products",
+      "menu": "Menu & QR",
       "staff": "Staff & Shifts",
       "settings": "Settings"
     },
@@ -193,6 +198,12 @@
     "pointsToUse": "Points to use",
     "total": "Total",
     "pay": "Pay",
+    "payWithWallet": "Pay with App Wallet",
+    "scanToPay": "Scan to Pay",
+    "scanBarcode": "Scan barcode...",
+    "barcodeScanned": "Scanned: {{name}}",
+    "productNotFound": "Product not found",
+    "noDescription": "No description available",
     "paymentSuccess": "Payment successful!",
     "insufficientFunds": "Insufficient wallet balance",
     "storeWalletCredit": "Credited to store wallet: {amount}",
@@ -239,9 +250,31 @@
       "autoPrintDesc": "Print receipt immediately after successful payment",
       "save": "Save Changes",
       "saveSuccess": "Store settings saved successfully!"
+    },
+    "menu": {
+      "title": "Digital Menu & QR Code",
+      "subtitle": "Create QR codes for customers to scan and order",
+      "qrTitle": "Store QR Code",
+      "qrDesc": "Place this code at tables or checkout counters",
+      "download": "Download",
+      "share": "Share",
+      "linkTitle": "Menu Link",
+      "linkDesc": "Send this link to customers to view the menu online",
+      "url": "Menu URL",
+      "copySuccess": "Menu link copied",
+      "features": "Digital Menu Features",
+      "feat1": "Display vivid product images & descriptions",
+      "feat2": "Customers scan barcodes to add to cart",
+      "feat3": "Fast payment via App Wallet or QR",
+      "feat4": "Auto-sync with POS inventory",
+      "preview": "Preview Menu"
     }
   },
   "loyalty": {
+    "title": "Loyalty & Gamification Program",
+    "description": "Increase customer retention with gamified missions and exclusive tier rewards.",
+    "manageRewards": "Manage Rewards",
+    "viewAnalytics": "View Analytics",
     "wallet": {
       "title": "Point Wallet",
       "balance": "Balance",
@@ -249,15 +282,150 @@
       "viewGifts": "View Gifts",
       "history": "Transaction History",
       "noHistory": "No transactions yet",
-      "redeemSuccess": "Successfully redeemed {reward}!",
+      "redeemSuccess": "Successfully redeemed {{reward}}!",
       "insufficientPoints": "Not enough points to redeem this reward.",
-      "confirmRedeem": "Are you sure you want to redeem {reward} for {points} points?",
+      "confirmRedeem": "Are you sure you want to redeem {{reward}} for {{points}} points?",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "earn": "Earned",
       "spent": "Spent",
       "rewards": "Available Rewards",
       "points": "pts"
+    },
+    "customers": {
+      "topCustomers": "Top Customers",
+      "name": "Customer Name",
+      "points": "Points",
+      "tier": "Tier",
+      "lastPurchase": "Last Purchase",
+      "tiers": {
+        "diamond": "Diamond",
+        "gold": "Gold",
+        "silver": "Silver",
+        "bronze": "Bronze"
+      }
+    },
+    "tiers": {
+      "title": "Membership Tiers",
+      "editStructure": "Edit Structure",
+      "minSpend": "Min Spend: {{amount}}",
+      "names": {
+        "Bronze": "Bronze",
+        "Silver": "Silver",
+        "Gold": "Gold",
+        "Diamond": "Diamond"
+      }
+    },
+    "missions": {
+      "title": "Active Missions",
+      "progress": "Progress",
+      "items": {
+        "Early Bird": {
+          "title": "Early Bird",
+          "description": "Make 3 purchases before 10 AM"
+        },
+        "Review Master": {
+          "title": "Review Master",
+          "description": "Write 5 reviews with photos"
+        },
+        "Big Spender": {
+          "title": "Big Spender",
+          "description": "Spend over $1000 this month"
+        }
+      }
+    },
+    "health": {
+      "title": "Program Health",
+      "description": "Performance over last 30 days",
+      "activeMembers": "Active Members",
+      "redemptionRate": "Redemption Rate",
+      "pointsIssued": "Points Issued"
+    },
+    "games": {
+      "title": "Mini-Games Hub",
+      "description": "Engage customers with fun",
+      "luckyWheel": "Lucky Wheel",
+      "dailyCheckin": "Daily Check-in",
+      "priceGuessing": "Price Guessing",
+      "status": {
+        "active": "Active",
+        "paused": "Paused"
+      }
+    },
+    "rules": {
+      "title": "Earning Rules",
+      "description": "Configure how customers earn points",
+      "status": {
+        "active": "Running",
+        "paused": "Paused"
+      },
+      "items": {
+        "purchase": {
+          "title": "Purchase Rewards",
+          "description": "Earn 1 point for every $1 spent"
+        },
+        "review": {
+          "title": "Product Review",
+          "description": "Earn 50 points for every review with photo"
+        },
+        "referral": {
+          "title": "Refer a Friend",
+          "description": "Earn 200 points when a friend signs up"
+        },
+        "social": {
+          "title": "Social Sharing",
+          "description": "Earn 20 points when sharing products"
+        }
+      }
+    },
+    "activities": {
+      "title": "Recent Activity",
+      "earned": "Earned",
+      "redeemed": "Redeemed",
+      "reviewed": "Reviewed",
+      "referred": "Referred",
+      "points": "pts",
+      "justNow": "Just now",
+      "minutesAgo": "{{count}}m ago",
+      "hoursAgo": "{{count}}h ago"
+    },
+    "stats": {
+      "totalMembers": "Total Members",
+      "pointsIssued": "Points Issued",
+      "redemptionRate": "Redemption Rate",
+      "roi": "Campaign ROI"
+    },
+    "hero": {
+      "newFeatures": "New Features"
+    },
+    "settings": {
+      "title": "Program Configuration",
+      "description": "Customize loyalty program features and operation parameters.",
+      "features": {
+        "title": "Enabled Features",
+        "miniGames": "Mini-Games",
+        "activityFeed": "Activity Feed",
+        "referral": "Referral Program",
+        "socialSharing": "Social Sharing",
+        "analytics": "Advanced Analytics"
+      },
+      "config": {
+        "title": "Basic Parameters",
+        "pointsPerUnit": "Points per $1",
+        "minSpendTier": "Min spend for next tier",
+        "pointExpiry": "Point expiry (months)",
+        "saveSuccess": "Configuration saved successfully"
+      }
+    },
+    "campaigns": {
+      "title": "Campaign Management",
+      "description": "Manage promotions and point campaigns.",
+      "add": "Add Campaign",
+      "status": {
+        "active": "Running",
+        "scheduled": "Scheduled",
+        "ended": "Ended"
+      }
     }
   },
   "socialCommerce": {
