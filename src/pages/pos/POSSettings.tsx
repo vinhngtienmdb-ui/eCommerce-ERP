@@ -5,7 +5,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Switch } from "../../components/ui/switch";
-import { Save, Store, Palette, Printer, Loader2 } from "lucide-react";
+import { Save, Store, Palette, Printer, Loader2, CreditCard } from "lucide-react";
 import { toast } from "sonner";
 import { db, auth } from "@/src/lib/firebase";
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
@@ -22,6 +22,10 @@ export function POSSettings({ storeId, branchId }: { storeId: string; branchId?:
     theme: "light",
     autoPrintReceipt: true,
     printerName: "",
+    bankId: "",
+    accountNo: "",
+    accountName: "",
+    qrTemplate: "compact",
   });
 
   useEffect(() => {
@@ -35,19 +39,30 @@ export function POSSettings({ storeId, branchId }: { storeId: string; branchId?:
         
         if (docSnap.exists()) {
           const data = docSnap.data();
+          const baseSettings = {
+            theme: "light",
+            autoPrintReceipt: true,
+            printerName: "",
+            bankId: "",
+            accountNo: "",
+            accountName: "",
+            qrTemplate: "compact",
+            ...(data.settings || {})
+          };
+
           if (branchId) {
             setSettings({
+              ...baseSettings,
               storeName: data.name || "",
               address: data.address?.detail || "",
               phone: data.phone || "",
-              ...(data.settings || {})
             });
           } else {
             setSettings({
+              ...baseSettings,
               storeName: data.name || "",
               address: data.address || "",
               phone: data.phone || "",
-              ...(data.settings || {})
             });
           }
         }
@@ -77,6 +92,10 @@ export function POSSettings({ storeId, branchId }: { storeId: string; branchId?:
           theme: settings.theme,
           autoPrintReceipt: settings.autoPrintReceipt,
           printerName: settings.printerName,
+          bankId: settings.bankId,
+          accountNo: settings.accountNo,
+          accountName: settings.accountName,
+          qrTemplate: settings.qrTemplate,
         },
         updatedAt: serverTimestamp(),
         updatedBy: auth.currentUser?.uid
@@ -183,6 +202,63 @@ export function POSSettings({ storeId, branchId }: { storeId: string; branchId?:
                 checked={settings.theme === "dark"} 
                 onCheckedChange={(c) => setSettings({ ...settings, theme: c ? "dark" : "light" })} 
               />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Payment & VietQR */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-primary" />
+              {t("pos.settings.payment", "Thanh toán & VietQR")}
+            </CardTitle>
+            <CardDescription>
+              {t("pos.settings.paymentDesc", "Cấu hình tài khoản ngân hàng để nhận thanh toán qua mã QR")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="bankId">{t("pos.settings.bankName", "Ngân hàng")}</Label>
+                <Input 
+                  id="bankId" 
+                  value={settings.bankId || ""} 
+                  onChange={(e) => setSettings({ ...settings, bankId: e.target.value })} 
+                  placeholder={t("pos.settings.bankPlaceholder", "Ví dụ: VCB, TCB, MBB...")}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="accountNo">{t("pos.settings.accountNo", "Số tài khoản")}</Label>
+                <Input 
+                  id="accountNo" 
+                  value={settings.accountNo || ""} 
+                  onChange={(e) => setSettings({ ...settings, accountNo: e.target.value })} 
+                  placeholder="0123456789"
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="accountName">{t("pos.settings.accountName", "Tên chủ tài khoản")}</Label>
+              <Input 
+                id="accountName" 
+                value={settings.accountName || ""} 
+                onChange={(e) => setSettings({ ...settings, accountName: e.target.value })} 
+                placeholder="NGUYEN VAN A"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="qrTemplate">{t("pos.settings.qrTemplate", "Mẫu QR")}</Label>
+              <select 
+                id="qrTemplate"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={settings.qrTemplate || "compact"}
+                onChange={(e) => setSettings({ ...settings, qrTemplate: e.target.value })}
+              >
+                <option value="compact">Compact (Chỉ mã QR)</option>
+                <option value="qr_only">QR Only</option>
+                <option value="print">Print (Có thông tin tài khoản)</option>
+              </select>
             </div>
           </CardContent>
         </Card>

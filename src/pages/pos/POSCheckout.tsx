@@ -31,10 +31,24 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
   const [barcodeInput, setBarcodeInput] = useState("");
   const [showScanner, setShowScanner] = useState(false);
   const [showPaymentQR, setShowPaymentQR] = useState(false);
-  const [storeConfig, setStoreConfig] = useState(STORE_CONFIG);
+  const [storeConfig, setStoreConfig] = useState<any>(STORE_CONFIG);
   const [activeShift, setActiveShift] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "wallet" | "dealtot" | "split">("cash");
-  const [splitAmounts, setSplitAmounts] = useState({ cash: 0, card: 0, wallet: 0, dealtot: 0 });
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "wallet" | "dealtot" | "vietqr" | "split">("cash");
+
+  // VietQR URL Generation
+  const getVietQRUrl = () => {
+    if (!storeConfig.bankId || !storeConfig.accountNo) return null;
+    
+    const bankId = storeConfig.bankId.toLowerCase();
+    const accountNo = storeConfig.accountNo;
+    const template = storeConfig.qrTemplate || "compact";
+    const amount = total;
+    const description = `Thanh toan don hang POS`;
+    const accountName = encodeURIComponent(storeConfig.accountName || "");
+
+    return `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${amount}&addInfo=${encodeURIComponent(description)}&accountName=${accountName}`;
+  };
+  const [splitAmounts, setSplitAmounts] = useState({ cash: 0, card: 0, wallet: 0, dealtot: 0, vietqr: 0 });
   const [showPrintPreview, setShowPrintPreview] = useState(false);
   const [lastOrder, setLastOrder] = useState<any>(null);
 
@@ -74,6 +88,10 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
             ...STORE_CONFIG,
             id: storeId,
             name: data.name,
+            bankId: data.settings?.bankId || "",
+            accountNo: data.settings?.accountNo || "",
+            accountName: data.settings?.accountName || "",
+            qrTemplate: data.settings?.qrTemplate || "compact",
             ...(data.settings || {})
           });
         }
@@ -269,7 +287,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
       setCustomerPhone("");
       setPointsToUse(0);
       setShowPaymentQR(false);
-      setSplitAmounts({ cash: 0, card: 0, wallet: 0, dealtot: 0 });
+      setSplitAmounts({ cash: 0, card: 0, wallet: 0, dealtot: 0, vietqr: 0 });
       setPaymentMethod("cash");
     } catch (error) {
       const ordersPath = branchId 
@@ -319,7 +337,7 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
             <p className="text-[10px] font-bold uppercase mb-1">Thanh toán:</p>
             {order.payments?.map((p: any, idx: number) => (
               <p key={idx} className="flex justify-between text-xs italic">
-                <span>{p.method === 'cash' ? 'Tiền mặt' : p.method === 'card' ? 'Thẻ/CK' : p.method === 'wallet' ? 'Ví App' : 'Dealtot'}:</span>
+                <span>{p.method === 'cash' ? 'Tiền mặt' : p.method === 'card' ? 'Thẻ/CK' : p.method === 'vietqr' ? 'VietQR' : p.method === 'wallet' ? 'Ví App' : 'Dealtot'}:</span>
                 <span>{p.amount.toLocaleString()}đ</span>
               </p>
             ))}
@@ -572,6 +590,17 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
                 <CreditCard className="mr-1 h-4 w-4" /> Thẻ/CK
               </Button>
               <Button 
+                variant={paymentMethod === "vietqr" ? "default" : "outline"} 
+                size="sm" 
+                className="h-9"
+                onClick={() => {
+                  setPaymentMethod("vietqr");
+                  setShowPaymentQR(true);
+                }}
+              >
+                <QrCode className="mr-1 h-4 w-4" /> VietQR
+              </Button>
+              <Button 
                 variant={paymentMethod === "wallet" ? "default" : "outline"} 
                 size="sm" 
                 className="h-9"
@@ -626,6 +655,18 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
                       className="h-8 text-xs" 
                       value={splitAmounts.wallet || ""} 
                       onChange={(e) => setSplitAmounts(prev => ({ ...prev, wallet: Number(e.target.value) }))}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">VietQR</label>
+                    <Input 
+                      type="number" 
+                      className="h-8 text-xs" 
+                      value={splitAmounts.vietqr || ""} 
+                      onChange={(e) => {
+                        setSplitAmounts(prev => ({ ...prev, vietqr: Number(e.target.value) }));
+                        if (Number(e.target.value) > 0) setShowPaymentQR(true);
+                      }}
                     />
                   </div>
                   <div className="space-y-1">
@@ -691,12 +732,32 @@ export function POSCheckout({ storeId, branchId }: { storeId: string; branchId?:
 
             {showPaymentQR && (
               <div className="mt-4 p-4 bg-white rounded-2xl border-2 border-dashed border-primary/20 flex flex-col items-center gap-3 animate-in zoom-in-95 duration-300">
-                <div className="bg-slate-100 p-3 rounded-xl">
-                  <QrCode className="h-32 w-32 text-slate-800" />
+                <div className="bg-slate-100 p-3 rounded-xl min-h-[160px] flex items-center justify-center">
+                  {getVietQRUrl() ? (
+                    <img 
+                      src={getVietQRUrl()!} 
+                      alt="VietQR Payment" 
+                      className="h-48 w-48 object-contain"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                      <QrCode className="h-32 w-32 opacity-20" />
+                      <p className="text-[10px] text-center">Chưa cấu hình tài khoản ngân hàng</p>
+                    </div>
+                  )}
                 </div>
-                <p className="text-[10px] font-bold text-center text-muted-foreground uppercase tracking-widest">
-                  {t("pos.scanToPay", "Khách quét mã để thanh toán")}
-                </p>
+                {getVietQRUrl() && (
+                  <>
+                    <p className="text-[10px] font-bold text-center text-muted-foreground uppercase tracking-widest">
+                      {t("pos.scanToPay", "Khách quét mã để thanh toán")}
+                    </p>
+                    <div className="text-center space-y-1">
+                      <p className="text-xs font-bold">{storeConfig.accountName}</p>
+                      <p className="text-[10px] text-muted-foreground">{storeConfig.bankId?.toUpperCase()} - {storeConfig.accountNo}</p>
+                    </div>
+                  </>
+                )}
                 <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => setShowPaymentQR(false)}>
                   {t("common.cancel")}
                 </Button>
