@@ -52,6 +52,9 @@
         "baseName": { "type": "string" },
         "specifications": { "type": "string" },
         "category": { "type": "array", "items": { "type": "string" } },
+        "categoryLevel1": { "type": "string" },
+        "categoryLevel2": { "type": "string" },
+        "categoryLevel3": { "type": "string" },
         "description": { "type": "string" },
         "images": { "type": "array", "items": { "type": "string" } },
         "coverImage": { "type": "string" },
@@ -258,6 +261,40 @@
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["name", "branchCode"]
+    },
+    "StoreRegistration": {
+      "title": "Store Registration",
+      "description": "Workflow for store onboarding",
+      "type": "object",
+      "properties": {
+        "partnerName": { "type": "string" },
+        "partnerContact": { "type": "string" },
+        "businessType": { "type": "string" },
+        "documents": { "type": "array", "items": { "type": "string" }, "description": "Base64 or URLs of documents" },
+        "storefrontImage": { "type": "string", "description": "Base64 of storefront image" },
+        "status": { "type": "string", "enum": ["pending_registration", "pending_verification", "pending_contract", "pending_approval", "approved", "rejected"] },
+        "fieldSaleVerification": {
+          "type": "object",
+          "properties": {
+            "verifiedBy": { "type": "string" },
+            "verifiedAt": { "type": "string", "format": "date-time" },
+            "verificationImages": { "type": "array", "items": { "type": "string" } },
+            "location": {
+              "type": "object",
+              "properties": {
+                "lat": { "type": "number" },
+                "lng": { "type": "number" }
+              }
+            },
+            "notes": { "type": "string" }
+          }
+        },
+        "contractSigned": { "type": "boolean" },
+        "contractUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["partnerName", "partnerContact", "status"]
     }
   },
   "firestore": {
@@ -344,6 +381,10 @@
     "/stores/{storeId}/branches/{branchId}/staff/{staffId}": {
       "schema": "Staff",
       "description": "Branch-specific staff"
+    },
+    "/store_registrations/{registrationId}": {
+      "schema": "StoreRegistration",
+      "description": "Store onboarding registrations"
     }
   }
 }

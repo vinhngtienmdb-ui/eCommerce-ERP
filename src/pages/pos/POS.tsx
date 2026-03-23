@@ -10,7 +10,8 @@ import { POSSettings } from "./POSSettings";
 import { POSDigitalMenu } from "./POSDigitalMenu";
 import { Button } from "@/src/components/ui/button";
 import { db } from "@/src/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, onSnapshot } from "firebase/firestore";
+import { toast } from "sonner";
 
 export function POS() {
   const { t } = useTranslation();
@@ -45,6 +46,29 @@ export function POS() {
     }
     fetchData();
   }, [storeId, branchId, navigate]);
+
+  useEffect(() => {
+    if (!storeId) return;
+
+    const ordersPath = branchId 
+      ? `stores/${storeId}/branches/${branchId}/orders` 
+      : `stores/${storeId}/orders`;
+
+    const q = query(collection(db, ordersPath), where("status", "==", "new"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          const order = change.doc.data();
+          toast.info(`🔔 ${t("pos.orders.newOrder", "Đơn hàng mới!")}`, {
+            description: `${t("pos.orders.total", "Tổng")}: ${order.total.toLocaleString()}đ`,
+            duration: 10000,
+          });
+        }
+      });
+    });
+
+    return () => unsubscribe();
+  }, [storeId, branchId, t]);
 
   if (loading) {
     return (

@@ -74,6 +74,9 @@ const PointWallet = lazy(() => import("./pages/loyalty/PointWallet").then(m => (
 const POS = lazy(() => import("./pages/pos/POS").then(m => ({ default: m.POS })))
 const POSStoreManagement = lazy(() => import("./pages/pos/POSStoreManagement").then(m => ({ default: m.POSStoreManagement })))
 const POSBranchManagement = lazy(() => import("./pages/pos/POSBranchManagement").then(m => ({ default: m.POSBranchManagement })))
+const POSStoreRegistration = lazy(() => import("./pages/pos/POSStoreRegistration").then(m => ({ default: m.POSStoreRegistration })))
+const POSRegistrationList = lazy(() => import("./pages/pos/POSRegistrationList").then(m => ({ default: m.POSRegistrationList })))
+const POSCustomerMenu = lazy(() => import("./pages/pos/POSCustomerMenu").then(m => ({ default: m.POSCustomerMenu })))
 
 const PaymentRequest = lazy(() => import("./pages/PaymentRequest"))
 
@@ -155,6 +158,8 @@ export default function App() {
         <AiAssistant />
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
+            <Route path="/pos/register" element={<POSStoreRegistration />} />
+            <Route path="/menu/:storeId/:branchId?" element={<POSCustomerMenu />} />
             <Route path="/" element={<ProtectedLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="products">
@@ -181,6 +186,7 @@ export default function App() {
               <Route path="customers" element={<Customers />} />
               <Route path="pos">
                 <Route index element={<POSStoreManagement />} />
+                <Route path="registrations" element={<POSRegistrationList />} />
                 <Route path=":storeId/branches" element={<POSBranchManagement />} />
                 <Route path=":storeId/:branchId?" element={<POS />} />
               </Route>
