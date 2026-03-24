@@ -9,16 +9,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/ta
 import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Textarea } from "@/src/components/ui/textarea"
+import { Switch } from "@/src/components/ui/switch"
 import { 
   Search, Plus, FileText, Download, Eye, Send, 
   Save, Edit, Trash2, Printer, CheckCircle, 
   Clock, AlertCircle, FileType, Settings,
-  History, UserCheck, FileSignature
+  History, UserCheck, FileSignature, Loader2
 } from "lucide-react"
 import { toast } from "sonner"
 import { useDataStore } from "@/src/store/useDataStore"
 import { db, auth } from "@/src/lib/firebase"
-import { collection, addDoc, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore"
+import { collection, addDoc, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc, setDoc } from "firebase/firestore"
 import { handleFirestoreError, OperationType } from "@/src/lib/firestore-errors"
 import { DOCUMENT_TYPES, DOCUMENT_FIELDS } from "@/src/constants/documentConstants"
 import { downloadPDF, downloadWord, generatePDF } from "@/src/utils/documentUtils"
@@ -38,6 +39,7 @@ interface DocumentData {
   createdAt: string
   creatorId: string
   signatureSteps?: any[]
+  year: number
 }
 
 export function DocumentsPage() {
@@ -53,7 +55,14 @@ export function DocumentsPage() {
   const [isSigningOpen, setIsSigningOpen] = useState(false)
   const [signingDoc, setSigningDoc] = useState<DocumentData | null>(null)
   const [autoNumber, setAutoNumber] = useState("")
-  const [settings, setSettings] = useState<any>({ autoNumbering: false })
+  const [settings, setSettings] = useState<any>({ 
+    autoNumbering: true,
+    format: "{number}/{year}/{type}",
+    currentNumber: 1,
+    typeAbbreviations: {}
+  })
+  const [savingSettings, setSavingSettings] = useState(false)
+  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
 
   const previewRef = useRef<HTMLDivElement>(null)
 
@@ -78,9 +87,6 @@ export function DocumentsPage() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setSettings(data);
-          if (data.autoNumbering) {
-            setAutoNumber(`${data.currentNumber}/${data.prefix}-${data.suffix}`);
-          }
         }
       } catch (error) {
         handleFirestoreError(error, OperationType.GET, "settings/documents")
@@ -90,6 +96,32 @@ export function DocumentsPage() {
 
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (settings.autoNumbering) {
+      const year = new Date().getFullYear().toString();
+      const typeAbbr = settings.typeAbbreviations?.[selectedType] || "VBD";
+      let formattedNumber = settings.format || "{number}/{year}/{type}";
+      formattedNumber = formattedNumber.replace("{number}", settings.currentNumber?.toString().padStart(3, '0') || "001");
+      formattedNumber = formattedNumber.replace("{year}", year);
+      formattedNumber = formattedNumber.replace("{type}", typeAbbr);
+      setAutoNumber(formattedNumber);
+    } else {
+      setAutoNumber("");
+    }
+  }, [settings, selectedType])
+
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      await setDoc(doc(db, "settings", "documents"), settings);
+      toast.success("Đã lưu cấu hình văn bản");
+    } catch (error) {
+      handleFirestoreError(error, OperationType.WRITE, "settings/documents");
+    } finally {
+      setSavingSettings(false);
+    }
+  };
 
   const handleFieldChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value })
@@ -113,6 +145,7 @@ export function DocumentsPage() {
         receiver: formData.receiver || "",
         createdAt: new Date().toISOString(),
         creatorId: auth.currentUser?.uid || "anonymous",
+        year: new Date().getFullYear(),
         signatureSteps: [
           { role: "Người soạn", userId: auth.currentUser?.uid, status: "completed", date: new Date().toISOString() },
           { role: "Trưởng phòng", status: "pending" },
@@ -127,8 +160,10 @@ export function DocumentsPage() {
       
       // Update auto-number if used
       if (settings.autoNumbering && (!formData.number || formData.number === autoNumber)) {
+        const newSettings = { ...settings, currentNumber: (settings.currentNumber || 1) + 1 };
+        setSettings(newSettings);
         const docRef = doc(db, "settings", "documents");
-        await updateDoc(docRef, { currentNumber: settings.currentNumber + 1 });
+        await updateDoc(docRef, { currentNumber: newSettings.currentNumber });
       }
     } catch (error) {
       handleFirestoreError(error, OperationType.WRITE, "documents")
@@ -267,6 +302,8 @@ export function DocumentsPage() {
   }
 
   const filteredDocs = documents.filter(doc => {
+    const docYear = new Date(doc.createdAt).getFullYear().toString()
+    if (docYear !== selectedYear) return false
     if (activeTab === "incoming") return doc.direction === "incoming"
     if (activeTab === "outgoing") return doc.direction === "outgoing"
     return true
@@ -280,10 +317,17 @@ export function DocumentsPage() {
           <p className="text-muted-foreground">Hệ thống quản lý văn bản, trình ký và lưu trữ tập trung.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => window.location.href = "/admin/document-settings"}>
-            <Settings className="mr-2 h-4 w-4" />
-            Cấu hình
-          </Button>
+          <Select value={selectedYear} onValueChange={setSelectedYear}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue placeholder="Chọn năm" />
+            </SelectTrigger>
+            <SelectContent>
+              {[...Array(5)].map((_, i) => {
+                const year = (new Date().getFullYear() - i).toString()
+                return <SelectItem key={year} value={year}>Năm {year}</SelectItem>
+              })}
+            </SelectContent>
+          </Select>
           <Button onClick={() => setActiveTab("create")}>
             <Plus className="mr-2 h-4 w-4" />
             Soạn văn bản
@@ -297,6 +341,7 @@ export function DocumentsPage() {
           <TabsTrigger value="outgoing">Sổ văn bản đi</TabsTrigger>
           <TabsTrigger value="create">Soạn thảo</TabsTrigger>
           <TabsTrigger value="archive">Kho lưu trữ</TabsTrigger>
+          <TabsTrigger value="settings">Cấu hình</TabsTrigger>
         </TabsList>
 
         <TabsContent value="incoming" className="space-y-4">
@@ -446,6 +491,85 @@ export function DocumentsPage() {
                     Trình ký
                   </Button>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="settings" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Cấu hình đánh số tự động</CardTitle>
+              <CardDescription>Thiết lập quy tắc sinh số hiệu văn bản tự động theo loại văn bản và năm.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Bật đánh số tự động</Label>
+                  <p className="text-sm text-muted-foreground">Tự động sinh số hiệu khi tạo văn bản mới.</p>
+                </div>
+                <Switch
+                  checked={settings.autoNumbering}
+                  onCheckedChange={(checked) => setSettings({ ...settings, autoNumbering: checked })}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Định dạng số hiệu</Label>
+                  <Input
+                    value={settings.format}
+                    onChange={(e) => setSettings({ ...settings, format: e.target.value })}
+                    placeholder="VD: {number}/{year}/{type}"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Các biến hỗ trợ: {"{number}"} (số thứ tự), {"{year}"} (năm hiện tại), {"{type}"} (ký hiệu loại văn bản)
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Số thứ tự tiếp theo</Label>
+                  <Input
+                    type="number"
+                    value={settings.currentNumber}
+                    onChange={(e) => setSettings({ ...settings, currentNumber: parseInt(e.target.value) })}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Label>Ký hiệu theo loại văn bản</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {DOCUMENT_TYPES.map(type => (
+                    <div key={type} className="flex items-center gap-2">
+                      <Label className="w-1/2 text-xs truncate" title={type}>{type}</Label>
+                      <Input 
+                        className="w-1/2 h-8 text-sm"
+                        placeholder="Ký hiệu"
+                        value={settings.typeAbbreviations?.[type] || ""}
+                        onChange={(e) => setSettings({
+                          ...settings, 
+                          typeAbbreviations: {
+                            ...settings.typeAbbreviations,
+                            [type]: e.target.value
+                          }
+                        })}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-4 bg-muted rounded-lg">
+                <Label className="text-xs uppercase text-muted-foreground">Xem trước định dạng (với loại văn bản hiện tại)</Label>
+                <div className="text-xl font-mono mt-1">
+                  {autoNumber || "Chưa bật đánh số tự động"}
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Button onClick={handleSaveSettings} disabled={savingSettings}>
+                  {savingSettings ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                  Lưu cấu hình
+                </Button>
               </div>
             </CardContent>
           </Card>

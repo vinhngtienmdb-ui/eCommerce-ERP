@@ -63,6 +63,7 @@ export interface Vendor {
   contactPerson: string;
   email: string;
   phone: string;
+  serviceTypeId?: string;
 }
 
 export interface ServiceType {

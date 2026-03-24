@@ -13,6 +13,7 @@ import { Document, Packer, Paragraph, TextRun, AlignmentType, Table as DocxTable
 import { saveAs } from "file-saver";
 import { toast } from "sonner";
 import { useDataStore, PaymentRequestData, Vendor, ServiceType } from "@/src/store/useDataStore";
+import { useAuth } from "@/src/lib/AuthContext";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
 import { Badge } from "@/src/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
@@ -40,6 +41,8 @@ const PaymentRequest = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [attachments, setAttachments] = useState<InvoiceAttachment[]>([{ id: '1', invoiceNumber: '', date: '', amount: '' }]);
   
+  const { user } = useAuth();
+  
   const [formData, setFormData] = useState({
     transactionType: 'payment' as 'payment' | 'advance' | 'settlement',
     serviceTypeId: '',
@@ -47,8 +50,8 @@ const PaymentRequest = () => {
     contractId: '',
     period: '',
     invoiceNumber: '',
-    department: '',
-    requester: '',
+    department: 'Phòng Hành chính', // Default or from user profile
+    requester: user?.displayName || user?.email || '',
     content: '',
     totalAmount: '',
     advanceAmount: '0',
@@ -57,6 +60,15 @@ const PaymentRequest = () => {
     beneficiary: '',
     bankName: ''
   });
+
+  useEffect(() => {
+    if (user && !formData.requester) {
+      setFormData(prev => ({
+        ...prev,
+        requester: user.displayName || user.email || ''
+      }));
+    }
+  }, [user]);
 
   const [signingRequest, setSigningRequest] = useState<PaymentRequestData | null>(null);
   const sigCanvas = useRef<any>(null);
@@ -78,16 +90,25 @@ const PaymentRequest = () => {
 
   const handleVendorChange = (vendorId: string) => {
     const vendor = vendors.find(v => v.id === vendorId);
+    let autoContractId = '';
+    
     if (vendor) {
+      // Auto-link contract if available
+      const relatedContract = eContracts.find(c => c.party.toLowerCase().includes(vendor.name.toLowerCase()));
+      if (relatedContract) {
+        autoContractId = relatedContract.id;
+      }
+
       setFormData({
         ...formData,
         vendorId,
+        contractId: autoContractId,
         bankAccount: vendor.bankAccount,
         beneficiary: vendor.beneficiary,
         bankName: vendor.bankName
       });
     } else {
-      setFormData({ ...formData, vendorId });
+      setFormData({ ...formData, vendorId, contractId: '' });
     }
   };
 
@@ -129,8 +150,8 @@ const PaymentRequest = () => {
       contractId: '',
       period: '',
       invoiceNumber: '',
-      department: '',
-      requester: '',
+      department: 'Phòng Hành chính',
+      requester: user?.displayName || user?.email || '',
       content: '',
       totalAmount: '',
       advanceAmount: '0',
@@ -522,7 +543,7 @@ const PaymentRequest = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Loại dịch vụ / Chi phí</label>
-                    <Select value={formData.serviceTypeId} onValueChange={(v) => setFormData({...formData, serviceTypeId: v})}>
+                    <Select value={formData.serviceTypeId} onValueChange={(v) => setFormData({...formData, serviceTypeId: v, vendorId: '', contractId: ''})}>
                       <SelectTrigger className="bg-slate-50 border-slate-200 h-11">
                         <SelectValue placeholder="Chọn loại dịch vụ" />
                       </SelectTrigger>
@@ -535,12 +556,12 @@ const PaymentRequest = () => {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nhà cung cấp</label>
-                    <Select value={formData.vendorId} onValueChange={handleVendorChange}>
+                    <Select value={formData.vendorId} onValueChange={handleVendorChange} disabled={!formData.serviceTypeId}>
                       <SelectTrigger className="bg-slate-50 border-slate-200 h-11">
-                        <SelectValue placeholder="Chọn nhà cung cấp" />
+                        <SelectValue placeholder={formData.serviceTypeId ? "Chọn nhà cung cấp" : "Vui lòng chọn loại dịch vụ trước"} />
                       </SelectTrigger>
                       <SelectContent>
-                        {vendors.map(v => (
+                        {vendors.filter(v => !v.serviceTypeId || v.serviceTypeId === formData.serviceTypeId).map(v => (
                           <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
                         ))}
                       </SelectContent>
@@ -564,7 +585,35 @@ const PaymentRequest = () => {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Kỳ thanh toán</label>
-                    <Input name="period" value={formData.period} onChange={handleInputChange} className="bg-slate-50 border-slate-200 h-11" placeholder="Ví dụ: Tháng 03/2026" />
+                    <div className="flex gap-2">
+                      <Select 
+                        value={formData.period.split(' ')[0] || 'Tháng'} 
+                        onValueChange={(v) => {
+                          const currentVal = formData.period.split(' ').slice(1).join(' ');
+                          setFormData({...formData, period: `${v} ${currentVal}`.trim()});
+                        }}
+                      >
+                        <SelectTrigger className="w-[120px] bg-slate-50 border-slate-200 h-11">
+                          <SelectValue placeholder="Loại kỳ" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Tháng">Tháng</SelectItem>
+                          <SelectItem value="Quý">Quý</SelectItem>
+                          <SelectItem value="Nửa năm">Nửa năm</SelectItem>
+                          <SelectItem value="Năm">Năm</SelectItem>
+                          <SelectItem value="Từ">Từ tháng - đến</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input 
+                        value={formData.period.split(' ').slice(1).join(' ')} 
+                        onChange={(e) => {
+                          const prefix = formData.period.split(' ')[0] || 'Tháng';
+                          setFormData({...formData, period: `${prefix} ${e.target.value}`.trim()});
+                        }} 
+                        className="flex-1 bg-slate-50 border-slate-200 h-11" 
+                        placeholder={formData.period.startsWith('Từ') ? "tháng 1 đến tháng 3/2026" : "03/2026"} 
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -797,13 +846,32 @@ const PaymentRequest = () => {
                 <Input name="name" defaultValue={editingVendor?.name} required className="bg-slate-50 border-slate-200" />
               </div>
               <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-500 uppercase">Loại dịch vụ</label>
+                <Select defaultValue={editingVendor?.serviceTypeId} onValueChange={(v) => {
+                  const input = document.getElementById('hidden-service-type-id') as HTMLInputElement;
+                  if (input) input.value = v;
+                }}>
+                  <SelectTrigger className="bg-slate-50 border-slate-200">
+                    <SelectValue placeholder="Chọn loại dịch vụ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {serviceTypes.map(st => (
+                      <SelectItem key={st.id} value={st.id}>{st.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <input type="hidden" id="hidden-service-type-id" name="serviceTypeId" defaultValue={editingVendor?.serviceTypeId} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-500 uppercase">Mã số thuế</label>
                 <Input name="taxCode" defaultValue={editingVendor?.taxCode} className="bg-slate-50 border-slate-200" />
               </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase">Địa chỉ</label>
-              <Input name="address" defaultValue={editingVendor?.address} className="bg-slate-50 border-slate-200" />
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-500 uppercase">Địa chỉ</label>
+                <Input name="address" defaultValue={editingVendor?.address} className="bg-slate-50 border-slate-200" />
+              </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
