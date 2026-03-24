@@ -177,7 +177,6 @@ const navigationGroups = [
           { nameKey: "stationery", href: "/admin-workspace/stationery" },
           { nameKey: "booking", href: "/admin-workspace/booking" },
           { nameKey: "documents", href: "/admin-workspace/documents" },
-          { nameKey: "documentSettings", href: "/admin-workspace/document-settings" },
           { nameKey: "notifications", href: "/admin-workspace/notifications" },
         ]
       },

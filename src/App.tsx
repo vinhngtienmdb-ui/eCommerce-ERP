@@ -40,7 +40,6 @@ const StationeryPage = lazy(() => import("./pages/admin-workspace/StationeryPage
 const BookingPage = lazy(() => import("./pages/admin-workspace/BookingPage").then(m => ({ default: m.BookingPage })))
 const RequestsPage = lazy(() => import("./pages/admin-workspace/RequestsPage").then(m => ({ default: m.RequestsPage })))
 const DocumentsPage = lazy(() => import("./pages/admin-workspace/DocumentsPage").then(m => ({ default: m.DocumentsPage })))
-const DocumentSettingsPage = lazy(() => import("./pages/admin-workspace/DocumentSettingsPage").then(m => ({ default: m.DocumentSettingsPage })))
 const Analytics = lazy(() => import("./pages/Analytics").then(m => ({ default: m.Analytics })))
 const Sales = lazy(() => import("./pages/Sales").then(m => ({ default: m.Sales })))
 const Settings = lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })))
@@ -258,7 +257,6 @@ export default function App() {
                 <Route path="booking" element={<BookingPage />} />
                 <Route path="requests" element={<RequestsPage />} />
                 <Route path="documents" element={<DocumentsPage />} />
-                <Route path="document-settings" element={<DocumentSettingsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="workflow" element={<WorkflowManagement />} />
                 <Route path="payment-request" element={<PaymentRequest />} />
