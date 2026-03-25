@@ -99,6 +99,9 @@
     "hrPayroll": "Tiền lương",
     "hrSocialInsurance": "Bảo hiểm xã hội",
     "hrRecruitment": "Tuyển dụng",
+    "hrContracts": "Quản lý Hợp đồng",
+    "hrPolicies": "Quy chế & Nội quy",
+    "hrSalaryScales": "Thang bảng lương",
     "hrEmployees": "Nhân viên",
     "hrTimeAttendance": "Chấm công",
     "hrLeave": "Nghỉ phép",
@@ -1969,8 +1972,53 @@
       "tabs": {
         "periods": "Kỳ lương",
         "salaryStructure": "Cấu trúc lương",
+        "allowances": "Cấu hình Phụ cấp",
+        "pitInsurance": "Thuế & Bảo hiểm",
+        "reports": "Báo cáo",
         "payslips": "Phiếu lương",
-        "config": "Cấu hình & Công thức"
+        "config": "Cấu hình chung"
+      },
+      "allowanceConfig": {
+        "title": "Cấu hình Loại Phụ cấp/Trợ cấp",
+        "add": "Thêm loại phụ cấp",
+        "name": "Tên phụ cấp",
+        "isTaxable": "Chịu thuế TNCN",
+        "taxLimit": "Hạn mức miễn thuế (nếu có)",
+        "unlimited": "Không giới hạn",
+        "isInsuranceSubject": "Đóng BHXH",
+        "calculationBasis": "Hình thức tính",
+        "monthly": "Theo tháng",
+        "daily": "Theo ngày công",
+        "isGradeBased": "Tính theo cấp bậc",
+        "gradeAmounts": "Số tiền theo cấp bậc",
+        "amount": "Mức tiền mặc định",
+        "description": "Mô tả"
+      },
+      "pitConfig": {
+        "title": "Cấu hình Thuế TNCN",
+        "personalDeduction": "Giảm trừ bản thân",
+        "dependentDeduction": "Giảm trừ người phụ thuộc",
+        "updateSuccess": "Cập nhật cấu hình thuế thành công",
+        "lawNote": "Mức giảm trừ gia cảnh được áp dụng theo Nghị quyết 954/2020/UBTVQH14."
+      },
+      "insurance": {
+        "title": "Người tham gia BHXH",
+        "participant": "Người tham gia",
+        "notParticipant": "Không tham gia",
+        "updateSuccess": "Cập nhật trạng thái bảo hiểm thành công",
+        "ratesTitle": "Cấu hình tỷ lệ BHXH",
+        "ratesDesc": "Tỷ lệ trích đóng theo quy định pháp luật",
+        "effectiveDate": "Ngày áp dụng",
+        "empRate": "NLĐ đóng (%)",
+        "employerRateShort": "DN đóng (%)",
+        "employerRate": "Tỷ lệ đóng của Doanh nghiệp (%)"
+      },
+      "reports": {
+        "companyPayroll": "Bảng lương toàn công ty",
+        "insuranceReport": "Báo cáo BHXH",
+        "pitDeclaration": "Tờ khai thuế TNCN",
+        "generate": "Tạo báo cáo",
+        "noData": "Không có dữ liệu cho kỳ lương này"
       },
       "toasts": {
         "fillInfo": "Vui lòng điền đầy đủ thông tin",
@@ -2525,6 +2573,106 @@
       "description": "Quản lý các khóa học và tiến độ đào tạo nhân viên.",
       "completed": "Hoàn thành",
       "courseCatalog": "Danh mục khóa học"
+    },
+    "contracts": {
+      "title": "Quản lý Hợp đồng",
+      "description": "Theo dõi thời hạn, tạo mẫu hợp đồng và quản lý phụ lục, chấm dứt.",
+      "add": "Tạo hợp đồng",
+      "listTitle": "Danh sách hợp đồng",
+      "expiringTitle": "Hợp đồng sắp hết hạn",
+      "expiringDesc": "Danh sách các hợp đồng sẽ hết hạn trong vòng 30 ngày tới.",
+      "noExpiring": "Không có hợp đồng nào sắp hết hạn.",
+      "type": "Loại hợp đồng",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "daysLeft": "Số ngày còn lại",
+      "renew": "Gia hạn",
+      "addSuccess": "Đã thêm hợp đồng thành công",
+      "updateSuccess": "Đã cập nhật hợp đồng thành công",
+      "deleteSuccess": "Đã xóa hợp đồng",
+      "templateTitle": "Mẫu hợp đồng & Quyết định",
+      "templateDesc": "Sử dụng các mẫu chuẩn để tạo nhanh tài liệu nhân sự.",
+      "useTemplate": "Sử dụng mẫu",
+      "editTitle": "Chỉnh sửa hợp đồng",
+      "addTitle": "Tạo hợp đồng mới",
+      "formDesc": "Điền thông tin chi tiết cho hợp đồng lao động.",
+      "modalDesc": "Điền thông tin chi tiết cho hợp đồng lao động.",
+      "selectEmployee": "Chọn nhân viên",
+      "selectType": "Chọn loại hợp đồng",
+      "selectSubType": "Chọn hình thức",
+      "selectStatus": "Chọn trạng thái",
+      "subType": "Hình thức hợp đồng",
+      "tabs": {
+        "all": "Tất cả",
+        "expiring": "Sắp hết hạn",
+        "templates": "Mẫu hợp đồng"
+      },
+      "status": {
+        "Active": "Đang hiệu lực",
+        "Expired": "Hết hạn",
+        "Terminated": "Đã chấm dứt"
+      },
+      "types": {
+        "Probation": "Thử việc",
+        "Labor": "Lao động",
+        "Service": "Dịch vụ",
+        "Addendum": "Phụ lục",
+        "Termination": "Chấm dứt"
+      },
+      "subTypes": {
+        "Definite Term": "Xác định thời hạn",
+        "Indefinite Term": "Không xác định thời hạn"
+      }
+    },
+    "policies": {
+      "title": "Quy chế & Nội quy",
+      "description": "Quản lý các văn bản quy định, nội quy lao động và chính sách nhân sự.",
+      "add": "Thêm văn bản",
+      "listTitle": "Danh sách văn bản",
+      "type": "Loại văn bản",
+      "version": "Phiên bản",
+      "updatedAt": "Cập nhật",
+      "addSuccess": "Đã thêm văn bản thành công",
+      "updateSuccess": "Đã cập nhật văn bản",
+      "editTitle": "Chỉnh sửa văn bản",
+      "addTitle": "Thêm văn bản mới",
+      "formDesc": "Cập nhật nội dung quy chế hoặc chính sách mới.",
+      "modalDesc": "Cập nhật nội dung quy chế hoặc chính sách mới.",
+      "policyTitle": "Tiêu đề văn bản",
+      "content": "Nội dung chi tiết",
+      "tabs": {
+        "all": "Tất cả",
+        "regulations": "Quy chế",
+        "laborRules": "Nội quy lao động"
+      },
+      "types": {
+        "Regulation": "Quy chế",
+        "Labor Rule": "Nội quy lao động",
+        "Policy": "Chính sách"
+      }
+    },
+    "salaryScales": {
+      "title": "Thang bảng lương",
+      "description": "Thiết lập hệ thống ngạch bậc lương và phụ cấp tiêu chuẩn.",
+      "add": "Thêm bậc lương",
+      "listTitle": "Hệ thống thang bảng lương",
+      "grade": "Ngạch",
+      "level": "Bậc",
+      "baseSalary": "Lương cơ bản",
+      "allowances": "Phụ cấp",
+      "addSuccess": "Đã thêm bậc lương thành công",
+      "updateSuccess": "Đã cập nhật bậc lương",
+      "editTitle": "Chỉnh sửa bậc lương",
+      "addTitle": "Thêm bậc lương mới",
+      "formDesc": "Thiết lập mức lương và phụ cấp cho ngạch bậc này.",
+      "modalDesc": "Thiết lập mức lương và phụ cấp cho ngạch bậc này.",
+      "descriptionLabel": "Mô tả / Ghi chú",
+      "vsLastYear": "so với năm ngoái",
+      "stats": {
+        "totalGrades": "Tổng số ngạch",
+        "avgSalary": "Lương trung bình",
+        "budgetImpact": "Tổng quỹ lương dự kiến"
+      }
     }
   },
   "settings": {

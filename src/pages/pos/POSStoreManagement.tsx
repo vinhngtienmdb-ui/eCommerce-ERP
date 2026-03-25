@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
+import { Badge } from "@/src/components/ui/badge";
+import { cn } from "@/src/lib/utils";
 import { Plus, Search, Store, ExternalLink, Edit, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/src/components/ui/dialog";
@@ -131,67 +133,70 @@ export function POSStoreManagement() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">{t("pos.stores.title", "Quản lý Hệ thống Cửa hàng")}</h2>
-          <p className="text-muted-foreground">{t("pos.stores.subtitle", "Tạo và quản lý các profile cửa hàng POS độc lập")}</p>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t("pos.stores.title", "Quản lý Hệ thống Cửa hàng")}</h2>
+          <p className="text-sm text-slate-500 font-medium mt-1">{t("pos.stores.subtitle", "Tạo và quản lý các profile cửa hàng POS độc lập")}</p>
         </div>
-        <Button onClick={handleAddStore}>
-          <Plus className="mr-2 h-4 w-4" /> {t("pos.stores.add", "Thêm cửa hàng")}
+        <Button onClick={handleAddStore} className="rounded-xl font-bold px-6 h-12 bg-primary hover:bg-primary/90 text-white shadow-sm transition-all">
+          <Plus className="mr-2 h-5 w-5" /> {t("pos.stores.add", "Thêm cửa hàng")}
         </Button>
       </div>
 
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
         <Input
           placeholder={t("pos.stores.search", "Tìm kiếm cửa hàng...")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9"
+          className="pl-11 h-11 rounded-xl bg-white border-slate-200 focus-visible:ring-primary/20 font-medium text-sm shadow-sm transition-all"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredStores.map((store) => (
-          <Card key={store.id} className="hover:shadow-lg transition-shadow border-white/20 bg-white/50 backdrop-blur-sm">
-            <CardHeader className="pb-3">
+          <Card key={store.id} className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all group">
+            <CardHeader className="pb-4 px-6 pt-6 bg-slate-50/50 border-b border-slate-100">
               <div className="flex justify-between items-start">
-                <div className="bg-primary/10 p-3 rounded-xl">
+                <div className="p-3 bg-primary/10 rounded-xl">
                   <Store className="h-6 w-6 text-primary" />
                 </div>
-                <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" onClick={() => handleEditStore(store)}>
-                    <Edit className="h-4 w-4 text-blue-500" />
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-slate-200 hover:bg-slate-50 transition-colors" onClick={() => handleEditStore(store)}>
+                    <Edit className="h-4 w-4 text-slate-600" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDeleteStore(store.id)}>
-                    <Trash2 className="h-4 w-4 text-red-500" />
+                  <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-rose-100 text-rose-500 hover:bg-rose-50 transition-colors" onClick={() => handleDeleteStore(store.id)}>
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-              <CardTitle className="mt-4">{store.name}</CardTitle>
-              <CardDescription>
-                <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded mr-2">{store.storeCode}</span>
-                {store.ownerName || t("pos.stores.noOwner", "Chưa có chủ sở hữu")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 text-sm text-muted-foreground mb-6">
-                <p><strong>{t("pos.stores.taxId", "MST")}:</strong> {store.taxId || "N/A"}</p>
-                <p><strong>{t("pos.stores.ownerType", "Loại hình")}:</strong> {store.ownerType || "N/A"}</p>
-                <p><strong>URL:</strong> <a href={`https://${store.customUrl || `${store.storeCode?.toLowerCase()}.dealtot.io.vn`}`} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">{store.customUrl || `${store.storeCode?.toLowerCase()}.dealtot.io.vn`}</a></p>
-                <p><strong>{t("pos.stores.status", "Trạng thái")}:</strong> 
-                  <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${store.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {store.status === 'active' ? t("pos.stores.active", "Hoạt động") : t("pos.stores.inactive", "Tạm dừng")}
-                  </span>
-                </p>
+              <CardTitle className="mt-4 text-xl font-bold tracking-tight text-slate-900">{store.name}</CardTitle>
+              <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                <Badge variant="secondary" className="font-mono font-bold text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md uppercase tracking-wider">{store.storeCode}</Badge>
+                <span className="text-xs font-medium text-slate-500">{store.ownerName || t("pos.stores.noOwner", "Chưa có chủ sở hữu")}</span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-3 text-sm font-medium text-slate-600 mb-6">
+                <p className="flex justify-between border-b border-slate-50 pb-2"><span className="text-slate-400">{t("pos.stores.taxId", "MST")}:</span> <span className="text-slate-900">{store.taxId || "N/A"}</span></p>
+                <p className="flex justify-between border-b border-slate-50 pb-2"><span className="text-slate-400">{t("pos.stores.ownerType", "Loại hình")}:</span> <span className="text-slate-900">{store.ownerType || "N/A"}</span></p>
+                <p className="flex justify-between border-b border-slate-50 pb-2"><span className="text-slate-400">URL:</span> <a href={`https://${store.customUrl || `${store.storeCode?.toLowerCase()}.dealtot.io.vn`}`} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate ml-4">{store.customUrl || `${store.storeCode?.toLowerCase()}.dealtot.io.vn`}</a></p>
+                <div className="flex justify-between items-center pt-1"><span className="text-slate-400">{t("pos.stores.status", "Trạng thái")}:</span> 
+                  <Badge className={cn(
+                    "rounded-full font-bold px-3 py-0.5 text-[10px] uppercase tracking-wider",
+                    store.status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
+                  )}>
+                    {store.status === 'active' ? t("pos.stores.active", "Hoạt động") : t("pos.stores.inactive", "Tạm dừng")}
+                  </Badge>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
                 <Link to={`/pos/${store.id}`}>
-                  <Button variant="outline" className="w-full group text-xs px-2">
+                  <Button variant="outline" className="w-full h-11 rounded-xl border-slate-200 text-sm font-bold bg-white text-slate-700 hover:bg-slate-50 transition-all group">
                     {t("pos.stores.access", "Truy cập POS")}
-                    <ExternalLink className="ml-1 h-3 w-3" />
+                    <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <Link to={`/pos/${store.id}/branches`}>
-                  <Button className="w-full text-xs px-2">
+                  <Button className="w-full h-11 rounded-xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-all">
                     {t("pos.stores.branches", "Chi nhánh")}
                   </Button>
                 </Link>
@@ -202,39 +207,41 @@ export function POSStoreManagement() {
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingStore ? t("pos.stores.editTitle", "Chỉnh sửa cửa hàng") : t("pos.stores.addTitle", "Thêm cửa hàng mới")}</DialogTitle>
+        <DialogContent className="sm:max-w-2xl rounded-2xl border-none p-0 shadow-2xl max-h-[90vh] overflow-y-auto bg-white">
+          <DialogHeader className="bg-slate-50 border-b border-slate-100 p-8">
+            <DialogTitle className="text-2xl font-bold tracking-tight text-slate-900">{editingStore ? t("pos.stores.editTitle", "Chỉnh sửa cửa hàng") : t("pos.stores.addTitle", "Thêm cửa hàng mới")}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-6 py-4">
+          <div className="space-y-8 p-8">
             {/* Basic Info */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>{t("pos.stores.formName", "Tên cửa hàng")}</Label>
+                <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.formName", "Tên cửa hàng")}</Label>
                 <Input 
                   value={formData.name} 
                   onChange={(e) => setFormData({...formData, name: e.target.value})} 
                   placeholder={t("pos.stores.placeholderName", "Ví dụ: Highlands Coffee")}
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                 />
               </div>
               <div className="space-y-2">
-                <Label>{t("pos.stores.formCode", "Mã cửa hàng")}</Label>
+                <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.formCode", "Mã cửa hàng")}</Label>
                 <Input 
                   value={formData.storeCode} 
                   onChange={(e) => setFormData({...formData, storeCode: e.target.value})} 
                   placeholder="HL001"
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                 />
               </div>
             </div>
 
             {/* Owner Info */}
-            <div className="space-y-4 border-t pt-4">
-              <h3 className="font-semibold text-sm">{t("pos.stores.ownerSection", "Thông tin chủ sở hữu")}</h3>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-6 border-t border-slate-100 pt-6">
+              <h3 className="font-bold text-base text-slate-900">{t("pos.stores.ownerSection", "Thông tin chủ sở hữu")}</h3>
+              <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>{t("pos.stores.ownerType", "Loại hình kinh doanh")}</Label>
+                  <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.ownerType", "Loại hình kinh doanh")}</Label>
                   <select 
-                    className="w-full p-2 rounded-md border border-input bg-background"
+                    className="w-full h-11 px-3 rounded-xl bg-slate-50/50 border border-slate-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none font-medium text-sm transition-all appearance-none"
                     value={formData.ownerType}
                     onChange={(e) => setFormData({...formData, ownerType: e.target.value})}
                   >
@@ -244,58 +251,63 @@ export function POSStoreManagement() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label>{t("pos.stores.taxId", "Mã số thuế")}</Label>
+                  <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.taxId", "Mã số thuế")}</Label>
                   <Input 
                     value={formData.taxId} 
                     onChange={(e) => setFormData({...formData, taxId: e.target.value})} 
                     placeholder="0123456789"
+                    className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>{t("pos.stores.ownerName", "Tên chủ sở hữu/Đại diện")}</Label>
+                  <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.ownerName", "Tên chủ sở hữu/Đại diện")}</Label>
                   <Input 
                     value={formData.ownerName} 
                     onChange={(e) => setFormData({...formData, ownerName: e.target.value})} 
                     placeholder="Nguyễn Văn A"
+                    className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>{t("pos.stores.ownerContact", "Thông tin liên lạc chủ")}</Label>
+                  <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.ownerContact", "Thông tin liên lạc chủ")}</Label>
                   <Input 
                     value={formData.ownerContact} 
                     onChange={(e) => setFormData({...formData, ownerContact: e.target.value})} 
                     placeholder="Email hoặc SĐT"
+                    className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                   />
                 </div>
               </div>
             </div>
 
             {/* Management & URL */}
-            <div className="space-y-4 border-t pt-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-6 border-t border-slate-100 pt-6">
+              <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>{t("pos.stores.managerContact", "Liên lạc Quản lý cửa hàng")}</Label>
+                  <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.managerContact", "Liên lạc Quản lý cửa hàng")}</Label>
                   <Input 
                     value={formData.managerContact} 
                     onChange={(e) => setFormData({...formData, managerContact: e.target.value})} 
                     placeholder="SĐT quản lý"
+                    className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>{t("pos.stores.customUrl", "Tùy chỉnh URL")}</Label>
+                  <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.customUrl", "Tùy chỉnh URL")}</Label>
                   <Input 
                     value={formData.customUrl} 
                     onChange={(e) => setFormData({...formData, customUrl: e.target.value})} 
                     placeholder={formData.storeCode ? `${formData.storeCode.toLowerCase()}.dealtot.io.vn` : "my-store.dealtot.io.vn"}
+                    className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>{t("pos.stores.formStatus", "Trạng thái")}</Label>
+                <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.stores.formStatus", "Trạng thái")}</Label>
                 <select 
-                  className="w-full p-2 rounded-md border border-input bg-background"
+                  className="w-full h-11 px-3 rounded-xl bg-slate-50/50 border border-slate-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none font-medium text-sm transition-all appearance-none"
                   value={formData.status}
                   onChange={(e) => setFormData({...formData, status: e.target.value})}
                 >
@@ -305,9 +317,9 @@ export function POSStoreManagement() {
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t("common.cancel", "Hủy")}</Button>
-            <Button onClick={handleSaveStore}>{t("common.save", "Lưu")}</Button>
+          <DialogFooter className="gap-3 bg-slate-50 border-t border-slate-100 p-8">
+            <Button variant="outline" className="rounded-xl font-bold text-slate-600 h-12 px-8 border-slate-200 hover:bg-slate-100 transition-all" onClick={() => setIsModalOpen(false)}>{t("common.cancel", "Hủy")}</Button>
+            <Button onClick={handleSaveStore} className="rounded-xl font-bold px-10 h-12 bg-primary text-white hover:bg-primary/90 transition-all shadow-md shadow-primary/20">{t("common.save", "Lưu")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

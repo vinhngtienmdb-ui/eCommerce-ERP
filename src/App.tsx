@@ -25,7 +25,6 @@ const Accounting = lazy(() => import("./pages/finance/Accounting").then(m => ({ 
 const Reconciliation = lazy(() => import("./pages/finance/Reconciliation").then(m => ({ default: m.Reconciliation })))
 const PnL = lazy(() => import("./pages/finance/PnL").then(m => ({ default: m.PnL })))
 const PaymentWallet = lazy(() => import("./pages/PaymentWallet"))
-const Employees = lazy(() => import("./pages/hr/Employees").then(m => ({ default: m.Employees })))
 const TimeAttendance = lazy(() => import("./pages/hr/TimeAttendance").then(m => ({ default: m.TimeAttendance })))
 const Payroll = lazy(() => import("./pages/hr/Payroll").then(m => ({ default: m.Payroll })))
 const Performance = lazy(() => import("./pages/hr/Performance").then(m => ({ default: m.Performance })))
@@ -34,6 +33,9 @@ const Recruitment = lazy(() => import("./pages/hr/Recruitment").then(m => ({ def
 const PIT = lazy(() => import("./pages/hr/PIT").then(m => ({ default: m.PIT })))
 const Goals = lazy(() => import("./pages/hr/Goals").then(m => ({ default: m.Goals })))
 const HRInfo = lazy(() => import("./pages/hr/HRInfo").then(m => ({ default: m.HRInfo })))
+const Contracts = lazy(() => import("./pages/hr/Contracts").then(m => ({ default: m.Contracts })))
+const Policies = lazy(() => import("./pages/hr/Policies").then(m => ({ default: m.Policies })))
+const SalaryScales = lazy(() => import("./pages/hr/SalaryScales").then(m => ({ default: m.SalaryScales })))
 const LeaveManagement = lazy(() => import("./pages/hr/LeaveManagement").then(m => ({ default: m.LeaveManagement })))
 const AssetsPage = lazy(() => import("./pages/admin-workspace/AssetsPage").then(m => ({ default: m.AssetsPage })))
 const StationeryPage = lazy(() => import("./pages/admin-workspace/StationeryPage").then(m => ({ default: m.StationeryPage })))
@@ -241,7 +243,9 @@ export default function App() {
                 <Route path="payroll" element={<Payroll />} />
                 <Route path="social-insurance" element={<SocialInsurance />} />
                 <Route path="recruitment" element={<Recruitment />} />
-                <Route path="employees" element={<Employees />} />
+                <Route path="contracts" element={<Contracts />} />
+                <Route path="policies" element={<Policies />} />
+                <Route path="salary-scales" element={<SalaryScales />} />
                 <Route path="portal" element={<EmployeePortal />} />
                 <Route path="time-attendance" element={<TimeAttendance />} />
                 <Route path="leave" element={<LeaveManagement />} />

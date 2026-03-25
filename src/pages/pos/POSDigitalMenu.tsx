@@ -43,54 +43,50 @@ export function POSDigitalMenu({ storeId, branchId, store, branch }: { storeId: 
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-widest mb-2">
-            <QrCode className="w-3 h-3" />
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-primary text-xs font-bold uppercase tracking-wider border border-primary/20">
+            <QrCode className="w-3.5 h-3.5" />
             {t("pos.menu.digitalMenu", "Menu Kỹ thuật số")}
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t("pos.menu.title", "Menu Điện tử & QR Code")}</h2>
-          <p className="text-slate-500 text-base max-w-2xl font-medium">{t("pos.menu.subtitle", "Tạo mã QR chuyên nghiệp để khách hàng tự quét và đặt hàng")}</p>
+          <h2 className="text-4xl font-bold tracking-tight text-slate-900 leading-tight">{t("pos.menu.title", "Menu Điện tử & QR Code")}</h2>
+          <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed">{t("pos.menu.subtitle", "Tạo mã QR chuyên nghiệp để khách hàng tự quét và đặt hàng")}</p>
         </div>
-        <Button variant="outline" className="rounded-2xl h-11 px-6 border-slate-200 hover:bg-slate-50 hover:text-primary transition-all shadow-sm font-semibold text-sm" onClick={() => window.open(menuUrl, "_blank")}>
-          <Eye className="mr-2 h-4 w-4" /> {t("pos.menu.preview", "Xem trước Menu")}
+        <Button variant="outline" className="rounded-xl h-14 px-8 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-primary transition-all font-bold shadow-sm" onClick={() => window.open(menuUrl, "_blank")}>
+          <Eye className="mr-2 h-5 w-5" /> {t("pos.menu.preview", "Xem trước Menu")}
         </Button>
       </div>
 
       <Tabs defaultValue="qr" className="w-full">
-        <TabsList className="bg-slate-100/50 p-1 rounded-2xl border border-slate-200/50 h-12 mb-8">
-          <TabsTrigger value="qr" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold text-xs px-6">
-            <QrCode className="mr-2 h-3.5 w-3.5" /> {t("pos.menu.qrTab", "Mã QR Cửa hàng")}
+        <TabsList className="bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 h-16 mb-8 flex gap-2 w-fit">
+          <TabsTrigger value="qr" className="rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md font-bold text-sm px-6 h-full transition-all">
+            <QrCode className="mr-2 h-4 w-4" /> {t("pos.menu.qrTab", "Mã QR Cửa hàng")}
           </TabsTrigger>
-          <TabsTrigger value="design" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold text-xs px-6">
-            <Palette className="mr-2 h-3.5 w-3.5" /> {t("pos.menu.designTab", "Tùy chỉnh Thiết kế")}
+          <TabsTrigger value="design" className="rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md font-bold text-sm px-6 h-full transition-all">
+            <Palette className="mr-2 h-4 w-4" /> {t("pos.menu.designTab", "Tùy chỉnh Thiết kế")}
           </TabsTrigger>
-          <TabsTrigger value="settings" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold text-xs px-6">
-            <Settings className="mr-2 h-3.5 w-3.5" /> {t("pos.menu.settingsTab", "Cấu hình Menu")}
+          <TabsTrigger value="settings" className="rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md font-bold text-sm px-6 h-full transition-all">
+            <Settings className="mr-2 h-4 w-4" /> {t("pos.menu.settingsTab", "Cấu hình Menu")}
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="qr" className="animate-in fade-in-50 slide-in-from-bottom-2 duration-500">
+        <TabsContent value="qr" className="mt-0">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-none shadow-xl shadow-slate-200/20 rounded-[32px] overflow-hidden bg-white relative group">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <QrCode className="w-32 h-32" />
-              </div>
-              <CardHeader className="text-center pb-2 relative z-10">
-                <CardTitle className="text-xl font-bold">{t("pos.menu.qrPreview", "Bản xem trước QR")}</CardTitle>
-                <CardDescription className="font-medium text-xs">{t("pos.menu.qrPreviewDesc", "Mã QR sẽ được in ra để dán tại bàn")}</CardDescription>
+            <Card className="border border-slate-200 rounded-3xl bg-white shadow-sm overflow-hidden">
+              <CardHeader className="text-center pb-6 border-b border-slate-100 bg-slate-50/50">
+                <CardTitle className="text-xl font-bold tracking-tight text-slate-900">{t("pos.menu.qrPreview", "Bản xem trước QR")}</CardTitle>
+                <CardDescription className="font-medium text-xs text-slate-500 mt-1">{t("pos.menu.qrPreviewDesc", "Mã QR sẽ được in ra để dán tại bàn")}</CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col items-center gap-8 py-10 relative z-10">
+              <CardContent className="flex flex-col items-center gap-10 py-12 relative z-10">
                 <div className="relative group/qr">
-                  <div className="absolute -inset-8 bg-gradient-to-r from-primary/20 to-violet-500/20 rounded-[60px] blur-3xl opacity-30 group-hover/qr:opacity-50 transition duration-1000"></div>
-                  <div className="relative bg-white p-6 rounded-[40px] shadow-2xl border-[8px] border-slate-50 transform transition-transform duration-500 group-hover/qr:scale-[1.02]">
-                    <div className="w-56 h-56 bg-white flex items-center justify-center relative overflow-hidden rounded-2xl border border-slate-100">
-                      <QrCode className="w-48 h-48" style={{ color: qrColor }} />
+                  <div className="relative bg-white p-8 rounded-3xl border border-slate-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
+                    <div className="w-64 h-64 bg-white flex items-center justify-center relative">
+                      <QrCode className="w-full h-full" style={{ color: qrColor }} />
                       {showLogo && (
                         <div className="absolute inset-0 flex items-center justify-center">
-                           <div className="bg-white p-2.5 rounded-[20px] shadow-xl border border-slate-50">
-                              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-[10px] shadow-lg shadow-primary/20">
+                           <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-lg">
+                              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary font-bold text-xs uppercase tracking-wider">
                                 POS
                               </div>
                            </div>
@@ -101,68 +97,69 @@ export function POSDigitalMenu({ storeId, branchId, store, branch }: { storeId: 
                 </div>
                 
                 <div className="flex gap-4 w-full max-w-sm">
-                  <Button className="flex-1 h-12 rounded-2xl font-bold bg-white text-slate-900 border-slate-200 hover:bg-slate-50 shadow-sm text-sm" variant="outline">
+                  <Button className="flex-1 h-12 rounded-xl font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all text-sm" variant="outline">
                     <Download className="mr-2 h-4 w-4" /> {t("pos.menu.download", "Tải PNG")}
                   </Button>
-                  <Button className="flex-1 h-12 rounded-2xl font-bold shadow-lg shadow-primary/20 text-sm">
+                  <Button className="flex-1 h-12 rounded-xl font-bold bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all text-sm">
                     <Share2 className="mr-2 h-4 w-4" /> {t("pos.menu.share", "Chia sẻ")}
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-xl shadow-slate-200/20 rounded-[32px] overflow-hidden bg-white">
-              <CardHeader className="p-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold">
-                  <div className="p-2.5 bg-primary/5 rounded-xl">
+            <Card className="border border-slate-200 rounded-3xl bg-white shadow-sm">
+              <CardHeader className="p-8 border-b border-slate-100 bg-slate-50/50">
+                <CardTitle className="flex items-center gap-4 text-xl font-bold tracking-tight text-slate-900">
+                  <div className="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm">
                     <ExternalLink className="h-5 w-5 text-primary" />
                   </div>
                   {t("pos.menu.linkTitle", "Liên kết Menu")}
                 </CardTitle>
-                <CardDescription className="text-sm font-medium text-slate-500">
+                <CardDescription className="text-xs font-medium text-slate-500 mt-2">
                   {t("pos.menu.linkDesc", "Gửi liên kết này cho khách hàng để xem menu và đặt hàng trực tuyến")}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="px-8 pb-8 space-y-8">
+              <CardContent className="p-8 space-y-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t("pos.menu.url", "Đường dẫn Menu")}</label>
-                  <div className="flex gap-2">
-                    <Input value={menuUrl} readOnly className="h-12 rounded-2xl bg-slate-50 border-slate-100 font-mono text-[10px] px-4 focus-visible:ring-primary/20" />
-                    <Button variant="secondary" className="h-12 w-12 rounded-2xl bg-white border border-slate-200 shadow-sm hover:bg-slate-50 transition-all flex-shrink-0" onClick={copyToClipboard}>
-                      {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4 text-slate-400" />}
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">{t("pos.menu.url", "Đường dẫn Menu")}</label>
+                  <div className="flex gap-3">
+                    <Input value={menuUrl} readOnly className="h-12 rounded-xl bg-slate-50 border-slate-200 font-mono text-xs px-4 focus-visible:ring-primary/20 shadow-none" />
+                    <Button variant="secondary" className="h-12 w-12 rounded-xl bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all flex-shrink-0" onClick={copyToClipboard}>
+                      {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                     </Button>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-5 bg-emerald-50/50 rounded-3xl border border-emerald-100/30 space-y-3 group hover:bg-emerald-50 transition-colors">
-                    <div className="h-9 w-9 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/10">
-                      <Layout className="h-4 w-4" />
+                  <div className="p-5 bg-white border border-slate-100 rounded-2xl shadow-sm space-y-3 group hover:border-primary/30 transition-all">
+                    <div className="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                      <Layout className="h-5 w-5" />
                     </div>
                     <div>
-                      <h5 className="font-bold text-emerald-900 text-xs">Giao diện đẹp</h5>
-                      <p className="text-[10px] text-emerald-700/60 font-medium">Tối ưu cho di động</p>
+                      <h5 className="font-bold text-slate-900 text-sm">Giao diện đẹp</h5>
+                      <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-1">Tối ưu cho di động</p>
                     </div>
                   </div>
-                  <div className="p-5 bg-blue-50/50 rounded-3xl border border-blue-100/30 space-y-3 group hover:bg-blue-50 transition-colors">
-                    <div className="h-9 w-9 bg-blue-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/10">
-                      <Check className="h-4 w-4" />
+                  <div className="p-5 bg-white border border-slate-100 rounded-2xl shadow-sm space-y-3 group hover:border-primary/30 transition-all">
+                    <div className="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                      <Check className="h-5 w-5" />
                     </div>
                     <div>
-                      <h5 className="font-bold text-blue-900 text-xs">Đặt hàng nhanh</h5>
-                      <p className="text-[10px] text-blue-700/60 font-medium">Tự chọn & thanh toán</p>
+                      <h5 className="font-bold text-slate-900 text-sm">Đặt hàng nhanh</h5>
+                      <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-1">Tự chọn & thanh toán</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-5 bg-slate-50 rounded-3xl border border-slate-100 relative overflow-hidden">
-                  <h4 className="font-bold text-slate-900 text-sm mb-2 flex items-center gap-2 relative z-10">
-                    <div className="p-1 bg-primary/10 rounded-md">
-                      <Info className="h-3.5 w-3.5 text-primary" />
-                    </div>
+                <div className="p-6 bg-amber-50 rounded-2xl border border-amber-100 relative overflow-hidden">
+                  <div className="absolute -right-4 -bottom-4 opacity-5">
+                    <Info className="w-16 h-16 text-amber-900" />
+                  </div>
+                  <h4 className="font-bold text-amber-900 text-sm mb-2 flex items-center gap-2 relative z-10">
+                    <Info className="h-4 w-4" />
                     {t("pos.menu.tips", "Mẹo nhỏ")}
                   </h4>
-                  <p className="text-xs text-slate-500 leading-relaxed font-medium relative z-10">
+                  <p className="text-xs text-amber-800 leading-relaxed font-medium relative z-10">
                     Bạn có thể in mã QR này và dán tại mỗi bàn. Khi khách hàng quét mã, hệ thống sẽ tự động nhận diện số bàn để nhân viên phục vụ chính xác hơn.
                   </p>
                 </div>
@@ -171,18 +168,21 @@ export function POSDigitalMenu({ storeId, branchId, store, branch }: { storeId: 
           </div>
         </TabsContent>
 
-        <TabsContent value="design" className="animate-in fade-in-50 duration-500">
-          <Card className="border-none shadow-xl shadow-slate-200/20 rounded-3xl bg-white">
-            <CardContent className="py-10">
-              <div className="grid md:grid-cols-2 gap-10">
-                <div className="space-y-8">
-                  <div className="space-y-4">
-                    <h4 className="font-bold text-slate-900">Màu sắc QR</h4>
-                    <div className="flex gap-3">
+        <TabsContent value="design" className="mt-0">
+          <Card className="border border-slate-200 rounded-3xl bg-white shadow-sm overflow-hidden">
+            <CardHeader className="border-b border-slate-100 bg-slate-50/50 p-8">
+              <CardTitle className="text-xl font-bold tracking-tight text-slate-900">Tùy chỉnh thiết kế QR</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="grid md:grid-cols-2 gap-12">
+                <div className="space-y-10">
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-900 uppercase tracking-wider text-xs ml-1">Màu sắc QR</h4>
+                    <div className="flex gap-4 flex-wrap">
                       {["#000000", "#2563eb", "#16a34a", "#dc2626", "#9333ea"].map(color => (
                         <button
                           key={color}
-                          className={`w-9 h-9 rounded-full border-2 transition-all ${qrColor === color ? "border-primary ring-4 ring-primary/10 scale-110" : "border-transparent hover:scale-105"}`}
+                          className={`w-12 h-12 rounded-xl border-2 transition-all ${qrColor === color ? "border-primary shadow-lg shadow-primary/20 scale-110" : "border-transparent hover:border-slate-200"}`}
                           style={{ backgroundColor: color }}
                           onClick={() => setQrColor(color)}
                         />
@@ -190,59 +190,58 @@ export function POSDigitalMenu({ storeId, branchId, store, branch }: { storeId: 
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <h4 className="font-bold text-slate-900">Tùy chọn hiển thị</h4>
-                    <div className="flex items-center gap-3">
-                      <input 
-                        type="checkbox" 
-                        id="show-logo" 
-                        checked={showLogo} 
-                        onChange={(e) => setShowLogo(e.target.checked)}
-                        className="w-5 h-5 rounded-lg border-slate-200 text-primary focus:ring-primary/20 transition-all"
-                      />
-                      <label htmlFor="show-logo" className="text-slate-600 font-medium text-sm">Hiển thị Logo ở giữa QR</label>
+                  <div className="space-y-6">
+                    <h4 className="font-bold text-slate-900 uppercase tracking-wider text-xs ml-1">Tùy chọn hiển thị</h4>
+                    <div className="flex items-center gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 hover:bg-white hover:border-primary/20 transition-all group cursor-pointer" onClick={() => setShowLogo(!showLogo)}>
+                      <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${showLogo ? "bg-primary border-primary" : "bg-white border-slate-300"}`}>
+                        {showLogo && <Check className="h-4 w-4 text-white" />}
+                      </div>
+                      <span className="text-slate-700 font-bold text-sm select-none">Hiển thị Logo ở giữa QR</span>
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t border-slate-100">
-                    <Button className="w-full h-12 rounded-2xl font-bold shadow-lg shadow-primary/20">Lưu thiết kế</Button>
+                  <div className="pt-8 border-t border-slate-100">
+                    <Button className="w-full h-14 rounded-xl font-bold text-base bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">Lưu thiết kế</Button>
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 group">
-                  <div className="bg-white p-5 rounded-[32px] shadow-xl transform transition-transform group-hover:scale-105 duration-500">
-                    <QrCode className="w-32 h-32" style={{ color: qrColor }} />
+                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-12 flex flex-col items-center justify-center group relative overflow-hidden min-h-[400px]">
+                  <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl transform transition-transform group-hover:scale-105 duration-300">
+                    <QrCode className="w-48 h-48" style={{ color: qrColor }} />
                   </div>
-                  <p className="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">Xem trước thay đổi</p>
+                  <p className="mt-10 text-[10px] text-slate-500 font-bold uppercase tracking-widest bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">Xem trước thay đổi</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="settings" className="animate-in fade-in-50 duration-500">
-          <Card className="border-none shadow-xl shadow-slate-200/20 rounded-3xl bg-white">
-            <CardContent className="py-10">
-              <div className="max-w-2xl space-y-8">
-                <div className="space-y-4">
+        <TabsContent value="settings" className="mt-0">
+          <Card className="border border-slate-200 rounded-3xl bg-white shadow-sm overflow-hidden">
+            <CardHeader className="border-b border-slate-100 bg-slate-50/50 p-8">
+              <CardTitle className="text-xl font-bold tracking-tight text-slate-900">Cấu hình Menu</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="max-w-3xl space-y-10">
+                <div className="space-y-6">
                   <div>
-                    <h4 className="font-bold text-slate-900">Chế độ đặt hàng</h4>
-                    <p className="text-sm text-slate-500 font-medium">Chọn cách khách hàng tương tác với menu</p>
+                    <h4 className="font-bold text-slate-900 text-lg">Chế độ đặt hàng</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-1">Chọn cách khách hàng tương tác với menu</p>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                    <div className="p-5 rounded-2xl border-2 border-primary bg-primary/5 cursor-pointer transition-all hover:shadow-md">
-                      <h5 className="font-bold text-primary text-sm">Chỉ xem Menu</h5>
-                      <p className="text-xs text-slate-500 font-medium mt-1">Khách hàng chỉ có thể xem giá & món</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                    <div className="p-6 rounded-2xl border-2 border-primary bg-primary/5 shadow-sm cursor-pointer transition-all">
+                      <h5 className="font-bold text-primary text-base">Chỉ xem Menu</h5>
+                      <p className="text-xs text-slate-600 font-medium mt-2 leading-relaxed">Khách hàng chỉ có thể xem giá & món. Không thể đặt hàng trực tiếp.</p>
                     </div>
-                    <div className="p-5 rounded-2xl border-2 border-slate-100 hover:border-primary/30 cursor-pointer transition-all hover:shadow-md group">
-                      <h5 className="font-bold text-slate-900 text-sm group-hover:text-primary transition-colors">Đặt hàng & Thanh toán</h5>
-                      <p className="text-xs text-slate-500 font-medium mt-1">Khách hàng tự đặt & trả tiền qua App</p>
+                    <div className="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:border-primary/30 hover:bg-slate-50 shadow-sm cursor-pointer transition-all group">
+                      <h5 className="font-bold text-slate-900 text-base group-hover:text-primary">Đặt hàng & Thanh toán</h5>
+                      <p className="text-xs text-slate-600 font-medium mt-2 leading-relaxed">Khách hàng tự đặt & trả tiền qua App. Tự động gửi thông báo cho bếp.</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-slate-100">
-                  <Button className="h-12 px-8 rounded-2xl font-bold shadow-lg shadow-primary/20">Cập nhật cấu hình</Button>
+                <div className="pt-8 border-t border-slate-100">
+                  <Button className="h-14 px-10 rounded-xl font-bold text-base bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">Cập nhật cấu hình</Button>
                 </div>
               </div>
             </CardContent>

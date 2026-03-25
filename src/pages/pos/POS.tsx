@@ -82,27 +82,27 @@ export function POS() {
   if (!store) return null;
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50 p-6 gap-6 overflow-hidden font-sans">
+    <div className="h-screen flex flex-col bg-slate-50 p-8 gap-8 overflow-hidden font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button 
             variant="outline" 
             size="icon" 
-            className="h-10 w-10 rounded-none bg-white border-2 border-slate-200 hover:bg-slate-50 transition-colors"
+            className="h-12 w-12 rounded-xl border-slate-200 bg-white hover:bg-slate-50 transition-all shadow-sm"
             onClick={() => navigate(branchId ? `/pos/${storeId}/branches` : "/pos")}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5 text-slate-600" />
           </Button>
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 bg-primary rounded-none flex items-center justify-center border-2 border-primary">
-              <Store className="h-6 w-6 text-white" />
+            <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 shadow-sm">
+              <Store className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-black uppercase tracking-tighter text-slate-900 leading-none mb-1">
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-none mb-1">
                 {branch ? branch.name : store.name}
               </h1>
-              <div className="flex items-center gap-2 text-slate-500 font-bold text-[10px] uppercase tracking-widest">
-                <MapPin className="h-3 w-3 text-slate-400" /> 
+              <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
+                <MapPin className="h-4 w-4 text-slate-400" /> 
                 {branch 
                   ? `${branch.address.detail}, ${branch.address.district}` 
                   : (store.address || t("pos.subtitle"))}
@@ -112,9 +112,20 @@ export function POS() {
         </div>
       </div>
 
-      <Tabs defaultValue="checkout" className="flex-1 flex flex-col gap-6 overflow-hidden">
+      <div className="w-full bg-primary/5 text-primary overflow-hidden py-2 rounded-xl border border-primary/10 shadow-sm">
+        <div className="flex whitespace-nowrap animate-marquee">
+          <span className="mx-6 font-bold uppercase tracking-wider text-xs">🔥 KHUYẾN MÃI: GIẢM 10% CHO ĐƠN TỪ 500K</span>
+          <span className="mx-6 font-bold uppercase tracking-wider text-xs">⚡️ TÍCH ĐIỂM 1% MỌI ĐƠN HÀNG</span>
+          <span className="mx-6 font-bold uppercase tracking-wider text-xs">🌟 QUÉT MÃ QR ĐỂ NHẬN ƯU ĐÃI</span>
+          <span className="mx-6 font-bold uppercase tracking-wider text-xs">🔥 KHUYẾN MÃI: GIẢM 10% CHO ĐƠN TỪ 500K</span>
+          <span className="mx-6 font-bold uppercase tracking-wider text-xs">⚡️ TÍCH ĐIỂM 1% MỌI ĐƠN HÀNG</span>
+          <span className="mx-6 font-bold uppercase tracking-wider text-xs">🌟 QUÉT MÃ QR ĐỂ NHẬN ƯU ĐÃI</span>
+        </div>
+      </div>
+
+      <Tabs defaultValue="checkout" className="flex-1 flex flex-col gap-8 overflow-hidden">
         <div className="flex items-center justify-between">
-          <TabsList className="h-12 p-1 bg-white rounded-none border-2 border-slate-200 w-fit">
+          <TabsList className="h-12 p-1 bg-white rounded-xl border border-slate-200 shadow-sm w-fit flex gap-1">
             {[
               { value: "checkout", icon: LayoutDashboard, label: t("pos.tabs.checkout") },
               { value: "products", icon: Package, label: t("pos.tabs.products") },
@@ -126,9 +137,9 @@ export function POS() {
               <TabsTrigger 
                 key={tab.value}
                 value={tab.value} 
-                className="px-4 rounded-none font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-colors"
+                className="px-6 h-9 rounded-lg font-bold text-xs uppercase tracking-wider text-slate-500 data-[state=active]:bg-primary data-[state=active]:text-white hover:bg-slate-50 data-[state=active]:hover:bg-primary transition-all"
               >
-                <tab.icon className="h-3.5 w-3.5 mr-2" />
+                <tab.icon className="h-4 w-4 mr-2" />
                 {tab.label}
               </TabsTrigger>
             ))}

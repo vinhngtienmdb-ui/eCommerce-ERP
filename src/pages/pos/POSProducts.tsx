@@ -24,28 +24,28 @@ const FilterPopover = ({ label, options, selected, onChange }: {
 }) => (
   <Popover>
     <PopoverTrigger asChild>
-      <Button variant="outline" size="sm" className="h-9 gap-2 rounded-none border-2 border-slate-900 hover:bg-slate-900 hover:text-white transition-colors font-black uppercase tracking-widest text-[10px]">
-        <Filter className="h-3.5 w-3.5" />
+      <Button variant="outline" size="sm" className="h-11 gap-2 rounded-xl border-slate-200 bg-white hover:bg-slate-50 transition-all font-bold text-xs shadow-sm">
+        <Filter className="h-4 w-4 text-slate-400" />
         {label}
         {selected.length > 0 && (
-          <span className="ml-1 bg-slate-900 text-white px-1.5 py-0.5 text-[8px] font-black">
+          <Badge variant="secondary" className="ml-1 bg-primary/10 text-primary border-none px-1.5 py-0 rounded-md text-[10px] font-bold">
             {selected.length}
-          </span>
+          </Badge>
         )}
       </Button>
     </PopoverTrigger>
-    <PopoverContent className="w-60 p-0 rounded-none border-4 border-slate-900 shadow-none" align="start">
-      <div className="p-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest">
+    <PopoverContent className="w-72 p-0 rounded-2xl border-none shadow-2xl bg-white overflow-hidden" align="start">
+      <div className="p-4 bg-slate-50 text-slate-900 text-xs font-bold uppercase tracking-wider border-b border-slate-100">
         Lọc theo {label}
       </div>
-      <div className="p-2 space-y-1 max-h-60 overflow-y-auto scrollbar-hide">
-        {options.length === 0 && <p className="text-[10px] font-bold text-slate-400 p-2 uppercase tracking-tight">Không có dữ liệu</p>}
+      <div className="p-2 space-y-1 max-h-80 overflow-y-auto scrollbar-hide">
+        {options.length === 0 && <p className="text-xs font-medium text-slate-400 p-4 text-center italic">Không có dữ liệu</p>}
         {options.map((option) => (
-          <div key={option} className="flex items-center space-x-2 p-2 hover:bg-slate-100 transition-colors cursor-pointer group">
+          <div key={option} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 transition-all cursor-pointer group">
             <Checkbox 
               id={`${label}-${option}`} 
               checked={selected.includes(option)}
-              className="rounded-none border-2 border-slate-900 data-[state=checked]:bg-slate-900 data-[state=checked]:text-white"
+              className="h-5 w-5 rounded-md border-slate-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               onCheckedChange={(checked) => {
                 if (checked) {
                   onChange([...selected, option]);
@@ -56,7 +56,7 @@ const FilterPopover = ({ label, options, selected, onChange }: {
             />
             <label 
               htmlFor={`${label}-${option}`}
-              className="text-xs font-black uppercase tracking-tight leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex-1 group-hover:text-slate-900"
+              className="text-sm font-medium text-slate-600 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex-1 group-hover:text-slate-900"
             >
               {option}
             </label>
@@ -284,31 +284,34 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-          <h2 className="text-3xl font-black uppercase tracking-tighter text-slate-900 leading-none">{t("pos.products.title", "Sản phẩm & Dịch vụ")}</h2>
-          <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1">{t("pos.products.subtitle", "Quản lý danh mục hàng hóa của cửa hàng")}</p>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 leading-none">{t("pos.products.title", "Sản phẩm & Dịch vụ")}</h2>
+          <p className="text-sm text-slate-500 font-medium mt-2">{t("pos.products.subtitle", "Quản lý danh mục hàng hóa của cửa hàng")}</p>
         </div>
-        <Button onClick={handleAddProduct} className="rounded-none font-black uppercase tracking-widest px-8 h-14 transition-colors border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px]">
+        <Button 
+          onClick={handleAddProduct} 
+          className="rounded-xl h-12 px-8 bg-primary text-white hover:bg-primary/90 shadow-md shadow-primary/20 font-bold transition-all"
+        >
           <Plus className="mr-2 h-5 w-5" /> {t("pos.products.add", "Thêm sản phẩm")}
         </Button>
       </div>
 
-      <Card className="border-4 border-slate-900 rounded-none overflow-hidden bg-white shadow-none">
-        <CardHeader className="pb-4 px-6 pt-6 bg-slate-50 border-b-4 border-slate-900">
+      <Card className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+        <CardHeader className="pb-6 px-8 pt-8 bg-slate-50/50 border-b border-slate-100">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="relative max-w-sm flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-900" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <Input
                 placeholder={t("pos.products.search", "Tìm kiếm sản phẩm...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-11 h-12 rounded-none bg-white border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black uppercase tracking-tight text-xs placeholder:text-slate-400"
+                className="pl-11 h-11 rounded-xl bg-white border-slate-200 focus-visible:ring-primary/20 font-medium text-sm shadow-sm"
               />
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <FilterPopover 
                 label="Cấp 1" 
                 options={uniqueL1} 
@@ -328,11 +331,16 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
                 onChange={setSelectedL3} 
               />
               {(selectedL1.length > 0 || selectedL2.length > 0 || selectedL3.length > 0) && (
-                <Button variant="ghost" size="sm" className="rounded-none text-[10px] font-black text-rose-500 hover:bg-rose-50 uppercase tracking-widest px-4" onClick={() => {
-                  setSelectedL1([]);
-                  setSelectedL2([]);
-                  setSelectedL3([]);
-                }}>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="rounded-xl text-xs font-bold text-rose-500 hover:bg-rose-50 px-4 h-11" 
+                  onClick={() => {
+                    setSelectedL1([]);
+                    setSelectedL2([]);
+                    setSelectedL3([]);
+                  }}
+                >
                   Xóa lọc
                 </Button>
               )}
@@ -342,42 +350,42 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-b-4 border-slate-900 bg-slate-100">
-                <TableHead className="h-12 text-[10px] uppercase tracking-widest font-black text-slate-900 px-6">{t("pos.products.name", "Tên sản phẩm")}</TableHead>
-                <TableHead className="h-12 text-[10px] uppercase tracking-widest font-black text-slate-900 px-6">{t("pos.products.category", "Danh mục")}</TableHead>
-                <TableHead className="h-12 text-[10px] uppercase tracking-widest font-black text-slate-900 px-6">{t("pos.products.price", "Giá bán")}</TableHead>
-                <TableHead className="h-12 text-[10px] uppercase tracking-widest font-black text-slate-900 px-6">{t("pos.products.stock", "Tồn kho")}</TableHead>
-                <TableHead className="h-12 text-right text-[10px] uppercase tracking-widest font-black text-slate-900 px-6">{t("pos.products.actions", "Thao tác")}</TableHead>
+              <TableRow className="hover:bg-transparent border-b border-slate-200 bg-slate-50">
+                <TableHead className="h-12 text-xs uppercase tracking-wider font-bold text-slate-500 px-8">{t("pos.products.name", "Tên sản phẩm")}</TableHead>
+                <TableHead className="h-12 text-xs uppercase tracking-wider font-bold text-slate-500 px-8">{t("pos.products.category", "Danh mục")}</TableHead>
+                <TableHead className="h-12 text-xs uppercase tracking-wider font-bold text-slate-500 px-8">{t("pos.products.price", "Giá bán")}</TableHead>
+                <TableHead className="h-12 text-xs uppercase tracking-wider font-bold text-slate-500 px-8">{t("pos.products.stock", "Tồn kho")}</TableHead>
+                <TableHead className="h-12 text-right text-xs uppercase tracking-wider font-bold text-slate-500 px-8">{t("pos.products.actions", "Thao tác")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredProducts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="h-32 text-center text-slate-400 font-black uppercase tracking-widest text-xs">
+                  <TableCell colSpan={5} className="h-48 text-center text-slate-400 font-medium text-sm italic">
                     Không tìm thấy sản phẩm nào
                   </TableCell>
                 </TableRow>
               ) : (
                 filteredProducts.map((product) => (
-                  <TableRow key={product.id} className="border-b-2 border-slate-100 hover:bg-slate-50 transition-colors group">
-                    <TableCell className="font-black text-slate-900 py-5 px-6 text-sm uppercase tracking-tight">{product.productName}</TableCell>
-                    <TableCell className="text-slate-500 font-bold text-[10px] px-6 uppercase tracking-widest">
+                  <TableRow key={product.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group">
+                    <TableCell className="font-bold text-slate-900 py-6 px-8 text-sm">{product.productName}</TableCell>
+                    <TableCell className="text-slate-500 font-medium text-xs px-8">
                       {Array.isArray(product.category) ? product.category.join(" / ") : product.category}
                     </TableCell>
-                    <TableCell className="font-black text-primary px-6 text-base">
+                    <TableCell className="font-bold text-slate-900 px-8 text-base">
                       {(product.price || product.suggestedPrice || 0).toLocaleString()}đ
                     </TableCell>
-                    <TableCell className="px-6">
-                      <span className="font-mono font-black text-xs bg-slate-100 px-2 py-1 border-2 border-slate-200">
+                    <TableCell className="px-8">
+                      <Badge variant="secondary" className="font-mono font-bold text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">
                         {product.stock}
-                      </span>
+                      </Badge>
                     </TableCell>
-                    <TableCell className="text-right px-6">
+                    <TableCell className="text-right px-8">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="outline" size="icon" className="h-9 w-9 rounded-none border-2 border-slate-900 hover:bg-slate-900 hover:text-white transition-colors" onClick={() => handleEditProduct(product)}>
-                          <Edit className="h-4 w-4" />
+                        <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-slate-200 hover:bg-slate-50 transition-all" onClick={() => handleEditProduct(product)}>
+                          <Edit className="h-4 w-4 text-slate-600" />
                         </Button>
-                        <Button variant="outline" size="icon" className="h-9 w-9 rounded-none border-2 border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors" onClick={() => handleDeleteProduct(product.id)}>
+                        <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-rose-100 text-rose-500 hover:bg-rose-50 transition-all" onClick={() => handleDeleteProduct(product.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -391,120 +399,122 @@ export function POSProducts({ storeId, branchId }: { storeId: string; branchId?:
       </Card>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent aria-describedby="dialog-description" className="sm:max-w-lg rounded-none border-4 border-slate-900 shadow-none scrollbar-hide max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="border-b-4 border-slate-900 pb-4 -mx-6 px-6">
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">{editingProduct ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}</DialogTitle>
-            <DialogDescription id="dialog-description" className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mt-1">
+        <DialogContent aria-describedby="dialog-description" className="sm:max-w-2xl p-0 rounded-2xl border-none shadow-2xl bg-white max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="p-8 bg-slate-50 border-b border-slate-100">
+            <DialogTitle className="text-2xl font-bold tracking-tight text-slate-900">{editingProduct ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}</DialogTitle>
+            <DialogDescription id="dialog-description" className="text-sm font-medium text-slate-500 mt-2">
               Điền thông tin chi tiết của sản phẩm để quản lý kho và bán hàng.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-6 py-6">
-            <div className="space-y-1.5">
-              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Tên sản phẩm</Label>
-              <Input 
-                value={formData.productName} 
-                onChange={(e) => setFormData({...formData, productName: e.target.value})} 
-                placeholder="Nhập tên sản phẩm"
-                className="h-12 rounded-none bg-slate-50 border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black uppercase tracking-tight text-xs"
-              />
+          <div className="p-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Tên sản phẩm</Label>
+                <Input 
+                  value={formData.productName} 
+                  onChange={(e) => setFormData({...formData, productName: e.target.value})} 
+                  placeholder="Nhập tên sản phẩm"
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Danh mục chính</Label>
+                <Input 
+                  value={formData.category} 
+                  onChange={(e) => setFormData({...formData, category: e.target.value})} 
+                  placeholder="Nhập danh mục"
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-sm transition-all"
+                />
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Danh mục chính</Label>
-              <Input 
-                value={formData.category} 
-                onChange={(e) => setFormData({...formData, category: e.target.value})} 
-                placeholder="Nhập danh mục"
-                className="h-12 rounded-none bg-slate-50 border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black uppercase tracking-tight text-xs"
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Cấp 1</Label>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Cấp 1</Label>
                 <Input 
                   value={formData.categoryLevel1} 
                   onChange={(e) => setFormData({...formData, categoryLevel1: e.target.value})} 
                   placeholder="Cấp 1"
-                  className="h-12 rounded-none bg-slate-50 border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black uppercase tracking-tight text-[10px]"
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-xs transition-all"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Cấp 2</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Cấp 2</Label>
                 <Input 
                   value={formData.categoryLevel2} 
                   onChange={(e) => setFormData({...formData, categoryLevel2: e.target.value})} 
                   placeholder="Cấp 2"
-                  className="h-12 rounded-none bg-slate-50 border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black uppercase tracking-tight text-[10px]"
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-xs transition-all"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Cấp 3</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Cấp 3</Label>
                 <Input 
                   value={formData.categoryLevel3} 
                   onChange={(e) => setFormData({...formData, categoryLevel3: e.target.value})} 
                   placeholder="Cấp 3"
-                  className="h-12 rounded-none bg-slate-50 border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black uppercase tracking-tight text-[10px]"
+                  className="h-11 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-medium text-xs transition-all"
                 />
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Mô tả sản phẩm</Label>
-              <Input 
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700 ml-1">Mô tả sản phẩm</Label>
+              <textarea 
                 value={formData.description} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})} 
                 placeholder="Nhập mô tả sản phẩm"
-                className="h-12 rounded-none bg-slate-50 border-2 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-bold text-xs"
+                className="flex min-h-[100px] w-full rounded-xl bg-slate-50/50 border border-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none font-medium transition-all"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">{t("pos.products.image", "Hình ảnh sản phẩm")}</Label>
-              <div className="flex flex-col gap-3">
-                <div className="h-48 w-full bg-slate-100 rounded-none flex items-center justify-center overflow-hidden border-4 border-slate-900 relative group">
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700 ml-1">{t("pos.products.image", "Hình ảnh sản phẩm")}</Label>
+              <div className="flex flex-col gap-4">
+                <div className="h-64 w-full bg-slate-50 rounded-2xl flex items-center justify-center overflow-hidden border border-slate-200 relative group shadow-sm">
                   {formData.image ? (
                     <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
                   ) : (
-                    <ImageIcon className="h-12 w-12 text-slate-300" />
+                    <ImageIcon className="h-12 w-12 text-slate-200" />
                   )}
-                  <div className="absolute inset-0 bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                    <Button variant="secondary" size="sm" className="relative h-10 rounded-none text-[10px] font-black uppercase tracking-widest border-2 border-white" asChild>
-                      <label>
+                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-[2px]">
+                    <Button variant="secondary" size="sm" className="relative h-10 rounded-xl font-bold text-xs bg-white text-slate-900 hover:bg-white/90 shadow-lg" asChild>
+                      <label className="cursor-pointer">
                         <Upload className="h-4 w-4 mr-2" /> {t("common.upload", "Tải lên")}
                         <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleImageUpload} />
                       </label>
                     </Button>
-                    <Button variant="secondary" size="sm" className="h-10 rounded-none text-[10px] font-black uppercase tracking-widest border-2 border-white" onClick={generateAIImage} disabled={isGenerating}>
+                    <Button variant="secondary" size="sm" className="h-10 rounded-xl font-bold text-xs bg-primary text-white hover:bg-primary/90 shadow-lg" onClick={generateAIImage} disabled={isGenerating}>
                       {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Sparkles className="h-4 w-4 mr-2" /> {t("common.aiGenerate", "AI Tạo ảnh")}</>}
                     </Button>
                   </div>
                 </div>
-                <p className="text-[8px] text-slate-400 text-center font-black uppercase tracking-[0.2em]">
+                <p className="text-xs text-slate-400 text-center font-medium italic">
                   {t("pos.products.imageHint", "Tải ảnh lên hoặc dùng AI để tạo ảnh từ tên sản phẩm")}
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Giá bán (đ)</Label>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Giá bán (đ)</Label>
                 <Input 
                   type="number" 
                   value={formData.price} 
                   onChange={(e) => setFormData({...formData, price: Number(e.target.value)})} 
-                  className="h-14 rounded-none bg-slate-50 border-4 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black text-primary text-xl"
+                  className="h-14 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-bold text-primary text-2xl transition-all"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-widest font-black text-slate-900 ml-1">Tồn kho</Label>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-slate-700 ml-1">Tồn kho</Label>
                 <Input 
                   type="number" 
                   value={formData.stock} 
                   onChange={(e) => setFormData({...formData, stock: Number(e.target.value)})} 
-                  className="h-14 rounded-none bg-slate-50 border-4 border-slate-900 focus-visible:ring-0 focus-visible:border-primary font-black text-slate-900 text-xl"
+                  className="h-14 rounded-xl bg-slate-50/50 border-slate-200 focus-visible:ring-primary/20 font-bold text-slate-900 text-2xl transition-all"
                 />
               </div>
             </div>
           </div>
-          <DialogFooter className="gap-3 border-t-4 border-slate-900 pt-6 -mx-6 px-6">
-            <Button variant="ghost" className="rounded-none font-black text-slate-500 uppercase tracking-widest h-12" onClick={() => setIsModalOpen(false)}>Hủy</Button>
-            <Button onClick={handleSaveProduct} className="rounded-none font-black uppercase tracking-widest px-10 h-12 transition-colors border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px]">Lưu</Button>
+          <DialogFooter className="p-8 bg-slate-50 border-t border-slate-100 gap-3">
+            <Button variant="outline" className="rounded-xl h-12 px-8 border-slate-200 font-bold text-slate-600 hover:bg-slate-100 transition-all" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button onClick={handleSaveProduct} className="rounded-xl h-12 px-12 font-bold bg-primary text-white hover:bg-primary/90 transition-all shadow-md shadow-primary/20">Lưu sản phẩm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

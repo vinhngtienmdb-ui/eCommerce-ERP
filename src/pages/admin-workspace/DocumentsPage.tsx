@@ -478,7 +478,7 @@ export function DocumentsPage() {
                 {renderFields()}
 
                 <div className="flex justify-end gap-2 pt-4 border-t">
-                  <Button variant="outline" onClick={() => { setPreviewDoc({ type: selectedType, number: formData.number || autoNumber, title: formData.title, content: formData, status: "draft", direction: "outgoing", sender: "Công ty", receiver: formData.receiver || "", createdAt: new Date().toISOString(), creatorId: "temp" }); setIsPreviewOpen(true); }}>
+                  <Button variant="outline" onClick={() => { setPreviewDoc({ type: selectedType, number: formData.number || autoNumber, title: formData.title, content: formData, status: "draft", direction: "outgoing", sender: "Công ty", receiver: formData.receiver || "", createdAt: new Date().toISOString(), creatorId: "temp", year: new Date().getFullYear() }); setIsPreviewOpen(true); }}>
                     <Eye className="mr-2 h-4 w-4" />
                     Xem trước
                   </Button>

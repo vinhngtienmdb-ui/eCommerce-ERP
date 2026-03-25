@@ -154,7 +154,9 @@ const navigationGroups = [
         subItems: [
           { nameKey: "hrPortal", href: "/hr/portal" },
           { nameKey: "hrInfo", href: "/hr/info" },
-          { nameKey: "hrEmployees", href: "/hr/employees" },
+          { nameKey: "hrContracts", href: "/hr/contracts" },
+          { nameKey: "hrPolicies", href: "/hr/policies" },
+          { nameKey: "hrSalaryScales", href: "/hr/salary-scales" },
           { nameKey: "hrTimeAttendance", href: "/hr/time-attendance" },
           { nameKey: "hrLeave", href: "/hr/leave" },
           { nameKey: "hrPayroll", href: "/hr/payroll" },
