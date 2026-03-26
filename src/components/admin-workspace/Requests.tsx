@@ -211,7 +211,7 @@ export function Requests() {
                   </SelectTrigger>
                   <SelectContent>
                     {employees.map(emp => (
-                      <SelectItem key={emp.id} value={emp.name}>{emp.name} ({emp.dept})</SelectItem>
+                      <SelectItem key={emp.id} value={emp.name}>{emp.name} ({t(`hr.core.${emp.dept.toLowerCase()}`, emp.dept)})</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

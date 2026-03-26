@@ -42,6 +42,7 @@ export function HRInfo() {
     name: "",
     dept: "",
     pos: "",
+    grade: "",
     email: "",
     phone: "",
     idCard: "",
@@ -90,7 +91,7 @@ export function HRInfo() {
       setIsAddEmployeeOpen(false)
       setEditingEmployee(null)
       setNewEmployee({
-        name: "", dept: "", pos: "", email: "", phone: "", idCard: "", taxCode: "", socialInsuranceNo: "", dependents: 0, status: "Onboarding", joinDate: new Date().toISOString().split('T')[0]
+        name: "", dept: "", pos: "", grade: "", email: "", phone: "", idCard: "", taxCode: "", socialInsuranceNo: "", dependents: 0, status: "Onboarding", joinDate: new Date().toISOString().split('T')[0]
       })
     } else {
       toast.error(t("hr.core.toasts.requiredFields"))
@@ -161,7 +162,7 @@ export function HRInfo() {
                 if (!open) {
                   setEditingEmployee(null)
                   setNewEmployee({
-                    name: "", dept: "", pos: "", email: "", phone: "", idCard: "", taxCode: "", socialInsuranceNo: "", status: "Onboarding", joinDate: new Date().toISOString().split('T')[0]
+                    name: "", dept: "", pos: "", grade: "", email: "", phone: "", idCard: "", taxCode: "", socialInsuranceNo: "", status: "Onboarding", joinDate: new Date().toISOString().split('T')[0]
                   })
                 }
               }}>
@@ -191,6 +192,18 @@ export function HRInfo() {
                           <Input id="name" value={newEmployee.name} onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="idCard" className="text-right">{t("hr.core.idCard", "CCCD/CMND")}</Label>
+                          <Input id="idCard" value={newEmployee.idCard} onChange={(e) => setNewEmployee({ ...newEmployee, idCard: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="email" className="text-right">{t("common.email", "Email")}</Label>
+                          <Input id="email" type="email" value={newEmployee.email} onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="phone" className="text-right">{t("hr.core.phone", "Số điện thoại")}</Label>
+                          <Input id="phone" value={newEmployee.phone} onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="dob" className="text-right">{t("hr.core.dob")}</Label>
                           <Input id="dob" type="date" value={newEmployee.dob} onChange={(e) => setNewEmployee({ ...newEmployee, dob: e.target.value })} className="col-span-3" />
                         </div>
@@ -209,6 +222,14 @@ export function HRInfo() {
                           <Label htmlFor="address" className="text-right">{t("hr.core.address")}</Label>
                           <Input id="address" value={newEmployee.address} onChange={(e) => setNewEmployee({ ...newEmployee, address: e.target.value })} className="col-span-3" />
                         </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="emergencyContactName" className="text-right">{t("hr.core.emergencyContactName", "Tên người liên hệ khẩn cấp")}</Label>
+                          <Input id="emergencyContactName" value={newEmployee.emergencyContactName || ""} onChange={(e) => setNewEmployee({ ...newEmployee, emergencyContactName: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="emergencyContactPhone" className="text-right">{t("hr.core.emergencyContactPhone", "SĐT khẩn cấp")}</Label>
+                          <Input id="emergencyContactPhone" value={newEmployee.emergencyContactPhone || ""} onChange={(e) => setNewEmployee({ ...newEmployee, emergencyContactPhone: e.target.value })} className="col-span-3" />
+                        </div>
                       </TabsContent>
                       <TabsContent value="work" className="space-y-4 pt-4">
                         <div className="grid grid-cols-4 items-center gap-4">
@@ -220,7 +241,7 @@ export function HRInfo() {
                               <SelectItem value="Marketing">{t("hr.core.marketing")}</SelectItem>
                               <SelectItem value="Sales">{t("hr.core.sales")}</SelectItem>
                               <SelectItem value="HR">{t("hr.core.hr")}</SelectItem>
-                              <SelectItem value="Finance">{t("hr.core.financeDept")}</SelectItem>
+                              <SelectItem value="Finance">{t("hr.core.finance")}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -229,14 +250,34 @@ export function HRInfo() {
                           <Input id="pos" value={newEmployee.pos} onChange={(e) => setNewEmployee({ ...newEmployee, pos: e.target.value })} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="grade" className="text-right">{t("hr.core.grade", "Bậc lương")}</Label>
+                          <Input id="grade" value={newEmployee.grade || ""} onChange={(e) => setNewEmployee({ ...newEmployee, grade: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="joinDate" className="text-right">{t("hr.core.joinDate")}</Label>
                           <Input id="joinDate" type="date" value={newEmployee.joinDate} onChange={(e) => setNewEmployee({ ...newEmployee, joinDate: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="status" className="text-right">{t("hr.core.status")}</Label>
+                          <Select value={newEmployee.status} onValueChange={(v: any) => setNewEmployee({ ...newEmployee, status: v })}>
+                            <SelectTrigger className="col-span-3"><SelectValue placeholder={t("hr.core.status")} /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Active">{t("hr.core.status.active", "Đang làm việc")}</SelectItem>
+                              <SelectItem value="Onboarding">{t("hr.core.status.onboarding", "Thử việc")}</SelectItem>
+                              <SelectItem value="Maternity">{t("hr.core.status.maternity", "Thai sản")}</SelectItem>
+                              <SelectItem value="Resigned">{t("hr.core.status.resigned", "Đã nghỉ việc")}</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
                       </TabsContent>
                       <TabsContent value="finance" className="space-y-4 pt-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="taxCode" className="text-right">{t("hr.core.taxCode")}</Label>
                           <Input id="taxCode" value={newEmployee.taxCode} onChange={(e) => setNewEmployee({ ...newEmployee, taxCode: e.target.value })} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="socialInsuranceNo" className="text-right">{t("hr.core.socialInsuranceNo", "Số sổ BHXH")}</Label>
+                          <Input id="socialInsuranceNo" value={newEmployee.socialInsuranceNo} onChange={(e) => setNewEmployee({ ...newEmployee, socialInsuranceNo: e.target.value })} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="bankName" className="text-right">{t("hr.core.bankName")}</Label>
@@ -344,7 +385,7 @@ export function HRInfo() {
                         <div className="font-medium">{item.name}</div>
                         <div className="text-xs text-muted-foreground">{item.email}</div>
                       </TableCell>
-                      <TableCell>{item.dept}</TableCell>
+                      <TableCell>{t(`hr.core.${item.dept.toLowerCase()}`, item.dept)}</TableCell>
                       <TableCell>{item.pos}</TableCell>
                       <TableCell>{item.idCard}</TableCell>
                       <TableCell>

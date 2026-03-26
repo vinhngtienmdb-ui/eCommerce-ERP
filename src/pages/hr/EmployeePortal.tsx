@@ -36,7 +36,7 @@ export function EmployeePortal() {
             VN
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Xin chào, Vinh Nguyen! 👋</h1>
+            <h1 className="text-3xl font-bold text-slate-900">{t("hr.portal.welcome", { name: "Vinh Nguyen" })}</h1>
             <p className="text-slate-500">Chuyên viên Marketing • Phòng Marketing</p>
           </div>
         </div>
@@ -45,10 +45,10 @@ export function EmployeePortal() {
             variant={isCustomizing ? "default" : "outline"} 
             onClick={() => setIsCustomizing(!isCustomizing)}
           >
-            <Settings className="mr-2 h-4 w-4" /> {isCustomizing ? "Lưu cấu hình" : "Tùy chỉnh"}
+            <Settings className="mr-2 h-4 w-4" /> {isCustomizing ? t("hr.portal.saveConfig") : t("hr.portal.customize")}
           </Button>
           <Button className="bg-indigo-600 hover:bg-indigo-700">
-            <Clock className="mr-2 h-4 w-4" /> Chấm công ngay (Check-in)
+            <Clock className="mr-2 h-4 w-4" /> {t("hr.portal.checkIn")}
           </Button>
         </div>
       </div>
@@ -58,23 +58,23 @@ export function EmployeePortal() {
           <CardContent className="p-4 flex flex-wrap gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={visibleWidgets.stats} onChange={(e) => setVisibleWidgets(p => ({...p, stats: e.target.checked}))} />
-              Chỉ số nhanh
+              {t("hr.portal.widgets.stats")}
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={visibleWidgets.quickActions} onChange={(e) => setVisibleWidgets(p => ({...p, quickActions: e.target.checked}))} />
-              Thao tác nhanh
+              {t("hr.portal.widgets.quickActions")}
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={visibleWidgets.recentRequests} onChange={(e) => setVisibleWidgets(p => ({...p, recentRequests: e.target.checked}))} />
-              Yêu cầu gần đây
+              {t("hr.portal.widgets.recentRequests")}
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={visibleWidgets.announcements} onChange={(e) => setVisibleWidgets(p => ({...p, announcements: e.target.checked}))} />
-              Thông báo
+              {t("hr.portal.widgets.announcements")}
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={visibleWidgets.kpi} onChange={(e) => setVisibleWidgets(p => ({...p, kpi: e.target.checked}))} />
-              KPI
+              {t("hr.portal.widgets.kpi")}
             </label>
           </CardContent>
         </Card>
@@ -89,8 +89,8 @@ export function EmployeePortal() {
               <Calendar className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase">Phép năm còn lại</p>
-              <p className="text-2xl font-bold text-slate-900">12.5 <span className="text-sm font-normal text-slate-500">ngày</span></p>
+              <p className="text-xs font-medium text-slate-500 uppercase">{t("hr.portal.stats.leaveBalance")}</p>
+              <p className="text-2xl font-bold text-slate-900">12.5 <span className="text-sm font-normal text-slate-500">{t("hr.portal.stats.days")}</span></p>
             </div>
           </CardContent>
         </Card>
@@ -100,8 +100,8 @@ export function EmployeePortal() {
               <Clock className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase">Giờ làm tháng này</p>
-              <p className="text-2xl font-bold text-slate-900">142 <span className="text-sm font-normal text-slate-500">giờ</span></p>
+              <p className="text-xs font-medium text-slate-500 uppercase">{t("hr.portal.stats.workHours")}</p>
+              <p className="text-2xl font-bold text-slate-900">142 <span className="text-sm font-normal text-slate-500">{t("hr.portal.stats.hours")}</span></p>
             </div>
           </CardContent>
         </Card>
@@ -111,7 +111,7 @@ export function EmployeePortal() {
               <Target className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase">Tiến độ KPI</p>
+              <p className="text-xs font-medium text-slate-500 uppercase">{t("hr.portal.stats.kpiProgress")}</p>
               <p className="text-2xl font-bold text-slate-900">85%</p>
             </div>
           </CardContent>
@@ -122,7 +122,7 @@ export function EmployeePortal() {
               <Wallet className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase">Tạm ứng chưa hoàn</p>
+              <p className="text-xs font-medium text-slate-500 uppercase">{t("hr.portal.stats.netSalary")}</p>
               <p className="text-2xl font-bold text-slate-900">0 <span className="text-sm font-normal text-slate-500">VNĐ</span></p>
             </div>
           </CardContent>
@@ -137,15 +137,15 @@ export function EmployeePortal() {
           {visibleWidgets.quickActions && (
           <Card className="border-none shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg">Thao tác nhanh</CardTitle>
+              <CardTitle className="text-lg">{t("hr.portal.quickActions.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { title: "Xin nghỉ phép", icon: Calendar, color: "text-emerald-600", bg: "bg-emerald-50" },
-                  { title: "Đề nghị thanh toán", icon: Wallet, color: "text-blue-600", bg: "bg-blue-50" },
-                  { title: "Xem phiếu lương", icon: FileText, color: "text-purple-600", bg: "bg-purple-50" },
-                  { title: "Cập nhật hồ sơ", icon: User, color: "text-orange-600", bg: "bg-orange-50" },
+                  { title: t("hr.portal.quickActions.leaveRequest"), icon: Calendar, color: "text-emerald-600", bg: "bg-emerald-50" },
+                  { title: t("hr.portal.quickActions.overtime"), icon: Wallet, color: "text-blue-600", bg: "bg-blue-50" },
+                  { title: t("hr.portal.quickActions.payslip"), icon: FileText, color: "text-purple-600", bg: "bg-purple-50" },
+                  { title: t("hr.portal.quickActions.updateInfo"), icon: User, color: "text-orange-600", bg: "bg-orange-50" },
                 ].map((action, i) => (
                   <Button key={i} variant="outline" className="h-24 flex flex-col items-center justify-center gap-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-50 transition-all">
                     <div className={`h-10 w-10 rounded-full flex items-center justify-center ${action.bg} ${action.color}`}>
@@ -163,15 +163,15 @@ export function EmployeePortal() {
           {visibleWidgets.recentRequests && (
           <Card className="border-none shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg">Yêu cầu gần đây</CardTitle>
-              <Button variant="ghost" size="sm" className="text-indigo-600">Xem tất cả <ChevronRight className="h-4 w-4 ml-1" /></Button>
+              <CardTitle className="text-lg">{t("hr.portal.recentRequests.title")}</CardTitle>
+              <Button variant="ghost" size="sm" className="text-indigo-600">{t("hr.portal.recentRequests.viewAll")} <ChevronRight className="h-4 w-4 ml-1" /></Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { title: "Nghỉ phép năm (2 ngày)", date: "18/03/2026", status: "Đã duyệt", icon: CheckCircle2, color: "text-emerald-600" },
-                  { title: "Đề nghị thanh toán tiền điện thoại", date: "15/03/2026", status: "Chờ duyệt", icon: AlertCircle, color: "text-orange-600" },
-                  { title: "Đăng ký làm thêm giờ", date: "10/03/2026", status: "Đã duyệt", icon: CheckCircle2, color: "text-emerald-600" },
+                  { title: t("hr.portal.recentRequests.annualLeave") + " (2 ngày)", date: "18/03/2026", status: t("hr.portal.recentRequests.approved"), icon: CheckCircle2, color: "text-emerald-600" },
+                  { title: t("hr.portal.recentRequests.overtime"), date: "15/03/2026", status: t("hr.portal.recentRequests.pending"), icon: AlertCircle, color: "text-orange-600" },
+                  { title: t("hr.portal.recentRequests.sickLeave"), date: "10/03/2026", status: t("hr.portal.recentRequests.approved"), icon: CheckCircle2, color: "text-emerald-600" },
                 ].map((req, i) => (
                   <div key={i} className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
                     <div className="flex items-center gap-4">
@@ -183,7 +183,7 @@ export function EmployeePortal() {
                         <p className="text-xs text-slate-500">{req.date}</p>
                       </div>
                     </div>
-                    <Badge variant="outline" className={req.status === "Đã duyệt" ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-orange-50 text-orange-700 border-orange-200"}>
+                    <Badge variant="outline" className={req.status === t("hr.portal.recentRequests.approved") ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-orange-50 text-orange-700 border-orange-200"}>
                       {req.status}
                     </Badge>
                   </div>
@@ -199,17 +199,17 @@ export function EmployeePortal() {
           {visibleWidgets.announcements && (
           <Card className="border-none shadow-sm bg-gradient-to-b from-indigo-900 to-slate-900 text-white">
             <CardHeader>
-              <CardTitle className="text-lg text-white">Thông báo nội bộ</CardTitle>
+              <CardTitle className="text-lg text-white">{t("hr.portal.announcements.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-4 bg-white/10 rounded-xl border border-white/10">
                 <Badge className="bg-rose-500 hover:bg-rose-600 mb-2">Quan trọng</Badge>
-                <h3 className="font-bold mb-1">Cập nhật chính sách nhân sự Q2/2026</h3>
+                <h3 className="font-bold mb-1">{t("hr.portal.announcements.holidayNotice")}</h3>
                 <p className="text-sm text-slate-300">Vui lòng đọc kỹ các thay đổi về phụ cấp và giờ làm việc áp dụng từ 01/04.</p>
               </div>
               <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                 <Badge className="bg-blue-500 hover:bg-blue-600 mb-2">Sự kiện</Badge>
-                <h3 className="font-bold mb-1">Team Building Tháng 4</h3>
+                <h3 className="font-bold mb-1">{t("hr.portal.announcements.teamBuilding")}</h3>
                 <p className="text-sm text-slate-300">Đăng ký tham gia chuyến đi Phú Quốc trước ngày 25/03.</p>
               </div>
             </CardContent>
@@ -219,7 +219,7 @@ export function EmployeePortal() {
           {visibleWidgets.kpi && (
           <Card className="border-none shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg">Mục tiêu (KPI) Tháng 3</CardTitle>
+              <CardTitle className="text-lg">{t("hr.portal.widgets.kpi")} Tháng 3</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">

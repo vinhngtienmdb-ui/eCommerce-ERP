@@ -230,7 +230,7 @@ export function Stationery() {
                       <TableCell className="font-medium">{req.item}</TableCell>
                       <TableCell>{req.qty} {req.unit}</TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="font-normal">{req.dept}</Badge>
+                        <Badge variant="outline" className="font-normal">{t(`hr.core.${req.dept.toLowerCase()}`, req.dept)}</Badge>
                       </TableCell>
                       <TableCell>{getStatusBadge(req.status)}</TableCell>
                     </TableRow>

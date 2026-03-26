@@ -149,7 +149,7 @@ export function Payroll() {
     }
 
     employees.forEach(emp => {
-      const scale = salaryScales.find(s => s.grade === emp.pos)
+      const scale = salaryScales.find(s => s.grade === emp.grade)
       const basicSalary = scale ? scale.baseSalary : 0
       
       // Calculate allowances
@@ -157,7 +157,7 @@ export function Payroll() {
         let alwAmount = 0
         if (alw.isGradeBased) {
           // Find employee grade from salary scale or employee record
-          alwAmount = alw.gradeAmounts?.[emp.pos] || 0
+          alwAmount = alw.gradeAmounts?.[emp.grade || ""] || 0
         } else {
           alwAmount = alw.amount || 0
         }
@@ -173,13 +173,22 @@ export function Payroll() {
       // Calculate Insurance Deduction
       const isInsured = insuranceParticipants.find(p => p.employeeId === emp.id)?.isParticipant
       
+      const insuranceSubjectAllowances = allowanceTypes.reduce((sum, alw) => {
+        if (!alw.isInsuranceSubject) return sum
+        let alwAmount = alw.isGradeBased ? (alw.gradeAmounts?.[emp.grade || ""] || 0) : (alw.amount || 0)
+        if (alw.calculationBasis === "Daily") {
+          alwAmount = (alwAmount / 26) * 22 // Mock 22/26 days
+        }
+        return sum + alwAmount
+      }, 0)
+
       const empInsRate = isInsured ? (currentRates.employeeRates.bhxh + currentRates.employeeRates.bhyt + currentRates.employeeRates.bhtn) / 100 : 0
-      const insuranceDeduction = basicSalary * empInsRate
+      const insuranceDeduction = (basicSalary + insuranceSubjectAllowances) * empInsRate
       
       // Calculate taxable income
       const taxableAllowances = allowanceTypes.reduce((sum, alw) => {
         if (!alw.isTaxable) return sum
-        let alwAmount = alw.isGradeBased ? (alw.gradeAmounts?.[emp.pos] || 0) : (alw.amount || 0)
+        let alwAmount = alw.isGradeBased ? (alw.gradeAmounts?.[emp.grade || ""] || 0) : (alw.amount || 0)
         
         // If daily, multiply by work days (mock 22 days)
         if (alw.calculationBasis === "Daily") {
@@ -187,7 +196,9 @@ export function Payroll() {
         }
 
         if (alw.taxLimit && alwAmount > alw.taxLimit) {
-          return sum + alw.taxLimit // Only tax up to limit
+          return sum + (alwAmount - alw.taxLimit) // Tax the amount exceeding the limit
+        } else if (alw.taxLimit && alwAmount <= alw.taxLimit) {
+          return sum // Fully exempt
         }
         return sum + alwAmount
       }, 0)

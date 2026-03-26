@@ -5,6 +5,7 @@ export interface Employee {
   name: string
   dept: string
   pos: string
+  grade?: string
   status: "Active" | "Maternity" | "Resigned" | "Onboarding"
   email: string
   phone: string
@@ -214,10 +215,10 @@ interface DataState {
 }
 
 const initialEmployees: Employee[] = [
-  { id: "EMP-001", name: "Nguyễn Văn A", dept: "Ban Giám Đốc", pos: "Giám đốc", status: "Active", email: "vana@example.com", phone: "0901234567", joinDate: "2022-03-15", idCard: "001090123456", taxCode: "8012345678", socialInsuranceNo: "7912345678", dependents: 2 },
-  { id: "EMP-002", name: "Trần Thị B", dept: "Phòng Kinh Doanh", pos: "Trưởng phòng", status: "Active", email: "thib@example.com", phone: "0909876543", joinDate: "2021-06-01", idCard: "002090987654", taxCode: "8023456789", socialInsuranceNo: "7923456789", dependents: 1 },
-  { id: "EMP-003", name: "Lê Văn C", dept: "Phòng Nhân Sự", pos: "Chuyên viên", status: "Onboarding", email: "vanc@example.com", phone: "0912345678", joinDate: "2023-10-01", idCard: "003091234567", taxCode: "8034567890", socialInsuranceNo: "7934567890", dependents: 0 },
-  { id: "EMP-004", name: "Phạm Thị D", dept: "Phòng Marketing", pos: "Nhân viên", status: "Maternity", email: "thid@example.com", phone: "0987654321", joinDate: "2020-11-20", idCard: "004098765432", taxCode: "8045678901", socialInsuranceNo: "7945678901", dependents: 3 },
+  { id: "EMP-001", name: "Nguyễn Văn A", dept: "Engineering", pos: "Giám đốc", grade: "M1", status: "Active", email: "vana@example.com", phone: "0901234567", joinDate: "2022-03-15", idCard: "001090123456", taxCode: "8012345678", socialInsuranceNo: "7912345678", dependents: 2 },
+  { id: "EMP-002", name: "Trần Thị B", dept: "Sales", pos: "Trưởng phòng", grade: "M1", status: "Active", email: "thib@example.com", phone: "0909876543", joinDate: "2021-06-01", idCard: "002090987654", taxCode: "8023456789", socialInsuranceNo: "7923456789", dependents: 1 },
+  { id: "EMP-003", name: "Lê Văn C", dept: "HR", pos: "Chuyên viên", grade: "S1", status: "Onboarding", email: "vanc@example.com", phone: "0912345678", joinDate: "2023-10-01", idCard: "003091234567", taxCode: "8034567890", socialInsuranceNo: "7934567890", dependents: 0 },
+  { id: "EMP-004", name: "Phạm Thị D", dept: "Marketing", pos: "Nhân viên", grade: "S1", status: "Maternity", email: "thid@example.com", phone: "0987654321", joinDate: "2020-11-20", idCard: "004098765432", taxCode: "8045678901", socialInsuranceNo: "7945678901", dependents: 3 },
 ]
 
 const initialContracts: Contract[] = [
